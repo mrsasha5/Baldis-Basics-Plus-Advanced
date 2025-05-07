@@ -14,7 +14,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameData
         [HarmonyPostfix]
         private static void OnLoadNextLevel(BaseGameManager __instance)
         {
-            DataManager.LevelData.OnLoadNextLevel(__instance is PitstopGameManager);
+            DataManager.LevelDataManager.OnLoadNextLevel(__instance is PitstopGameManager);
 
         }
 
