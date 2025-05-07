@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BBE</name>
+    </assembly>
+    <members>
+        <member name="M:BBE.API.BaldiBasicsExtraApi.CreateFunSetting(BepInEx.PluginInfo,System.String,BBE.CustomClasses.FunSettingsType@,System.String,System.Collections.Generic.List{BBE.CustomClasses.FunSettingsType},System.Collections.Generic.List{BBE.CustomClasses.FunSettingsType},UnityEngine.Events.UnityAction,UnityEngine.Events.UnityAction,UnityEngine.Events.UnityAction,UnityEngine.Events.UnityAction,UnityEngine.Events.UnityAction)">
+            <summary>
+            Create new fun setting for Baldi Basics Extra
+            </summary>
+            <param name="pluginInfo"> PluginInfo of your mod, used to get fun settings from mod</param>
+            <param name="nameKey">Localized key of name for fun setting</param>
+            <param name="funSettingEnum">FunSettingType enum, used to check if fun setting is active by method extension FunSettingType.IsActive()</param>
+            <param name="descriptionKey">Localized key of description for fun setting, if is empty in game you will see description "This fun setting has no description"</param>
+            <param name="dependies">A list of mandatory fun settings to enable this one</param>
+            <param name="notAllowedSettings">A list of fun settings that don't have to be on to enable this one</param>
+            <param name="OnEnabling">Action on enabling fun setting in game using PineDebug</param>
+            <param name="OnDisabling">Action on disabling fun setting in game using PineDebug</param>
+            <param name="OnHighlight">Action when the cursor is placed on the button of fun setting</param>
+            <param name="ActOnButtonDisabling">Action when player disable fun setting button in menu</param>
+            <param name="ActOnButtonEnabling">Action when player enable fun setting button in menu</param>
+            <returns>New instance of fun setting class</returns>
+        </member>
+        <member name="T:BBE.API.InvalidFunSettingException">
+            <summary>
+            Represents an exception that is thrown when an invalid fun setting is encountered
+            </summary>
+        </member>
+        <member name="M:BBE.API.InvalidFunSettingException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:BBE.API.InvalidFunSettingException"/> class
+            </summary>
+        </member>
+        <member name="M:BBE.API.InvalidFunSettingException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:BBE.API.InvalidFunSettingException"/> class with a specified error message
+            </summary>
+            <param name="message">The message that describes the error</param>
+        </member>
+        <member name="M:BBE.API.InvalidFunSettingException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:BBE.API.InvalidFunSettingException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception
+            </summary>
+            <param name="message">The message that describes the error</param>
+            <param name="inner">The exception that is the cause of the current exception, or a null reference if no inner exception is specified</param>
+        </member>
+        <member name="T:BBE.API.FunSettingBuilder">
+            <summary>
+            A builder class for creating and configuring instances of <see cref="T:BBE.CustomClasses.FunSetting"/>
+            </summary>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.#ctor(BepInEx.PluginInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:BBE.API.FunSettingBuilder"/> class with the specified plugin information
+            </summary>
+            <param name="info">The plugin information associated with this fun setting</param>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.Build">
+            <summary>
+            Creates and returns an instance of <see cref="T:BBE.CustomClasses.FunSetting"/> based on the current configuration
+            </summary>
+            <returns>A configured instance of <see cref="T:BBE.CustomClasses.FunSetting"/></returns>
+            <exception cref="T:BBE.API.InvalidFunSettingException">
+            Thrown if the fun setting name is empty or if the fun setting type is <see cref="F:BBE.CustomClasses.FunSettingsType.None"/>
+            </exception>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.SetOnMenuDisabling(UnityEngine.Events.UnityAction)">
+            <summary>
+            Set the action to be executed when player disable fun setting button in menu
+            </summary>
+            <param name="action">Action when player disable fun setting button in menu</param>
+            <returns>The current <see cref="T:BBE.API.FunSettingBuilder"/> instance</returns>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.SetOnMenuEnabling(UnityEngine.Events.UnityAction)">
+            <summary>
+            Set the action to be executed when player enable fun setting button in menu
+            </summary>
+            <param name="action">Action when player enable fun setting button in menu</param>
+            <returns>The current <see cref="T:BBE.API.FunSettingBuilder"/> instance</returns>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.SetName(System.String)">
+            <summary>
+            Set name of the fun setting
+            </summary>
+            <param name="name">The localization key for the fun setting name</param>
+            <returns>The current <see cref="T:BBE.API.FunSettingBuilder"/> instance</returns>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.GetEnum(BBE.CustomClasses.FunSettingsType@)">
+            <summary>
+            Retrieves the enum value of the fun setting through an out parameter
+            </summary>
+            <param name="funSetting">The enum value of the fun setting</param>
+            <returns>The current <see cref="T:BBE.API.FunSettingBuilder"/> instance</returns>
+            <exception cref="T:BBE.API.InvalidFunSettingException">
+            Thrown if the fun setting type is <see cref="F:BBE.CustomClasses.FunSettingsType.None"/>.
+            </exception>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.SetDescription(System.String)">
+            <summary>
+            Set description of the fun setting
+            </summary>
+            <param name="description">The localization key for the fun setting description</param>
+            <returns>The current <see cref="T:BBE.API.FunSettingBuilder"/> instance</returns>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.SetEnum(BBE.CustomClasses.FunSettingsType)">
+            <summary>
+            Set enum type of the fun setting
+            </summary>
+            <param name="type">The enum type of the fun setting</param>
+            <returns>The current <see cref="T:BBE.API.FunSettingBuilder"/> instance</returns>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.SetEnum(System.String)">
+            <summary>
+            Converts the specified string to an enum value and sets it as the fun setting type
+            </summary>
+            <param name="type">The string representation of the enum type</param>
+            <returns>The current <see cref="T:BBE.API.FunSettingBuilder"/> instance</returns>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.SetActionOnEnabling(UnityEngine.Events.UnityAction)">
+            <summary>
+            Set action to be executed when player enable fun setting using PineDebug
+            </summary>
+            <param name="act">The action to execute when the fun setting is enabled</param>
+            <returns>The current <see cref="T:BBE.API.FunSettingBuilder"/> instance</returns>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.SetActionOnDisabling(UnityEngine.Events.UnityAction)">
+            <summary>
+            Set action to be executed when player disable fun setting disabled using PineDebug
+            </summary>
+            <param name="act">The action to execute when the fun setting is disabled</param>
+            <returns>The current <see cref="T:BBE.API.FunSettingBuilder"/> instance</returns>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.SetActionOnHighlight(UnityEngine.Events.UnityAction)">
+            <summary>
+            Set action to be executed when the player hovers the mouse cursor over the fun setting button
+            </summary>
+            <param name="act">The action to execute when the fun setting button is highlighted</param>
+            <returns>The current <see cref="T:BBE.API.FunSettingBuilder"/> instance</returns>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.SetDependies(BBE.CustomClasses.FunSettingsType[])">
+            <summary>
+            Set required fun settings that must be enabled for the current fun setting to be enabled.
+            </summary>
+            <param name="funSettingsTypes">The fun settings types that are required</param>
+            <returns>The current <see cref="T:BBE.API.FunSettingBuilder"/> instance</returns>
+        </member>
+        <member name="M:BBE.API.FunSettingBuilder.SetNotAllowed(BBE.CustomClasses.FunSettingsType[])">
+            <summary>
+            Set fun settings that must be disabled for the current fun setting to be enabled
+            </summary>
+            <param name="funSettingsTypes">The fun settings types that are not allowed</param>
+            <returns>The current <see cref="T:BBE.API.FunSettingBuilder"/> instance</returns>
+        </member>
+    </members>
+</doc>
