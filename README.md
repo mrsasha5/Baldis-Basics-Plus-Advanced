@@ -4,8 +4,7 @@ This is a source code of the [Baldi's Basics Plus: Advanced Edition](https://gam
 This mod adds a new content and extensions for the Baldi's Basics Plus!
 # Dependencies
 **BepInEx, Baldi's Basics Plus DEV API and Level Loading System are main dependencies of the mod.**<br>
-*This modification also includes another dependencies, but they are not mandatory<br>
-(if they are another Plus mods which have extra Compatibility).*
+*This modification also includes another dependencies.*
 
 ## The public code includes only the necessary mods in its dependencies.<br>
 ### Please note that the public source code does not include the game's dependencies and the game's DLL which contains Plus code.<br>
