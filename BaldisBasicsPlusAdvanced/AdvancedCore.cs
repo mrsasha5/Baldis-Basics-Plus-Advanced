@@ -211,12 +211,6 @@ namespace BaldisBasicsPlusAdvanced
             
             yield return "Initializing room assets...";
             GameRegisterManager.InitializeRoomAssets();
-            //+3 to count
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    yield return "Invoking changes for MainLevel" + (i + 1);
-            //    RegisterMainLevelData(AssetsHelper.loadAsset<SceneObject>("MainLevel_" + (i + 1)), i);
-            //}
             yield return "Overriding game prefabs...";
             AssetsStorage.OverrideAssetsProperties();
             yield return "Correcting patches...";
