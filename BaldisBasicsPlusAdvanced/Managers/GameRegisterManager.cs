@@ -1196,7 +1196,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateFunctionContainerWithRoomFunction<EnglishClassTimerFunction>("EnglishClassTimerFunction");
             PrefabsCreator.CreateFunctionContainerWithRoomFunction<CorruptedLightsFunction>("CorruptedLightsFunction");
             PrefabsCreator.CreateFunctionContainerWithRoomFunction<SchoolCouncilFunction>("SchoolCouncilFunction");
-            RoomHelper.SetupRoomFunction<DisabledPowerOnGenerationFinishedFunction>(
+            RoomHelper.SetupRoomFunction<DisabledPowerOnGenerationFinishFunction>(
                 ObjectsStorage.RoomFunctionsContainers["SchoolCouncilFunction"]);
         }
 

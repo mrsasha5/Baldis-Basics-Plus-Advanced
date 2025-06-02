@@ -50,25 +50,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Components
             LayersHelper.SetIgnoreCollisionForPlayer(playerEntitiesInteractionDisables > 0);
         }
 
-        public void SetPlayerClick(bool state)
-        {
-            if (state)
-            {
-                playerClickDisables--;
-            } else
-            {
-                playerClickDisables++;
-            }
-
-            if (playerClickDisables < 0) playerClickDisables = 0;
-
-            PlayerClickPatch.SetEnabled(playerClickDisables < 1);
-        }
-
         private void OnDestroy()
         {
             LayersHelper.SetIgnoreCollisionForPlayer(false);
-            PlayerClickPatch.SetEnabled(true);
         }
 
     }

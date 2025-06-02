@@ -78,6 +78,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         private RoomController room;
 
+        private bool _roomPowered;
+
+        private string _screenText;
+
+        private string _faceName;
+
+        private bool makeFailedOnUpdate;
+
         private bool isPitFloor;
 
         private float time;
@@ -202,12 +210,36 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
         private void Start()
         {
             room = transform.parent.parent.GetComponent<RoomController>();
-            room.ec.OnEnvironmentBeginPlay += Initialize;
+            _roomPowered = room.Powered;
+            if (room.Powered) room.ec.OnEnvironmentBeginPlay += Initialize;
             isPitFloor = Singleton<BaseGameManager>.Instance is PitstopGameManager;
         }
 
         private void Update()
         {
+            for (int i = 0; i < spelloons.Count; i++)
+            {
+                if (spelloons[i] == null)
+                {
+                    SpawnSpelloon(symbolsSpawned[i], i);
+                }
+            }
+
+            if (room.Powered != _roomPowered)
+            {
+                _roomPowered = room.Powered;
+                _screenText = screenText.text;
+                string __faceName = _faceName; 
+
+                SetScreenText(room.Powered ? _screenText : "");
+                UpdateVisualAnswerField(clear: !room.Powered);
+                SetFaceTex(room.Powered ? _faceName : "adv_symbol_machine_face");
+
+                _faceName = __faceName;
+            }
+
+            if (!room.Powered) return;
+
             if (switcherAnimations.Count > 0 && currentSwitcher == null)
             {
                 currentSwitcher = switcherAnimations.Dequeue();
@@ -217,25 +249,23 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
             if (completed) return;
 
-            if (timerActive && time > 0)
+            if (makeFailedOnUpdate)
+            {
+                makeFailedOnUpdate = false;
+                OnCompleted(false);
+            }
+
+            if (timerActive && time > 0f)
             {
                 int time1 = (int)time;
                 time -= Time.deltaTime;
                 int time2 = (int)time;
 
-                if (time < 0) OnCompleted(decidedCorrectly: false);
+                if (time <= 0f) OnCompleted(decidedCorrectly: false);
                 else if (time1 != time2)
                 {
                     UpdateTextProgress();
                     audMan.PlaySingle(AssetsStorage.sounds["adv_beep"]);
-                }
-            }
-
-            for (int i = 0; i < spelloons.Count; i++)
-            {
-                if (spelloons[i] == null)
-                {
-                    SpawnSpelloon(symbolsSpawned[i], i);
                 }
             }
         }
@@ -274,7 +304,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         public bool ReInit()
         {
-            if (reInitializing) return false;
+            if (reInitializing || !room.Powered) return false;
             if (ApiManager.GetAllSymbolMachineWords().Count == 0)
             {
                 SetScreenTextKey("Adv_Phrase_SM_No_Words");
@@ -404,7 +434,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         public void Clicked(int player)
         {
-            if (playerIsHolding && !completed && spelloons[playerHolding].trackingPlayer)
+            if (room.Powered && playerIsHolding && !completed && spelloons[playerHolding].trackingPlayer)
             {
                 bool symbolIsRight = spelloons[playerHolding].Value == answer.ElementAt(answerField.Length).ToString().ToLower();
 
@@ -466,9 +496,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
         public void SetSymbolTimer(bool active, float symbolTime)
         {
             this.timerActive = active;
-            if (symbolTime == -1f)
+            if (symbolTime == float.NegativeInfinity)
             {
-                OnCompleted(false);
+                makeFailedOnUpdate = true;
                 return;
             }
             this.symbolTime = symbolTime;
@@ -573,6 +603,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         private void SetFaceTex(string assetKey)
         {
+            _faceName = assetKey;
             Material[] materials = meshRenderer.materials;
 
             materials[0].SetMainTexture(AssetsStorage.textures[assetKey]);
@@ -603,6 +634,19 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
         {
             this.timerMode = timerMode;
             if (updadeProgress) UpdateTextProgress();
+        }
+
+        private void UpdateVisualAnswerField(bool clear)
+        {
+            for (int i = 0; i < texts.Count; i++)
+            {
+                texts[i].text = "";
+            }
+            if (clear) return;
+            for (int i = 0; i < answerField.Length; i++)
+            {
+                texts[i].text = answerField[i].ToString().ToUpper();
+            }
         }
 
         private void ClearAnswerField()

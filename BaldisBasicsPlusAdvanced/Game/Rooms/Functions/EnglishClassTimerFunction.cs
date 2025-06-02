@@ -28,11 +28,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Rooms.Functions
             for (int i = 0; i < symbolMachines.Length; i++)
             {
                 if (!symbolMachines[i].Completed && symbolMachines[i].AnswerField.Length == 0) symbolMachines[i].SetSymbolTimer(false, symbolMachines[i].SymbolTime);
-                else if (!symbolMachines[i].Completed && !symbolMachines[i].PlayerRewarded) symbolMachines[i].SetSymbolTimer(true, -1f);
+                else if (!symbolMachines[i].Completed && !symbolMachines[i].PlayerRewarded) symbolMachines[i].SetSymbolTimer(true, float.NegativeInfinity);
             }
             
         }
 
+        //Stay is required instead of Enter when player reloads Symbol Machine with timer and he doesn't leave the room
         public override void OnPlayerStay(PlayerManager player)
         {
             base.OnPlayerStay(player);

@@ -1,9 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BepInEx;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
@@ -160,10 +157,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 floater.Stop();
                 entity.Enable(val: false);
                 audMan.PlaySingle(AssetsStorage.sounds["pop"]);
-                //if (base.gameObject.activeInHierarchy)
-                //{
-                    //StartCoroutine(PopWait()); //bad idea from numballoons code
-                //}
             }
             else if (!base.gameObject.activeInHierarchy)
             {
@@ -196,17 +189,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             base.transform.eulerAngles = Vector3.zero;
             sprite.gameObject.layer = initialSpriteLayer;
         }
-
-        /*private IEnumerator PopWait()
-        {
-            yield return null;
-            while (audMan.QueuedAudioIsPlaying)
-            {
-                yield return null;
-            }
-
-            Object.Destroy(base.gameObject);
-        }*/
 
         public void Use()
         {

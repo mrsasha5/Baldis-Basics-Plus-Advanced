@@ -34,7 +34,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "Baldi's Basics Plus Advanced Edition";
 
-        public const string version = "0.2.4.11";
+        public const string version = "0.2.4.20";
 
         internal static string tempPath;
 
@@ -208,7 +208,6 @@ namespace BaldisBasicsPlusAdvanced
             GameRegisterManager.InitializeApiThings();
             yield return "Adding some tags...";
             GameRegisterManager.SetTags();
-            
             yield return "Initializing room assets...";
             GameRegisterManager.InitializeRoomAssets();
             yield return "Overriding game prefabs...";

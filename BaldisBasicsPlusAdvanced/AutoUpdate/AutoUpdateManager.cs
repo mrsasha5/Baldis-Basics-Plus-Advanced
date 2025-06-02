@@ -63,10 +63,6 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
 
         private static IEnumerator Checker()
         {
-            //Singleton<NotificationManager>.Instance.Queue(
-            //    $"OH NO!",
-            //    AssetsStorage.sounds["slap"]);
-
             string url = "https://api.github.com/repos/mrsasha5/Baldis-Basics-Plus-Advanced/releases?page=";
             int page = 1;
             int attempts = 5;
@@ -189,6 +185,13 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                 Singleton<NotificationManager>.Instance.Queue("", AssetsStorage.sounds["ytp_pickup_0"], 
                 time: result == CompatibilityAnalyzer.Result.Success ? 15f : 20f);
 
+            void SetExceptionMessage(string text, float time = 10f)
+            {
+                notif.tmpText.text = text;
+                notif.time = time;
+                notif.sound = AssetsStorage.sounds["buzz_elv"];
+            }
+
             while (!notif.active) yield return null;
 
             bool installUpdate = false;
@@ -249,11 +252,10 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
 
                     retry = false;
 
-                    notif.time = 15f;
+                    SetExceptionMessage("", 15f);
 
                     while (notif.time > 0f)
                     {
-                        notif.sound = AssetsStorage.sounds["buzz_elv"];
                         notif.tmpText.text =
                             $"Something went wrong! Retry? ({KeyBindingsManager.Keys["update_mod"].Button.ToString()})\n" +
                             $"Ability ends in: {(int)notif.time}";
@@ -275,18 +277,23 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                     if (notif.time <= 0f && !retry) yield break;
                 }
 
-                using (FileStream fs = 
-                    new FileStream($"Adv_TEMP/build{selectedData.fileExtension}", FileMode.OpenOrCreate, FileAccess.Write))
+                try
                 {
-                    fs.Write(downloadRequest.downloadHandler.data, 0, downloadRequest.downloadHandler.data.Length);
+                    using (FileStream fs = new FileStream($"Adv_TEMP/build{selectedData.fileExtension}", 
+                        FileMode.OpenOrCreate, FileAccess.Write))
+                    {
+                        fs.Write(downloadRequest.downloadHandler.data, 0, downloadRequest.downloadHandler.data.Length);
+                    }
+                } 
+                catch (Exception e)
+                {
+                    SetExceptionMessage("Something went wrong during creating file!");
+                    AdvancedCore.Logging.LogError(e);
                 }
 
                 if (selectedData.fileExtension != ".zip")
                 {
-                    notif.sound = AssetsStorage.sounds["buzz_elv"];
-                    notif.time = 10f;
-                    notif.tmpText.text = $"Extension {selectedData.fileExtension} is unsupported!";
-
+                    SetExceptionMessage($"Extension {selectedData.fileExtension} is unsupported!");
                     yield break;
                 }
 
@@ -306,20 +313,35 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                 if (!supportedPlatforms.Contains(Environment.OSVersion.Platform))
                 {
                     AdvancedCore.preparedToInstalling = false;
-                    notif.sound = AssetsStorage.sounds["buzz_elv"];
-                    notif.time = 10f;
-                    notif.tmpText.text = 
-                        "Auto-installation is not supported for your OS! Install it yourself (all mod files stored in Adv_TEMP).";
+                    SetExceptionMessage(
+                        "Auto-installation is not supported for your OS! Install it yourself (all mod files stored in Adv_TEMP).");
                     yield break;
                 }
 
-                foreach (string filePath in Directory.GetFiles("Adv_TEMP/AutoUpdater"))
+                try
                 {
-                    File.Move(filePath, AdvancedCore.tempPath + Path.GetFileName(filePath));
+                    foreach (string filePath in Directory.GetFiles("Adv_TEMP/AutoUpdater"))
+                    {
+                        File.Move(filePath, AdvancedCore.tempPath + Path.GetFileName(filePath));
+                    }
+                }
+                catch (Exception e)
+                {
+                    SetExceptionMessage("Something went wrong during moving files!");
+                    AdvancedCore.Logging.LogError(e);
                 }
 
-                File.WriteAllText(AdvancedCore.tempPath + "AutoUpdater_MainPath.txt", 
-                    Directory.GetCurrentDirectory() + "/");
+                try
+                {
+                    File.WriteAllText(AdvancedCore.tempPath + "AutoUpdater_MainPath.txt",
+                        Directory.GetCurrentDirectory() + "/");
+                }
+                catch (Exception e)
+                {
+                    SetExceptionMessage("Something went wrong during moving files!");
+                    AdvancedCore.Logging.LogError(e);
+                }
+                
 
                 if (AdvancedCore.preparedToInstalling)
                 {
@@ -329,9 +351,8 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                 }
                 else
                 {
-                    notif.sound = AssetsStorage.sounds["buzz_elv"];
-                    notif.time = 10f;
-                    notif.tmpText.text = "Something went wrong during extracting! Continue installing by yourself.";
+                    AdvancedCore.preparedToInstalling = false;
+                    SetExceptionMessage("Something went wrong during extracting! Continue installing by yourself.");
                 }
 
             }
