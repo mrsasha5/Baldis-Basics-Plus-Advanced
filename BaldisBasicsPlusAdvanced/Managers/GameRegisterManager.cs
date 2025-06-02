@@ -40,15 +40,11 @@ using PlusLevelLoader;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.Objects.Farm;
-using MTM101BaldAPI.Registers.Buttons;
 using BaldisBasicsPlusAdvanced.Compats;
 using MTM101BaldAPI.AssetTools;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
 using BaldisBasicsPlusAdvanced.Patches.Player;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
-using BaldisBasicsPlusAdvanced.AutoUpdate;
-using static Mono.Security.X509.X520;
-using tripolygon.UModeler;
 using BaldisBasicsPlusAdvanced.Game.Objects.Portals;
 using MTM101BaldAPI.PlusExtensions;
 
@@ -56,6 +52,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 {
     public class GameRegisterManager
     {
+
         public static void InitializeMidis()
         {
             void LoadFrom(string floorName, LevelType type)
@@ -72,6 +69,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
             LoadFrom("Laboratory", LevelType.Laboratory);
             LoadFrom("Maintenance", LevelType.Maintenance);
             LoadFrom("Factory", LevelType.Factory);
+            //FarmFieldTripManager.farmTripMusicKey = 
+            //    AssetLoader.MidiFromFile(AssetsHelper.modPath + "Audio/Music/FieldTrips/Adv_BSideSkid_CornTime.mid",
+            //        "Adv_BSideSkid_CornTime");
         }
 
         public static void InitializeMidisPost()
@@ -907,8 +907,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 "apple", "chalk", "erase", "cloud", "plate", "store", "clock", "farm", "math"
             );
 
-
-            //ApiManager.AddNewSchoolCouncilTopic<StudentExpelingTopic>(AdvancedCore.Instance.Info);
             ApiManager.CreateSchoolCouncilTopic<NoPlatesCooldownTopic>(AdvancedCore.Instance.Info);
             ApiManager.CreateSchoolCouncilTopic<PrincipalIgnoresSomeRulesTopic>(AdvancedCore.Instance.Info);
             ApiManager.CreateSchoolCouncilTopic<LightsEconomyTopic>(AdvancedCore.Instance.Info);

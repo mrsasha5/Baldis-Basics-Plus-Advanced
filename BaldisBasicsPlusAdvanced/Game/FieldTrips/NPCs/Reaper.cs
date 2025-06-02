@@ -3,9 +3,11 @@ using BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.Objects.Farm;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
+using MTM101BaldAPI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
 {
@@ -31,10 +33,25 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
         private SoundObject audShred;
 
         [SerializeField]
+        private ParticleSystem particleSystem;
+
+        [SerializeField]
         private float motorVolume;
 
         [SerializeField]
+        private float warmingSpeed;
+
+        [SerializeField]
+        private float coolingSpeed;
+
+        [SerializeField]
         private float speed;
+
+        private Color spriteColor;
+
+        private float keepWarmTime;
+
+        private float spriteWarmValue;
 
         private EnvironmentController ec;
 
@@ -47,10 +64,13 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
         public void InitializePrefab(int variant)
         {
             transform.localScale = new Vector3(2f, 1f, 1f);
+
             audShred = AssetsStorage.sounds["buzz_lose"];
             audReap = AssetsStorage.sounds["adv_reaper_gotta_reap"];
             speed = 5f;
             motorVolume = 1f;
+            warmingSpeed = 0.1f;
+            coolingSpeed = 0.01f;
 
             renderer = ObjectsCreator.CreateSpriteRenderer(AssetsStorage.sprites["adv_reaper"], isBillboard: false);
             renderer.transform.SetParent(transform, false);
@@ -71,8 +91,6 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
             motorAudMan.transform.SetParent(transform, false);
             motorAudMan.audioDevice.volume = 0f;
             motorAudMan.volumeModifier = 0f;
-            //motorAudMan.audioDevice.spatialBlend = 1f;
-            //motorAudMan.audioDevice.rolloffMode = AudioRolloffMode.Custom;
             ReflectionHelper.SetValue<SoundObject[]>(motorAudMan, "soundOnStart", new SoundObject[]
             {
                 AssetsStorage.sounds["adv_motor_loop"]
@@ -84,8 +102,6 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
             buzzerAudMan.transform.SetParent(transform, false);
             buzzerAudMan.audioDevice.volume = 0.5f;
             buzzerAudMan.volumeModifier = 0.5f;
-            //buzzerAudMan.audioDevice.spatialBlend = 1f;
-            //buzzerAudMan.audioDevice.rolloffMode = AudioRolloffMode.Custom;
 
             GameObject trapObj = new GameObject("Trap");
             trapObj.transform.SetParent(transform, false);
@@ -99,6 +115,36 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
 
             trapObj.AddComponent<CubeTrap>().reaper = this;
 
+            particleSystem = new GameObject("ParticleSystem").AddComponent<ParticleSystem>();
+            particleSystem.transform.SetParent(transform);
+            particleSystem.transform.localPosition = Vector3.up * -5f;
+
+            ParticleSystemRenderer particlesRenderer = particleSystem.GetComponent<ParticleSystemRenderer>();
+            particlesRenderer.material = AssetsHelper.LoadAsset<Material>("DustTest");
+            particlesRenderer.material.shader = Shader.Find("Shader Graphs/Standard");
+            particlesRenderer.material.SetColor(Color.gray);
+
+            MainModule main = particleSystem.main;
+            main.gravityModifier = -4f;
+            main.startLifetime = 5f;
+            main.startSize = 9f;
+            main.startSpeed = 0f;
+            main.maxParticles = 10000;
+
+            ShapeModule shape = particleSystem.shape;
+            shape.shapeType = ParticleSystemShapeType.Box;
+            shape.scale = new Vector3(600f, 25f, 20f);
+
+            EmissionModule emission = particleSystem.emission;
+            emission.rateOverTime = 0;
+            emission.rateOverDistance = 100;
+            emission.enabled = false;
+
+            VelocityOverLifetimeModule velocityOverLifetime = particleSystem.velocityOverLifetime;
+            velocityOverLifetime.enabled = true;
+            velocityOverLifetime.y = 24f;
+            velocityOverLifetime.radialMultiplier = 1.5f;
+
             trapObj.transform.localScale = new Vector3(250f, 25f, 20f);
         }
 
@@ -110,6 +156,8 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
 
         public void Begin()
         {
+            spriteColor = Color.white;
+            spriteWarmValue = 1f;
             gameObject.SetActive(true);
             active = true;
             audMan.PlaySingle(audReap);
@@ -148,13 +196,41 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
         private void Update()
         {
             if (active)
-            transform.position += transform.forward * -speed * Time.deltaTime * ec.NpcTimeScale;
+                transform.position += transform.forward * -speed * Time.deltaTime * ec.NpcTimeScale;
+
+            if (keepWarmTime > 0f)
+            {
+                keepWarmTime -= Time.deltaTime * ec.NpcTimeScale;
+                spriteWarmValue = Mathf.Clamp01(spriteWarmValue - warmingSpeed * Time.deltaTime * ec.NpcTimeScale);
+                spriteColor.g = spriteWarmValue;
+                spriteColor.b = spriteWarmValue;
+                renderer.color = spriteColor;
+            }
+            else
+            {
+                if (particleSystem.emission.enabled)
+                {
+                    EmissionModule emission = particleSystem.emission;
+                    emission.enabled = false;
+                }
+                spriteWarmValue = Mathf.Clamp01(spriteWarmValue + coolingSpeed * Time.deltaTime * ec.NpcTimeScale);
+                spriteColor.g = spriteWarmValue;
+                spriteColor.b = spriteWarmValue;
+                renderer.color = spriteColor;
+            }
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Wall"))
             {
+                if (!particleSystem.emission.enabled)
+                {
+                    EmissionModule emission = particleSystem.emission;
+                    emission.enabled = true;
+                }
+
+                keepWarmTime = 3f;
                 Cell cell = ec.CellFromPosition(other.transform.parent.position);
                 Direction direction = Direction.Null;
                 foreach (Direction dir in Directions.All())

@@ -496,13 +496,9 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                             key = "Adv_Sub_GottaReap_Reap4",
                             time = 3.2f
                         }
-                    }; ;
+                    };
 
                 LoadModSound("adv_mus_win", "Music/Adv_Mus_Win.ogg", SoundType.Music, "");
-                //LoadModSound("adv_mus_game_over", "Music/Adv_Mus_Game_Over.wav", SoundType.Music, "");
-
-                //Voices
-                //LoadModSound("adv_achoo", "Voices/Adv_Achoo.   ", SoundType.Music, "");
 
                 //event sounds
                 LoadModSound("adv_bal_event_portals", "Voices/Baldi/Adv_Bal_Event_Portals.wav", SoundType.Voice, "Adv_Sub_Bal_Portals1", Color.green, 9.074f)

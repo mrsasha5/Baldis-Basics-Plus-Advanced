@@ -4,6 +4,7 @@ using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.Objects.Farm;
 using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Managers;
 using BaldisBasicsPlusAdvanced.Patches;
 using MTM101BaldAPI.Registers;
 using System;
@@ -49,6 +50,8 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
         [SerializeField]
         private float timePerCell;
 
+        public static string farmTripMusicKey;
+
         private bool flagIsReached;
 
         private bool coverageFuncRemoved;
@@ -83,7 +86,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
             reaperBaseTime = 60f;
             timePerCell = 2f;
             minMaxSigns = new IntVector2(5, 12);
-            minMaxItems = new IntVector2(5, 6);
+            minMaxItems = new IntVector2(5, 12);
             signShapes = TileShapeMask.Corner | TileShapeMask.End;
             itemShapes = TileShapeMask.End;
 
@@ -151,6 +154,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
                 ec.Players[i]?.Teleport(Vector3.one * 5f);
                 ec.Players[i]?.itm.Disable(true); //TURN ON
             }
+
             GameObject quadObj = GameObject.CreatePrimitive(PrimitiveType.Quad);
             quadObj.name = "GrassField";
             MeshRenderer renderer = quadObj.GetComponent<MeshRenderer>();
@@ -186,8 +190,6 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
                 new Vector3(room.size.x * 10f, 10f, 10f));
             CreateCollider(new Vector3(centerX, 0f, startZ + 5f),
                 new Vector3(room.size.x * 10f, 10f, 10f));
-
-
         }
 
         public void SpawnBaldi()
@@ -327,7 +329,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
             reaper.gameObject.SetActive(false);
             reaper.transform.position = new Vector3(-25f, -10f, -25f);
             reaper.transform.rotation = Quaternion.Euler(0f, 230f, 0f);
-            reaper.transform.localScale = new Vector3(3f, 1f, 1f);
+            //reaper.transform.localScale = new Vector3(1f, 1f, 1f);
 
             flags = FindObjectsOfType<FinishFlag>();
             foreach (FinishFlag flag in flags)
