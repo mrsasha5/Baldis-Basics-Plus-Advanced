@@ -1,4 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Helpers;
 using System.Collections;
 using UnityEngine;
 
@@ -24,6 +25,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
         [SerializeField]
         private float setTime;
 
+        [SerializeField]
+        private Sprite gaugeIcon;
+
         private ActivityModifier actMod;
 
         private Collider hitCollider;
@@ -31,6 +35,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
         private Vector3 hitColliderPosition;
 
         private Quaternion hitColliderRotation;
+
+        private HudGauge gauge;
 
         private bool done;
 
@@ -58,6 +64,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
 
         public override void InitializePrefab(int variant)
         {
+            gaugeIcon = AssetsHelper.LoadAsset<Sprite>("beans_gum_icon");
+
             entity = gameObject.GetComponent<Entity>();
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
             setTime = 10f;
@@ -106,6 +114,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
                     canvas.gameObject.SetActive(value: true);
                     canvas.worldCamera = Singleton<CoreGameManager>.Instance.GetCamera(other.GetComponent<PlayerManager>().playerNumber).canvasCam;
                     attachedToPlayer = true;
+                    gauge = CoreGameManager.Instance.GetHud(0).gaugeManager.ActivateNewGauge(gaugeIcon, setTime);
                     //playerGum.Add(this);
                     //beans.HitPlayer();
                     //beans.GumHit(this, hitSelf: false);
@@ -148,9 +157,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             while (time > 0f && !cut)
             {
                 time -= Time.deltaTime * ec.EnvironmentTimeScale;
+                gauge?.SetValue(setTime, time);
                 yield return null;
             }
 
+            gauge?.Deactivate();
             cut = false;
             actMod.moveMods.Remove(moveMod);
             actMod.moveMods.Remove(playerMod);

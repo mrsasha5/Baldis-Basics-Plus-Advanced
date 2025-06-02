@@ -16,6 +16,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 
         private Image image;
 
+        private HudGauge gauge;
+
+        private float baseTime;
+
         public override void OnInitialize()
         {
             base.OnInitialize();
@@ -35,6 +39,23 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             }
         }
 
+        public void SetGauge(HudGauge gauge)
+        {
+            this.gauge = gauge;
+        }
+
+        public override void SetTime(float time)
+        {
+            base.SetTime(time);
+            baseTime = time;
+        }
+
+        public override void VirtualUpdate()
+        {
+            base.VirtualUpdate();
+            gauge?.SetValue(baseTime, time);
+        }
+
         public override void OnPreDestroying()
         {
             base.OnPreDestroying();
@@ -43,6 +64,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             {
                 entity.StartCoroutine(FadeOutEffect());
             }
+            gauge?.Deactivate();
         }
 
         private IEnumerator FadeOutEffect()

@@ -54,6 +54,9 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
         private Sprite[] turnsCrazySprites;
 
         [SerializeField]
+        private Sprite gaugeIcon;
+
+        [SerializeField]
         private LaserObject laser;
 
         [SerializeField]
@@ -112,6 +115,8 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
             Sprite[] crazySprites =
                 AssetLoader.SpritesFromSpritesheet(3, 3, 25f, Vector2.one * 0.5f, AssetsStorage.textures["adv_criss_the_crystal_crazy"]);
+
+            gaugeIcon = AssetsHelper.SpriteFromFile("Textures/Gauges/adv_gauge_crystal_blindness.png");
 
             turnsCrazySprites = new Sprite[4];
 
@@ -273,6 +278,9 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                         {
                             systems[i].CreateController(out BlindController blind);
                             blind.SetTime(criss.blindTime);
+                            if (systems[i] is PlayerControllerSystem)
+                                blind.SetGauge(
+                                    CoreGameManager.Instance.GetHud(0).gaugeManager.ActivateNewGauge(criss.gaugeIcon, criss.blindTime));
                         }
                     }
                 }

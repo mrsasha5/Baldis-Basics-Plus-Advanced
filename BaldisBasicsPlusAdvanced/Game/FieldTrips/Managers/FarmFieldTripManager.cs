@@ -17,6 +17,9 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
     public class FarmFieldTripManager : BaseFieldTripManager, IPrefab
     {
         [SerializeField]
+        private Sprite reaperIconGauge;
+
+        [SerializeField]
         private WeightedGameObject[] signs;
 
         [SerializeField]
@@ -74,6 +77,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
 
         public void InitializePrefab(int variant)
         {
+            reaperIconGauge = AssetsHelper.SpriteFromFile("Textures/Gauges/adv_gauge_reaper.png");
             baldiPre = AssetsStorage.genericBaldi;
             reaperPre = ObjectsStorage.Objects["farm_reaper"].GetComponent<Reaper>();
             reaperBaseTime = 60f;
@@ -203,7 +207,10 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
                 ec.CellFromPosition(flags[0].transform.position), PathType.Nav, out List<Cell> path, out bool success);
 
             float time = reaperBaseTime + path.Count * timePerCell;
+            float baseTime = time;
             if (!success) time = 10f;
+
+            HudGauge gauge = CoreGameManager.Instance.GetHud(0).gaugeManager.ActivateNewGauge(reaperIconGauge, time);
 
             float defaultSpeed = 1f;
 
@@ -212,6 +219,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
             while (time > 0f)
             {
                 time -= Time.deltaTime * ec.EnvironmentTimeScale;
+                gauge?.SetValue(baseTime, time);
 
                 if (time <= 10f && time >= 0f)
                 {
@@ -221,6 +229,8 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
 
                 yield return null;
             }
+
+            gauge?.Deactivate();
 
             Singleton<MusicManager>.Instance.StopMidi();
             reaper.Begin();

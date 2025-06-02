@@ -88,6 +88,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 currentOffset = Mathf.MoveTowards(currentOffset, targetOffset, Time.deltaTime * 20f);
                 sprite.localPosition = spriteInitPosition + Vector3.up * currentOffset;
             }
+
+            if (Popping && !AudMan.AnyAudioIsPlaying)
+            {
+                Destroy(gameObject);
+            }
         }
 
         public void Clicked(int player)

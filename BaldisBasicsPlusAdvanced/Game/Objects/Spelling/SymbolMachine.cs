@@ -11,6 +11,7 @@ using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -272,18 +273,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         private void LateUpdate()
         {
-            if (completed) return;
-
             for (int i = 0; i < spelloons.Count; i++)
             {
                 if (spelloons[i] != null && !spelloons[i].Popping && room.ec.CellFromPosition(spelloons[i].transform.position).room != room)
                 {
                     spelloons[i].Pop();
-                }
-
-                if (spelloons[i].Popping && !spelloons[i].AudMan.AnyAudioIsPlaying)
-                {
-                    Destroy(spelloons[i].gameObject);
                 }
             }
         }
