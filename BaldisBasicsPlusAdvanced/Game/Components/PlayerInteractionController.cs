@@ -12,8 +12,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Components
 
         private int playerEntitiesInteractionDisables;
 
-        private int playerClickDisables;
-
         public static PlayerInteractionController Instance => instance;
 
         private void Awake() {
