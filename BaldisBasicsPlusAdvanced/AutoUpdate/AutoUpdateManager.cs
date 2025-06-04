@@ -187,6 +187,7 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
 
             void SetExceptionMessage(string text, float time = 10f)
             {
+                AdvancedCore.Logging.LogWarning(text);
                 notif.tmpText.text = text;
                 notif.time = time;
                 notif.sound = AssetsStorage.sounds["buzz_elv"];
@@ -279,8 +280,9 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
 
                 try
                 {
+                    Directory.CreateDirectory("Adv_TEMP");
                     using (FileStream fs = new FileStream($"Adv_TEMP/build{selectedData.fileExtension}", 
-                        FileMode.OpenOrCreate, FileAccess.Write))
+                        FileMode.OpenOrCreate, FileAccess.ReadWrite))
                     {
                         fs.Write(downloadRequest.downloadHandler.data, 0, downloadRequest.downloadHandler.data.Length);
                     }
@@ -289,6 +291,7 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                 {
                     SetExceptionMessage("Something went wrong during creating file!");
                     AdvancedCore.Logging.LogError(e);
+                    yield break;
                 }
 
                 if (selectedData.fileExtension != ".zip")
