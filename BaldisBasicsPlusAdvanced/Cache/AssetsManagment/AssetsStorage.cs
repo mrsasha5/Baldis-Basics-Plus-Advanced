@@ -92,6 +92,8 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
 
         //game assets
 
+        public static Shader graphsStandardShader;
+
         public static readonly Baldi genericBaldi;
 
         public static readonly Structure_EnvironmentObjectPlacer weightedPlacer;
@@ -136,6 +138,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                     sw.Start();
                 }
                 
+                graphsStandardShader = Shader.Find("Shader Graphs/Standard");
                 genericBaldi = AssetsHelper.LoadAsset<Baldi>("Baldi_Main1");
                 weirdErrorSound = AssetsHelper.LoadAsset<AudioClip>("WeirdError");
 

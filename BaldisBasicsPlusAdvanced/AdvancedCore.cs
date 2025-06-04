@@ -93,7 +93,6 @@ namespace BaldisBasicsPlusAdvanced
                 Config.Bind("Updates", "Check Updates", defaultValue: true, 
                 "Checks releases from Github repo and install them if you give permission for this!").Value;
 
-            //cancelled due of the Github restrictions
             //updateCheckIntervalTime =
             //    Config.Bind("Updates", "Interval Time", defaultValue: 600f,
             //    "How many seconds should go until mod will check releases again. " +
@@ -106,8 +105,9 @@ namespace BaldisBasicsPlusAdvanced
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), false);
             LoadingEvents.RegisterOnAssetsLoaded(Info, OnAssetsLoadedPost(), true);
 
-            //damn, I even can't change text size without patches!!
-            /*MTM101BaldiDevAPI.AddWarningScreen(
+#warning REMOVE ON RELEASE
+            //damn, I even can't change text size without patches
+            MTM101BaldiDevAPI.AddWarningScreen(
                 "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
                 "Remember about main conditions for the beta testers. " +
                 "You must observe them until they are declared obsolete by me.\n" +
@@ -115,7 +115,13 @@ namespace BaldisBasicsPlusAdvanced
                 " * Do not leak build & assets\n" +
                 "<color=#00FF00> * You are allowed to show a new content</color></color>",
                 //" * Do not disclose information about new/planned content in any way to non-beta testers</color>", 
-                false);*/
+                false);
+            MTM101BaldiDevAPI.AddWarningScreen(
+                "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
+                "If this build was leaked without permission and you have installed it... " +
+                "Please note that as a NON-BETA TESTER YOU WILL NOT RECEIVE FEEDBACK IN CASE OF A BROKEN GAME. " +
+                "You can close game until it will be launched fully.",
+                false);
 
             GameRegisterManager.InitializeDoNotDestroyOnLoadObjects();
         }

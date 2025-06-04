@@ -101,7 +101,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             ParticleSystemRenderer renderer = particleSystem.GetComponent<ParticleSystemRenderer>();
             renderer.material = AssetsHelper.LoadAsset<Material>("DustTest");
-            renderer.material.shader = Shader.Find("Shader Graphs/Standard");
+            renderer.material.shader = AssetsStorage.graphsStandardShader;
             renderer.material.SetColor(new Color(0.88f, 0.34f, 0.13f));
 
             MainModule main = particleSystem.main;

@@ -56,7 +56,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                     List<Cell> cells = room.GetNewTileList();
                     for (int i = 0; i < positions.Count; i++)
                     {
-                        Cell cell = ec.CellFromPosition(positions[i]);//cells.Find(x => x.position == positions[i]);
+                        Cell cell = ec.CellFromPosition(positions[i]);
 
                         if (cell != null && cell.HardCoverageFits(CellCoverage.Center | CellCoverage.Down))
                         {
@@ -79,6 +79,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                     facultyPlates[i].SetPointsReward(pointsPerFaculty);
                     facultyPlates[i].SetGenerosityCount(1);
                 }
+
+                //AW I FORGOT ABOUT THIS CODE LINE, WHEN I WAS REWRITING ALL BUILDERS TO THE NEW ONES AFTER 0.8 
+                if (faculties <= 0) break;
             }
 
             generatedPlates.Clear();

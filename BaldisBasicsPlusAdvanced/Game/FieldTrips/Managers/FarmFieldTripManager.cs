@@ -76,6 +76,9 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
             if (!flagIsReached)
                 FieldTripsLoader.onGameLoadedBack += 
                     () => FieldTripsLoader.PrevEc.GetAudMan().PlaySingle(AssetsStorage.sounds["bal_game_over"]);
+            //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(1, 1f);
+            //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(5, 1f);
+            //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(6, 1f);
         }
 
         public void InitializePrefab(int variant)
@@ -158,7 +161,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
             GameObject quadObj = GameObject.CreatePrimitive(PrimitiveType.Quad);
             quadObj.name = "GrassField";
             MeshRenderer renderer = quadObj.GetComponent<MeshRenderer>();
-            renderer.material = new Material(AssetsStorage.materials["belt"]);
+            renderer.material = new Material(AssetsStorage.graphsStandardShader);
             renderer.material.mainTexture = AssetsStorage.textures["grass"];
             renderer.material.mainTextureScale = Vector2.one * 100f;
             quadObj.transform.position = Vector3.up * -1f;
@@ -321,6 +324,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
         public override void OnLoadingScreenDestroying()
         {
             base.OnLoadingScreenDestroying();
+
             AudioListener.pause = false;
             PropagatedAudioManager.paused = false;
 
@@ -341,6 +345,10 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
 
             StartCoroutine(Timer());
 
+            //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(1, 0f);
+            //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(5, 0f);
+            //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(6, 0f);
+
             Singleton<MusicManager>.Instance.PlayMidi(AssetsStorage.campingMidi.text, loop: true);
         }
 
@@ -352,6 +360,8 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
         //Eller's algorithm
         private IEnumerator MazeGenerator()
         {
+            ec.CullingManager.SetActive(false);
+
             int setsCounter = 0;
             Dictionary<Cell, int> cellSets = new Dictionary<Cell, int>();
 
@@ -544,6 +554,8 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
                 cell.HardCoverEntirely();
                 itemsCounter--;
             }
+
+            ec.CullingManager.SetActive(false);
 
             Initialize();
             FieldTripsLoader.OnTripReady();

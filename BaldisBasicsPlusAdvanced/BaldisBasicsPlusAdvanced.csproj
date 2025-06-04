@@ -16,6 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Game\FieldTrips\Components\**" />
+    <EmbeddedResource Remove="Game\FieldTrips\Components\**" />
+    <None Remove="Game\FieldTrips\Components\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\Dependencies\0Harmony.dll</HintPath>
     </Reference>
@@ -349,10 +355,6 @@
     <Reference Include="UnityEngine.XRModule">
       <HintPath>..\Dependencies\UnityEngine.XRModule.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Game\FieldTrips\Components\" />
   </ItemGroup>
 
 </Project>

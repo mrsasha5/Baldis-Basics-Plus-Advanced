@@ -47,6 +47,9 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
         [SerializeField]
         private float speed;
 
+        [SerializeField]
+        private float particlesRateOverDistance;
+
         private Color spriteColor;
 
         private float keepWarmTime;
@@ -71,6 +74,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
             motorVolume = 1f;
             warmingSpeed = 0.1f;
             coolingSpeed = 0.01f;
+            particlesRateOverDistance = 100;
 
             renderer = ObjectsCreator.CreateSpriteRenderer(AssetsStorage.sprites["adv_reaper"], isBillboard: false);
             renderer.transform.SetParent(transform, false);
@@ -121,7 +125,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
 
             ParticleSystemRenderer particlesRenderer = particleSystem.GetComponent<ParticleSystemRenderer>();
             particlesRenderer.material = AssetsHelper.LoadAsset<Material>("DustTest");
-            particlesRenderer.material.shader = Shader.Find("Shader Graphs/Standard");
+            particlesRenderer.material.shader = AssetsStorage.graphsStandardShader;
             particlesRenderer.material.SetColor(Color.gray);
 
             MainModule main = particleSystem.main;
@@ -137,7 +141,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
 
             EmissionModule emission = particleSystem.emission;
             emission.rateOverTime = 0;
-            emission.rateOverDistance = 100;
+            emission.rateOverDistance = 0;
             emission.enabled = false;
 
             VelocityOverLifetimeModule velocityOverLifetime = particleSystem.velocityOverLifetime;
@@ -205,6 +209,9 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs
                 spriteColor.g = spriteWarmValue;
                 spriteColor.b = spriteWarmValue;
                 renderer.color = spriteColor;
+
+                EmissionModule emission = particleSystem.emission;
+                emission.rateOverDistance = particlesRateOverDistance * (1f - spriteWarmValue);
             }
             else
             {

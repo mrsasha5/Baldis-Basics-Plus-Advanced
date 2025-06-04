@@ -53,7 +53,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             ignorableCollidableObjects =
             //btw, doors uses entity buffers
             ~(LayerMask.GetMask("NPCs", "Player", "Ignore Raycast", "StandardEntities", "ClickableEntities" //"Ignore Raycast B" needed?
-                , "EntityBuffer") | 1 << 18);
+                , "EntityBuffer", "Block Raycast") | 1 << 18);
             takenBalloonLayer = 29;
         }
 
