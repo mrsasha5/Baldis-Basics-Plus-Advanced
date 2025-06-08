@@ -64,6 +64,8 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
 
         private bool firstInit = true;
 
+        private HudGauge gauge;
+
         private System.Random rng;
 
         protected override void CloseFieldTrip(bool showFieldTripScreen = true)
@@ -76,6 +78,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
             if (!flagIsReached)
                 FieldTripsLoader.onGameLoadedBack += 
                     () => FieldTripsLoader.PrevEc.GetAudMan().PlaySingle(AssetsStorage.sounds["bal_game_over"]);
+            gauge?.Deactivate();
             //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(1, 1f);
             //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(5, 1f);
             //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(6, 1f);
@@ -215,7 +218,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers
             float baseTime = time;
             if (!success) time = 10f;
 
-            HudGauge gauge = CoreGameManager.Instance.GetHud(0).gaugeManager.ActivateNewGauge(reaperIconGauge, time);
+            gauge = CoreGameManager.Instance.GetHud(0).gaugeManager.ActivateNewGauge(reaperIconGauge, time);
 
             float defaultSpeed = 1f;
 

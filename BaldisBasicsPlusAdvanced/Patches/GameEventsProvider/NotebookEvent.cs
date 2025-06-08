@@ -1,8 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.GameEventSystem;
+﻿using BaldisBasicsPlusAdvanced.Game.Events;
 using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BaldisBasicsPlusAdvanced.Patches.GameEventsProvider
 {
@@ -13,7 +10,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameEventsProvider
         [HarmonyPostfix]
         private static void OnCLicked()
         {
-            EventsManager.OnNotebookClaim();
+            ColdSchoolEvent.InvokeOnNotebookClaim();
         }
     }
 }

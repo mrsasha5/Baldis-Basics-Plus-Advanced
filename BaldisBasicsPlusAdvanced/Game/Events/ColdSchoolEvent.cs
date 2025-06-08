@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace BaldisBasicsPlusAdvanced.Game.Events
 {
-    public class ColdSchoolEvent : EventableRandomEvent, IPrefab
+    public class ColdSchoolEvent : RandomEvent, IPrefab
     {
 
         private static int activeEvents;
@@ -24,15 +24,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private AudioManager audMan;
 
         [SerializeField]
-        private float maxRaycast = 62.5f;
+        private float maxRaycast;
 
         private Fog fog = new Fog();
 
         private Color fogColor = new Color(0f, 0f, 1f, 1f);
 
-        private MovementModifier npcMoveMod = new MovementModifier(Vector3.zero, 0.25f);
-
-        private MovementModifier playerMod = new MovementModifier(Vector3.zero, 0.25f);
+        private MovementModifier moveMod = new MovementModifier(Vector3.zero, 0.25f);
 
         private float minMultiplier = 0.25f;
 
@@ -60,7 +58,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         {
             audMan = gameObject.AddComponent<AudioManager>();
             audMan.audioDevice = gameObject.AddComponent<AudioSource>();
-            //canvasFrozen.gameObject.SetActive(false); //it's automatically disabled
+            maxRaycast = 62.5f;
         }
 
         private IEnumerator PlayMusicIn(float seconds)
@@ -117,7 +115,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
         private void AddMoveModifiers()
         {
-            pm.Am.moveMods.Add(playerMod);
+            pm.Am.moveMods.Add(moveMod);
             List<NPC> npcs = GetAvailableNPCs();
             foreach (NPC npc in npcs)
             {
@@ -127,7 +125,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
         private void RemoveMoveModifiers()
         {
-            pm.Am.moveMods.Remove(playerMod);
+            pm.Am.moveMods.Remove(moveMod);
             List<NPC> npcs = GetAvailableNPCs();
             foreach (NPC npc in npcs)
             {
@@ -165,16 +163,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             {
                 if (cooldownTime > 0 && ec != null) cooldownTime -= Time.deltaTime * ec.EnvironmentTimeScale;
 
-                if (playerMod.movementMultiplier < maxMultiplier && ReflectionHelper.GetValue<bool>(pm.plm, "running"))
+                if (moveMod.movementMultiplier < maxMultiplier && ReflectionHelper.GetValue<bool>(pm.plm, "running"))
                 {
-                    playerMod.movementMultiplier += 0.06f * Time.deltaTime;
+                    moveMod.movementMultiplier += 0.06f * Time.deltaTime;
                     SetCooldown(2f);
                 }
-                if (playerMod.movementMultiplier > minMultiplier && !ReflectionHelper.GetValue<bool>(pm.plm, "running") && cooldownTime < 0)
+                if (moveMod.movementMultiplier > minMultiplier && !ReflectionHelper.GetValue<bool>(pm.plm, "running") && cooldownTime < 0)
                 {
-                    playerMod.movementMultiplier -= 0.02f * Time.deltaTime;
+                    moveMod.movementMultiplier -= 0.02f * Time.deltaTime;
                 }
-                transparency = (maxMultiplier - playerMod.movementMultiplier) / maxMultiplier;
+                transparency = (maxMultiplier - moveMod.movementMultiplier) / maxMultiplier;
                 frozenOverlay.color = new Color(1f, 1f, 1f, transparency);
                 yield return null;
             }
@@ -206,7 +204,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             //if (activeEvents < 2) setEventText(descriptionKey);
 
             AddMoveModifiers();
-            playerMod.movementMultiplier = minMultiplier;
+            moveMod.movementMultiplier = minMultiplier;
             audMan.PlaySingle(AssetsStorage.sounds["adv_frozen"]);
         }
 
@@ -235,9 +233,18 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             RemoveMoveModifiers();
         }
 
-        public override void OnNotebookClaim()
+        public static void InvokeOnNotebookClaim()
         {
-            playerMod.movementMultiplier = maxMultiplier;
+            ColdSchoolEvent[] events = FindObjectsOfType<ColdSchoolEvent>();
+            for (int i = 0; i < events.Length; i++)
+            {
+                if (events[i].Active) events[i].OnNotebookClaim();
+            }
+        }
+
+        private void OnNotebookClaim()
+        {
+            moveMod.movementMultiplier = maxMultiplier;
             SetCooldown(7f);
         }
 

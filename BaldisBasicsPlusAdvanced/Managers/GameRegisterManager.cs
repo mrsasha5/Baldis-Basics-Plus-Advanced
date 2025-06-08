@@ -152,21 +152,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeNPCs()
         {
-            /*PrefabsCreator.CreateNpc(
-                new NPCBuilder<Virus>(AdvancedCore.Instance.Info)
-                .SetName("Chohu")
-                .SetMetaName("Adv_NPC_Virus")
-                .SetEnum("Chohu")
-                .SetPoster(AssetsHelper.TextureFromFile("Textures/Npcs/Chohu/adv_poster_chohu.png"),
-                "Adv_NPC_Virus", "Adv_NPC_Virus_Desc")
-                .SetAirborne()
-                .AddMetaFlag(NPCFlags.StandardNoCollide)
-                .AddLocker()
-                //.AddHeatmap() //???
-                )
-                .DoNotSpawn();
-                .SetEndless(true)
-                .SetForced(true);*/
             PrefabsCreator.CreateNpc(
                 new NPCBuilder<CrissTheCrystal>(AdvancedCore.Instance.Info)
                 .SetName("Criss the Crystal")
