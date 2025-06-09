@@ -73,7 +73,6 @@ namespace BaldisBasicsPlusAdvanced
             }
         }
 
-
         private void Awake()
         {
             harmony = new Harmony(modId);
