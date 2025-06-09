@@ -156,18 +156,18 @@ namespace BaldisBasicsPlusAdvanced
 
             KitchenStove.LoadRecipesFromAssets();
 
-            if (ApiManager.onAssetsPostLoading != null)
-            {
-                ApiManager.onAssetsPostLoading.Invoke();
-                ApiManager.onAssetsPostLoading = null;
-            }
-
             yield return "Initializing new MIDIs...";
 
             GameRegisterManager.InitializeMidisPost();
 
             yield return "Initializing Kitchen Stove posters...";
             GameRegisterManager.InitializeKitchenStovePosters();
+
+            if (ApiManager.onAssetsPostLoading != null)
+            {
+                ApiManager.onAssetsPostLoading.Invoke();
+                ApiManager.onAssetsPostLoading = null;
+            }
 
             GC.Collect();
         }
@@ -180,7 +180,7 @@ namespace BaldisBasicsPlusAdvanced
                 ApiManager.onAssetsPreLoading = null;
             }
 
-            int count = 19; //+1 ?
+            int count = 20;
 
             yield return count;
             yield return "Caching game assets...";
@@ -209,6 +209,8 @@ namespace BaldisBasicsPlusAdvanced
             GameRegisterManager.InitializeObjectBuilders();
             yield return "Initializing posters...";
             GameRegisterManager.InitializePosters();
+            yield return "Initializing trips...";
+            GameRegisterManager.InitializeTrips();
             yield return "Initializing other things...";
             GameRegisterManager.InitializeApiThings();
             yield return "Adding some tags...";

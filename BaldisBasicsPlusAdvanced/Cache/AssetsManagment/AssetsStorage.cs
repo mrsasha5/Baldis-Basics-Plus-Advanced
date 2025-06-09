@@ -179,8 +179,9 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
 
                 sounds.Add(
                     "grapple_loop",
-                    ObjectCreators.CreateSoundObject(AssetsHelper.LoadAsset<AudioClip>("GrappleLoop"), "", SoundType.Effect, Color.white, sublength: 0f)
-                    );
+                    ObjectCreators.CreateSoundObject(AssetsHelper.LoadAsset<AudioClip>("GrappleLoop"), "", 
+                        SoundType.Effect, Color.white, sublength: 0f)
+                );
 
                 LoadSound("nana_sput", "Nana_Sput");
                 LoadSound("lock_door_stop", "LockDoorStop");
@@ -637,11 +638,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                 exception = e;
                 cached = false;
             }
-
-        }
-
-        public static void LoadAssetsOnMemoryCleaningPost()
-        {
 
         }
 

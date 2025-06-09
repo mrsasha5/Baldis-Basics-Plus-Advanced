@@ -1,5 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Game.FieldTrips;
+using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 using HarmonyLib;
 
 namespace BaldisBasicsPlusAdvanced.Patches.FieldTrips
@@ -9,6 +9,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.FieldTrips
     {
         private static FieldTripEntranceRoomFunction instance;
 
+        private static FieldTripData data;
+
         public static FieldTripEntranceRoomFunction Instance => instance;
 
         [HarmonyPatch("Initialize")]
@@ -16,6 +18,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.FieldTrips
         private static void OnInitialize(FieldTripEntranceRoomFunction __instance)
         {
             instance = __instance;
+            SpecialTripsRegistryManager.InitializeRng();
+            data = SpecialTripsRegistryManager.GetRandomTripData();
+            SpecialTripsRegistryManager.ResetRng();
         }
 
         [HarmonyPatch("StartFieldTrip")]
@@ -30,11 +35,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.FieldTrips
                     ___unlocked = true;
                 }
 
-                FieldTripsLoader.LoadFieldTrip(new FieldTripData()
-                {
-                    sceneName = "Farm",
-                    sceneObject = ObjectsStorage.SceneObjects["Farm"]
-                });
+                FieldTripsLoader.LoadFieldTrip(data);
                 return false;
             }
             return true;

@@ -37,9 +37,6 @@ using BaldisBasicsPlusAdvanced.Game.GameItems.Drinks;
 using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using PlusLevelFormat;
 using PlusLevelLoader;
-using BaldisBasicsPlusAdvanced.Game.FieldTrips.Managers;
-using BaldisBasicsPlusAdvanced.Game.FieldTrips.NPCs;
-using BaldisBasicsPlusAdvanced.Game.FieldTrips.Objects.Farm;
 using BaldisBasicsPlusAdvanced.Compats;
 using MTM101BaldAPI.AssetTools;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
@@ -47,6 +44,10 @@ using BaldisBasicsPlusAdvanced.Patches.Player;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Game.Objects.Portals;
 using MTM101BaldAPI.PlusExtensions;
+using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm;
+using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs;
+using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects;
+using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 
 namespace BaldisBasicsPlusAdvanced.Managers
 {
@@ -70,7 +71,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             LoadFrom("Maintenance", LevelType.Maintenance);
             LoadFrom("Factory", LevelType.Factory);
             //FarmFieldTripManager.farmTripMusicKey = 
-            //    AssetLoader.MidiFromFile(AssetsHelper.modPath + "Audio/Music/FieldTrips/Adv_BSideSkid_CornTime.mid",
+            //    AssetLoader.MidiFromFile(AssetsHelper.modPath + "Audio/Music/FieldTrips/.mid",
             //        "Adv_BSideSkid_CornTime");
         }
 
@@ -119,6 +120,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeSceneObjects()
         {
+            const string fieldTripsModeName = "Mode_SpecialFieldTrips";
+
             BinaryReader binaryReader = new BinaryReader(File.OpenRead(AssetsHelper.modPath + "Premades/Levels/Farm.cbld"));
             Level farmLevel = binaryReader.ReadLevel();
 
@@ -138,14 +141,13 @@ namespace BaldisBasicsPlusAdvanced.Managers
             ObjectsStorage.SceneObjects["Farm"].manager = farmMan;
 
             farmMan.beginPlayImmediately = true;
-            farmMan.managerNameKey = "Mode_FieldTrips";
+            farmMan.managerNameKey = fieldTripsModeName;
 
-            //ReflectionHelper.SetValue(farmMan, "ambience", );
             ReflectionHelper.SetValue(farmMan, "elevatorScreenPre", Resources.FindObjectsOfTypeAll<ElevatorScreen>()[0]);
 
             farmMan.gameObject.ConvertToPrefab(true);
 
-            farmScene.AddMeta(AdvancedCore.Instance, new string[] { "adv_3D_field_trip" });
+            farmScene.AddMeta(AdvancedCore.Instance, new string[] { "adv_special_field_trip" });
 
             binaryReader.Close();
         }
@@ -898,6 +900,17 @@ namespace BaldisBasicsPlusAdvanced.Managers
             ApiManager.CreateSchoolCouncilTopic<TurnOffFacultyNoisyPlatesTopic>(AdvancedCore.Instance.Info);
             ApiManager.CreateSchoolCouncilTopic<GottaSweepTimeTopic>(AdvancedCore.Instance.Info);
             ApiManager.CreateSchoolCouncilTopic<ConvertVendingMachinesTopic>(AdvancedCore.Instance.Info);
+        }
+
+        public static void InitializeTrips()
+        {
+            new FieldTripData()
+            {
+                sceneName = "Farm",
+                sceneObject = ObjectsStorage.SceneObjects["Farm"]
+            }
+            .SetDefaultSkybox()
+            .Register();
         }
 
         public static void InitializeObjects()
