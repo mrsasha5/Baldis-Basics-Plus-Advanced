@@ -8,6 +8,8 @@ using System.Reflection;
 using System;
 using BaldisBasicsPlusAdvanced.Game.Components.Movement;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Game.Components.UI;
+using MTM101BaldAPI.UI;
 
 namespace BaldisBasicsPlusAdvanced.Patches
 {
@@ -379,35 +381,6 @@ namespace BaldisBasicsPlusAdvanced.Patches
             _audMan.PlaySingle(AssetsStorage.sounds["teleport"]);
         }
 
-        /*public static void SetGrounded(this ITM_NanaPeel nanaPeel)
-        {
-            Entity entity = ReflectionHelper.GetValue<Entity>(nanaPeel, "entity");
-
-            Vector3 position = new Vector3(entity.transform.position.x, ReflectionHelper.GetValue<Entity, float>("physicalHeight"), entity.transform.position.z);
-
-            entity.transform.position = position;
-
-            //PrivateDataHelper.SetValue<Vector3>(entity, "velocity", Vector3.zero);
-            ReflectionHelper.SetValue<Vector3>(entity, "previousPosition", entity.transform.position);
-
-            entity.UpdateInternalMovement(Vector3.zero);
-
-            ReflectionHelper.SetValue<float>(nanaPeel, "height", ReflectionHelper.GetValue<float>(nanaPeel, "endHeight"));
-            ReflectionHelper.SetValue<bool>(nanaPeel, "ready", true);
-
-            Force force = ReflectionHelper.GetValue<Force>(nanaPeel, "force");
-
-            try
-            {
-                entity.RemoveForce(force);
-            } catch (Exception) { }
-
-            entity.SetGrounded(true);
-            entity.SetHeight(ReflectionHelper.GetValue<float>(nanaPeel, "height"));
-
-            ReflectionHelper.SetValue<float>(nanaPeel, "time", ReflectionHelper.GetValue<float>(nanaPeel, "maxTime"));
-        }*/
-
         public static bool Exists(this LocalizationManager localizationManager, string checkName)
         {
             Dictionary<string, string> localizedText = ReflectionHelper.GetValue<Dictionary<string, string>>(localizationManager,
@@ -442,6 +415,14 @@ namespace BaldisBasicsPlusAdvanced.Patches
                 }
             }
             return itemsCount;
+        }
+
+        public static void SetCursorInitiator(this Canvas canvas, bool setAutoInitiator = false)
+        {
+            CursorInitiator cursorInitiator = UIHelpers.AddCursorInitiatorToCanvas(canvas);
+
+            if (setAutoInitiator)
+                canvas.gameObject.AddComponent<CursorAutoInitiator>().initiator = cursorInitiator;
         }
 
         public static void ToCenter(this Image image)

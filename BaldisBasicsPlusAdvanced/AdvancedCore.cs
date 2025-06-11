@@ -209,8 +209,6 @@ namespace BaldisBasicsPlusAdvanced
             GameRegisterManager.InitializeObjectBuilders();
             yield return "Initializing posters...";
             GameRegisterManager.InitializePosters();
-            yield return "Initializing trips...";
-            GameRegisterManager.InitializeTrips();
             yield return "Initializing other things...";
             GameRegisterManager.InitializeApiThings();
             yield return "Adding some tags...";
@@ -223,6 +221,8 @@ namespace BaldisBasicsPlusAdvanced
             GameRegisterManager.CorrectPatches();
             yield return "Initializing scene objects...";
             GameRegisterManager.InitializeSceneObjects();
+            yield return "Initializing trips...";
+            GameRegisterManager.InitializeTrips();
             yield return "Loading new MIDIs...";
             GameRegisterManager.InitializeMidis();
             yield return "Integrating with other mods...";

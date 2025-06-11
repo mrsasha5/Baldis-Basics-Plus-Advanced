@@ -1,5 +1,7 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
-using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
+﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Game.Components.UI;
+using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.SaveSystem;
@@ -54,6 +56,13 @@ namespace BaldisBasicsPlusAdvanced.Menu
                 setDisabledCover: true
             ).Disable(gameInitialized);
 
+            StandardMenuButton creditsButton = CreateButton(LoadCreditsScreen, AssetsHelper.LoadAsset<Sprite>("QMark_Sheet_1"),
+                "CreditsButton", new Vector3(155f, 70f, 0f));
+            creditsButton.swapOnHigh = true;
+            creditsButton.image = creditsButton.GetComponent<Image>();
+            creditsButton.highlightedSprite = AssetsHelper.LoadAsset<Sprite>("QMark_Sheet_0");
+            creditsButton.unhighlightedSprite = creditsButton.image.sprite;
+
             CreateApplyButton(OnApply);
 
             if (OptionsDataManager.ExtraSettings.showNotif)
@@ -68,6 +77,13 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
                 gameObject.AddComponent<NotifiedExtraMenu>().notifImage = notif;
             }
+        }
+
+        private void LoadCreditsScreen()
+        {
+            CreditsScreen screen = Instantiate(ObjectsStorage.Objects["credits_screen"].GetComponent<CreditsScreen>());
+            screen.onScreenClose += delegate { transform.parent.gameObject.SetActive(true); };
+            transform.parent.gameObject.SetActive(false);
         }
 
         private void OnApply()

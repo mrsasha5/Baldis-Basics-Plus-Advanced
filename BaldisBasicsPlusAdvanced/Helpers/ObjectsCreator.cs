@@ -11,6 +11,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Texts;
 using BaldisBasicsPlusAdvanced.Game.Objects.Pickups;
 using Rewired.Demos;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using MTM101BaldAPI.UI;
 
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
@@ -33,11 +34,9 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             image.sprite = sprite;
 
             StandardMenuButton standardButton = button.gameObject.AddComponent<StandardMenuButton>();
-            standardButton.OnPress = new UnityEvent();
-            standardButton.OnRelease = new UnityEvent();
+            standardButton.InitializeAllEvents();
             if (spriteOnHighlight != null)
             {
-                standardButton.OnHighlight = new UnityEvent();
                 standardButton.swapOnHigh = true;
                 standardButton.image = image;
                 standardButton.highlightedSprite = spriteOnHighlight;
@@ -66,11 +65,9 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             StandardMenuButton standardButton = button.gameObject.AddComponent<StandardMenuButton>();
             standardButton.image = image;
             standardButton.unhighlightedSprite = sprite;
-            standardButton.OnPress = new UnityEvent();
-            standardButton.OnRelease = new UnityEvent();
+            standardButton.InitializeAllEvents();
             if (changeSpriteOnHightlight)
             {
-                standardButton.OnHighlight = new UnityEvent();
                 standardButton.swapOnHigh = true;
                 standardButton.highlightedSprite = spriteOnHighlight;
             }
@@ -244,6 +241,11 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         public static Canvas CreateCanvas(bool setGlobalCam, float planeDistance = 0.31f)
         {
             GameObject gameObj = new GameObject("Canvas");
+            return CreateCanvas(gameObj, setGlobalCam, planeDistance);
+        }
+
+        public static Canvas CreateCanvas(GameObject gameObj, bool setGlobalCam, float planeDistance = 0.31f)
+        {
             gameObj.layer = LayersHelper.ui; //UI
             Canvas canvas = gameObj.AddComponent<Canvas>();
             CanvasScaler canvasScaler = gameObj.AddComponent<CanvasScaler>();

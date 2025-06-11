@@ -48,6 +48,7 @@ using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
+using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 
 namespace BaldisBasicsPlusAdvanced.Managers
 {
@@ -801,7 +802,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             //initializing Chalkboard Menu
             Canvas canvas = ObjectsCreator.CreateCanvas(setGlobalCam: true);
             canvas.name = "Chalkboard Menu";
-            GraphicRaycaster graphicRaycaster = canvas.GetComponent<GraphicRaycaster>();
 
             ChalkboardMenu chalkboardMenu = canvas.gameObject.AddComponent<ChalkboardMenu>();
 
@@ -831,6 +831,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             info.color = Color.white;
             info.alignment = TextAlignmentOptions.Top;
 
+#warning update ObjectsCreator button methods, rewrite this part (and CreditsScreen too)
             Image exitImage = UIHelpers.CreateImage(AssetsStorage.sprites["adv_exit_transparent"], chalkboardMenu.chalkboard.transform,
                 Vector3.zero, correctPosition: false);
             exitImage.name = "exit";
@@ -854,12 +855,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             canvas.gameObject.ConvertToPrefab(true);
 
-            CursorInitiator cursorInitiator = canvas.gameObject.AddComponent<CursorInitiator>();
-            cursorInitiator.cursorPre = AssetsStorage.cursor;
-            cursorInitiator.graphicRaycaster = graphicRaycaster;
-            canvas.gameObject.AddComponent<CursorAutoInitiator>().initiator = cursorInitiator;
+            canvas.SetCursorInitiator(setAutoInitiator: true);
 
             ObjectsStorage.Objects.Add("chalkboard_menu", canvas.gameObject);
+
+            PrefabsCreator.CreateObjectPrefab<CreditsScreen>("Credits Screen", "credits_screen");
         }
 
         public static void InitializeApiThings()

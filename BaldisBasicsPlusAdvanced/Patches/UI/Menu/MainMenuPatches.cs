@@ -1,5 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
-using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
+using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
 using MTM101BaldAPI.UI;
