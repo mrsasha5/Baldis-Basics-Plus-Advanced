@@ -18,60 +18,34 @@ namespace BaldisBasicsPlusAdvanced.Helpers
     public class ObjectsCreator
     {
 
-        public static StandardMenuButton CreateSpriteButton(Sprite sprite, Sprite spriteOnHighlight = null, Transform parent = null)
+        public static StandardMenuButton CreateSpriteButton(Sprite sprite, Vector3? position = null, Transform parent = null, 
+            Sprite spriteOnHighlight = null, Sprite spriteOnPress = null)
         {
-            GameObject button = new GameObject("Button");
-            if (parent != null)
-            {
-                button.transform.SetParent(parent);
-                button.transform.localPosition = Vector3.zero;
-            }
+            Image image = UIHelpers.CreateImage(sprite, parent, position != null ? (Vector3)position : Vector3.zero, false);
+            image.name = "Button";
 
-            button.layer = 5; //UI
+            GameObject button = image.gameObject;
+
+            button.layer = LayersHelper.ui;
             button.tag = "Button";
-
-            Image image = button.gameObject.AddComponent<Image>();
+            
             image.sprite = sprite;
 
             StandardMenuButton standardButton = button.gameObject.AddComponent<StandardMenuButton>();
+            standardButton.image = image;
             standardButton.InitializeAllEvents();
+            standardButton.unhighlightedSprite = sprite;
             if (spriteOnHighlight != null)
             {
                 standardButton.swapOnHigh = true;
                 standardButton.image = image;
                 standardButton.highlightedSprite = spriteOnHighlight;
-                standardButton.unhighlightedSprite = sprite;
             }
-            
-
-            return standardButton;
-        }
-
-        public static StandardMenuButton CreateSpriteButton(Sprite sprite, out Image image, Sprite spriteOnHighlight = null, bool changeSpriteOnHightlight = false, Transform parent = null)
-        {
-            GameObject button = new GameObject("Button");
-            if (parent != null)
+            if (spriteOnPress != null)
             {
-                button.transform.SetParent(parent);
-                button.transform.localPosition = Vector3.zero;
+                standardButton.swapOnHold = true;
+                standardButton.heldSprite = spriteOnPress;
             }
-
-            button.layer = 5; //UI
-            button.tag = "Button";
-
-            image = button.gameObject.AddComponent<Image>();
-            image.sprite = sprite;
-
-            StandardMenuButton standardButton = button.gameObject.AddComponent<StandardMenuButton>();
-            standardButton.image = image;
-            standardButton.unhighlightedSprite = sprite;
-            standardButton.InitializeAllEvents();
-            if (changeSpriteOnHightlight)
-            {
-                standardButton.swapOnHigh = true;
-                standardButton.highlightedSprite = spriteOnHighlight;
-            }
-
 
             return standardButton;
         }
@@ -79,7 +53,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         public static StandardMenuButton AddButtonProperties(TMP_Text text, bool underlineOnHighlight = false)
         {
             GameObject parent = new GameObject("Button");
-            parent.layer = 5; //UI
+            parent.layer = LayersHelper.ui;
             parent.tag = "Button";
             parent.transform.SetParent(text.transform.parent);
             parent.transform.position = text.transform.position;
@@ -106,7 +80,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         public static StandardMenuButton AddButtonProperties(TMP_Text text, Vector2 sizeDelta, bool underlineOnHighlight = false)
         {
             GameObject parent = new GameObject("Button");
-            parent.layer = 5; //UI
+            parent.layer = LayersHelper.ui;
             parent.tag = "Button";
             parent.transform.SetParent(text.transform.parent);
             parent.transform.position = text.transform.position;
@@ -118,12 +92,11 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             text.transform.localPosition = Vector3.zero;
 
             StandardMenuButton standardButton = parent.gameObject.AddComponent<StandardMenuButton>();
-            standardButton.OnPress = new UnityEvent();
+            standardButton.InitializeAllEvents();
             text.tag = "Button";
 
             if (underlineOnHighlight)
             {
-                standardButton.OnHighlight = new UnityEvent();
                 standardButton.underlineOnHigh = true;
                 standardButton.text = text;
             }
@@ -178,7 +151,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             gm.transform.position = pos;
 
             PropagatedAudioManager audMan = gm.AddComponent<PropagatedAudioManager>();
-            //gm.AddComponent<TemporaryGameObject>().Initialize(GameCamera.dijkstraMap.EnvironmentController, gm, aliveTime);
 
             if (destroyWhenAudioEnds)
             {

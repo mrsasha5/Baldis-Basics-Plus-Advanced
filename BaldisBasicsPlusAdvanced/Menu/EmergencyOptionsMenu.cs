@@ -24,15 +24,12 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
             if (buttonSpawn)
             {
-                emergencyButton = ObjectsCreator.CreateSpriteButton(AssetsStorage.sprites["elv_button_up"], out Image image, AssetsStorage.sprites["elv_button_down"], false, transform);
-                emergencyButton.swapOnHold = true;
-                emergencyButton.heldSprite = AssetsStorage.sprites["elv_button_down"];
+                emergencyButton = ObjectsCreator.CreateSpriteButton(AssetsStorage.sprites["elv_button_up"], new Vector3(0, -120, 0),
+                    transform, null, AssetsStorage.sprites["elv_button_down"]);
 
-                RectTransform rect = image.rectTransform;
+                RectTransform rect = emergencyButton.image.rectTransform;
 
                 rect.sizeDelta = new Vector2(140, 130);
-
-                emergencyButton.transform.localPosition = new Vector3(0, -120, 0);
 
                 TMP_Text buttonTitle = UIHelpers.CreateText<TextMeshProUGUI>(BaldiFonts.ComicSans12, Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_EmergencyButton_SpriteTitle"),
                     transform, new Vector3(0, -104, 0), false);
@@ -54,7 +51,6 @@ namespace BaldisBasicsPlusAdvanced.Menu
                 SetButtonState(ButtonState.InMenu);
             }
 
-            description.fontSize = 12;
             description.color = Color.black;
             description.alignment = TextAlignmentOptions.Top;
 

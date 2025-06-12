@@ -386,7 +386,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 npcText.alignment = TextAlignmentOptions.Top;
 
                 StandardMenuButton menuButton = ObjectsCreator.AddButtonProperties(npcText, size, true);
-                menuButton.InitializeAllEvents();
                 textButtons.Add(menuButton);
             }
         }

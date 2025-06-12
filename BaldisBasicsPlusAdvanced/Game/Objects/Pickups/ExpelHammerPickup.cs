@@ -106,7 +106,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Pickups
             agreeText.alignment = TextAlignmentOptions.Top;
 
             StandardMenuButton agreeButton = ObjectsCreator.AddButtonProperties(agreeText, size, true);
-            agreeButton.InitializeAllEvents();
 
             agreeButton.OnPress.AddListener(delegate ()
             {

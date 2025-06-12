@@ -374,8 +374,8 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
 
                 LoadModSprite("adv_obstacle_trick", "Objects/Plates/FakePlate/adv_obstacle_trick.png", 20f);
                 LoadModSprite("adv_boxing_glove_trick", "Objects/Plates/FakePlate/adv_boxing_glove_trick.png", 20f);
-                LoadModSprite("adv_exit", "UI/adv_exit.png");
-                LoadModSprite("adv_exit_transparent", "UI/adv_exit_transparent.png");
+                LoadModSprite("adv_exit", "UI/Buttons/adv_button_exit.png");
+                LoadModSprite("adv_exit_transparent", "UI/Buttons/adv_button_exit_transparent.png");
 
                 LoadModSprite("adv_mysterious_teleporter", "Items/LargeSprites/adv_mysterious_teleporter_large.png", 50f); 
                 LoadModSprite("adv_teleportation_bomb", "Items/LargeSprites/adv_teleportation_bomb_large.png", 50f);

@@ -201,7 +201,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
                 rejectText.alignment = TextAlignmentOptions.Top;
 
                 StandardMenuButton supportButton = ObjectsCreator.AddButtonProperties(supportText, buttonSize, true);
-                supportButton.InitializeAllEvents();
 
                 supportButton.OnPress.AddListener(delegate ()
                 {
@@ -215,7 +214,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
                 });
 
                 StandardMenuButton rejectButton = ObjectsCreator.AddButtonProperties(rejectText, buttonSize, true);
-                rejectButton.InitializeAllEvents();
 
                 rejectButton.OnPress.AddListener(delegate ()
                 {

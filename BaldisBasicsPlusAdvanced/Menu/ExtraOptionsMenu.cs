@@ -63,6 +63,8 @@ namespace BaldisBasicsPlusAdvanced.Menu
             creditsButton.highlightedSprite = AssetsHelper.LoadAsset<Sprite>("QMark_Sheet_0");
             creditsButton.unhighlightedSprite = creditsButton.image.sprite;
 
+            AddTooltip(creditsButton, "Adv_Option_Credits_Desc");
+
             CreateApplyButton(OnApply);
 
             if (OptionsDataManager.ExtraSettings.showNotif)
