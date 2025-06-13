@@ -12,6 +12,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Pickups;
 using Rewired.Demos;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using MTM101BaldAPI.UI;
+using BaldisBasicsPlusAdvanced.Patches;
 
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
@@ -19,10 +20,12 @@ namespace BaldisBasicsPlusAdvanced.Helpers
     {
 
         public static StandardMenuButton CreateSpriteButton(Sprite sprite, Vector3? position = null, Transform parent = null, 
-            Sprite spriteOnHighlight = null, Sprite spriteOnPress = null)
+            Sprite highlightedSprite = null, Sprite heldSprite = null)
         {
-            Image image = UIHelpers.CreateImage(sprite, parent, position != null ? (Vector3)position : Vector3.zero, false);
+            Image image = UIHelpers.CreateImage(sprite, parent, Vector3.zero, false);
             image.name = "Button";
+            image.ToCenter();
+            if (position != null) image.transform.localPosition = (Vector3)position;
 
             GameObject button = image.gameObject;
 
@@ -35,16 +38,16 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             standardButton.image = image;
             standardButton.InitializeAllEvents();
             standardButton.unhighlightedSprite = sprite;
-            if (spriteOnHighlight != null)
+            if (highlightedSprite != null)
             {
                 standardButton.swapOnHigh = true;
                 standardButton.image = image;
-                standardButton.highlightedSprite = spriteOnHighlight;
+                standardButton.highlightedSprite = highlightedSprite;
             }
-            if (spriteOnPress != null)
+            if (heldSprite != null)
             {
                 standardButton.swapOnHold = true;
-                standardButton.heldSprite = spriteOnPress;
+                standardButton.heldSprite = heldSprite;
             }
 
             return standardButton;
@@ -138,9 +141,13 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         {
             GameObject gm = new GameObject("AudioManager");
             gm.transform.position = pos;
+            return CreateAudMan(gm);
+        }
 
-            AudioSource audDevice = gm.AddComponent<AudioSource>();
-            AudioManager audMan = gm.AddComponent<AudioManager>();
+        public static AudioManager CreateAudMan(GameObject obj)
+        {
+            AudioSource audDevice = obj.AddComponent<AudioSource>();
+            AudioManager audMan = obj.AddComponent<AudioManager>();
             audMan.audioDevice = audDevice;
             return audMan;
         }
@@ -149,8 +156,12 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         {
             GameObject gm = new GameObject("PropagatedAudioManager");
             gm.transform.position = pos;
+            return CreatePropagatedAudMan(gm, destroyWhenAudioEnds);
+        }
 
-            PropagatedAudioManager audMan = gm.AddComponent<PropagatedAudioManager>();
+        public static PropagatedAudioManager CreatePropagatedAudMan(GameObject obj, bool destroyWhenAudioEnds = false)
+        {
+            PropagatedAudioManager audMan = obj.AddComponent<PropagatedAudioManager>();
 
             if (destroyWhenAudioEnds)
             {

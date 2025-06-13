@@ -84,7 +84,10 @@ namespace BaldisBasicsPlusAdvanced.Menu
         private void LoadCreditsScreen()
         {
             CreditsScreen screen = Instantiate(ObjectsStorage.Objects["credits_screen"].GetComponent<CreditsScreen>());
-            screen.onScreenClose += delegate { transform.parent.gameObject.SetActive(true); };
+            screen.onScreenClose += delegate
+            {
+                transform.parent.gameObject.SetActive(true);
+            };
             transform.parent.gameObject.SetActive(false);
         }
 

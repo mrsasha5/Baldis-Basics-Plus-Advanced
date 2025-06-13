@@ -831,26 +831,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
             info.color = Color.white;
             info.alignment = TextAlignmentOptions.Top;
 
-#warning update ObjectsCreator button methods, rewrite this part (and CreditsScreen too)
-            Image exitImage = UIHelpers.CreateImage(AssetsStorage.sprites["adv_exit_transparent"], chalkboardMenu.chalkboard.transform,
-                Vector3.zero, correctPosition: false);
-            exitImage.name = "exit";
-
-            exitImage.ToCenter();
-
-            exitImage.transform.localPosition = new Vector3(185, 140);
-            exitImage.tag = "Button";
-
-            StandardMenuButton exit = exitImage.gameObject.AddComponent<StandardMenuButton>();
+            StandardMenuButton exit = ObjectsCreator.CreateSpriteButton(AssetsStorage.sprites["adv_exit_transparent"], 
+                new Vector3(185, 140), chalkboardMenu.chalkboard.transform, AssetsStorage.sprites["adv_exit"]);
+            exit.name = "exit";
 
             chalkboardMenu.buttons.Add(exit);
-            exit.image = exitImage;
-            exit.heldSprite = AssetsStorage.sprites["adv_exit"];
-            exit.unhighlightedSprite = AssetsStorage.sprites["adv_exit_transparent"];
-            exit.highlightedSprite = AssetsStorage.sprites["adv_exit"];
-
-            exit.swapOnHold = true; //on press
-            exit.swapOnHigh = true; //on high
             exit.InitializeAllEvents();
 
             canvas.gameObject.ConvertToPrefab(true);

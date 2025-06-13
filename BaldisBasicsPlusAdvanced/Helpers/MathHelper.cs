@@ -6,6 +6,22 @@ namespace BaldisBasicsPlusAdvanced.Helpers
     public class MathHelper
     {
 
+        public static float FindNearestValue(float[] values, float value)
+        {
+            float difference = Mathf.Abs(values[0] - value);
+            float nearest = values[0];
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                if (Mathf.Abs(values[i] - value) < difference)
+                {
+                    difference = Mathf.Abs(values[i] - value);
+                    nearest = values[i];
+                }
+            }
+            return nearest;
+        }
+
         public static int FindNearestValue(int[] values, int value)
         {
             int difference = Mathf.Abs(values[0] - value);
