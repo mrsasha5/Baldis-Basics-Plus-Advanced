@@ -1135,7 +1135,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 Character.Pomp, Character.Sweep, Character.Prize, Character.Chalkles);
 
             SetTagsTo(new string[] { "adv_ev_disappearing_characters_immunity" },
-                Character.Baldi, Character.Principal, Character.Null);
+                Character.Baldi, Character.Principal);
 
             SetTagsTo(new string[] { "adv_narrowly_functional" }, 
                 Items.BusPass, Items.lostItem0, Items.lostItem1, Items.lostItem2, Items.lostItem3,

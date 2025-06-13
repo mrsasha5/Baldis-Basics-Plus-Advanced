@@ -417,12 +417,14 @@ namespace BaldisBasicsPlusAdvanced.Patches
             return itemsCount;
         }
 
-        public static void SetCursorInitiator(this Canvas canvas, bool setAutoInitiator = false)
+        public static CursorInitiator SetCursorInitiator(this Canvas canvas, bool setAutoInitiator = false)
         {
             CursorInitiator cursorInitiator = UIHelpers.AddCursorInitiatorToCanvas(canvas);
 
             if (setAutoInitiator)
                 canvas.gameObject.AddComponent<CursorAutoInitiator>().initiator = cursorInitiator;
+
+            return cursorInitiator;
         }
 
         public static void ToCenter(this Image image)

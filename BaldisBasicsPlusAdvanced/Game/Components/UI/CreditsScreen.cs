@@ -8,6 +8,7 @@ using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
 using MTM101BaldAPI.UI;
+using Rewired;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -75,7 +76,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
         private bool paused;
 
-        private bool pausedByArrow;
+        private bool pausedByKeyboardSkip;
 
         private Vector3 _position;
 
@@ -222,7 +223,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             float baseVal = 0.5f;
             while (color.a > 0f)
             {
-                if (!paused && !pausedByArrow)
+                if (!paused && !pausedByKeyboardSkip)
                 {
                     color.a = Mathf.Clamp01(color.a - Time.unscaledDeltaTime * fadeSpeed);
                     backgroundImage.color = color;
@@ -234,7 +235,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             if (spriteIndex > backgroundSprites.Count - 1) spriteIndex = 0;
             while (color.a < baseVal)
             {
-                if (!paused && !pausedByArrow)
+                if (!paused && !pausedByKeyboardSkip)
                 {
                     color.a = Mathf.Clamp(color.a + Time.unscaledDeltaTime * fadeSpeed, 0f, baseVal);
                     backgroundImage.color = color;
@@ -411,17 +412,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             _position.y = tmpText.transform.position.y;
             _position.z = tmpText.transform.position.z;
 
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A))
             {
-                if (!pausedByArrow)
+                if (!pausedByKeyboardSkip)
                 {
-                    CursorController.Instance.Hide(true); //There's no technical reason for it, I just want to do this
-#warning TODO: make cursor doesn't moving after unpressing arrow and itself appearing
-                    InputManager.Instance.enabled = false;
                     Pause(true);
                     LockInterface(true);
                 }
-                pausedByArrow = true;
+                pausedByKeyboardSkip = true;
                 _position.y -= Time.unscaledDeltaTime * arrowKeyboardSpeed;
                 if (_position.y < offset) _position.y = offset;
                 tmpText.transform.position = _position;
@@ -429,36 +427,31 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
                 skipBackButton.image.color = Color.red;
                 skipForwardButton.image.color = Color.white;
             }
-            else if (Input.GetKey(KeyCode.DownArrow))
+            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
             {
-                if (!pausedByArrow)
+                if (!pausedByKeyboardSkip)
                 {
-                    CursorController.Instance.Hide(true);
-                    //...
                     Pause(true);
                     LockInterface(true);
                 }
-                pausedByArrow = true;
+                pausedByKeyboardSkip = true;
                 _position.y += Time.unscaledDeltaTime * arrowKeyboardSpeed;
-                if (_position.y < offset) _position.y = offset;
+                if (_position.y > maxHeight) _position.y = maxHeight;
                 tmpText.transform.position = _position;
 
                 skipBackButton.image.color = Color.white;
                 skipForwardButton.image.color = Color.red;
             }
-            else if (pausedByArrow)
+            else if (pausedByKeyboardSkip)
             {
-                CursorController.Instance.Hide(false);
-                //...
-                InputManager.Instance.enabled = true;
-                pausedByArrow = false;
+                pausedByKeyboardSkip = false;
                 Pause(false);
                 LockInterface(false);
                 skipBackButton.image.color = Color.white;
                 skipForwardButton.image.color = Color.white;
             }
 
-            if (!paused && !pausedByArrow)
+            if (!paused && !pausedByKeyboardSkip)
             {
                 if (time > 0f && !switchingBg)
                 {
