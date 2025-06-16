@@ -1,6 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Game.Events;
-using BaldisBasicsPlusAdvanced.Patches;
-using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
@@ -12,7 +10,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 
         private bool active;
 
-        protected bool marksAsActiveOnEndedPost = true;
+        protected bool marksAsActiveOnEndedPost;
 
         public bool Active => active;
 

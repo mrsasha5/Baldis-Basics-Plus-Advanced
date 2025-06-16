@@ -11,6 +11,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
     public class ZiplineHanger : MonoBehaviour, IPrefab, IClickable<int>
     {
         [SerializeField]
+        private SoundObject audRestore;
+
+        [SerializeField]
+        private SoundObject audBreak;
+
+        [SerializeField]
         private float height;
 
         [SerializeField]
@@ -42,6 +48,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         [SerializeField]
         private bool canAcceptNPCs;
+
+        [SerializeField]
+        private Sprite genericSprite;
 
         [SerializeField]
         private Sprite brokenSprite;
@@ -78,6 +87,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         public void InitializePrefab(int variant)
         {
+            audRestore = AssetsStorage.sounds["adv_appearing"];
+            audBreak = AssetsStorage.sounds["bal_break"];
+
             height = 7f;
             requiredDistance = 5f;
             acceleration = 25f;
@@ -87,11 +99,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             hasInfinityUses = true;
             canAcceptNPCs = true;
 
-            renderer = ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_hanger"]);
+            genericSprite = AssetsStorage.sprites["adv_hanger"];
+            brokenSprite = AssetsStorage.sprites["adv_broken_hanger"];
+
+            renderer = ObjectsCreator.CreateSpriteRendererBase(genericSprite);
             renderer.transform.parent.SetParent(transform, false);
             renderer.transform.localPosition += Vector3.up * 3f;
-
-            brokenSprite = AssetsStorage.sprites["adv_broken_hanger"];
 
             SphereCollider collider = gameObject.AddComponent<SphereCollider>();
             collider.radius = 3f;
@@ -104,8 +117,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             if (variant == 2)
             {
-                renderer.sprite = AssetsStorage.sprites["adv_black_hanger"];
+                genericSprite = AssetsStorage.sprites["adv_black_hanger"];
                 brokenSprite = AssetsStorage.sprites["adv_broken_black_hanger"];
+                renderer.sprite = genericSprite;
                 hasInfinityUses = false;
                 minMaxUses.x = 4;
                 minMaxUses.z = 9;
@@ -158,7 +172,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         private void OnTriggerEnter(Collider other)
         {
-            if (canAcceptNPCs && !moving && ignoresNpcsTime <= 0f && other.CompareTag("NPC"))
+            if (!broken && canAcceptNPCs && !moving && ignoresNpcsTime <= 0f && other.CompareTag("NPC"))
             {
                 NPC npc = other.GetComponent<NPC>();
                 if (npc.GetMeta().tags.Contains("student") && SetEntity(npc.GetComponent<Entity>(), kickEntity: false))
@@ -169,12 +183,24 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             }
         }
 
-        public void Break()
+        public void Restore(bool playSound = true)
+        {
+            if (broken)
+            {
+                if (playSound)
+                    audMan.PlaySingle(audRestore);
+                broken = false;
+                renderer.sprite = genericSprite;
+            }
+        }
+
+        public void Break(bool playSound = true)
         {
             if (!broken)
             {
                 KickEntity(entity);
-                audMan.PlaySingle(AssetsStorage.sounds["bal_break"]);
+                if (playSound)
+                    audMan.PlaySingle(audBreak);
                 broken = true;
                 renderer.sprite = brokenSprite;
             }

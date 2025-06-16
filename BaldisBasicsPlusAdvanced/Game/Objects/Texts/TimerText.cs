@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Texts
@@ -20,24 +19,19 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Texts
 
         public void Stop()
         {
-            SetTime(0f);
+            time = 0f;
             SetText("");
+            onTimerEnds?.Invoke();
         }
 
-        public void SetTime(float time)
-        {
-            this.time = time;
-        }
-
-        public void UpdateTime(float time)
+        public void UpdateTime(float time, bool updateVisual = true)
         {
             this.time = time;
             if (time <= 0f)
             {
                 Stop();
-                onTimerEnds?.Invoke();
             }
-            else
+            else if (updateVisual)
                 SetVisualTime((int)time + 1);
         }
 
@@ -50,7 +44,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Texts
                 if (time <= 0f)
                 {
                     Stop();
-                    onTimerEnds?.Invoke();
                 }
                 else 
                     SetVisualTime((int)time + 1);

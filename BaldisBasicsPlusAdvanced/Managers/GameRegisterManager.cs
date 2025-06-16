@@ -609,8 +609,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 maxTime: 100f,
                 flags: RandomEventFlags.AffectsGenerator
                 )
-                .SetWeight(floor: 2, 75)
-                .SetLevelTypes(LevelType.Schoolhouse)
+                .SetWeight(floor: 2, 150)
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory, LevelType.Laboratory)
                 //.SetEndless(true) //no endless
                 .SetBannedFloors(1);
         }
@@ -879,12 +879,16 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 "apple", "chalk", "erase", "cloud", "plate", "store", "clock", "farm", "math"
             );
 
-            ApiManager.CreateSchoolCouncilTopic<NoPlatesCooldownTopic>(AdvancedCore.Instance.Info);
-            ApiManager.CreateSchoolCouncilTopic<PrincipalIgnoresSomeRulesTopic>(AdvancedCore.Instance.Info);
-            ApiManager.CreateSchoolCouncilTopic<LightsEconomyTopic>(AdvancedCore.Instance.Info);
-            ApiManager.CreateSchoolCouncilTopic<TurnOffFacultyNoisyPlatesTopic>(AdvancedCore.Instance.Info);
-            ApiManager.CreateSchoolCouncilTopic<GottaSweepTimeTopic>(AdvancedCore.Instance.Info);
-            ApiManager.CreateSchoolCouncilTopic<ConvertVendingMachinesTopic>(AdvancedCore.Instance.Info);
+            ApiManager.CreateSchoolCouncilTopic<NoPlatesCooldownTopic>(AdvancedCore.Instance.Info, 100);
+            ApiManager.CreateSchoolCouncilTopic<PrincipalIgnoresSomeRulesTopic>(AdvancedCore.Instance.Info, 75);
+            ApiManager.CreateSchoolCouncilTopic<LightsEconomyTopic>(AdvancedCore.Instance.Info, 50);
+            ApiManager.CreateSchoolCouncilTopic<TurnOffFacultyNoisyPlatesTopic>(AdvancedCore.Instance.Info, 100);
+            ApiManager.CreateSchoolCouncilTopic<GottaSweepTimeTopic>(AdvancedCore.Instance.Info, 50);
+            ApiManager.CreateSchoolCouncilTopic<ConvertVendingMachinesTopic>(AdvancedCore.Instance.Info, 100);
+            ApiManager.CreateSchoolCouncilTopic<BrokenZiplinesTopic>(AdvancedCore.Instance.Info, 125);
+            ApiManager.CreateSchoolCouncilTopic<DisabledConveyorsTopic>(AdvancedCore.Instance.Info, 125);
+            ApiManager.CreateSchoolCouncilTopic<DisabledFacultyLockdownDoorsTopic>(AdvancedCore.Instance.Info, 125);
+            //ApiManager.CreateSchoolCouncilTopic<OpenVentsTopic>(AdvancedCore.Instance.Info, 100);
         }
 
         public static void InitializeTrips()

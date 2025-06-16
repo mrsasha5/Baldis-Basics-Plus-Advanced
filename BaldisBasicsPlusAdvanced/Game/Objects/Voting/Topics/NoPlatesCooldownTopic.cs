@@ -23,9 +23,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
                 && GameObject.FindObjectOfType<BaseCooldownPlate>() != null;
         }
 
-        public override void OnVotingEndedPost(bool isWin)
+        public override void OnVotingEndedPre(bool isWin)
         {
-            base.OnVotingEndedPost(isWin);
+            base.OnVotingEndedPre(isWin);
             if (isWin) OverrideCooldownPlates();
         }
 

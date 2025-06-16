@@ -44,9 +44,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
             return topic;
         }
 
-        public override void OnVotingEndedPost(bool isWin)
+        public override void OnVotingEndedPre(bool isWin)
         {
-            base.OnVotingEndedPost(isWin);
+            base.OnVotingEndedPre(isWin);
             if (isWin)
             {
                 foreach (RoomController room in ec.rooms.FindAll(x => categories.Contains(x.category)))

@@ -3,8 +3,6 @@ using BaldisBasicsPlusAdvanced.Game.Events;
 using BaldisBasicsPlusAdvanced.Game.NPCs.Behavior.States.Navigation;
 using BaldisBasicsPlusAdvanced.Game.Objects.Texts;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
-using MTM101BaldAPI;
 using UnityEngine;
 using UnityEngine.AI;
 

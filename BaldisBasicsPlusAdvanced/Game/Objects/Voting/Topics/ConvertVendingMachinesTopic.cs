@@ -16,9 +16,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
             return base.IsAvailable() && GameObject.FindObjectOfType<SodaMachine>() != null;
         }
 
-        public override void OnVotingEndedPost(bool isWin)
+        public override void OnVotingEndedPre(bool isWin)
         {
-            base.OnVotingEndedPost(isWin);
+            base.OnVotingEndedPre(isWin);
             List<WeightedItemObject> _items = new List<WeightedItemObject>();
             ItemMetaData[] metas = ItemMetaStorage.Instance.All();
             for (int i = 0; i < metas.Length; i++)

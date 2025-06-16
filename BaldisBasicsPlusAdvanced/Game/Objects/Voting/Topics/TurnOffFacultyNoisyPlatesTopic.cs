@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
-using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Patches;
 using System;
 using UnityEngine;
@@ -16,9 +15,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
                 Array.Find(GameObject.FindObjectsOfType<NoisyPlate>(), x => x.CallsPrincipal) != null; //...
         }
 
-        public override void OnVotingEndedPost(bool isWin)
+        public override void OnVotingEndedPre(bool isWin)
         {
-            base.OnVotingEndedPost(isWin);
+            base.OnVotingEndedPre(isWin);
             if (isWin)
             {
                 foreach (NoisyPlate plate in GameObject.FindObjectsOfType<NoisyPlate>())

@@ -3,6 +3,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
+using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BaldisBasicsPlusAdvanced.SaveSystem;
@@ -274,22 +275,43 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Returns a reference (not new instance) of the specific mod's topics.
+        /// Returns a list (new instance) of the specific mod's weighted topics.
+        /// </summary>
+        /// <param name="pluginInfo"></param>
+        /// <returns></returns>
+        public static List<WeightedCouncilTopic> GetAllWeigthedSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
+        {
+            return ObjectsStorage.Topics[pluginInfo];
+        }
+
+        /// <summary>
+        /// Returns a list (new instance) of the specific mod's topics.
         /// </summary>
         /// <param name="pluginInfo"></param>
         /// <returns></returns>
         public static List<BaseTopic> GetAllSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
         {
-            return ObjectsStorage.Topics[pluginInfo];
+            List<BaseTopic> topics = new List<BaseTopic>();
+            List<WeightedCouncilTopic> _topics = ObjectsStorage.Topics[pluginInfo];
+
+            for (int i = 0; i < _topics.Count; i++)
+            {
+                topics.Add(_topics[i].selection);
+            }
+
+            return topics;
         }
 
         public static List<BaseTopic> GetAllSchoolCouncilTopics()
         {
             List<BaseTopic> topics = new List<BaseTopic>();
 
-            foreach (List<BaseTopic> _topics in ObjectsStorage.Topics.Values)
+            foreach (List<WeightedCouncilTopic> _topics in ObjectsStorage.Topics.Values)
             {
-                topics.AddRange(_topics);
+                for (int i = 0; i < _topics.Count; i++)
+                {
+                    topics.Add(_topics[i].selection);
+                }
             }
 
             return topics;
@@ -300,10 +322,14 @@ namespace BaldisBasicsPlusAdvanced.API
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="pluginInfo"></param>
-        public static void CreateSchoolCouncilTopic<T>(PluginInfo pluginInfo) where T : BaseTopic, new()
+        public static void CreateSchoolCouncilTopic<T>(PluginInfo pluginInfo, int weight = 100) where T : BaseTopic, new()
         {
-            if (!ObjectsStorage.Topics.ContainsKey(pluginInfo)) ObjectsStorage.Topics.Add(pluginInfo, new List<BaseTopic>());
-            ObjectsStorage.Topics[pluginInfo].Add(new T());
+            if (!ObjectsStorage.Topics.ContainsKey(pluginInfo)) ObjectsStorage.Topics.Add(pluginInfo, new List<WeightedCouncilTopic>());
+            ObjectsStorage.Topics[pluginInfo].Add(new WeightedCouncilTopic()
+            {
+                selection = new T(),
+                weight = weight
+            });
         }
 
         /// <summary>
@@ -358,11 +384,15 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <param name="topics"></param>
         public static void UnloadSchoolCouncilTopics(params BaseTopic[] topics)
         {
-            foreach (List<BaseTopic> _topics in ObjectsStorage.Topics.Values)
+            foreach (List<WeightedCouncilTopic> _topics in ObjectsStorage.Topics.Values)
             {
-                foreach (BaseTopic topic in topics)
+                for (int i = 0; i < _topics.Count; i++)
                 {
-                    if (_topics.Contains(topic)) _topics.Remove(topic);
+                    if (topics.Contains(_topics[i].selection))
+                    {
+                        _topics.RemoveAt(i);
+                        i--;
+                    }
                 }
             }
         }

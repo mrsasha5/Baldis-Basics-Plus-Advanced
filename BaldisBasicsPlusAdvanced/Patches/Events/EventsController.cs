@@ -56,7 +56,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Events
             VotingEvent mainEvent = (VotingEvent)___events.Find(x => x is VotingEvent);
             if (mainEvent != null)
             {
-                ___eventTimes[___events.IndexOf(mainEvent)] = 30f;
+                ___eventTimes[___events.IndexOf(mainEvent)] = 15f;
             }
 
         }

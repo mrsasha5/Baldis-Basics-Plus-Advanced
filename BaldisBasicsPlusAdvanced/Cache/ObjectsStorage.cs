@@ -7,6 +7,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
 using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
+using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using BepInEx;
 using UnityEngine;
@@ -35,9 +36,9 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         //datas that was used by API
 
-        private static Dictionary<PluginInfo, List<BaseTopic>> topics = new Dictionary<PluginInfo, List<BaseTopic>>();
+        private static Dictionary<PluginInfo, List<WeightedCouncilTopic>> topics = new Dictionary<PluginInfo, List<WeightedCouncilTopic>>();
 
-        public static Dictionary<PluginInfo, List<BaseTopic>> Topics => topics;
+        public static Dictionary<PluginInfo, List<WeightedCouncilTopic>> Topics => topics;
 
         private static Dictionary<PluginInfo, List<string>> tips = new Dictionary<PluginInfo, List<string>>();
 

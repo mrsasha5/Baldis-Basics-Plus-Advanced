@@ -14,9 +14,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
             return base.IsAvailable() && ec.npcsToSpawn.Find(x => x is GottaSweep) != null;
         }
 
-        public override void OnVotingEndedPost(bool isWin)
+        public override void OnVotingEndedPre(bool isWin)
         {
-            base.OnVotingEndedPost(isWin);
+            base.OnVotingEndedPre(isWin);
             if (isWin)
             {
                 foreach (GottaSweep gottaSweep in GameObject.FindObjectsOfType<GottaSweep>())

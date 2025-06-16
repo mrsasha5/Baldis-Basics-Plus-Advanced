@@ -4,9 +4,9 @@ using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using BaldisBasicsPlusAdvanced.Game.Events;
 using BaldisBasicsPlusAdvanced.Game.Objects.Pickups;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
+using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
-using BaldisBasicsPlusAdvanced.SaveSystem;
 using MTM101BaldAPI.UI;
 using Rewired;
 using System;
@@ -67,22 +67,26 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
 
         private void ChooseTopic(System.Random rng)
         {
-            List<BaseTopic> potentialTopics = new List<BaseTopic>();
+            List<WeightedCouncilTopic> potentialTopics = new List<WeightedCouncilTopic>();
 
-            foreach (List<BaseTopic> topics in ObjectsStorage.Topics.Values)
+            foreach (List<WeightedCouncilTopic> topics in ObjectsStorage.Topics.Values)
             {
-                foreach (BaseTopic topic in topics)
+                foreach (WeightedCouncilTopic topic in topics)
                 {
-                    BaseTopic _topic = topic.Clone();
+                    BaseTopic _topic = topic.selection.Clone();
                     _topic.Initialize(votingEvent, ballot.Ec);
                     if (_topic.IsAvailable())
                     {
-                        potentialTopics.Add(_topic);
+                        potentialTopics.Add(new WeightedCouncilTopic()
+                        {
+                            selection = _topic,
+                            weight = topic.weight
+                        });
                     }
                 }
             }
 
-            chosenTopic = potentialTopics[rng.Next(0, potentialTopics.Count)];
+            chosenTopic = WeightedCouncilTopic.ControlledRandomSelection(potentialTopics.ToArray(), rng);
             chosenTopic.OnBringUp(rng);
             ballot.Ec.OnEnvironmentBeginPlay += chosenTopic.OnEnvironmentBeginPlay;
         }
@@ -284,6 +288,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
             ballot.AudMan.PlaySingle(AssetsStorage.sounds["adv_throwing_vote"]);
 
             return true;
+        }
+
+        public bool ShouldVotingBeEnded()
+        {
+            int npcsLeft = votingEvent.Ec.Npcs.Count - CountTotalVotes();
+            if (npcsLeft <= 0) return true;
+            return (CountPosVotes() > npcsLeft || CountNegVotes() > npcsLeft);
         }
 
         public int CountTotalVotes()
