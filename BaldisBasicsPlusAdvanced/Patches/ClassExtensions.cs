@@ -10,6 +10,7 @@ using BaldisBasicsPlusAdvanced.Game.Components.Movement;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using MTM101BaldAPI.UI;
+using TMPro;
 
 namespace BaldisBasicsPlusAdvanced.Patches
 {
@@ -427,11 +428,13 @@ namespace BaldisBasicsPlusAdvanced.Patches
             return cursorInitiator;
         }
 
-        public static void ToCenter(this Image image)
+        public static void ToCenter(this RectTransform rect)
         {
-            image.rectTransform.anchoredPosition = Vector3.zero;
-            image.rectTransform.anchorMin = Vector2.one * 0.5f;
-            image.rectTransform.anchorMax = Vector2.one * 0.5f;
+            rect.anchoredPosition = Vector3.zero;
+            rect.anchorMin = Vector2.one * 0.5f;
+            rect.anchorMax = Vector2.one * 0.5f;
         }
+
+        public static void ToCenter(this Image image) => image.rectTransform.ToCenter();
     }
 }

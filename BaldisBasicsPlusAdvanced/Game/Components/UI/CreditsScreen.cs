@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
@@ -166,8 +167,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
             using (StreamReader reader = new StreamReader(AssetsHelper.modPath + "Language/English/Credits.txt"))
             {
-                offset = float.Parse(reader.ReadLine().Replace("Offset: ", ""));
-                maxHeight = float.Parse(reader.ReadLine().Replace("Max Height: ", ""));
+                offset = float.Parse(reader.ReadLine().Replace("Offset: ", ""), CultureInfo.InvariantCulture);
+                maxHeight = float.Parse(reader.ReadLine().Replace("Max Height: ", ""), CultureInfo.InvariantCulture);
                 string line = reader.ReadLine();
                 while (line != null)
                 {
