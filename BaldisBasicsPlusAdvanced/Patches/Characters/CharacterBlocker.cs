@@ -1,10 +1,6 @@
-﻿using BaldisBasicsPlusAdvanced.Patches.GameData;
-using BaldisBasicsPlusAdvanced.SaveSystem;
+﻿using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace BaldisBasicsPlusAdvanced.Patches.Characters
 {
@@ -13,20 +9,16 @@ namespace BaldisBasicsPlusAdvanced.Patches.Characters
     {
         [HarmonyPatch("BeginPlay")]
         [HarmonyPrefix]
-        private static void OnBeginPlay(EnvironmentController __instance)
+        private static void OnBeginPlay(EnvironmentController __instance, ref List<Tile> ___npcSpawnTiles)
         {
-            List<NPC> npcsToRemove = new List<NPC>();
-            foreach (NPC npc in __instance.npcsToSpawn)
+            for (int i = 0; i < __instance.npcsToSpawn.Count; i++)
             {
-                if (LevelDataManager.LevelData.bannedCharacters.Contains(npc.Character))
+                if (LevelDataManager.LevelData.bannedCharacters.Contains(__instance.npcsToSpawn[i].Character))
                 {
-                    npcsToRemove.Add(npc);
+                    __instance.npcsToSpawn.Remove(__instance.npcsToSpawn[i]);
+                    ___npcSpawnTiles.RemoveAt(i);
+                    i--;
                 }
-            }
-
-            foreach (NPC npc in npcsToRemove)
-            {
-                __instance.npcsToSpawn.Remove(npc);
             }
         }
     }

@@ -1124,13 +1124,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void SetTags()
         {
-            SetTagsTo(new string[] { "adv_exclusion_hammer_immunity" },
-                Character.Baldi, Character.Principal, Character.Pomp, Character.Sweep, Character.Cumulo, Character.DrReflex,
-                Character.LookAt, Character.Null);
-
-            SetTagsTo(new string[] { "adv_exclusion_hammer_weakness" },
-                Character.Beans, Character.Crafters, Character.Bully, Character.Chalkles, Character.Prize);
-
             SetTagsTo(new string[] { "adv_ev_cold_school_immunity" },
                 Character.Pomp, Character.Sweep, Character.Prize, Character.Chalkles);
 

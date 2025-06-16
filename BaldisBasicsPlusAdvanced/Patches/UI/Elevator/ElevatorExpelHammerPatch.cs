@@ -405,7 +405,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 NPCMetadata meta = npc.GetMeta();
                 LevelObject ld = Singleton<BaseGameManager>.Instance.levelObject;
 
-                if (meta.tags.Contains("adv_exclusion_hammer_immunity")) continue;
+                if (meta.tags.Contains("adv_exclusion_hammer_immunity") || meta.tags.Contains("faculty") ||
+                    meta.tags.Contains("teachers")) continue;
+
                 //forced npcs and potential baldis
                 if (!meta.tags.Contains("adv_exclusion_hammer_weakness") &&
                     (ld.forcedNpcs.Contains(npc) || Array.Find(ld.potentialBaldis,
