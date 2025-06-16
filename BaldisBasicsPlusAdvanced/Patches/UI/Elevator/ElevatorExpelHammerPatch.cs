@@ -406,7 +406,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 LevelObject ld = Singleton<BaseGameManager>.Instance.levelObject;
 
                 if (meta.tags.Contains("adv_exclusion_hammer_immunity") || meta.tags.Contains("faculty") ||
-                    meta.tags.Contains("teachers")) continue;
+                    meta.tags.Contains("teacher")) continue;
 
                 //forced npcs and potential baldis
                 if (!meta.tags.Contains("adv_exclusion_hammer_weakness") &&
