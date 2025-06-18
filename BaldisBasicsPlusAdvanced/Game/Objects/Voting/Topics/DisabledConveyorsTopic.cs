@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Patches;
+﻿using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.Patches.Objects;
 using UnityEngine;
 
@@ -33,6 +34,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
                         belt.SetRunning(false);
                         BeltManagerRunningPatch.belts.Add(belt);
                     }
+
+                    foreach (BeltRoomTrigger beltTrigger in func.Room.GetComponentsInChildren<BeltRoomTrigger>())
+                    {
+                        beltTrigger.GetComponent<Collider>().enabled = false;
+                        beltTrigger.enabled = false;
+                    }
                 }
 
                 foreach (Structure_ConveyorBelt beltBuilder in GameObject.FindObjectsOfType<Structure_ConveyorBelt>())
@@ -40,6 +47,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
                     foreach (BeltManager belt in beltBuilder.builtBelts)
                     {
                         belt.SetRunning(false);
+                        AudioManager audMan = belt.GetComponentInChildren<PropagatedAudioManager>();
+                        audMan.Pause(true);
                         BeltManagerRunningPatch.belts.Add(belt);
                     }
                     

@@ -22,6 +22,5 @@ namespace BaldisBasicsPlusAdvanced.Game.Rooms.Functions
             this.levelBuilder = builder;
         }
 
-
     }
 }

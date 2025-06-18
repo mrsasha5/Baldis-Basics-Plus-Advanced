@@ -26,8 +26,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
             Color color = new Color(0.25f, 0.25f, 0.25f, 1f);
             foreach (FacultyOnlyDoor door in GameObject.FindObjectsOfType<FacultyOnlyDoor>())
             {
-                if (!door.IsOpen)
-                    door.Open(cancelTimer: true, makeNoise: false);
                 door.gameObject.GetComponent<Collider>().enabled = false;
                 foreach (SpriteRenderer renderer in door.gameObject.GetComponentsInChildren<SpriteRenderer>())
                 {

@@ -13,6 +13,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -38,7 +39,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             public NavigationState_PartyEvent state;
 
-            public bool updated;
+            public bool inRoom;
+
+            public void Update()
+            {
+                if (inRoom)
+                    principal.WhistleReached(); //set default speed always
+            }
 
             public void SetCheckingRoomMode(bool value)
             {
@@ -143,6 +150,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             string path = AssetsHelper.modPath + "Premades/Rooms/Voting/";
 
+            List<WeightedRoomAsset> assets = new List<WeightedRoomAsset>();
+
             int n = 1;
             while (File.Exists(path + "VotingRoom" + n + ".cbld"))
             {
@@ -159,9 +168,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                 weightedRoom.selection.maxItemValue = 30;
                 weightedRoom.selection.lightPre = AssetsHelper.LoadAsset<Transform>("HangingLight");
 
-                potentialRoomAssets = potentialRoomAssets.AddToArray(weightedRoom);
+                assets.Add(weightedRoom);
                 n++;
             }
+
+            potentialRoomAssets = assets.ToArray();
         }
 
         public override void AssignRoom(RoomController room)
@@ -238,16 +249,18 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             {
                 if (state == VotingState.Active)
                 {
+                    ballot.Timer.UpdateTime(remainingTime);
+
                     if (ballot.VotingPickup.ShouldVotingBeEnded())
                         EndVoting();
-
-                    ballot.Timer.UpdateTime(remainingTime);
+                    
                     UpdateTexts();
                 }
 
                 for (int i = 0; i < principals.Count; i++)
                 {
-                    if (!principals[i].updated)
+                    principals[i].Update();
+                    if (!principals[i].inRoom)
                     {
                         if (principals[i].entity != null)
                         {
@@ -255,7 +268,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                             {
                                 CheckLight();
                                 principals[i].SetCheckingRoomMode(true);
-                                principals[i].updated = true;
+                                principals[i].inRoom = true;
                             }
                         } else
                         {
