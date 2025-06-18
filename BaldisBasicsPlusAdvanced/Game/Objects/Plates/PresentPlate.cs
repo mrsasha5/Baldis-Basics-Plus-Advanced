@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using MTM101BaldAPI.Registers;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             }
 
             ItemMetaData[] metas = ItemMetaStorage.Instance.FindAll(x => x.id != Items.None && x.flags != ItemFlags.InstantUse && 
-            !x.tags.Contains("adv_forbidden_present") && !x.tags.Contains("adv_narrowly_functional"));
+                !x.tags.Contains(TagsStorage.forbiddenPresent) && !x.tags.Contains(TagsStorage.narrowlyFunctional));
 
             if (metas.Length > 0)
             {

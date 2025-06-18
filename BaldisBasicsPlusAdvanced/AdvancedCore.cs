@@ -61,6 +61,7 @@ namespace BaldisBasicsPlusAdvanced
         {
             if (AutoUpdateManager.thread != null) AutoUpdateManager.thread.Abort();
 
+            //I think in the future I'll make something like bat files and etc if they will be working like I want
             if (preparedToInstalling)
             {
                 Process process = new Process();

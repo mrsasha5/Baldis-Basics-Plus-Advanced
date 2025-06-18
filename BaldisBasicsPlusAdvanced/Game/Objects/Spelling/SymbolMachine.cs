@@ -512,11 +512,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             RewardType[] itemTypes = new RewardType[] { RewardType.PerfectItem, RewardType.GoodItem, RewardType.NormalItem, RewardType.CommonItem };
             if (itemTypes.Contains(rewardType))
             {
-                string forcedTag = "adv_sm_potential_reward";
-                string qualityTag = "adv_none";
+                string qualityTag = TagsStorage.noneRate;
                 qualityTag = rewardType.ConvertToTag();
 
-                ItemMetaData[] metas = ItemMetaStorage.Instance.FindAll(x => x.tags.Contains(forcedTag) && x.tags.Contains(qualityTag));
+                ItemMetaData[] metas = ItemMetaStorage.Instance.FindAll(x => x.tags.Contains(TagsStorage.symbolMachinePotentialReward) 
+                    && x.tags.Contains(qualityTag));
                 if (metas.Length > 0)
                 {
                     reward = Instantiate(AssetsStorage.pickup, transform);

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
+﻿namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 {
     public enum RewardType
     {

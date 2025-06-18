@@ -238,7 +238,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_InvisibilityPotion_Desc",
                 enumName: "InvisibilityPotion",
                 tags: new string[] { 
-                    "drink"
+                    TagsStorage.drink
                 },
                 smallSpriteFileName: "adv_invisibility_potion_small.png",
                 largeSpriteFileName: "adv_invisibility_potion_large.png",
@@ -360,7 +360,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 generatorCost: 75,
                 price: 400,
                 tags: new string[] { 
-                    "adv_forbidden_present" 
+                    TagsStorage.forbiddenPresent 
                 }
                 )
                 .SetSpawnsOnShop(false)
@@ -377,7 +377,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_Bread_Desc",
                 enumName: "Bread",
                 flags: ItemFlags.MultipleUse,
-                tags: new string[] { "food" },
+                tags: new string[] { TagsStorage.food },
                 smallSpriteFileName: "adv_bread_small.png",
                 largeSpriteFileName: "adv_bread_large.png",
                 generatorCost: 50,
@@ -395,7 +395,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_BreadPiece_Desc",
                 enumName: "Bread",
                 flags: ItemFlags.MultipleUse,
-                tags: new string[] { "food" },
+                tags: new string[] { TagsStorage.food },
                 smallSpriteFileName: "adv_piece_of_bread_small.png",
                 largeSpriteFileName: "adv_piece_of_bread_large.png",
                 generatorCost: 50,
@@ -411,7 +411,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_RawChickenLeg_Desc",
                 enumName: "RawChickenLeg",
                 flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
-                tags: new string[] { "food" },
+                tags: new string[] { TagsStorage.food },
                 smallSpriteFileName: "adv_raw_chicken_leg_small.png",
                 largeSpriteFileName: "adv_raw_chicken_leg_large.png",
                 generatorCost: 75,
@@ -429,7 +429,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_RawChickenLeg_Desc",
                 enumName: "RawChickenLeg",
                 flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
-                tags: new string[] { "food" },
+                tags: new string[] { TagsStorage.food },
                 smallSpriteFileName: "adv_raw_chicken_leg_small.png",
                 largeSpriteFileName: "adv_raw_chicken_leg_large.png",
                 generatorCost: 75,
@@ -445,7 +445,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_CookedChickenLeg_Desc",
                 enumName: "CookedChickenLeg",
                 flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
-                tags: new string[] { "food" },
+                tags: new string[] { TagsStorage.food },
                 smallSpriteFileName: "adv_cooked_chicken_leg_small.png",
                 largeSpriteFileName: "adv_cooked_chicken_leg_large.png",
                 generatorCost: 75,
@@ -465,7 +465,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_CookedChickenLeg_Desc",
                 enumName: "CookedChickenLeg",
                 flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
-                tags: new string[] { "food" },
+                tags: new string[] { TagsStorage.food },
                 smallSpriteFileName: "adv_cooked_chicken_leg_small.png",
                 largeSpriteFileName: "adv_cooked_chicken_leg_large.png",
                 generatorCost: 75,
@@ -1128,23 +1128,23 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void SetTags()
         {
-            SetTagsTo(new string[] { "adv_ev_cold_school_immunity" },
+            SetTagsTo(new string[] { TagsStorage.coldSchoolEventImmunity },
                 Character.Pomp, Character.Sweep, Character.Prize, Character.Chalkles);
 
-            SetTagsTo(new string[] { "adv_ev_disappearing_characters_immunity" },
+            SetTagsTo(new string[] { TagsStorage.disappearingCharactersEventImmunity },
                 Character.Baldi, Character.Principal);
 
-            SetTagsTo(new string[] { "adv_narrowly_functional" }, 
+            SetTagsTo(new string[] { TagsStorage.narrowlyFunctional }, 
                 Items.BusPass, Items.lostItem0, Items.lostItem1, Items.lostItem2, Items.lostItem3,
                 Items.lostItem4, Items.lostItem5, Items.lostItem6, Items.lostItem7, Items.lostItem8, Items.lostItem9,
                 Items.CircleKey, Items.TriangleKey, Items.SquareKey, Items.PentagonKey, Items.HexagonKey, Items.WeirdKey);
-            SetTagsTo(new string[] { "adv_perfect", "adv_sm_potential_reward" },
+            SetTagsTo(new string[] { TagsStorage.perfectRate, TagsStorage.symbolMachinePotentialReward },
                 Items.GrapplingHook, Items.Apple, Items.Bsoda, Items.Teleporter);
-            SetTagsTo(new string[] { "adv_good", "adv_sm_potential_reward" },
+            SetTagsTo(new string[] { TagsStorage.goodRate, TagsStorage.symbolMachinePotentialReward },
                 Items.PortalPoster, Items.NanaPeel, Items.Quarter, Items.ZestyBar, Items.DietBsoda);
-            SetTagsTo(new string[] { "adv_normal", "adv_sm_potential_reward" },
+            SetTagsTo(new string[] { TagsStorage.normalRate, TagsStorage.symbolMachinePotentialReward },
                 Items.Nametag, Items.ChalkEraser, Items.DetentionKey);
-            SetTagsTo(new string[] { "adv_common", "adv_sm_potential_reward" },
+            SetTagsTo(new string[] { TagsStorage.commonRate, TagsStorage.symbolMachinePotentialReward },
                 Items.Scissors, Items.Tape, Items.PrincipalWhistle, Items.Wd40);
         }
 

@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
 using MTM101BaldAPI.Registers;
@@ -81,7 +82,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private List<NPC> GetAvailableNPCs()
         {
             List<NPC> npcs = ec.Npcs.FindAll(x => x.GetMeta() == null || 
-                !x.GetMeta().tags.Contains("adv_ev_disappearing_characters_immunity"));
+                !x.GetMeta().tags.Contains(TagsStorage.disappearingCharactersEventImmunity));
             npcs.Mix();
             return npcs;
         }

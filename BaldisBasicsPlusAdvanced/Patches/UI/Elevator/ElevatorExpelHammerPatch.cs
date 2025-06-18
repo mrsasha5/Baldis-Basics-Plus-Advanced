@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Game.Components.Movement;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
@@ -407,11 +408,11 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 NPCMetadata meta = npc.GetMeta();
                 LevelObject ld = Singleton<BaseGameManager>.Instance.levelObject;
 
-                if (meta.tags.Contains("adv_exclusion_hammer_immunity") || meta.tags.Contains("faculty") ||
+                if (meta.tags.Contains(TagsStorage.expelHammerImmunity) || meta.tags.Contains("faculty") ||
                     meta.tags.Contains("teacher")) continue;
 
                 //forced npcs and potential baldis
-                if (!meta.tags.Contains("adv_exclusion_hammer_weakness") &&
+                if (!meta.tags.Contains(TagsStorage.expelHammerWeakness) &&
                     (ld.forcedNpcs.Contains(npc) || Array.Find(ld.potentialBaldis,
                         x => x.selection.Character == npc.Character) != null)) continue;
 

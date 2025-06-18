@@ -284,7 +284,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
         {
             List<ItemObject> items = new List<ItemObject>();
 
-            foreach (ItemMetaData meta in ItemMetaStorage.Instance.FindAll(x => x.tags.Contains("adv_perfect")))
+            foreach (ItemMetaData meta in ItemMetaStorage.Instance.FindAll(x => x.tags.Contains(TagsStorage.perfectRate)))
             {
                 if (!items.Contains(meta.value))
                 {

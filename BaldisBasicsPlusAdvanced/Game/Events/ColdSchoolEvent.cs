@@ -136,7 +136,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private List<NPC> GetAvailableNPCs()
         {
             List<NPC> npcs = ec.Npcs.FindAll(x => x.TryGetComponent(out Entity _) &&
-            (x.GetMeta() == null || !x.GetMeta().tags.Contains("adv_ev_cold_school_immunity")));
+                (x.GetMeta() == null || !x.GetMeta().tags.Contains(TagsStorage.coldSchoolEventImmunity)));
             npcs.Mix();
             return npcs;
         }

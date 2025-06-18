@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
+﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,15 +13,15 @@ namespace BaldisBasicsPlusAdvanced.Patches
             switch (rewardType)
             {
                 case RewardType.PerfectItem:
-                    return "adv_perfect";
+                    return TagsStorage.perfectRate;
                 case RewardType.GoodItem:
-                    return "adv_good";
+                    return TagsStorage.goodRate;
                 case RewardType.NormalItem:
-                    return "adv_normal";
+                    return TagsStorage.normalRate;
                 case RewardType.CommonItem:
-                    return "adv_common";
+                    return TagsStorage.commonRate;
                 default:
-                    return "adv_none";
+                    return TagsStorage.noneRate;
             }
         }
     }
