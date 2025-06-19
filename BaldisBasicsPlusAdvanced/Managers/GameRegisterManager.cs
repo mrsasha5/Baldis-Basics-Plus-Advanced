@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Cache;
+﻿#region Used Namespaces
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Events;
 using BaldisBasicsPlusAdvanced.Game.GameItems;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -51,12 +52,14 @@ using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using Newtonsoft.Json;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
-using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
+#endregion
 
 namespace BaldisBasicsPlusAdvanced.Managers
 {
     public class GameRegisterManager
     {
+
+        #region Main MIDIs Initialization
 
         public static void InitializeMidis()
         {
@@ -78,6 +81,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
             //    AssetLoader.MidiFromFile(AssetsHelper.modPath + "Audio/Music/FieldTrips/.mid",
             //        "Adv_BSideSkid_CornTime");
         }
+
+        #endregion
+
+        #region MIDIs Post Initialization (For mods)
 
         public static void InitializeMidisPost()
         {
@@ -106,6 +113,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         }
 
+        #endregion
+
+        #region Don't Destroy On Scene Load Objects Initialization
+
         public static void InitializeDoNotDestroyOnLoadObjects()
         {
             NotificationManager notifMan = new GameObject("NotificationManager").AddComponent<NotificationManager>();
@@ -121,6 +132,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 updatesMan.Initialize(AdvancedCore.updateCheckIntervalTime);
             }*/
         }
+
+        #endregion
+
+        #region Scene Objects Initialization
 
         public static void InitializeSceneObjects()
         {
@@ -156,6 +171,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
             binaryReader.Close();
         }
 
+        #endregion
+
+        #region NPCs Initialization
+
         public static void InitializeNPCs()
         {
             PrefabsCreator.CreateNpc(
@@ -175,9 +194,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetLevelTypes(LevelType.Schoolhouse);
         }
 
+        #endregion
+
+        #region Items Initialization
+
         public static void InitializeGameItems()
         {
-            //crmp_contraband
             PrefabsCreator.CreateItem<HammerItem>(
                 nameKey: "Adv_Item_Hammer",
                 descKey: "Adv_Item_Hammer_Desc",
@@ -189,8 +211,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 flags: ItemFlags.None,
                 tags: new string[]
                 {
-                    "adv_repair_tool",
-                    "crmp_contraband"
+                    TagsStorage.repairTool,
+                    TagsStorage.contraband
                 }
                 )
                 .SetSpawnsOnRooms(true)
@@ -225,7 +247,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 500,
                 tags: new string[] { 
                     "BBE_RNGLibraryItem",
-                    "crmp_contraband"
+                    TagsStorage.contraband
                 },
                 flags: ItemFlags.CreatesEntity
                 )
@@ -293,7 +315,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 500,
                 tags: new string[]
                 {
-                    "crmp_contraband"
+                    TagsStorage.contraband
                 }
                 )
                 .SetSpawnsOnFieldTrips(true)
@@ -314,7 +336,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 750,
                 tags: new string[]
                 {
-                    "crmp_contraband"
+                    TagsStorage.contraband
                 }
                 )
                 .SetSpawnsOnFieldTrips(true)
@@ -563,6 +585,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
             bread2.GetMeta().itemObjects = ((BaseMultipleUsableItem)bread2.item).AllVersions.AddItem(bread2).ToArray();
         }
 
+        #endregion
+
+        #region Random Events Initialization
+
         public static void InitializeGameEvents()
         {
             PrefabsCreator.CreateEvent<DisappearingCharactersEvent>(
@@ -618,6 +644,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetBannedFloors(1);
         }
 
+        #endregion
+
+        #region Vending Machines Initialization
+
         public static void InitializeVendingMachines()
         {
             PrefabsCreator.CreateMultipleRequiredVendingMachine("GoodMachine",
@@ -642,6 +672,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 },
             }).SetForced(true);
         }
+
+        #endregion
+
+        #region Structure Builders Initialization
 
         public static void InitializeObjectBuilders()
         {
@@ -850,6 +884,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateObjectPrefab<CreditsScreen>("Credits Screen", "credits_screen");
         }
 
+        #endregion
+
+        #region API Content Initialization 
+
         public static void InitializeApiThings()
         {
             
@@ -894,6 +932,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
             //ApiManager.CreateSchoolCouncilTopic<OpenVentsTopic>(AdvancedCore.Instance.Info, 100);
         }
 
+        #endregion
+
+        #region Special Field Trips Initialization
+
         public static void InitializeTrips()
         {
             new FieldTripData()
@@ -904,6 +946,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
             .SetDefaultSkybox()
             .Register();
         }
+
+        #endregion
+
+        #region Objects Initialization
 
         public static void InitializeObjects()
         {
@@ -1069,6 +1115,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
             ObjectsStorage.Objects.Add("farm_sign1", cornSign);
         }
 
+        #endregion
+
+        #region Entities Initialization
+
         public static void InitializeEntities()
         {
             PrefabsCreator.CreateEntity<Fan>(new EntityBuilder()
@@ -1124,32 +1174,18 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 }));
         }
 
+        #endregion
+
+        #region Internal Patches Corrections
+
         public static void CorrectPatches()
         {
             ItemManagerPatch.items.Add(EnumExtensions.GetFromExtendedName<Items>("Hammer"));
         }
 
-        public static void SetTags()
-        {
-            SetTagsTo(new string[] { TagsStorage.coldSchoolEventImmunity },
-                Character.Pomp, Character.Sweep, Character.Prize, Character.Chalkles);
+        #endregion
 
-            SetTagsTo(new string[] { TagsStorage.disappearingCharactersEventImmunity },
-                Character.Baldi, Character.Principal);
-
-            SetTagsTo(new string[] { TagsStorage.narrowlyFunctional }, 
-                Items.BusPass, Items.lostItem0, Items.lostItem1, Items.lostItem2, Items.lostItem3,
-                Items.lostItem4, Items.lostItem5, Items.lostItem6, Items.lostItem7, Items.lostItem8, Items.lostItem9,
-                Items.CircleKey, Items.TriangleKey, Items.SquareKey, Items.PentagonKey, Items.HexagonKey, Items.WeirdKey);
-            SetTagsTo(new string[] { TagsStorage.perfectRate, TagsStorage.symbolMachinePotentialReward },
-                Items.GrapplingHook, Items.Apple, Items.Bsoda, Items.Teleporter);
-            SetTagsTo(new string[] { TagsStorage.goodRate, TagsStorage.symbolMachinePotentialReward },
-                Items.PortalPoster, Items.NanaPeel, Items.Quarter, Items.ZestyBar, Items.DietBsoda);
-            SetTagsTo(new string[] { TagsStorage.normalRate, TagsStorage.symbolMachinePotentialReward },
-                Items.Nametag, Items.ChalkEraser, Items.DetentionKey);
-            SetTagsTo(new string[] { TagsStorage.commonRate, TagsStorage.symbolMachinePotentialReward },
-                Items.Scissors, Items.Tape, Items.PrincipalWhistle, Items.Wd40);
-        }
+        #region Door Materials Initialization
 
         public static void CreateDoorMats()
         {
@@ -1164,6 +1200,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateDoorMatSet("AdvancedClassDoorSet", AssetsStorage.materials["adv_advanced_class_open"],
                 AssetsStorage.materials["adv_advanced_class_closed"]);
         }
+
+        #endregion
+
+        #region Rooms Initialization
 
         public static void InitializeRoomBasics()
         {
@@ -1254,6 +1294,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
             }
         }
 
+        #endregion
+
+        #region Kitchen Stove Recipe Posters Initialization
         public static void InitializeKitchenStovePosters()
         {
             int offsetX = -16;
@@ -1363,28 +1406,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         }
 
-        private static void SetTagsTo(string[] tags, params Character[] characters)
-        {
-            foreach (NPCMetadata metadata in Array.FindAll(NPCMetaStorage.Instance.All(), x => characters.Contains(x.character)))
-            {
-                foreach (string tag in tags)
-                {
-                    if (!metadata.tags.Contains(tag)) metadata.tags.Add(tag);
-                }
-            }
-        }
+        #endregion
 
-        private static void SetTagsTo(string[] tags, params Items[] items)
-        {
-            foreach (ItemMetaData metadata in Array.FindAll(ItemMetaStorage.Instance.All(), x => items.Contains(x.id)))
-            {
-                foreach (string tag in tags)
-                {
-                    if (!metadata.tags.Contains(tag)) metadata.tags.Add(tag);
-                }
-            }
-        }
-
+        #region Generic Posters Initialization
         public static void InitializePosters()
         {
             PosterTextData[] emptyTextArray = new PosterTextData[0];
@@ -1412,5 +1436,56 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     .selection.name = Path.GetFileNameWithoutExtension(path);
             }
         }
+
+        #endregion
+
+        #region Tags Management
+
+        public static void SetTags()
+        {
+            SetTagsTo(new string[] { TagsStorage.coldSchoolEventImmunity },
+                Character.Pomp, Character.Sweep, Character.Prize, Character.Chalkles);
+
+            SetTagsTo(new string[] { TagsStorage.disappearingCharactersEventImmunity },
+                Character.Baldi, Character.Principal);
+
+            SetTagsTo(new string[] { TagsStorage.narrowlyFunctional },
+                Items.BusPass, Items.lostItem0, Items.lostItem1, Items.lostItem2, Items.lostItem3,
+                Items.lostItem4, Items.lostItem5, Items.lostItem6, Items.lostItem7, Items.lostItem8, Items.lostItem9,
+                Items.CircleKey, Items.TriangleKey, Items.SquareKey, Items.PentagonKey, Items.HexagonKey, Items.WeirdKey);
+            SetTagsTo(new string[] { TagsStorage.perfectRate, TagsStorage.symbolMachinePotentialReward },
+                Items.GrapplingHook, Items.Apple, Items.Bsoda, Items.Teleporter);
+            SetTagsTo(new string[] { TagsStorage.goodRate, TagsStorage.symbolMachinePotentialReward },
+                Items.PortalPoster, Items.NanaPeel, Items.Quarter, Items.ZestyBar, Items.DietBsoda);
+            SetTagsTo(new string[] { TagsStorage.normalRate, TagsStorage.symbolMachinePotentialReward },
+                Items.Nametag, Items.ChalkEraser, Items.DetentionKey);
+            SetTagsTo(new string[] { TagsStorage.commonRate, TagsStorage.symbolMachinePotentialReward },
+                Items.Scissors, Items.Tape, Items.PrincipalWhistle, Items.Wd40);
+        }
+
+        private static void SetTagsTo(string[] tags, params Character[] characters)
+        {
+            foreach (NPCMetadata metadata in Array.FindAll(NPCMetaStorage.Instance.All(), x => characters.Contains(x.character)))
+            {
+                foreach (string tag in tags)
+                {
+                    if (!metadata.tags.Contains(tag)) metadata.tags.Add(tag);
+                }
+            }
+        }
+
+        private static void SetTagsTo(string[] tags, params Items[] items)
+        {
+            foreach (ItemMetaData metadata in Array.FindAll(ItemMetaStorage.Instance.All(), x => items.Contains(x.id)))
+            {
+                foreach (string tag in tags)
+                {
+                    if (!metadata.tags.Contains(tag)) metadata.tags.Add(tag);
+                }
+            }
+        }
+
+        #endregion
+
     }
 }

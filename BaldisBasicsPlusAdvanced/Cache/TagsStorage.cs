@@ -3,15 +3,15 @@
     public class TagsStorage
     {
 
-        // API -----------------------------------
+        #region API 
 
         //Items
         public const string food = "food";
         public const string drink = "drink";
 
-        // API -----------------------------------
+        #endregion
 
-        // Internal
+        #region Internal
 
         //Expel Hammer only
         public const string expelHammerImmunity = "adv_exclusion_hammer_immunity";
@@ -36,6 +36,15 @@
 
         //Not sure yet if these supposed to be used by other mods
         internal const string narrowlyFunctional = "adv_narrowly_functional";
+        internal const string repairTool = "adv_repair_tool";
+
+        #endregion
+
+        #region Criminal Pack
+
+        public const string contraband = "crmp_contraband";
+
+        #endregion
 
     }
 }
