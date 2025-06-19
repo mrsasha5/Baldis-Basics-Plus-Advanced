@@ -49,6 +49,7 @@ using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
+using Newtonsoft.Json;
 
 namespace BaldisBasicsPlusAdvanced.Managers
 {
@@ -1395,28 +1396,20 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 if (!File.Exists(imagePath)) break;
                 if (!File.Exists(jsonPath)) continue;
 
-                PosterSpawningData posterData = JsonUtility.FromJson<PosterSpawningData>(File.ReadAllText(jsonPath));
+                PosterSerializableData posterData = JsonConvert.DeserializeObject<PosterSerializableData>(File.ReadAllText(jsonPath));
 
-                for (int i = 0; i < posterData.fonts.Length; i++)
-                {
-                    Enum.TryParse(posterData.fonts[i], out BaldiFonts font);
-                    Enum.TryParse(posterData.alignments[i], out TextAlignmentOptions alignment);
-                    posterData.posterTextDatas[i].font = font.FontAsset();//Enum.Parse<BaldiFonts>(posterData.fonts[i]).FontAsset();
-                    posterData.posterTextDatas[i].alignment = alignment;
-                }
-
-                //alignment
+                posterData.ConvertTextsToGameStandard();
 
                 ObjectsStorage.WeightedPosterObjects.Add(new WeightedPosterObject()
                 {
                     selection = ObjectCreators.CreatePosterObject(
                         AssetsHelper.TextureFromFile("Textures/Posters/adv_poster_" + textureNum + ".png"),
-                    posterData.posterTextDatas),
+                            posterData.Texts),
                     weight = posterData.weight
                 });
 
                 ObjectsStorage.WeightedPosterObjects[ObjectsStorage.WeightedPosterObjects.Count - 1]
-                    .selection.name = "adv_poster" + textureNum;
+                    .selection.name = "adv_poster_" + textureNum;
 
                 textureNum++;
             }

@@ -62,10 +62,10 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         {
             //Debug.Log("Ignores standard: " + Physics.GetIgnoreLayerCollision(LayerMask.NameToLayer("Player"), standardEntities));
             //Debug.Log("Ignores clickable: " + Physics.GetIgnoreLayerCollision(LayerMask.NameToLayer("Player"), clickableEntities));
-
-            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), standardEntities, state);
-            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), clickableEntities, state);
-            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("NPCs"), state);
+            int layer = LayerMask.NameToLayer("Player");
+            Physics.IgnoreLayerCollision(layer, standardEntities, state);
+            Physics.IgnoreLayerCollision(layer, clickableEntities, state);
+            Physics.IgnoreLayerCollision(layer, LayerMask.NameToLayer("NPCs"), state);
         }
 
     }
