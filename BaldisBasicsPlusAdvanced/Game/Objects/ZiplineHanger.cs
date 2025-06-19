@@ -87,6 +87,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         public void InitializePrefab(int variant)
         {
+            const float pixelsPerUnit = 25f;
+
             audRestore = AssetsStorage.sounds["adv_appearing"];
             audBreak = AssetsStorage.sounds["bal_break"];
 
@@ -99,8 +101,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             hasInfinityUses = true;
             canAcceptNPCs = true;
 
-            genericSprite = AssetsStorage.sprites["adv_hanger"];
-            brokenSprite = AssetsStorage.sprites["adv_broken_hanger"];
+            genericSprite = AssetsHelper.SpriteFromFile("Textures/Objects/Hangers/adv_hanger.png", pixelsPerUnit);
+            brokenSprite = AssetsHelper.SpriteFromFile("Textures/Objects/Hangers/adv_broken_hanger.png", pixelsPerUnit);
 
             renderer = ObjectsCreator.CreateSpriteRendererBase(genericSprite);
             renderer.transform.parent.SetParent(transform, false);
@@ -117,8 +119,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             if (variant == 2)
             {
-                genericSprite = AssetsStorage.sprites["adv_black_hanger"];
-                brokenSprite = AssetsStorage.sprites["adv_broken_black_hanger"];
+                genericSprite = AssetsHelper.SpriteFromFile("Textures/Objects/Hangers/adv_black_hanger.png", pixelsPerUnit);
+                brokenSprite = AssetsHelper.SpriteFromFile("Textures/Objects/Hangers/adv_broken_black_hanger.png", pixelsPerUnit);
                 renderer.sprite = genericSprite;
                 hasInfinityUses = false;
                 minMaxUses.x = 4;

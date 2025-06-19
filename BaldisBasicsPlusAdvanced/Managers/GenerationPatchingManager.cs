@@ -1,6 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
-using BaldisBasicsPlusAdvanced.SerializableData;
+using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 using HarmonyLib;
 using MTM101BaldAPI;
 using System;

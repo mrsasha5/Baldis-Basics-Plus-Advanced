@@ -12,9 +12,9 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 {
     public class AssetsHelper
     {
-        public static Sprite SpriteFromFile(string path, float pixelsPerUnit = 1f, Vector2? center = null)
+        public static Sprite SpriteFromFile(string path, float pixelsPerUnit = 1f, Vector2? center = null, bool overrideBasePath = false)
         {
-            Texture2D texture = AssetLoader.TextureFromFile(modPath + path);
+            Texture2D texture = AssetLoader.TextureFromFile(overrideBasePath ? path : modPath + path);
             Sprite sprite = null;
             if (center == null)
                 sprite = AssetLoader.SpriteFromTexture2D(texture, Vector2.one/2f, pixelsPerUnit);
@@ -22,9 +22,9 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             return sprite;
         }
 
-        public static Texture2D TextureFromFile(string path)
+        public static Texture2D TextureFromFile(string path, bool overrideBasePath = false)
         {
-            Texture2D texture = AssetLoader.TextureFromFile(modPath + path);
+            Texture2D texture = AssetLoader.TextureFromFile(overrideBasePath ? path : modPath + path);
             return texture;
         }
 

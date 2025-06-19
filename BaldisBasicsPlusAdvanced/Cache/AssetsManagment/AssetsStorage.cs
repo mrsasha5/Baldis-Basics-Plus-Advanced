@@ -398,12 +398,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                 //Lamps!!!
                 LoadModSprite("adv_advanced_class_lamp", "Rooms/AdvancedClass/adv_advanced_class_lamp.png", 50f);
 
-                //Hangers
-                LoadModSprite("adv_hanger", "Objects/Hangers/adv_hanger.png", 25f);
-                LoadModSprite("adv_broken_hanger", "Objects/Hangers/adv_broken_hanger.png", 25f);
-                LoadModSprite("adv_black_hanger", "Objects/Hangers/adv_black_hanger.png", 25f);
-                LoadModSprite("adv_broken_black_hanger", "Objects/Hangers/adv_broken_black_hanger.png", 25f);
-
                 /*for (int i = 1; i <= 4; i++)
                 {
                     LoadModSprite("adv_gum_dispenser_" + i, "Objects/GumDispenser/adv_gum_dispenser_" + i + ".png", 25f);
@@ -415,18 +409,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                     string symbol = alphabet.ElementAt(i).ToString();
                     LoadModSprite("adv_balloon_" + symbol, "Objects/Spelloons/adv_balloon_" + symbol + ".png", 30f);
                 }
-
-                LoadModSprite("adv_fan_face_1", "Objects/Fan/adv_fan_face_1.png", 27f);
-                LoadModSprite("adv_fan_face_2", "Objects/Fan/adv_fan_face_2.png", 27f);
-                LoadModSprite("adv_fan_face_side_1", "Objects/Fan/adv_fan_face_side_1.png", 27f);
-                LoadModSprite("adv_fan_face_side_2", "Objects/Fan/adv_fan_face_side_2.png", 27f);
-                LoadModSprite("adv_fan_face_side_3", "Objects/Fan/adv_fan_face_side_3.png", 27f);
-                LoadModSprite("adv_fan_face_side_4", "Objects/Fan/adv_fan_face_side_4.png", 27f);
-                LoadModSprite("adv_fan_side_1", "Objects/Fan/adv_fan_side_1.png", 27f);
-                LoadModSprite("adv_fan_side_2", "Objects/Fan/adv_fan_side_2.png", 27f);
-                LoadModSprite("adv_fan_rear_side_1", "Objects/Fan/adv_fan_rear_side_1.png", 27f);
-                LoadModSprite("adv_fan_rear_side_2", "Objects/Fan/adv_fan_rear_side_2.png", 27f);
-                LoadModSprite("adv_fan_backside", "Objects/Fan/adv_fan_backside.png", 27f);
 
                 LoadModSprite("adv_reaper", "Npcs/GottaReap/adv_reaper.png", 1.5f);
                 LoadModSprite("adv_farm_flag", "Objects/Flags/adv_farm_flag.png", 5f, new Vector2(0.08f, 0.88f));
@@ -473,10 +455,10 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                 LoadModSound("adv_laser_loop", "Sounds/Adv_Laser_Loop.wav", SoundType.Effect, "Adv_Sub_Laser_Loop", 1f);
                 LoadModSound("adv_laser_end", "Sounds/Adv_Laser_End.wav", SoundType.Effect, "Adv_Sub_Laser_End", 2f);
                 LoadModSound("adv_balloon_inflation", "Sounds/Adv_Balloon_Inflation.wav", SoundType.Effect, "");
-                LoadModSound("adv_magic_1", "Sounds/Adv_Magic1.wav", SoundType.Effect, "");
-                LoadModSound("adv_wood_1", "Sounds/Adv_Wood1.wav", SoundType.Effect, "");
-                LoadModSound("adv_wood_2", "Sounds/Adv_Wood2.wav", SoundType.Effect, "");
-                LoadModSound("adv_wood_3", "Sounds/Adv_Wood3.wav", SoundType.Effect, "");
+                LoadModSound("adv_magic_1", "Sounds/Adv_Magic_1.wav", SoundType.Effect, "");
+                LoadModSound("adv_wood_1", "Sounds/Adv_Wood_1.wav", SoundType.Effect, "");
+                LoadModSound("adv_wood_2", "Sounds/Adv_Wood_2.wav", SoundType.Effect, "");
+                LoadModSound("adv_wood_3", "Sounds/Adv_Wood_3.wav", SoundType.Effect, "");
                 LoadModSound("adv_yum", "Sounds/Adv_Yum.wav", SoundType.Effect, "");
                 LoadModSound("adv_motor_loop", "Sounds/Adv_Motor_Loop.wav", SoundType.Effect, "");
                 LoadModSound("adv_pulley_click", "Sounds/Adv_Pulley_Click.wav", SoundType.Effect, "");

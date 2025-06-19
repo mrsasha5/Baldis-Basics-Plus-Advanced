@@ -302,11 +302,14 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             return prefabComponent;
         }
 
-        public static void CreateFunctionContainerWithRoomFunction<T>(string name) where T : RoomFunction, new()
+        public static void CreateFunctionContainerWithRoomFunction<T>(string name, int variant = 1) where T : RoomFunction, new()
         {
             //RoomFunctionContainer container = GameObject.Instantiate(AssetsHelper.loadAsset<RoomFunctionContainer>("NoFunction"));
             RoomFunctionContainer container = new GameObject(name).AddComponent<RoomFunctionContainer>();
-            RoomHelper.SetupRoomFunction<T>(container);
+            T func = RoomHelper.SetupRoomFunction<T>(container);
+
+            if (func is IPrefab) ((IPrefab)func).InitializePrefab(variant);
+
             container.gameObject.ConvertToPrefab(true);
             ObjectsStorage.RoomFunctionsContainers.Add(name, container);
         }

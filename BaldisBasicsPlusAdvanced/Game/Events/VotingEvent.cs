@@ -148,17 +148,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                 AssetsHelper.LoadAsset<Balloon>("Balloon_Blue"),
             };
 
-            string path = AssetsHelper.modPath + "Premades/Rooms/Voting/";
-
             List<WeightedRoomAsset> assets = new List<WeightedRoomAsset>();
 
-            int n = 1;
-            while (File.Exists(path + "VotingRoom" + n + ".cbld"))
+            foreach (string path in Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/Voting/",
+                "*.cbld", SearchOption.AllDirectories))
             {
                 WeightedRoomAsset weightedRoom = new WeightedRoomAsset()
                 {
                     selection = RoomHelper.CreateAssetFromPath(
-                        path + "VotingRoom" + n + ".cbld",
+                        path,
                         isOffLimits: true,
                         autoAssignFunctionContainer: true,
                         keepTextures: true),
@@ -169,7 +167,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                 weightedRoom.selection.lightPre = AssetsHelper.LoadAsset<Transform>("HangingLight");
 
                 assets.Add(weightedRoom);
-                n++;
             }
 
             potentialRoomAssets = assets.ToArray();

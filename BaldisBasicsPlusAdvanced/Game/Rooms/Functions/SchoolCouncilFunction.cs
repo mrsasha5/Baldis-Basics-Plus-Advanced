@@ -22,5 +22,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Rooms.Functions
             this.levelBuilder = builder;
         }
 
+        public override void OnGenerationFinished()
+        {
+            base.OnGenerationFinished();
+            if (levelBuilder is LevelGenerator)
+            {
+
+            }
+        }
+
     }
 }

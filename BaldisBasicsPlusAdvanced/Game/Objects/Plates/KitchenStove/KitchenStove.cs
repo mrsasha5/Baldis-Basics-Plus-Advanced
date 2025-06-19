@@ -159,7 +159,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         public static void LoadRecipesFromAssets()
         {
-            string[] filesPath = Directory.GetFiles(AssetsHelper.modPath + "Premades/Recipes/KitchenStove");
+            string[] filesPath = Directory.GetFiles(AssetsHelper.modPath + "Premades/Recipes/KitchenStove/", 
+                "*.json", SearchOption.AllDirectories);
 
             int ignoredRecipes = 0;
             int brokenRecipes = 0;

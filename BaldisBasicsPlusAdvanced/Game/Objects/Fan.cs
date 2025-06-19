@@ -25,6 +25,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         [SerializeField]
         private SpriteRotator rotator;
 
+        private static Sprite[][] sprites;
+
         private static float windSpeed = 30f;
 
         private static int windSize = 12;
@@ -47,6 +49,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         public void InitializePrefab(Entity entity, int variant)
         {
+            const float pixelsPerUnit = 27f;
+
             entity.gameObject.SetRigidbody();
 
             this.entity = entity;
@@ -60,6 +64,31 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
 
             animator = gameObject.AddComponent<RotatedSpriteAnimator>();
+
+            sprites = new Sprite[2][];
+
+            sprites[0] = new Sprite[]
+            {
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_2.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_3.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_1.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_1.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_1.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_1.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_backside.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_2.png", pixelsPerUnit),
+            };
+            sprites[1] = new Sprite[]
+            {
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_2.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_4.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_2.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_2.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_1.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_1.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_backside.png", pixelsPerUnit),
+                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_2.png", pixelsPerUnit),
+            };
         }
 
         public void Initialize(EnvironmentController ec, Vector3 position, Quaternion rotation, float livingTime, bool turnOff = true)
@@ -88,31 +117,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             if (turnOff) SetActivityState(false);
 
             time = livingTime;
-
-            Sprite[][] sprites = new Sprite[2][];
-
-            sprites[0] = new Sprite[]
-            {
-                AssetsStorage.sprites["adv_fan_side_2"],
-                AssetsStorage.sprites["adv_fan_face_side_3"],
-                AssetsStorage.sprites["adv_fan_face_1"],
-                AssetsStorage.sprites["adv_fan_face_side_1"],
-                AssetsStorage.sprites["adv_fan_side_1"],
-                AssetsStorage.sprites["adv_fan_rear_side_1"],
-                AssetsStorage.sprites["adv_fan_backside"],
-                AssetsStorage.sprites["adv_fan_rear_side_2"]
-            };
-            sprites[1] = new Sprite[]
-            {
-                AssetsStorage.sprites["adv_fan_side_2"],
-                AssetsStorage.sprites["adv_fan_face_side_4"],
-                AssetsStorage.sprites["adv_fan_face_2"],
-                AssetsStorage.sprites["adv_fan_face_side_2"],
-                AssetsStorage.sprites["adv_fan_side_1"],
-                AssetsStorage.sprites["adv_fan_rear_side_1"],
-                AssetsStorage.sprites["adv_fan_backside"],
-                AssetsStorage.sprites["adv_fan_rear_side_2"]
-            };
 
             animator.affectedObject = rotator;
             animator.PopulateAnimations(new Dictionary<string, Sprite[][]>() {

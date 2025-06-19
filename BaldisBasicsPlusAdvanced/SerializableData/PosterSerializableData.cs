@@ -15,15 +15,15 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
 
             public string textKey;
 
-            public IntVector2 position;
+            public IntVector2? position;
 
-            public IntVector2 size;
+            public IntVector2? size;
 
             public string font;
 
             public int fontSize;
 
-            public Color color;
+            public Color? color;
 
             public string style;
 
@@ -34,18 +34,24 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
                 PosterTextData data = new PosterTextData();
 
                 data.textKey = textKey;
-                data.position = position;
-                data.size = size;
+                if (position != null) data.position = (IntVector2)position;
+                if (size != null) data.size = (IntVector2)size;
+
+                if (string.IsNullOrEmpty(font)) throw new Exception("Font name of the poster is empty or missing!");
+
                 data.font = ((BaldiFonts)Enum.Parse(typeof(BaldiFonts), font)).FontAsset();
 
                 if (fontSize <= 0)
                 {
                     data.fontSize = (int)((BaldiFonts)Enum.Parse(typeof(BaldiFonts), font)).FontSize();
                 }
-                
-                data.color = color;
-                data.style = (FontStyles)Enum.Parse(typeof(FontStyles), style);
-                data.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), alignment);
+                else data.fontSize = fontSize;
+
+                data.color = (Color)color;
+                if (!string.IsNullOrEmpty(style)) data.style = 
+                        (FontStyles)Enum.Parse(typeof(FontStyles), style);
+                if (!string.IsNullOrEmpty(alignment)) data.alignment = 
+                        (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), alignment);
 
                 return data;
             }
@@ -53,10 +59,6 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
         }
 
         public int weight;
-
-        public string[] fonts;
-
-        public string[] alignments;
 
         private PosterText[] texts;
 
@@ -67,6 +69,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
 
         public void ConvertTextsToGameStandard()
         {
+            if (texts == null) return;
             posterTextDatas = new PosterTextData[texts.Length];
             for (int i = 0; i < texts.Length; i++)
             {

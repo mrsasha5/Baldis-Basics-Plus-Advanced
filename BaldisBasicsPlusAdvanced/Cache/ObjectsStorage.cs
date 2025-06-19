@@ -8,7 +8,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
-using BaldisBasicsPlusAdvanced.SerializableData;
+using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 using BepInEx;
 using UnityEngine;
 

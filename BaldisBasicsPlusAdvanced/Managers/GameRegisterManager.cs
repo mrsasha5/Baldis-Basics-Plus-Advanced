@@ -50,6 +50,8 @@ using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using Newtonsoft.Json;
+using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 
 namespace BaldisBasicsPlusAdvanced.Managers
 {
@@ -1076,7 +1078,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetLayerCollisionMask(LayersHelper.entityCollisionMask)
                 .AddRenderbaseFunction(delegate (Entity entity)
                 {
-                    Transform fanBaseRenderer = ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_fan_face_1"])
+                    Transform fanBaseRenderer = ObjectsCreator.CreateSpriteRendererBase(null)
                     .transform.parent;
                     fanBaseRenderer.SetParent(entity.transform);
                     return fanBaseRenderer;
@@ -1385,16 +1387,14 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializePosters()
         {
-            int textureNum = 1;
-            while (true)
+            PosterTextData[] emptyTextArray = new PosterTextData[0];
+
+            foreach (string path in Directory.GetFiles(
+                AssetsHelper.modPath + "Textures/Posters/GenericPosters/", "*.png", SearchOption.AllDirectories))
             {
-                string basePath = AssetsHelper.modPath + "Textures/Posters/adv_poster_" + textureNum;
+                string jsonPath = path.Replace(".png", ".json");
 
-                string imagePath = basePath + ".png";
-                string jsonPath = basePath + ".json";
-
-                if (!File.Exists(imagePath)) break;
-                if (!File.Exists(jsonPath)) continue;
+                if (!File.Exists(jsonPath)) throw new Exception("Json for generic poster is missing!");
 
                 PosterSerializableData posterData = JsonConvert.DeserializeObject<PosterSerializableData>(File.ReadAllText(jsonPath));
 
@@ -1403,15 +1403,13 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 ObjectsStorage.WeightedPosterObjects.Add(new WeightedPosterObject()
                 {
                     selection = ObjectCreators.CreatePosterObject(
-                        AssetsHelper.TextureFromFile("Textures/Posters/adv_poster_" + textureNum + ".png"),
-                            posterData.Texts),
+                        AssetsHelper.TextureFromFile(path, overrideBasePath: true),
+                            posterData.Texts != null ? posterData.Texts : emptyTextArray),
                     weight = posterData.weight
                 });
 
                 ObjectsStorage.WeightedPosterObjects[ObjectsStorage.WeightedPosterObjects.Count - 1]
-                    .selection.name = "adv_poster_" + textureNum;
-
-                textureNum++;
+                    .selection.name = Path.GetFileNameWithoutExtension(path);
             }
         }
     }
