@@ -2,19 +2,25 @@
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Patches;
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.GameItems
 {
-    public class PlaceableFanItem : Item
+    public class PlaceableFanItem : Item, IPrefab
     {
+        [SerializeField]
+        private CellCoverage cover;
+
+        public void InitializePrefab(int variant)
+        {
+            cover = CellCoverage.Up | CellCoverage.Center| CellCoverage.Down;
+        }
+
         public override bool Use(PlayerManager pm)
         {
-            //List<Cell> potentialCells = pm.ec.AllTilesNoGarbage(includeOffLimits: false, includeWithHardCoverage: false);
             Cell cell = pm.ec.CellFromPosition(pm.transform.position);
 
-            if (cell != null && !cell.Null && !cell.HasAnyHardCoverage)/*(cell != null && potentialCells.Contains(cell) && cell.room.entitySafeCells.Find(x => x == cell.position) != null
-                && cell.room.eventSafeCells.Find(x => x == cell.position) != null)*/
+            if (cell != null && !cell.Null && cell.AllCoverageFits(cover))
             { 
                 Fan fan = Instantiate(ObjectsStorage.Entities["Fan"]).GetComponent<Fan>();
 

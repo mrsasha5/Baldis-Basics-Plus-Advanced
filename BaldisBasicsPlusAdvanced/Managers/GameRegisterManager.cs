@@ -1333,7 +1333,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             for (int i = 0; i < datas.Count; i++)
             {
-                posters.Add(CreateRecipePoster(datas[i], "recipe" + i));
+                posters.Add(CreateRecipePoster(datas[i], "recipe_" + i));
             }
 
             datas.Clear();
