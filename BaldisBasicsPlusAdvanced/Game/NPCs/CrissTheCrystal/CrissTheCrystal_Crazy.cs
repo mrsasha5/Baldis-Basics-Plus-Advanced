@@ -27,6 +27,8 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             criss.StartCoroutine(WaitsAnimation());
         }
 
+        public void OverrideTime(float newTime) => time = newTime;
+
         private IEnumerator WaitsAnimation()
         {
             while (criss.Animator.currentAnimationName == "TurnsCrazy")

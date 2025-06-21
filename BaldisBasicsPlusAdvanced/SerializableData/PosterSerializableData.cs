@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using MTM101BaldAPI.UI;
 using Newtonsoft.Json;
 using TMPro;
@@ -9,6 +10,13 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
     [JsonObject(MemberSerialization.Fields)]
     public class PosterSerializableData
     {
+
+        public static PosterSerializableData GetFromFile(string path)
+        {
+            PosterSerializableData posterData = JsonConvert.DeserializeObject<PosterSerializableData>(File.ReadAllText(path));
+            posterData.ConvertTextsToGameStandard();
+            return posterData;
+        }
 
         private class PosterText
         {

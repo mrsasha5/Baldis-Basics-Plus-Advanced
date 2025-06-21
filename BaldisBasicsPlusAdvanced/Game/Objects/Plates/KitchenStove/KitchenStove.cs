@@ -22,13 +22,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
     public class KitchenStove : BasePlate, IButtonReceiver
     {
         [SerializeField]
-        private SoundObject audBurningStart;
+        protected SoundObject audBurningStart;
 
         [SerializeField]
-        private SoundObject audBurningLoop;
+        protected SoundObject audBurningLoop;
 
         [SerializeField]
-        private SoundObject audBurningEnd;
+        protected SoundObject audBurningEnd;
 
         [SerializeField]
         private NavMeshObstacle obstacle;
@@ -44,29 +44,29 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         private static List<FoodRecipeData> datas = new List<FoodRecipeData>();
 
         [SerializeField]
-        private float coolingTime;
+        protected float coolingTime;
 
         [SerializeField]
-        private float burningTime;
+        protected float burningTime;
 
         [SerializeField]
         private bool activeStateOverridden;
 
-        private List<Pickup> pickups;
+        protected List<Pickup> pickups;
 
-        private FoodRecipeData currentRecipe;
+        protected FoodRecipeData currentRecipe;
 
-        private float activeTime;
+        protected float activeTime;
 
-        private bool available;
+        protected bool available;
 
-        private bool active;
+        protected bool active;
 
-        private bool isHot;
+        protected bool isHot;
 
         //private bool updatesColor;
 
-        private Cell cell;
+        protected Cell cell;
 
         public static int MaxFoodCount => maxFoodCount;
 
@@ -297,7 +297,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             return false;
         }
 
-        private void OnItemCollected(Pickup pickup, int player)
+        protected virtual void OnItemCollected(Pickup pickup, int player)
         {
             if (pickup.item.itemType == Items.None)
             {
@@ -320,8 +320,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             if (IsUsable) Activate();
         }
 
+        public virtual bool IsCookingAvailable() => true;
+
         public void Activate()
         {
+            currentRecipe = datas.Find(x => x.ContainsListOfPickups(pickups) && pickups.Count == x.RawFood.Length);
+
+            if (!IsCookingAvailable()) return;
+
             activeStateOverridden = false;
             UpdateVisualActiveState(true);
             activeStateOverridden = true;
@@ -345,12 +351,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 }
             }
 
-            currentRecipe = datas.Find(x => x.ContainsListOfPickups(pickups) && pickups.Count == x.RawFood.Length);
-
             currentRecipe?.onKitchenStoveActivatingPre?.Invoke(this);
+            OnActivatingPre();
         }
 
-        private void OnActivating()
+        protected virtual void OnActivatingPre()
+        {
+
+        }
+
+        protected virtual void OnActivatingPost()
         {
             particleSystem.Play();
             active = true;
@@ -366,7 +376,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             currentRecipe?.onKitchenStoveActivatingPost?.Invoke(this);
         }
 
-        private void OnDeactivatingPre()
+        protected virtual void OnDeactivatingPre()
         {
             particleSystem.Stop();
 
@@ -401,7 +411,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             if (pickups.Count == 0) interaction.gameObject.SetActive(true);
         }
 
-        private void OnDeactivatingPost()
+        protected virtual void OnDeactivatingPost()
         {
             available = true;
 
@@ -449,7 +459,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
                 isHot = true;
 
-                OnActivating();
+                OnActivatingPost();
             } else
             {
                 OnDeactivatingPre();

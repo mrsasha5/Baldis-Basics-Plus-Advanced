@@ -903,15 +903,21 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 int num = 1;
                 string tipKey = tipBaseName + num;
 
-                List<string> tips = new List<string>();
+                Dictionary<string, string> locText = ReflectionHelper.GetValue<Dictionary<string, string>>(localization, "localizedText");
+                List<string> tipKeys = locText.Keys.ToList();
 
-                while (localization.Exists(tipKey))
+                for (int i = 0; i < tipKeys.Count; i++)
                 {
-                    tips.Add(tipKey);
-                    tipKey = tipBaseName + ++num;
+                    if (!tipKeys[i].StartsWith(tipBaseName))
+                    {
+                        tipKeys.RemoveAt(i);
+                        i--;
+                    }
                 }
 
-                ApiManager.AddNewTips(AdvancedCore.Instance.Info, tips.ToArray());
+                tipKeys.Remove("Adv_Elv_Tip_Base");
+
+                ApiManager.AddNewTips(AdvancedCore.Instance.Info, tipKeys.ToArray());
             }
 
             ApiManager.AddNewSymbolMachineWords(AdvancedCore.Instance.Info,
@@ -1080,6 +1086,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreatePlate<MysteriousPlate>("fake_plate");
             PrefabsCreator.CreatePlate<SafetyTrapdoor>("safety_trapdoor");
             PrefabsCreator.CreatePlate<KitchenStove>("kitchen_stove");
+            PrefabsCreator.CreatePlate<JohnnyKitchenStove>("johnny_kitchen_stove");
 
             //plates end
 
@@ -1103,12 +1110,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
             }
             //spelling end
 
-            //teleportation bomb
             PrefabsCreator.CreateObjectPrefab<TeleportationHole>("Teleportation Bomb", "teleportation_bomb");
             PrefabsCreator.CreateObjectPrefab<Reaper>("Farm Reaper", "farm_reaper");
             PrefabsCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_flag");
 
-            GameObject cornSign = new GameObject("CornSign");
+            GameObject cornSign = new GameObject("Corn Sign");
             ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_corn_sign1"])
                 .transform.SetParent(cornSign.transform, false);
             cornSign.ConvertToPrefab(true);
@@ -1420,9 +1426,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
                 if (!File.Exists(jsonPath)) throw new Exception("Json for generic poster is missing!");
 
-                PosterSerializableData posterData = JsonConvert.DeserializeObject<PosterSerializableData>(File.ReadAllText(jsonPath));
-
-                posterData.ConvertTextsToGameStandard();
+                PosterSerializableData posterData = PosterSerializableData.GetFromFile(jsonPath);
 
                 ObjectsStorage.WeightedPosterObjects.Add(new WeightedPosterObject()
                 {

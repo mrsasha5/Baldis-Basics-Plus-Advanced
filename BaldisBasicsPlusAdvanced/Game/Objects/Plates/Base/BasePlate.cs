@@ -423,7 +423,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         protected virtual void VirtualTriggerStay(Collider other)
         {
-            if (plateData.targetsPlayer && !(other.tag == "Player")) return;
+            if (plateData.targetsPlayer && !(other.CompareTag("Player"))) return;
 
             if (other.TryGetComponent(out Entity entity) && IsPressable(entity))
             {

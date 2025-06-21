@@ -5,6 +5,8 @@ using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Managers;
 using BaldisBasicsPlusAdvanced.Patches;
+using BaldisBasicsPlusAdvanced.SerializableData;
+using HarmonyLib;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.UI;
@@ -17,6 +19,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
 {
@@ -658,16 +661,16 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                 ElevatorScreen elvScreen = AssetsHelper.LoadAsset<ElevatorScreen>("ElevatorScreen");
                 elvScreen.GetComponent<AudioManager>().positional = false;
 
+                LevelAsset pitStop = AssetsHelper.LoadAsset<LevelAsset>("Pitstop");
+                RoomData hall = pitStop.rooms.Find(x => x.category == RoomCategory.Null);
+
                 //PIT overrides
                 if (!PitOverrides.EnglishClassDisabled)
                 {
                     StandardDoorMats engDoorMats = Array.Find(UnityEngine.Object.FindObjectsOfType<StandardDoorMats>(),
                     x => x.name == "EnglishDoorSet");
 
-                    LevelAsset pitStop = AssetsHelper.LoadAsset<LevelAsset>("Pitstop");
-
-                    //Adding special trigger & Acceleration Plate
-                    RoomData hall = pitStop.rooms.Find(x => x.category == RoomCategory.Null);
+                    //Adding special trigger, Acceleration Plate
 
                     hall.basicObjects.Add(
                         new BasicObjectData()
@@ -766,6 +769,33 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                     });
                 }
 
+#warning add API option to disable
+                if (true)
+                {
+                    hall.basicObjects.Add(new BasicObjectData()
+                    {
+                        prefab = ObjectsStorage.Objects["johnny_kitchen_stove"].transform,
+                        position = new Vector3(355f, 0f, 145f)
+                    });
+
+                    PosterObject posterObj = ObjectCreators.CreatePosterObject(
+                        AssetsHelper.TextureFromFile("Textures/Posters/adv_poster_kitchen_stove.png"),
+                        PosterSerializableData.GetFromFile(AssetsHelper.modPath + "Textures/Posters/adv_poster_kitchen_stove.json").Texts);
+
+                    /*CellData cell = new CellData();
+                    cell.pos = new IntVector2(37, 14);
+                    pitStop.tile = pitStop.tile.AddToArray(cell);
+                    cell.type = (int)(CellCoverage.Up | CellCoverage.Down | CellCoverage.South);*/
+
+                    pitStop.posters.Add(new PosterData()
+                    {
+                        poster = posterObj,
+                        position = new IntVector2(36, 14),
+                        direction = Direction.East
+                    });
+
+                }
+
                 overridden = true;
             }
 
@@ -773,7 +803,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
 
         public static void LoadEditorAssets()
         {
-            //.png
             LoadModSprite("adv_editor_criss_the_crystal", "Compats/LevelEditor/NPCs/adv_editor_criss_the_crystal.png");
 
             LoadModSprite("adv_editor_corn_sign1", "Compats/LevelEditor/Objects/adv_editor_corn_sign1.png");

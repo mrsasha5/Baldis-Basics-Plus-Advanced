@@ -3,6 +3,7 @@ using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Game.GameItems;
 using BaldisBasicsPlusAdvanced.Game.Objects.Pickups;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Helpers;
 using HarmonyLib;
 using System;
@@ -18,6 +19,22 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
         private static StoreRoomFunction storeFunc;
 
         private static PriceTag priceTagPre;
+
+        [HarmonyPatch("OnGenerationFinished")]
+        [HarmonyPostfix]
+        private static void OnGenerationFinished(StoreRoomFunction __instance)
+        {
+#warning I guess in the future I need to improve my builders to instead of this setting data for them on these premades
+            JohnnyKitchenStove stove = GameObject.FindObjectOfType<JohnnyKitchenStove>();
+            if (stove != null)
+            {
+                IntVector2 pos = __instance.Room.ec.CellFromPosition(stove.transform.position).position;
+                pos.x -= 1;
+                GameButton button = (GameButton)GameButton.Build(AssetsStorage.gameButton, __instance.Room.ec,
+                    pos, Direction.North);
+                button.SetUp(stove);
+            }
+        }
 
         [HarmonyPatch("Initialize")]
         [HarmonyPostfix]
@@ -93,6 +110,31 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
             priceTag.transform.SetParent(storeFunc.Room.objectObject.transform);
             priceTag.SetText(text);
             return priceTag;
+        }
+
+        public static void PlayJohnnyUnafforable()
+        {
+            if (storeFunc == null) return;
+            PropagatedAudioManagerAnimator audMan = 
+                ReflectionHelper.GetValue<PropagatedAudioManagerAnimator>(storeFunc, "johnnyAudioManager");
+            if (!audMan.QueuedUp)
+            {
+                audMan.QueueRandomAudio(ReflectionHelper.GetValue<SoundObject[]>(storeFunc, "audUnafforable"));
+            }
+        }
+        
+        public static void PlayJohnnyBuy()
+        {
+            if (storeFunc == null) return;
+            PropagatedAudioManagerAnimator audMan = 
+                ReflectionHelper.GetValue<PropagatedAudioManagerAnimator>(storeFunc, "johnnyAudioManager");
+            if (!audMan.QueuedUp)
+            {
+                audMan.QueueRandomAudio(ReflectionHelper.GetValue<SoundObject[]>(storeFunc, "audBuy"));
+            }
+
+            ReflectionHelper.SetValue<bool>(storeFunc, "itemPurchased", true);
+            ReflectionHelper.SetValue<bool>(storeFunc, "playerLeft", false);
         }
 
         public static bool BuyingItem(int price, PriceTag priceTag, out int ytpCollected)

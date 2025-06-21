@@ -57,7 +57,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
         private Sprite gaugeIcon;
 
         [SerializeField]
-        private LaserObject laser;
+        private WindowObject windowObjectPre;
 
         [SerializeField]
         private AudioManager audMan;
@@ -75,6 +75,12 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
         private float blindTime;
 
         [SerializeField]
+        private float destroyingWallTime;
+
+        [SerializeField]
+        private float laserSize;
+
+        [SerializeField]
         private float walkSpeed;
 
         [SerializeField]
@@ -82,6 +88,8 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
         [SerializeField]
         private float pitchSpeed;
+
+        private LaserObject laser;
 
         public Vector2 MinMaxCooldown => minMaxCooldown;
 
@@ -91,15 +99,29 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
         public CustomSpriteAnimator Animator => animator;
 
+        public WindowObject WindowPre => windowObjectPre;
+
         public void InitializePrefab(int variant)
         {
+            windowObjectPre = ObjectCreators.CreateWindowObject(
+                "Big Hole",
+                AssetsHelper.TextureFromFile("Textures/Windows/BigHole/adv_window_big_hole.png"),
+                AssetsHelper.TextureFromFile("Textures/Windows/BigHole/adv_window_big_hole.png"),
+                AssetsHelper.TextureFromFile("Textures/Windows/BigHole/adv_window_big_hole_mask.png")
+            );
+            windowObjectPre.windowPre = Instantiate(windowObjectPre.windowPre);
+            windowObjectPre.windowPre.gameObject.ConvertToPrefab(true);
+            windowObjectPre.windowPre.openOnStart = true;
+
             audMan = gameObject.GetComponent<AudioManager>();
             animator = gameObject.AddComponent<CustomSpriteAnimator>();
             blindCooldown = 1f;
+            laserSize = 5f;
             blindTime = 10f;
             walkSpeed = 10f;
             runSpeed = 30f;
             pitchSpeed = 0.15f;
+            destroyingWallTime = 2f;
 
             minMaxCooldown = new Vector2(30f, 60f);
 
@@ -187,7 +209,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             );
             animator.SetDefaultAnimation("Idle", 1f);
 
-            GameObject laserObj = new GameObject("CrissLaser");
+            GameObject laserObj = new GameObject("Criss Laser");
             laser = laserObj.AddComponent<LaserObject>();
             laser.Initialize(this);
             laser.SetActive(false, playSound: false);
@@ -226,6 +248,64 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             navigator.SetSpeed(runSpeed);
         }
 
+        public void TryDestroyCollider(Collider collider)
+        {
+            if (collider != null)
+            {
+                if (collider.transform.CompareTag("Wall"))
+                {
+                    Direction direction = Directions.DirFromVector3(collider.transform.forward, 5f);
+                    Cell cell = ec.CellFromPosition(IntVector2.GetGridPosition(
+                        collider.transform.position + collider.transform.forward * 5f));
+                    Cell cell2 = ec.CellFromPosition(IntVector2.GetGridPosition(
+                        collider.transform.position + collider.transform.forward * -5f));
+                    if (ec.ContainsCoordinates(
+                        IntVector2.GetGridPosition(collider.transform.position + collider.transform.forward * 5f)) &&
+                        !cell.Null &&
+                        cell.HasWallInDirection(direction.GetOpposite()) && //Moved
+                        //!cell.WallHardCovered(direction.GetOpposite()) && //It's not Portal Poster which player bought or found himself
+                        ec.ContainsCoordinates(IntVector2.GetGridPosition(
+                            collider.transform.position + collider.transform.forward * -5f)) &&
+                        !cell2.Null &&
+                        !cell2.WallHardCovered(direction)) //Well logically we should have it
+                    {
+
+                        ec.BuildWindow(cell2, direction, windowObjectPre);
+                    }
+                }
+                else if (collider.transform.CompareTag("Window"))
+                {
+                    collider.transform.GetComponent<Window>().Break(true); //Why it makes noise? Then ask First Prize why he makes, when
+                                                                      //he tries to push player to a wall
+                }
+                else if (collider.transform.parent != null && collider.transform.parent.CompareTag("StandardDoor"))
+                {
+                    StandardDoor door = collider.transform.parent.GetComponent<StandardDoor>();
+                    door.Unlock();
+                    door.Open(true, false);
+                    door.doors = new MeshRenderer[0];
+                    door.colliders = new MeshCollider[0];
+                    door.audMan.volumeModifier = 0f; //Haha, no.
+                    door.tag = "Untagged";
+                    //GameObject.Destroy(door); //Still can't do that because it registered not only by some room
+                    //but it may be registered by some mod too
+                    MeshRenderer[] renderers = collider.transform.parent.GetComponentsInChildren<MeshRenderer>();
+                    for (int i = 0; i < renderers.Length; i++)
+                    {
+                        Material[] materials = renderers[i].materials;
+                        materials[0] = windowObjectPre.mask;
+                        materials[1] = windowObjectPre.open[0];
+                        renderers[i].materials = materials;
+                    }
+                    Collider[] colliders = collider.transform.parent.GetComponentsInChildren<MeshCollider>();
+                    for (int i = 0; i < colliders.Length; i++)
+                    {
+                        GameObject.Destroy(colliders[i]);
+                    }
+                }
+            }
+        }
+
         public class LaserObject : MonoBehaviour
         {
             private BoxCollider collider;
@@ -234,11 +314,13 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
             private CrissTheCrystal criss;
 
-            private float size = 10f;
-
             private List<BaseControllerSystem> systems = new List<BaseControllerSystem>();
 
             private List<float> times = new List<float>();
+
+            private List<Collider> triggeredColliders = new List<Collider>();
+
+            private List<float> triggeredTimes = new List<float>();
 
             private Vector3 _direction;
 
@@ -258,6 +340,8 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
                 collider = gameObject.AddComponent<BoxCollider>();
                 collider.isTrigger = true;
+
+                gameObject.SetRigidbody();
             }
 
             private void Update()
@@ -267,6 +351,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                     Destroy(gameObject);
                     return;
                 }
+
                 transform.position = criss.transform.position;
                 for (int i = 0; i < systems.Count; i++)
                 {
@@ -281,6 +366,19 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                             if (systems[i] is PlayerControllerSystem)
                                 blind.SetGauge(
                                     CoreGameManager.Instance.GetHud(0).gaugeManager.ActivateNewGauge(criss.gaugeIcon, criss.blindTime));
+                        }
+                    }
+                }
+
+                for (int i = 0; i < triggeredColliders.Count; i++)
+                {
+                    if (triggeredTimes[i] > 0f)
+                    {
+                        triggeredTimes[i] -= Time.deltaTime * criss.TimeScale;
+
+                        if (triggeredTimes[i] <= 0f)
+                        {
+                            criss.TryDestroyCollider(triggeredColliders[i]);
                         }
                     }
                 }
@@ -302,6 +400,8 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                 {
                     systems.Clear();
                     times.Clear();
+                    triggeredColliders.Clear();
+                    triggeredTimes.Clear();
                     criss.audMan.pitchModifier = 1f;
                     if (playSound)
                     {
@@ -313,22 +413,38 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
             private void OnTriggerEnter(Collider collider)
             {
-                if (collider.TryGetComponent(out BaseControllerSystem system)
-                    && !systems.Contains(system) && collider.gameObject != criss.gameObject)
+                if (collider.TryGetComponent(out BaseControllerSystem system))
                 {
-                    systems.Add(system);
-                    times.Add(criss.blindCooldown);
+                    if (!systems.Contains(system) && collider.gameObject != criss.gameObject)
+                    {
+                        systems.Add(system);
+                        times.Add(criss.blindCooldown);
+                    }
                 }
+                else if (!triggeredColliders.Contains(collider))
+                {
+                    triggeredColliders.Add(collider);
+                    triggeredTimes.Add(criss.destroyingWallTime);
+                }
+                    
             }
 
             private void OnTriggerExit(Collider collider)
             {
-                if (collider.TryGetComponent(out BaseControllerSystem system)
-                    && systems.Contains(system) && collider.gameObject != criss.gameObject)
+                if (collider.TryGetComponent(out BaseControllerSystem system))
                 {
-                    int index = systems.IndexOf(system);
-                    systems.RemoveAt(index);
-                    times.RemoveAt(index);
+                    if (systems.Contains(system) && collider.gameObject != criss.gameObject)
+                    {
+                        int index = systems.IndexOf(system);
+                        systems.RemoveAt(index);
+                        times.RemoveAt(index);
+                    }
+                }
+                else if (triggeredColliders.Contains(collider))
+                {
+                    int index = triggeredColliders.IndexOf(collider);
+                    triggeredColliders.RemoveAt(index);
+                    triggeredTimes.RemoveAt(index);
                 }
             }
 
@@ -340,7 +456,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
                 _direction = (positions[1] - positions[0]).normalized;
 
-                collider.size = (Vector3.right + Vector3.up) * size + Vector3.forward * _distance;
+                collider.size = (Vector3.right + Vector3.up) * criss.laserSize + Vector3.forward * _distance;
                 collider.center = Vector3.forward * _distance / 2f;
                 
                 transform.rotation = Quaternion.Euler(0f, math.atan2(_direction.x, _direction.z) * 180f / math.PI, 0f);

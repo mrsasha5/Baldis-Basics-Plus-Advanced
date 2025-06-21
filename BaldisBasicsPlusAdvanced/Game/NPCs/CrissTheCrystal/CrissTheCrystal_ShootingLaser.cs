@@ -1,8 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
-using MTM101BaldAPI;
-using Rewired;
+﻿using BaldisBasicsPlusAdvanced.Helpers;
 using System.Collections;
 using UnityEngine;
 
@@ -27,6 +23,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             npc.StartCoroutine(Waits());
         }
 
+#warning Oh no, these damn doors and windows
         private IEnumerator ShootLaser()
         {
             npc.Navigator.maxSpeed = 0;
@@ -35,7 +32,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
             UpdateDirection();
 
-            RaycastHit hit;
+            RaycastHit hit = default;
 
             float baseTime = 5f;
             float time = baseTime;
@@ -49,12 +46,15 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             while (time > 0f)
             {
                 time -= Time.deltaTime * npc.TimeScale;
+                if (time < 0f) time = 0f;
 
                 color.g = time / baseTime;
                 color.b = color.g;
                 npc.spriteRenderer[0].color = color;
 
                 if (target == null) break;
+
+                if (npc.Navigator.Velocity.magnitude != 0f) break;
 
                 Physics.Raycast(npc.transform.position, laserDirection, out hit, float.PositiveInfinity, LayersHelper.gumCollisionMask, 
                     QueryTriggerInteraction.Ignore);
@@ -68,7 +68,9 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
             criss.Laser.SetActive(false);
 
-            npc.behaviorStateMachine.ChangeState(new CrissTheCrystal_Crazy(criss));
+            CrissTheCrystal_Crazy crazyState = new CrissTheCrystal_Crazy(criss);
+            crazyState.OverrideTime(20f * (1f - color.g));
+            npc.behaviorStateMachine.ChangeState(crazyState);
         }
 
         private void UpdateDirection()
