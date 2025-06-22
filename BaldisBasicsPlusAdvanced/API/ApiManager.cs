@@ -322,6 +322,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="pluginInfo"></param>
+        /// <param name="weight"></param>
         public static void CreateSchoolCouncilTopic<T>(PluginInfo pluginInfo, int weight = 100) where T : BaseTopic, new()
         {
             if (!ObjectsStorage.Topics.ContainsKey(pluginInfo)) ObjectsStorage.Topics.Add(pluginInfo, new List<WeightedCouncilTopic>());

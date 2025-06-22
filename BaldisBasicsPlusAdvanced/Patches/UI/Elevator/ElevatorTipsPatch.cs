@@ -1,15 +1,14 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Patches;
 using BaldisBasicsPlusAdvanced.SaveSystem;
-using BepInEx;
 using HarmonyLib;
 using MTM101BaldAPI.UI;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
+using static Rewired.Platforms.Custom.CustomPlatformUnifiedKeyboardSource.KeyPropertyMap;
+using static UnityEngine.Random;
 
 namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 {
@@ -24,7 +23,23 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         private static string originalText;
 
-        //public static bool patched => tipText != null;
+        public static bool LoadTip => !(ObjectsStorage.TipKeys.Count == 0) &&
+                (OptionsDataManager.ExtraSettings.GetValue<bool>("tips"));
+
+        public static string GetTipText()
+        {
+            if (!LoadTip) return "";
+            return LocalizationManager.Instance.GetLocalizedText("Adv_Elv_Tip_Base") + "\n" + GetRandomTip();
+        }
+
+        public static string GetRandomTip()
+        {
+            List<string> tipKeys = ApiManager.GetAllTips();
+
+            int tipNum = UnityEngine.Random.Range(0, tipKeys.Count);
+
+            return LocalizationManager.Instance.GetLocalizedText(tipKeys[tipNum]);
+        }
 
         [HarmonyPatch("Start")]
         [HarmonyPrefix]
@@ -32,26 +47,10 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             elvScreen = __instance;
             canvas = ___canvas;
-            //(ApiManager.ElevatorTopText && (DataManager.ExtraSettings.tipsEnabled || (overrideText != null && overrideEvenTipsDisabled)))
+
             LocalizationManager localization = Singleton<LocalizationManager>.Instance;
 
-            bool loadTip = !(ObjectsStorage.TipKeys.Count == 0) &&
-                (OptionsDataManager.ExtraSettings.GetValue<bool>("tips"));
-
-            string tip = "";
-
-            if (loadTip)
-            {
-                List<string> tipKeys = ApiManager.GetAllTips();
-
-                int tipNum = UnityEngine.Random.Range(0, tipKeys.Count);
-
-                tip = localization.GetLocalizedText(tipKeys[tipNum]);
-            }
-
-            string text = localization.GetLocalizedText("Adv_Elv_Tip_Base") + "\n" + tip;
-
-            originalText = loadTip ? text : "";
+            originalText = GetTipText();
 
             CreateTipText(originalText);
         }
@@ -69,6 +68,11 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         public static void SetOverride(bool state, string key, bool asTip, bool overrideWorksEvenTipsDisabled = false)
         {
+            SetOverride(tipText, state, key, asTip, overrideWorksEvenTipsDisabled);
+        }
+
+        public static void SetOverride(TMP_Text tipText, bool state, string key, bool asTip, bool overrideWorksEvenTipsDisabled = false)
+        {
             if (state)
             {
                 if (tipText != null && (OptionsDataManager.ExtraSettings.GetValue<bool>("tips") || overrideWorksEvenTipsDisabled))
@@ -76,12 +80,13 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                     string text = Singleton<LocalizationManager>.Instance.GetLocalizedText(key);
                     tipText.text = asTip ? Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Elv_Tip_Base") + "\n" + text : text;
                 }
-            } else
+            }
+            else
             {
                 if (tipText != null)
                 {
                     tipText.text = originalText;
-                } 
+                }
             }
         }
 

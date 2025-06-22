@@ -1,14 +1,10 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
-using BaldisBasicsPlusAdvanced.Compats;
-using BaldisBasicsPlusAdvanced.Game.GameItems;
 using BaldisBasicsPlusAdvanced.Game.Objects.Pickups;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Helpers;
 using HarmonyLib;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Patches.Shop
@@ -19,6 +15,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
         private static StoreRoomFunction storeFunc;
 
         private static PriceTag priceTagPre;
+
+        public static PosterObject posterKitchenPre;
 
         [HarmonyPatch("OnGenerationFinished")]
         [HarmonyPostfix]
@@ -33,6 +31,10 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
                 GameButton button = (GameButton)GameButton.Build(AssetsStorage.gameButton, __instance.Room.ec,
                     pos, Direction.North);
                 button.SetUp(stove);
+
+                pos.x += 2;
+
+                __instance.Room.ec.BuildPoster(posterKitchenPre, __instance.Room.cells.Find(x => x.position == pos), Direction.North);
             }
         }
 

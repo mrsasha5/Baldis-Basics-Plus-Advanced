@@ -5,6 +5,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Managers;
 using BaldisBasicsPlusAdvanced.Patches;
+using BaldisBasicsPlusAdvanced.Patches.Shop;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using HarmonyLib;
 using MTM101BaldAPI;
@@ -609,6 +610,10 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                 advancedClassLamp.transform.localPosition = Vector3.up * 8.95f;
                 advancedClassLamp.transform.parent.gameObject.ConvertToPrefab(true);
 
+                StoreRoomPatches.posterKitchenPre = ObjectCreators.CreatePosterObject(
+                        AssetsHelper.TextureFromFile("Textures/Posters/adv_poster_kitchen_stove.png"),
+                        PosterSerializableData.GetFromFile(AssetsHelper.modPath + "Textures/Posters/adv_poster_kitchen_stove.json").Texts);
+
                 cached = true;
 
                 if (Debugging)
@@ -778,21 +783,12 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                         position = new Vector3(355f, 0f, 145f)
                     });
 
-                    PosterObject posterObj = ObjectCreators.CreatePosterObject(
-                        AssetsHelper.TextureFromFile("Textures/Posters/adv_poster_kitchen_stove.png"),
-                        PosterSerializableData.GetFromFile(AssetsHelper.modPath + "Textures/Posters/adv_poster_kitchen_stove.json").Texts);
-
-                    /*CellData cell = new CellData();
-                    cell.pos = new IntVector2(37, 14);
-                    pitStop.tile = pitStop.tile.AddToArray(cell);
-                    cell.type = (int)(CellCoverage.Up | CellCoverage.Down | CellCoverage.South);*/
-
-                    pitStop.posters.Add(new PosterData()
+                    /*pitStop.posters.Add(new PosterData()
                     {
                         poster = posterObj,
                         position = new IntVector2(36, 14),
-                        direction = Direction.East
-                    });
+                        direction = Direction.North
+                    });*/
 
                 }
 

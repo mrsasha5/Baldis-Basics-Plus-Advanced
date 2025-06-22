@@ -19,6 +19,26 @@ namespace BaldisBasicsPlusAdvanced.Helpers
     public class ObjectsCreator
     {
 
+        public static TextMeshPro CreateSpatialText(BaldiFonts font, Vector2? size = null, Transform parent = null, 
+            Vector3? position = null)
+        {
+            RectTransform rect = new GameObject("SpatialText").AddComponent<RectTransform>();
+
+            if (size != null)
+                rect.sizeDelta = (Vector2)size;
+            if (parent != null)
+                rect.SetParent(parent, false);
+            if (position != null)
+                rect.localPosition = (Vector3)position;
+
+            TextMeshPro text = rect.gameObject.AddComponent<TextMeshPro>();
+            text.alignment = TextAlignmentOptions.Center;
+            text.font = font.FontAsset();
+            text.fontSize = font.FontSize();
+
+            return text;
+        }
+
         public static StandardMenuButton CreateSpriteButton(Sprite sprite, Vector3? position = null, Transform parent = null, 
             Sprite highlightedSprite = null, Sprite heldSprite = null)
         {

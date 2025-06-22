@@ -21,6 +21,8 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
         private class PosterText
         {
 
+#pragma warning disable CS0649
+
             public string textKey;
 
             public IntVector2? position;
@@ -36,6 +38,8 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
             public string style;
 
             public string alignment;
+
+#pragma warning restore CS0649
 
             public PosterTextData Convert()
             {

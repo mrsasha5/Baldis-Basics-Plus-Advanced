@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Managers
