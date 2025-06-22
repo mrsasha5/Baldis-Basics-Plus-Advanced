@@ -28,6 +28,7 @@
 !/Dependencies/Newtonsoft.Json.dll
 !/Dependencies/PlusLevelFormat.dll
 !/Dependencies/PlusLevelLoader.dll
+!/Dependencies/The3DElevator.dll
 
 # User-specific files
 *.rsuser
