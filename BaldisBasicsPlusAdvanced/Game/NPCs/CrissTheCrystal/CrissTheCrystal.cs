@@ -262,46 +262,82 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                     if (ec.ContainsCoordinates(
                         IntVector2.GetGridPosition(collider.transform.position + collider.transform.forward * 5f)) &&
                         !cell.Null &&
-                        cell.HasWallInDirection(direction.GetOpposite()) && //Moved
-                        //!cell.WallHardCovered(direction.GetOpposite()) && //It's not Portal Poster which player bought or found himself
+                        cell.HasWallInDirection(direction.GetOpposite()) &&
+                        !cell.WallHardCovered(direction.GetOpposite()) && 
                         ec.ContainsCoordinates(IntVector2.GetGridPosition(
                             collider.transform.position + collider.transform.forward * -5f)) &&
                         !cell2.Null &&
-                        !cell2.WallHardCovered(direction)) //Well logically we should have it
+                        !cell2.WallHardCovered(direction))
                     {
 
                         ec.BuildWindow(cell2, direction, windowObjectPre);
                     }
                 }
-                else if (collider.transform.CompareTag("Window"))
+                else if (collider.transform.parent != null)
                 {
-                    collider.transform.GetComponent<Window>().Break(true); //Why it makes noise? Then ask First Prize why he makes, when
-                                                                      //he tries to push player to a wall
-                }
-                else if (collider.transform.parent != null && collider.transform.parent.CompareTag("StandardDoor"))
-                {
-                    StandardDoor door = collider.transform.parent.GetComponent<StandardDoor>();
-                    door.Unlock();
-                    door.Open(true, false);
-                    door.doors = new MeshRenderer[0];
-                    door.colliders = new MeshCollider[0];
-                    door.audMan.volumeModifier = 0f; //Haha, no.
-                    door.tag = "Untagged";
-                    //GameObject.Destroy(door); //Still can't do that because it registered not only by some room
-                    //but it may be registered by some mod too
-                    MeshRenderer[] renderers = collider.transform.parent.GetComponentsInChildren<MeshRenderer>();
-                    for (int i = 0; i < renderers.Length; i++)
+                    if (collider.transform.parent.CompareTag("Window"))
+                        collider.transform.parent.GetComponent<Window>()
+                            .Break(true); //Why it makes noise? Then ask First Prize why he makes, when
+                                        //he tries to push player to a wall
+                    else if (collider.transform.parent.TryGetComponent(out StandardDoor door))
                     {
-                        Material[] materials = renderers[i].materials;
-                        materials[0] = windowObjectPre.mask;
-                        materials[1] = windowObjectPre.open[0];
-                        renderers[i].materials = materials;
+                        door.Unlock();
+                        door.Open(true, false);
+                        door.doors = new MeshRenderer[0];
+                        door.colliders = new MeshCollider[0];
+                        door.audMan.volumeModifier = 0f; //Haha, no.
+                        door.tag = "Untagged";
+                        //GameObject.Destroy(door); //Still can't do that because it registered not only by some room
+                        //but it may be registered by some mod too
+                        MeshRenderer[] renderers = collider.transform.parent.GetComponentsInChildren<MeshRenderer>();
+                        for (int i = 0; i < renderers.Length; i++)
+                        {
+                            Material[] materials = renderers[i].materials;
+                            materials[0] = windowObjectPre.mask;
+                            materials[1] = windowObjectPre.open[0];
+                            renderers[i].materials = materials;
+                        }
+
+                        Collider trigger = collider.transform.parent.GetComponent<Collider>();
+
+                        if (trigger != null) Destroy(trigger);
+
+                        Collider[] colliders = collider.transform.parent.GetComponentsInChildren<MeshCollider>();
+                        for (int i = 0; i < colliders.Length; i++)
+                        {
+                            GameObject.Destroy(colliders[i]);
+                        }
                     }
-                    Collider[] colliders = collider.transform.parent.GetComponentsInChildren<MeshCollider>();
-                    for (int i = 0; i < colliders.Length; i++)
+                    else if (collider.transform.parent.TryGetComponent(out SwingDoor swingDoor))
                     {
-                        GameObject.Destroy(colliders[i]);
+                        swingDoor.Unlock();
+                        swingDoor.Open(true, false);
+                        swingDoor.doors = new MeshRenderer[0];
+                        swingDoor.colliders = new MeshCollider[0];
+                        swingDoor.audMan.volumeModifier = 0f; //Haha, no.
+                        swingDoor.tag = "Untagged";
+                        //GameObject.Destroy(door); //Still can't do that because it registered not only by some room
+                        //but it may be registered by some mod too
+                        MeshRenderer[] renderers = collider.transform.parent.GetComponentsInChildren<MeshRenderer>();
+                        for (int i = 0; i < renderers.Length; i++)
+                        {
+                            Material[] materials = renderers[i].materials;
+                            materials[0] = windowObjectPre.mask;
+                            materials[1] = windowObjectPre.open[0];
+                            renderers[i].materials = materials;
+                        }
+
+                        Collider trigger = collider.transform.parent.GetComponent<Collider>();
+
+                        if (trigger != null) Destroy(trigger);
+
+                        Collider[] colliders = collider.transform.parent.GetComponentsInChildren<MeshCollider>();
+                        for (int i = 0; i < colliders.Length; i++)
+                        {
+                            GameObject.Destroy(colliders[i]);
+                        }
                     }
+
                 }
             }
         }

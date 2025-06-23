@@ -1,5 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Compats;
+using BaldisBasicsPlusAdvanced.Compats.SpatialElevator;
 using BaldisBasicsPlusAdvanced.Game.Components.Movement;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
@@ -10,7 +12,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,6 +24,14 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
     [HarmonyPatch(typeof(ElevatorScreen))]
     internal class ElevatorExpelHammerPatch
     {
+
+        public enum Status
+        {
+            Available,
+            ShouldBreak,
+            Existing
+        }
+
         private static Image chalkboard;
 
         private static TMP_Text pagesText;
@@ -49,32 +58,57 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         private static bool state;
 
-        private static bool shouldInitialized;
+        private static bool shouldInitialize;
+
+        public static bool ShouldInitialize => shouldInitialize;
+
+        public static bool Available => LevelDataManager.LevelData.hammerPurchased;
+
+        public static Status GetStatus(BaseGameManager gameManager)
+        {
+            if (gameManager is PitstopGameManager || GetPotentialCharacters().Count == 0)
+            {
+                return Status.Existing;
+            }
+            else if (shouldInitialize && !Available)
+            {
+                return Status.ShouldBreak;
+            }
+            else
+            {
+                return Status.Available;
+            }
+        }
 
         public static void OnGameManagerInit(BaseGameManager gameManager)
         {
-            if (!shouldInitialized || elvScreen == null) return;
-            if (gameManager is PitstopGameManager || GetPotentialCharacters().Count == 0)
-            {
+            if (!shouldInitialize || elvScreen == null) return;
 
-            } else if (shouldInitialized && !LevelDataManager.LevelData.hammerPurchased)
+            switch (GetStatus(gameManager))
             {
-                elvScreen.GetComponent<AudioManager>().PlaySingle(AssetsStorage.sounds["bal_break"]);
-                expelImage.StartCoroutine(AlphaAnimation(false, animSpeed, new Color(1f, 1f, 1f, 0f), lockedColor, true));
-            } else
-            {
-                SetState(true, animate: true);
+                case Status.Available:
+                    SetState(true, animate: true);
+                    break;
+                case Status.ShouldBreak:
+                    elvScreen.GetComponent<AudioManager>().PlaySingle(AssetsStorage.sounds["bal_break"]);
+                    expelImage.StartCoroutine(AlphaAnimation(false, animSpeed, new Color(1f, 1f, 1f, 0f), lockedColor, true));
+                    break;
+                default:
+                    break;
             }
+            
             GameObject.Destroy(arrowsImage.gameObject);
         }
 
-        [HarmonyPatch("Start")]
+        [HarmonyPatch("AwakeFunction")]
         [HarmonyPostfix]
-        private static void OnStart(ElevatorScreen __instance)
+        private static void OnAwakeFunction(ElevatorScreen __instance)
         {
-            shouldInitialized = false;
-            if (!LevelDataManager.LevelData.hammerPurchased) return;
-            shouldInitialized = true;
+            shouldInitialize = false;
+            if (!Available) return;
+            shouldInitialize = true;
+
+            if (IntegrationManager.IsActive<SpatialElevatorIntegration>()) return;
 
             elvScreen = __instance;
 
@@ -116,11 +150,11 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             SetState(false, animate: false);
         }
 
-        private static void CreateMenu()
+        public static void CreateMenuIn(Canvas canvas)
         {
             Singleton<GlobalCam>.Instance.Transition(UiTransition.Dither, 0.01666667f);
 
-            chalkboard = UIHelpers.CreateImage(AssetsStorage.sprites["chalkboard_standard"], elvScreen.Canvas.transform,
+            chalkboard = UIHelpers.CreateImage(AssetsStorage.sprites["chalkboard_standard"], canvas.transform,
                 Vector3.zero, correctPosition: false);
             chalkboard.ToCenter();
 
@@ -245,20 +279,26 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 );
             }
 
+            if (CursorController.Instance == null) return; //For Spatial Elv
             chalkboard.transform.SetSiblingIndex(CursorController.Instance.transform.GetSiblingIndex()); //instead of cursor
         }
 
-        private static void DestroyMenu()
+        public static void DestroyMenu()
         {
             Singleton<GlobalCam>.Instance.Transition(UiTransition.Dither, 0.01666667f);
 
-            GameObject.Destroy(chalkboard.gameObject);
+            if (!IntegrationManager.IsActive<SpatialElevatorIntegration>())
+                GameObject.Destroy(chalkboard.gameObject);
+            else GameObject.Destroy(chalkboard.gameObject.transform.parent.gameObject);
         }
 
         private static void SetState(bool available, bool animate, bool animateOnlyStateTransition = true)
         {
             bool stateChangedToNew = state != available;
             state = available;
+
+            if (elvScreen == null) return;
+
             if (available)
             {
                 if ((animate && stateChangedToNew) || !animateOnlyStateTransition) expelImage.StartCoroutine(AlphaAnimation(appearing: true, animSpeed, lockedColor, Color.white));
@@ -269,7 +309,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 expelButton.OnPress.AddListener(
                     delegate ()
                     {
-                        CreateMenu();
+                        CreateMenuIn(elvScreen.Canvas);
                     }
                 );
 
@@ -367,11 +407,14 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             LevelDataManager.LevelData.BuyExpelHammer(0, cancelPurchase: true);
             LevelDataManager.LevelData.BanCharacter(character, floorsToUnban);
-
-            elvScreen.GetComponent<AudioManager>().PlaySingle(AssetsStorage.sounds["adv_boing"]);
+            
             DestroyMenu();
 
             SetState(false, animate: false);
+
+            if (!IntegrationManager.IsActive<SpatialElevatorIntegration>())
+                elvScreen.GetComponent<AudioManager>().PlaySingle(AssetsStorage.sounds["adv_boing"]);
+            
         }
 
         private static void AppendButtons()

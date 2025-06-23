@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Game.Components;
+﻿using BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects;
+using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Menu;
 using BaldisBasicsPlusAdvanced.Patches.Shop;
@@ -20,6 +21,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameEventsProvider
         private static void OnInit(BaseGameManager __instance)
         {
             ElevatorExpelHammerPatch.OnGameManagerInit(__instance);
+
+            //Part of compatibility
+            ExpelHammerInteractionObject.OnGameManagerInit(__instance);
         }
 
         [HarmonyPatch("LoadSceneObject", new Type[] { typeof(SceneObject), typeof(bool) })]

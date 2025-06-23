@@ -3,7 +3,9 @@ using System.Text;
 using BaldisBasicsPlusAdvanced.Attributes;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Compats.SpatialElevator;
+using BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects;
 using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
@@ -52,6 +54,15 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Patches
                 screenObj.transform.localScale = new Vector3(18f, 6f, 1f);
 
                 __instance.StartCoroutine(TextLoader());
+            }
+
+            if (ElevatorExpelHammerPatch.ShouldInitialize)
+            {
+                ExpelHammerInteractionObject hammer = 
+                    new GameObject("Expel Hammer").AddComponent<ExpelHammerInteractionObject>();
+                hammer.transform.SetParent(__instance.transform, false);
+                hammer.transform.localPosition = new Vector3(10f, 6f, -10f);
+                hammer.Initialize();
             }
             
         }

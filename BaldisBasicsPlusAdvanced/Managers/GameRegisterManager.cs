@@ -830,6 +830,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);
         }
 
+        #endregion
+
+        #region UI Initialization
+
         public static void InitializeUi()
         {
             PrefabsCreator.CreateOverlay("FrozenOverlay", AssetsStorage.sprites["adv_frozen_overlay"], false);
