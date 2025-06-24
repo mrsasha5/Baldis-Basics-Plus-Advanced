@@ -105,7 +105,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                     break;
             }
             
-            GameObject.Destroy(arrowsImage.gameObject);
+            if (arrowsImage != null) GameObject.Destroy(arrowsImage.gameObject);
         }
 
         [HarmonyPatch("AwakeFunction")]
@@ -291,7 +291,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 rightArrowButton.OnPress.AddListener(SetNextPage);
             }
 
-            if (CursorController.Instance == null) return; //For Spatial Elv
             chalkboard.transform.SetSiblingIndex(CursorController.Instance.transform.GetSiblingIndex()); //instead of cursor
         }
 
@@ -412,7 +411,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             for (int j = 0; j < i; j++)
             {
-                if (j < textButtons.Count - 1) break;
+                if (j >= textButtons.Count - 1) break;
                 textButtons[j].gameObject.SetActive(true);
             }
 

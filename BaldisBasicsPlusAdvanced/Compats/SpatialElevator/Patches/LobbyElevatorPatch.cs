@@ -33,25 +33,22 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Patches
             {
                 Transform mainParent = new GameObject("Screen").transform;
                 mainParent.SetParent(__instance.transform, false);
-                mainParent.localPosition = new Vector3(0f, 24f, 0f);
+                mainParent.localPosition = new Vector3(0f, 24f, 18f);
+                mainParent.localRotation = Quaternion.Euler(0f, 180f, 0f);
 
-                GameObject screenObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                screenObj.name = "Renderer";
+                GameObject screenObj = GameObject.Instantiate(SpatialElevatorIntegration.monitorPre);
+                screenObj.name = "Model";
                 screenObj.transform.SetParent(mainParent, false);
 
-                MeshRenderer renderer = screenObj.GetComponent<MeshRenderer>();
-                renderer.material = new Material(AssetsStorage.graphsStandardShader);
-                renderer.material.SetColor(Color.black);
-
-                BoxCollider collider = screenObj.GetComponent<BoxCollider>();
+                Collider collider = screenObj.GetComponent<Collider>();
                 GameObject.Destroy(collider);
 
                 tmpText = ObjectsCreator.CreateSpatialText(
-                    BaldiFonts.ComicSans12, new Vector2(35f, 100f), mainParent, new Vector3(0f, 1f, 0.55f));
+                    BaldiFonts.ComicSans12, new Vector2(35f, 100f), mainParent, new Vector3(0f, 0f, 0.55f));
                 tmpText.transform.localScale = Vector3.one * 0.5f;
                 tmpText.color = Color.green;
 
-                screenObj.transform.localScale = new Vector3(18f, 6f, 1f);
+                screenObj.transform.localScale = new Vector3(5f, 6f, 1f);
 
                 __instance.StartCoroutine(TextLoader());
             }
@@ -59,7 +56,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Patches
             SpatialChalkboard board = 
                 new GameObject("Spatial Chalkboard").AddComponent<SpatialChalkboard>();
             board.transform.SetParent(__instance.transform, false);
-            board.transform.localPosition = new Vector3(-22.3f, 15f, 11f);
+            board.transform.localPosition = new Vector3(-22.3f, 17f, 11f);
             board.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
             board.Initialize();
             
