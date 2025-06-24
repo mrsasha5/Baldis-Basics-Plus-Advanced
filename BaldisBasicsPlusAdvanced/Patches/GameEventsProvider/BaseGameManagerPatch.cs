@@ -23,7 +23,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameEventsProvider
             ElevatorExpelHammerPatch.OnGameManagerInit(__instance);
 
             //Part of compatibility
-            ExpelHammerInteractionObject.OnGameManagerInit(__instance);
+            SpatialChalkboard.OnGameManagerInit(__instance);
         }
 
         [HarmonyPatch("LoadSceneObject", new Type[] { typeof(SceneObject), typeof(bool) })]

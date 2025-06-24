@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Pickups
 {
+
+#warning REMOVE IN 0.11
+
     public class RefreshPickup : BasePickup
     {
         public StoreRoomFunction storeRoomFunc;

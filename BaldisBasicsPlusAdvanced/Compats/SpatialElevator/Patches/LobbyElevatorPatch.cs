@@ -56,14 +56,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Patches
                 __instance.StartCoroutine(TextLoader());
             }
 
-            if (ElevatorExpelHammerPatch.ShouldInitialize)
-            {
-                ExpelHammerInteractionObject hammer = 
-                    new GameObject("Expel Hammer").AddComponent<ExpelHammerInteractionObject>();
-                hammer.transform.SetParent(__instance.transform, false);
-                hammer.transform.localPosition = new Vector3(10f, 6f, -10f);
-                hammer.Initialize();
-            }
+            SpatialChalkboard board = 
+                new GameObject("Spatial Chalkboard").AddComponent<SpatialChalkboard>();
+            board.transform.SetParent(__instance.transform, false);
+            board.transform.localPosition = new Vector3(-22.3f, 15f, 11f);
+            board.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+            board.Initialize();
             
         }
 

@@ -1,4 +1,15 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+﻿
+//I never forget you
+//You have been added in 0.4 by me in the 1st release as well as another items like Hammer, Wind Blower and Mysterious Teleporter...
+//And you are supposed to die in 0.11
+//Since now you are officially official item
+//Anyways it was a good time and you was a part of main basics collection of items from the mod
+
+
+#warning REMOVE IN 0.11 release
+
+
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
 using BaldisBasicsPlusAdvanced.Patches;
 using UnityEngine;

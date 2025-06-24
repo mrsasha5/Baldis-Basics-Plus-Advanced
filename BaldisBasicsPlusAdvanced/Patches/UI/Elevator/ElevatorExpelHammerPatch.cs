@@ -60,6 +60,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         private static bool shouldInitialize;
 
+        public static int FloorsToUnbanValue => floorsToUnban;
+
         public static bool ShouldInitialize => shouldInitialize;
 
         public static bool Available => LevelDataManager.LevelData.hammerPurchased;
@@ -150,7 +152,25 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             SetState(false, animate: false);
         }
 
-        public static void CreateMenuIn(Canvas canvas)
+        public static void CreatePages()
+        {
+            pages.Clear();
+            textButtons.Clear();
+            currentPage = 0;
+
+            List<NPC> potentialCharacters = GetPotentialCharacters();
+
+            int counter = 0;
+            foreach (NPC npc in potentialCharacters)
+            {
+                if (counter == 0) pages.Add(new List<NPC>());
+                pages[pages.Count - 1].Add(npc);
+                counter++;
+                if (counter == maxCountOnPage) counter = 0;
+            }
+        }
+
+        public static void CreateMenu(Canvas canvas)
         {
             Singleton<GlobalCam>.Instance.Transition(UiTransition.Dither, 0.01666667f);
 
@@ -196,20 +216,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 }
             );
 
-            pages.Clear();
-            textButtons.Clear();
-            currentPage = 0;
-
-            List<NPC> potentialCharacters = GetPotentialCharacters();
-
-            int counter = 0;
-            foreach (NPC npc in potentialCharacters)
-            {
-                if (counter == 0) pages.Add(new List<NPC>());
-                pages[pages.Count - 1].Add(npc);
-                counter++;
-                if (counter == maxCountOnPage) counter = 0;
-            }
+            CreatePages();
 
             pagesText = UIHelpers.CreateText<TextMeshProUGUI>(BaldiFonts.ComicSans18, "",
                 chalkboard.transform, new Vector3(0, -117, 0), false);
@@ -223,7 +230,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             if (pages.Count > 1)
             {
-                Image leftArrowImage = UIHelpers.CreateImage(AssetsStorage.sprites["menuArrow0"], chalkboard.transform,
+                Image leftArrowImage = UIHelpers.CreateImage(AssetsStorage.sprites["menuArrow2"], chalkboard.transform,
                 Vector3.zero, correctPosition: false);
                 leftArrowImage.ToCenter();
                 leftArrowImage.transform.localPosition = new Vector3(-160, -108);
@@ -232,9 +239,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
                 StandardMenuButton leftArrowButton = leftArrowImage.gameObject.AddComponent<StandardMenuButton>();
                 leftArrowButton.image = leftArrowImage;
-                leftArrowButton.heldSprite = AssetsStorage.sprites["menuArrow2"];
-                leftArrowButton.unhighlightedSprite = AssetsStorage.sprites["menuArrow0"];
-                leftArrowButton.highlightedSprite = AssetsStorage.sprites["menuArrow2"];
+                leftArrowButton.heldSprite = AssetsStorage.sprites["menuArrow0"];
+                leftArrowButton.unhighlightedSprite = AssetsStorage.sprites["menuArrow2"];
+                leftArrowButton.highlightedSprite = AssetsStorage.sprites["menuArrow0"];
 
                 leftArrowButton.swapOnHold = true; //on press
                 leftArrowButton.swapOnHigh = true; //on high
@@ -250,7 +257,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 );
 
 
-                Image rightArrowImage = UIHelpers.CreateImage(AssetsStorage.sprites["menuArrow1"], chalkboard.transform,
+                Image rightArrowImage = UIHelpers.CreateImage(AssetsStorage.sprites["menuArrow3"], chalkboard.transform,
                 Vector3.zero, correctPosition: false);
                 rightArrowImage.ToCenter();
                 rightArrowImage.transform.localPosition = new Vector3(156, -108);
@@ -259,9 +266,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
                 StandardMenuButton rightArrowButton = rightArrowImage.gameObject.AddComponent<StandardMenuButton>();
                 rightArrowButton.image = rightArrowImage;
-                rightArrowButton.heldSprite = AssetsStorage.sprites["menuArrow3"];
-                rightArrowButton.unhighlightedSprite = AssetsStorage.sprites["menuArrow1"];
-                rightArrowButton.highlightedSprite = AssetsStorage.sprites["menuArrow3"];
+                rightArrowButton.heldSprite = AssetsStorage.sprites["menuArrow1"];
+                rightArrowButton.unhighlightedSprite = AssetsStorage.sprites["menuArrow3"];
+                rightArrowButton.highlightedSprite = AssetsStorage.sprites["menuArrow1"];
 
                 rightArrowButton.swapOnHold = true; //on press
                 rightArrowButton.swapOnHigh = true; //on high
@@ -309,7 +316,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 expelButton.OnPress.AddListener(
                     delegate ()
                     {
-                        CreateMenuIn(elvScreen.Canvas);
+                        CreateMenu(elvScreen.Canvas);
                     }
                 );
 
@@ -376,7 +383,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             if (pages.Count == 0)
             {
-                pagesText.text = string.Format(Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Expel_Hammer_Pages"), 0, 0);
+                if (pagesText != null)
+                    pagesText.text = 
+                        string.Format(Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Expel_Hammer_Pages"), 0, 0);
                 return;
             }
 
@@ -384,6 +393,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             int i = 0;
             foreach (NPC npc in characters)
             {
+                if (i >= textButtons.Count - 1) break;
                 textButtons[i].text.text = Singleton<LocalizationManager>.Instance.GetLocalizedText(npc.GetMeta().nameLocalizationKey);
                 textButtons[i].OnPress = new UnityEvent();
                 textButtons[i].OnPress.AddListener(
@@ -397,10 +407,14 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             for (int j = 0; j < i; j++)
             {
+                if (j < textButtons.Count - 1) break;
                 textButtons[j].gameObject.SetActive(true);
             }
 
-            pagesText.text = string.Format(Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Expel_Hammer_Pages"), currentPage + 1, pages.Count);
+            if (pagesText != null)
+                pagesText.text = 
+                    string.Format(Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Expel_Hammer_Pages"), 
+                        currentPage + 1, pages.Count);
         }
 
         private static void HitCharacter(Character character)
