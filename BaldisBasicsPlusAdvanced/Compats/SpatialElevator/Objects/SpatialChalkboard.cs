@@ -4,6 +4,7 @@ using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
+using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
 using TMPro;
 using UnityEngine;
@@ -17,7 +18,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
 
         private MeshRenderer renderer;
 
-        private List<TextMeshPro> texts = new List<TextMeshPro>();
+        private List<IInteractionObject> allElements = new List<IInteractionObject>();
+
+        private List<InteractionTextObject> buttons = new List<InteractionTextObject>();
 
         private static SpatialChalkboard instance;
 
@@ -25,7 +28,20 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
         {
             if (instance != null)
             {
-                ElevatorExpelHammerPatch.CreatePages();
+
+                switch (ElevatorExpelHammerPatch.GetStatus(gameManager))
+                {
+                    case ElevatorExpelHammerPatch.Status.Available:
+                        ElevatorExpelHammerPatch.CreatePages();
+                        HideAll(false, animation: true);
+                        UpdateList(ElevatorExpelHammerPatch.CurrentPage, animation: true);
+                        break;
+                    case ElevatorExpelHammerPatch.Status.ShouldBreak:
+                        instance.audMan.PlaySingle(AssetsStorage.sounds["bal_break"]);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             //Adv_Expel_Hammer_Pages
@@ -59,36 +75,56 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
             titleText.text = string.Format(LocalizationManager.Instance.GetLocalizedText("Adv_ExpelHammer_Character_Info"), 
                 ElevatorExpelHammerPatch.FloorsToUnbanValue);
             titleText.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
+            allElements.Add(titleText.gameObject.AddComponent<InteractionTextObject>()
+                .Assign()
+                .SetBoxColliderAppropriateSize());
 
             SpriteRenderer renderer1 = ObjectsCreator.CreateSpriteRenderer(null, false);
             renderer1.gameObject.transform.SetParent(transform, false);
             renderer1.gameObject.transform.localPosition = new Vector3(-7.8f, -5.5f, distanceOffset);
-            renderer1.gameObject.AddComponent<InteractionSpriteRendererObject>()
+            InteractionSpriteRendererObject arrowLeft = 
+                renderer1.gameObject.AddComponent<InteractionSpriteRendererObject>()
                 .Assign()
                 .SetSprites(AssetsStorage.sprites["menuArrow0"], AssetsStorage.sprites["menuArrow2"])
                 .SetDefaultParameters();
             renderer1.transform.localScale = new Vector3(0.07f, 0.07f, 1f);
             renderer1.GetComponent<BoxCollider>().size = newArrowSize;
+            allElements.Add(arrowLeft);
+
+            arrowLeft.onClick =
+                delegate ()
+                {
+                    ElevatorExpelHammerPatch.SetBackPage();
+                    UpdateList(ElevatorExpelHammerPatch.CurrentPage, animation: false);
+                };
 
             SpriteRenderer renderer2 = ObjectsCreator.CreateSpriteRenderer(null, false);
             renderer2.gameObject.transform.SetParent(transform, false);
             renderer2.gameObject.transform.localPosition = new Vector3(7.8f, -5.5f, distanceOffset);
-            renderer2.gameObject.AddComponent<InteractionSpriteRendererObject>()
+            InteractionSpriteRendererObject arrowRight = 
+                renderer2.gameObject.AddComponent<InteractionSpriteRendererObject>()
                 .Assign()
                 .SetSprites(AssetsStorage.sprites["menuArrow1"], AssetsStorage.sprites["menuArrow3"])
                 .SetDefaultParameters();
             renderer2.transform.localScale = renderer1.transform.localScale;
             renderer2.GetComponent<BoxCollider>().size = newArrowSize;
+            allElements.Add(arrowRight);
 
-            //if (ElevatorExpelHammerPatch.ShouldInitialize)
-            for (int i = 0; i < 4; i++)
+            arrowRight.onClick =
+                delegate ()
+                {
+                    ElevatorExpelHammerPatch.SetNextPage();
+                    UpdateList(ElevatorExpelHammerPatch.CurrentPage, animation: false);
+                };
+
+            for (int i = 0; i < ElevatorExpelHammerPatch.MaxCountOnPage; i++)
             {
-                //16 max symb
+                
                 TextMeshPro tmpText = 
                     ObjectsCreator.CreateSpatialText(BaldiFonts.ComicSans12, new Vector2(16f, 2.5f), 
                         transform, new Vector3(0f, height, distanceOffset));
 
-                tmpText.gameObject.AddComponent<InteractionTextObject>()
+                InteractionTextObject textObj = tmpText.gameObject.AddComponent<InteractionTextObject>()
                     .Assign()
                     .SetDefaultParameters();
 
@@ -97,9 +133,42 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
 
                 height += offset;
 
-                texts.Add(tmpText);
+                allElements.Add(textObj);
+                buttons.Add(textObj);
             }
 
+            HideAll(true, animation: false);
+        }
+
+        public static void HideAll(bool state, bool animation)
+        {
+            foreach (IInteractionObject obj in instance.allElements)
+            {
+                obj.Hide(state, animation);
+            }
+        }
+
+        public static void UpdateList(List<NPC> npcs, bool animation)
+        {
+            for (int i = 0; i < instance.buttons.Count; i++)
+            {
+                instance.buttons[i].onClick = null;
+                instance.buttons[i].Hide(true, animation: false);
+            }
+
+            for (int i = 0; i < npcs.Count; i++)
+            {
+                Character character = npcs[i].Character;
+                instance.buttons[i].onClick =
+                    delegate()
+                    {
+                        ElevatorExpelHammerPatch.HitCharacter(character);
+                        HideAll(true, animation: true);
+                        instance.audMan.PlaySingle(AssetsStorage.sounds["adv_boing"]);
+                    };
+                instance.buttons[i].Tmp.text = LocalizationManager.Instance.GetLocalizedText(npcs[i].GetMeta().nameLocalizationKey);
+                instance.buttons[i].Hide(false, animation: animation);
+            }
         }
 
         

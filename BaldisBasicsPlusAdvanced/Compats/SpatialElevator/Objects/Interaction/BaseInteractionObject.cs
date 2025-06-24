@@ -3,13 +3,21 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
 {
-    public class BaseInteractionObject<T> : MonoBehaviour, IClickable<int> where T : BaseInteractionObject<T>
+    public class BaseInteractionObject<T> : MonoBehaviour, IInteractionObject, IClickable<int> where T : BaseInteractionObject<T>
     {
 
         public Action onClick;
 
+        protected bool interactionEnabled;
+
         protected BoxCollider collider;
 
+        protected bool sighted;
+
+        public virtual void Hide(bool state, bool animation)
+        {
+
+        }
 
         public virtual T SetBoxCollider(Vector3 size)
         {
@@ -21,12 +29,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
 
         public virtual void Clicked(int player)
         {
-            onClick?.Invoke();
+            if (!ClickableHidden()) 
+                onClick?.Invoke();
         }
 
         public virtual bool ClickableHidden()
         {
-            return false;
+            return interactionEnabled;
         }
 
         public virtual bool ClickableRequiresNormalHeight()
@@ -36,13 +45,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
 
         public virtual void ClickableSighted(int player)
         {
-
+            sighted = true;
         }
 
         public virtual void ClickableUnsighted(int player)
         {
-
+            sighted = false;
         }
-
     }
 }

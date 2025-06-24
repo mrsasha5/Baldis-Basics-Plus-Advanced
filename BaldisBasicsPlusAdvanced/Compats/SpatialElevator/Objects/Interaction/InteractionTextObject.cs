@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
@@ -14,6 +15,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
 
         protected TextMeshPro tmp;
 
+        public TextMeshPro Tmp => tmp;
+
         public InteractionTextObject Assign()
         {
             tmp = GetComponent<TextMeshPro>();
@@ -24,6 +27,54 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
         {
             tmp = tmpText;
             return this;
+        }
+
+        public override void Hide(bool state, bool animation)
+        {
+            base.Hide(state, animation);
+
+            collider.enabled = !state;
+
+            StopAllCoroutines();
+
+            if (animation)
+            {
+                StartCoroutine(Animation(state));
+            }
+            else
+            {
+                Color color = tmp.color;
+                color.a = state ? 0f : 1f;
+                tmp.color = color;
+            }
+        }
+
+        private IEnumerator Animation(bool state)
+        {
+            if (state)
+            {
+                Color color = tmp.color;
+                color.a = 1f;
+                while (tmp.color.a > 0f)
+                {
+                    color.a -= Time.unscaledDeltaTime;
+                    if (color.a < 0f) color.a = 0f;
+                    tmp.color = color;
+                    yield return null;
+                }
+            }
+            else
+            {
+                Color color = tmp.color;
+                color.a = 0f;
+                while (tmp.color.a < 1f)
+                {
+                    color.a += Time.unscaledDeltaTime;
+                    if (color.a > 1f) color.a = 1f;
+                    tmp.color = color;
+                    yield return null;
+                }
+            }
         }
 
         public InteractionTextObject SetClassicFontStyleOnSight()
@@ -37,10 +88,16 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
             return this;
         }
 
+        public InteractionTextObject SetBoxColliderAppropriateSize()
+        {
+            SetBoxCollider(new Vector3(tmp.rectTransform.sizeDelta.x, tmp.rectTransform.sizeDelta.y, 1f));
+            return this;
+        }
+
         public InteractionTextObject SetDefaultParameters()
         {
             SetClassicFontStyleOnSight();
-            SetBoxCollider(new Vector3(tmp.rectTransform.sizeDelta.x, tmp.rectTransform.sizeDelta.y, 1f));
+            SetBoxColliderAppropriateSize();
             return this;
         }
 

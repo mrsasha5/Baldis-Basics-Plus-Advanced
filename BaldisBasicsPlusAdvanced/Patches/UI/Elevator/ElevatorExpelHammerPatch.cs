@@ -29,7 +29,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             Available,
             ShouldBreak,
-            Existing
+            Existing,
+            NotAvailable
         }
 
         private static Image chalkboard;
@@ -44,7 +45,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         private static List<StandardMenuButton> textButtons = new List<StandardMenuButton>();
 
-        private static int currentPage;
+        private static int currentPageIndex;
 
         private static int maxCountOnPage = 4;
 
@@ -60,11 +61,15 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         private static bool shouldInitialize;
 
+        public static int MaxCountOnPage => maxCountOnPage;
+
         public static int FloorsToUnbanValue => floorsToUnban;
 
         public static bool ShouldInitialize => shouldInitialize;
 
         public static bool Available => LevelDataManager.LevelData.hammerPurchased;
+
+        public static List<NPC> CurrentPage => pages.Count == 0 ? new List<NPC>() : pages[currentPageIndex];
 
         public static Status GetStatus(BaseGameManager gameManager)
         {
@@ -76,10 +81,11 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             {
                 return Status.ShouldBreak;
             }
-            else
+            else if (shouldInitialize && Available)
             {
                 return Status.Available;
             }
+            else return Status.NotAvailable;
         }
 
         public static void OnGameManagerInit(BaseGameManager gameManager)
@@ -156,7 +162,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             pages.Clear();
             textButtons.Clear();
-            currentPage = 0;
+            currentPageIndex = 0;
 
             List<NPC> potentialCharacters = GetPotentialCharacters();
 
@@ -168,6 +174,22 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 counter++;
                 if (counter == maxCountOnPage) counter = 0;
             }
+        }
+
+        public static void SetNextPage()
+        {
+            //+ 1 because index
+            //+ 1 because next
+            if (currentPageIndex + 2 > pages.Count) currentPageIndex = 0;
+            else currentPageIndex++;
+            SetPage(currentPageIndex);
+        }
+
+        public static void SetBackPage()
+        {
+            if (currentPageIndex - 1 < 0) currentPageIndex = pages.Count - 1;
+            else currentPageIndex--;
+            SetPage(currentPageIndex);
         }
 
         public static void CreateMenu(Canvas canvas)
@@ -247,15 +269,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 leftArrowButton.swapOnHigh = true; //on high
                 leftArrowButton.InitializeAllEvents();
 
-                leftArrowButton.OnPress.AddListener(
-                    delegate ()
-                    {
-                        if (currentPage - 1 < 0) currentPage = pages.Count - 1;
-                        else currentPage--;
-                        SetPage(currentPage);
-                    }
-                );
-
+                leftArrowButton.OnPress.AddListener(SetBackPage);
 
                 Image rightArrowImage = UIHelpers.CreateImage(AssetsStorage.sprites["menuArrow3"], chalkboard.transform,
                 Vector3.zero, correctPosition: false);
@@ -274,16 +288,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 rightArrowButton.swapOnHigh = true; //on high
                 rightArrowButton.InitializeAllEvents();
 
-                rightArrowButton.OnPress.AddListener(
-                    delegate ()
-                    {
-                        //+ 1 because index
-                        //+ 1 because next
-                        if (currentPage + 2 > pages.Count) currentPage = 0;
-                        else currentPage++;
-                        SetPage(currentPage);
-                    }
-                );
+                rightArrowButton.OnPress.AddListener(SetNextPage);
             }
 
             if (CursorController.Instance == null) return; //For Spatial Elv
@@ -292,11 +297,11 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         public static void DestroyMenu()
         {
+            if (elvScreen == null) return;
+
             Singleton<GlobalCam>.Instance.Transition(UiTransition.Dither, 0.01666667f);
 
-            if (!IntegrationManager.IsActive<SpatialElevatorIntegration>())
-                GameObject.Destroy(chalkboard.gameObject);
-            else GameObject.Destroy(chalkboard.gameObject.transform.parent.gameObject);
+            GameObject.Destroy(chalkboard.gameObject);
         }
 
         private static void SetState(bool available, bool animate, bool animateOnlyStateTransition = true)
@@ -374,7 +379,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             yield break;
         }
 
-        private static void SetPage(int index)
+        private static List<NPC> SetPage(int index)
         {
             for (int j = 0; j < textButtons.Count; j++)
             {
@@ -386,7 +391,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 if (pagesText != null)
                     pagesText.text = 
                         string.Format(Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Expel_Hammer_Pages"), 0, 0);
-                return;
+                return new List<NPC>();
             }
 
             List<NPC> characters = pages[index];
@@ -397,7 +402,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 textButtons[i].text.text = Singleton<LocalizationManager>.Instance.GetLocalizedText(npc.GetMeta().nameLocalizationKey);
                 textButtons[i].OnPress = new UnityEvent();
                 textButtons[i].OnPress.AddListener(
-                    delegate ()
+                    delegate()
                     {
                         HitCharacter(npc.Character);
                     }
@@ -414,20 +419,23 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             if (pagesText != null)
                 pagesText.text = 
                     string.Format(Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Expel_Hammer_Pages"), 
-                        currentPage + 1, pages.Count);
+                        currentPageIndex + 1, pages.Count);
+
+            return pages[index];
         }
 
-        private static void HitCharacter(Character character)
+        public static void HitCharacter(Character character)
         {
             LevelDataManager.LevelData.BuyExpelHammer(0, cancelPurchase: true);
             LevelDataManager.LevelData.BanCharacter(character, floorsToUnban);
-            
+
+            if (elvScreen == null) return;
+
             DestroyMenu();
 
             SetState(false, animate: false);
-
-            if (!IntegrationManager.IsActive<SpatialElevatorIntegration>())
-                elvScreen.GetComponent<AudioManager>().PlaySingle(AssetsStorage.sounds["adv_boing"]);
+            
+            elvScreen.GetComponent<AudioManager>().PlaySingle(AssetsStorage.sounds["adv_boing"]);
             
         }
 

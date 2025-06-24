@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
 {
@@ -13,6 +14,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
 
         protected SpriteRenderer renderer;
 
+        public SpriteRenderer Renderer => renderer;
+
         public InteractionSpriteRendererObject Assign()
         {
             renderer = GetComponent<SpriteRenderer>();
@@ -25,10 +28,63 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
             return this;
         }
 
+        public override void Hide(bool state, bool animation)
+        {
+            base.Hide(state, animation);
+
+            collider.enabled = !state;
+
+            StopAllCoroutines();
+
+            if (animation)
+            {
+                StartCoroutine(Animation(state));
+            }
+            else
+            {
+                Color color = renderer.color;
+                color.a = state ? 0f : 1f;
+                renderer.color = color;
+            }
+        }
+
+        private IEnumerator Animation(bool state)
+        {
+            if (state)
+            {
+                Color color = renderer.color;
+                color.a = 1f;
+                while (renderer.color.a > 0f)
+                {
+                    color.a -= Time.unscaledDeltaTime;
+                    if (color.a < 0f) color.a = 0f;
+                    renderer.color = color;
+                    yield return null;
+                }
+            } else
+            {
+                Color color = renderer.color;
+                color.a = 0f;
+                while (renderer.color.a < 1f)
+                {
+                    color.a += Time.unscaledDeltaTime;
+                    if (color.a > 1f) color.a = 1f;
+                    renderer.color = color;
+                    yield return null;
+                }
+            }
+        }
+
+        public InteractionSpriteRendererObject SetBoxColliderAppropriateSize()
+        {
+            SetBoxCollider(new Vector3(renderer.size.x, renderer.size.y, 1f));
+            return this;
+        }
+
         public InteractionSpriteRendererObject SetDefaultParameters()
         {
             ignoreSightedEvents = false;
-            SetBoxCollider(new Vector3(renderer.size.x, renderer.size.y, 1f));
+            SetBoxColliderAppropriateSize();
             return this;
         }
 
