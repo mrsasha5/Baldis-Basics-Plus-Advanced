@@ -354,7 +354,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
             //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(5, 0f);
             //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(6, 0f);
 
-            Singleton<MusicManager>.Instance.PlayMidi(AssetsStorage.campingMidi.text, loop: true);
+            Singleton<MusicManager>.Instance.PlayMidi(farmTripMusicKey, loop: true);
         }
 
         public override void CollectNotebooks(int count)

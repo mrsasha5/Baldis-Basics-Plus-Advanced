@@ -77,9 +77,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
             LoadFrom("Laboratory", LevelType.Laboratory);
             LoadFrom("Maintenance", LevelType.Maintenance);
             LoadFrom("Factory", LevelType.Factory);
-            //FarmFieldTripManager.farmTripMusicKey = 
-            //    AssetLoader.MidiFromFile(AssetsHelper.modPath + "Audio/Music/FieldTrips/.mid",
-            //        "Adv_BSideSkid_CornTime");
+            FarmFieldTripManager.farmTripMusicKey = 
+                AssetLoader.MidiFromFile(AssetsHelper.modPath + "Audio/Music/FieldTrips/Adv_BSideSkid_CornTime.mid",
+                    "Adv_BSideSkid_CornTime");
         }
 
         #endregion
