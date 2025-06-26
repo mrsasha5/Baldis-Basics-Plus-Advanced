@@ -33,7 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             if (lb.controlledRNG.NextDouble() <= parameters.chance[0])
             {
                 if (Array.Find(FindObjectsOfType<UnityEngine.Object>(), x => x is IButtonReceiver) != null)
-                    Build(lb, lb.controlledRNG, isRoomCells: false);
+                    Build(lb, lb.controlledRNG, roomCells: false);
 
                 for (int i = 0; i < generatedPlates.Count; i++)
                 {
@@ -52,10 +52,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             {
                 potentialButtonReceivers.Add((IButtonReceiver)_potentialButtonReceivers[i]);
             }
-
-            //potentialButtonReceivers.AddRange(FindObjectsOfType<BeltManager>());
-            //potentialButtonReceivers.AddRange(FindObjectsOfType<RotoHall>());
-            //potentialButtonReceivers.AddRange(FindObjectsOfType<LockdownDoor>());
 
             List<IButtonReceiver> newReceiversList = new List<IButtonReceiver>(potentialButtonReceivers);
             newReceiversList.ControlledMix(rng);

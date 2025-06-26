@@ -1,4 +1,7 @@
-﻿using BaldisBasicsPlusAdvanced.Patches;
+﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Patches;
+using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
@@ -6,6 +9,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
     {
 
         public override string Desc => "Adv_Text_School_Council_Topic9".Localize();
+
+        public override bool IsAvailable()
+        {
+            return base.IsAvailable() && GameObject.FindObjectOfType<VentController>() != null;
+        }
 
         public override BaseTopic Clone()
         {
@@ -17,6 +25,30 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
         public override void OnVotingEndedPre(bool isWin)
         {
             base.OnVotingEndedPre(isWin);
+            if (isWin)
+            {
+                foreach (VentController controller in GameObject.FindObjectsOfType<VentController>())
+                {
+                    Animator entrance = controller.GetComponentInChildren<Animator>();
+                    entrance.enabled = false;
+
+                    entrance.GetComponentInChildren<MeshRenderer>().
+                        transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+
+                    EntitySucker sucker = new GameObject("Sucker").AddComponent<EntitySucker>();
+                    sucker.Initialize(ec);
+                    sucker.transform.SetParent(entrance.gameObject.transform, false);
+                    sucker.maxForce = 40f;
+
+                    AudioManager audMan = ObjectsCreator.CreatePropagatedAudMan(sucker.gameObject);
+                    audMan.QueueAudio(AssetsStorage.sounds["vent_vacuum"]);
+                    audMan.QueueAudio(AssetsStorage.sounds["vent_travel"]);
+                    audMan.SetLoop(true);
+
+                    sucker.CreateSphere(60f);
+                    sucker.ignoreAirborne = true; //It's made for you, my "favourite" Buglloons!
+                }
+            }
         }
     }
 }

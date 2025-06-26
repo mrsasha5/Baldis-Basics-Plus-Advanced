@@ -1,7 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BaldisBasicsPlusAdvanced.API
 {
@@ -12,7 +9,11 @@ namespace BaldisBasicsPlusAdvanced.API
     public class PitOverrides
     {
 
+        private static bool kitchenStoveDisabled;
+
         private static bool englishClassDisabled;
+
+        private static bool accelerationPlateDisabled;
 
         private static int hammerPickupDisables;
 
@@ -22,7 +23,19 @@ namespace BaldisBasicsPlusAdvanced.API
         /// If you turn it off, you won't be able to turn it on again.
         /// If enabled, the pit level will be overridden.
         /// </summary>
+        public static bool KitchenStoveDisabled => kitchenStoveDisabled;
+
+        /// <summary>
+        /// If you turn it off, you won't be able to turn it on again.
+        /// If enabled, the pit level will be overridden.
+        /// </summary>
         public static bool EnglishClassDisabled => englishClassDisabled;
+
+        /// <summary>
+        /// If you turn it off, you won't be able to turn it on again.
+        /// If enabled, the pit level will be overridden.
+        /// </summary>
+        public static bool AccelerationPlateDisabled => accelerationPlateDisabled;
 
         /// <summary>
         /// This can be easily turned on and off any time, but be aware of other mods!
@@ -33,6 +46,50 @@ namespace BaldisBasicsPlusAdvanced.API
         /// This can be easily turned on and off any time, but be aware of other mods!
         /// </summary>
         public static bool RefreshPickupDisabled => refreshPickupDisables > 0;
+
+        /// <summary>
+        /// It must be called only before mod assets will be loaded.
+        /// </summary>
+        public static void DisableAllContent()
+        {
+            if (AssetsStorage.Overridden)
+            {
+                ApiManager.logger.LogWarning("DisableAllOverrides() doesn't work on assets post load! Assets are overridden already.");
+                return;
+            }
+
+            DisableAccelerationPlate();
+            DisableKitchenStove();
+            DisableEnglishClass();
+            SetExpelHammerPickup(active: false);
+            SetRefreshPickup(active: false);
+        }
+
+        /// <summary>
+        /// It must be called only before mod assets will be loaded.
+        /// </summary>
+        public static void DisableAccelerationPlate()
+        {
+            if (AssetsStorage.Overridden && !kitchenStoveDisabled)
+            {
+                ApiManager.logger.LogWarning("Acceleration Plate cannot be disabled! Assets are overridden already.");
+                return;
+            }
+            accelerationPlateDisabled = true;
+        }
+
+        /// <summary>
+        /// It must be called only before mod assets will be loaded.
+        /// </summary>
+        public static void DisableKitchenStove()
+        {
+            if (AssetsStorage.Overridden && !kitchenStoveDisabled)
+            {
+                ApiManager.logger.LogWarning("Kitchen Stove cannot be disabled! Assets are overridden already.");
+                return;
+            }
+            kitchenStoveDisabled = true;
+        }
 
         /// <summary>
         /// It must be called only before mod assets will be loaded.

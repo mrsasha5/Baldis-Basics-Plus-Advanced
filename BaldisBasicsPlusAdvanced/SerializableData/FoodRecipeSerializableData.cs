@@ -51,8 +51,6 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
             }
             for (int i = 0; i < this.cookedFood.Length; i++)
             {
-                //Debug.Log("Name: " + this.cookedFood[i].name);
-                //Debug.Log("Uses: " + this.cookedFood[i].uses);
                 if (string.IsNullOrEmpty(this.cookedFood[i].GUID) && Enum.TryParse(this.cookedFood[i].name, out Items @enum))
                 {
                     ItemMetaData meta = ItemMetaStorage.Instance.FindByEnum(@enum);

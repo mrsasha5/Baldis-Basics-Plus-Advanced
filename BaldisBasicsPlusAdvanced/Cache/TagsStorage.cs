@@ -13,6 +13,8 @@
 
         #region Internal
 
+        public const string firstPrizeImmunity = "adv_first_prize_immunity";
+
         //Expel Hammer only
         public const string expelHammerImmunity = "adv_exclusion_hammer_immunity";
         public const string expelHammerWeakness = "adv_exclusion_hammer_weakness";

@@ -639,7 +639,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 flags: RandomEventFlags.AffectsGenerator
                 )
                 .SetWeight(floor: 2, 150)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory, LevelType.Laboratory)
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory, LevelType.Laboratory, LevelType.Maintenance)
                 //.SetEndless(true) //no endless
                 .SetBannedFloors(1);
         }
@@ -771,7 +771,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     minMax = new IntVector2[] { new IntVector2(2, 5), new IntVector2(0, 2) },
                 })
                 .SetBannedFloors(1)
-                .SetWeight(floor: 2, 75)
+#warning return 75
+                .SetWeight(floor: 2, 7500000)
                 .SetEndless(true)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory, LevelType.Laboratory, LevelType.Maintenance);
 
@@ -935,7 +936,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
             ApiManager.CreateSchoolCouncilTopic<LightsEconomyTopic>(AdvancedCore.Instance.Info, 50);
             ApiManager.CreateSchoolCouncilTopic<TurnOffFacultyNoisyPlatesTopic>(AdvancedCore.Instance.Info, 100);
             ApiManager.CreateSchoolCouncilTopic<GottaSweepTimeTopic>(AdvancedCore.Instance.Info, 50);
-            ApiManager.CreateSchoolCouncilTopic<ConvertVendingMachinesTopic>(AdvancedCore.Instance.Info, 100);
+            ApiManager.CreateSchoolCouncilTopic<ConvertVendingMachinesTopic>(AdvancedCore.Instance.Info, 50);
+            ApiManager.CreateSchoolCouncilTopic<OpenVentsTopic>(AdvancedCore.Instance.Info, 125);
             ApiManager.CreateSchoolCouncilTopic<BrokenZiplinesTopic>(AdvancedCore.Instance.Info, 125);
             ApiManager.CreateSchoolCouncilTopic<DisabledConveyorsTopic>(AdvancedCore.Instance.Info, 125);
             ApiManager.CreateSchoolCouncilTopic<DisabledFacultyLockdownDoorsTopic>(AdvancedCore.Instance.Info, 125);
@@ -1011,29 +1013,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             }
             
 
-            //Own gum
-            Gum gumPre = AssetsHelper.LoadAsset<Gum>("Gum");
-
-            Gum gumComp = GameObject.Instantiate(gumPre);
-
-            GumProjectile gumProj = gumComp.gameObject.AddComponent<GumProjectile>();
-            gumProj.gameObject.ConvertToPrefab(true);
-
-            gumProj.Speed = ReflectionHelper.GetValue<float>(gumComp, "speed");
-            gumProj.canvas = ReflectionHelper.GetValue<Canvas>(gumComp, "canvas");
-            gumProj.moveMod = ReflectionHelper.GetValue<MovementModifier>(gumComp, "moveMod");
-            gumProj.playerMod = ReflectionHelper.GetValue<MovementModifier>(gumComp, "playerMod");
-            gumProj.groundedSprite = ReflectionHelper.GetValue<GameObject>(gumComp, "groundedSprite");
-            gumProj.flyingSprite = ReflectionHelper.GetValue<GameObject>(gumComp, "flyingSprite");
-
-            gumProj.InitializePrefab(1);
-
-            GameObject.Destroy(gumComp);
-
-            ObjectsStorage.Objects.Add("gum", gumProj.gameObject);
-
-            //gum end
-
             //Zipline Hangers
             PrefabsCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Hanger", "zipline_hanger");
             PrefabsCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Black Hanger", "zipline_black_hanger", variant: 2);
@@ -1049,12 +1028,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             //Gum Dispenser
             PrefabsCreator.CreateObjectPrefab<GumDispenser>("Gum Dispenser", "gum_dispenser");
-
-            //Mysterious Teleporter
-            PrefabsCreator.CreateObjectPrefab<MysteriousTeleporterProjectile>("Mysterious Teleporter", "mysterious_teleporter");
-
-            //Anvil Projectile
-            PrefabsCreator.CreateObjectPrefab<AnvilProjectile>("Anvil Projectile", "anvil_projectile");
 
             //Mysterious portal
             PrefabsCreator.CreateObjectPrefab<MysteriousPortal>("Mysterious Portal", "mysterious_portal");
@@ -1131,6 +1104,35 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeEntities()
         {
+            //Mysterious Teleporter
+            PrefabsCreator.CreateObjectPrefab<MysteriousTeleporterProjectile>("Mysterious Teleporter", "mysterious_teleporter");
+
+            //Anvil Projectile
+            PrefabsCreator.CreateObjectPrefab<AnvilProjectile>("Anvil Projectile", "anvil_projectile");
+
+            //Own gum
+            Gum gumPre = AssetsHelper.LoadAsset<Gum>("Gum");
+
+            Gum gumComp = GameObject.Instantiate(gumPre);
+
+            GumProjectile gumProj = gumComp.gameObject.AddComponent<GumProjectile>();
+            gumProj.gameObject.ConvertToPrefab(true);
+
+            gumProj.Speed = ReflectionHelper.GetValue<float>(gumComp, "speed");
+            gumProj.canvas = ReflectionHelper.GetValue<Canvas>(gumComp, "canvas");
+            gumProj.moveMod = ReflectionHelper.GetValue<MovementModifier>(gumComp, "moveMod");
+            gumProj.playerMod = ReflectionHelper.GetValue<MovementModifier>(gumComp, "playerMod");
+            gumProj.groundedSprite = ReflectionHelper.GetValue<GameObject>(gumComp, "groundedSprite");
+            gumProj.flyingSprite = ReflectionHelper.GetValue<GameObject>(gumComp, "flyingSprite");
+
+            gumProj.InitializePrefab(1);
+
+            GameObject.Destroy(gumComp);
+
+            ObjectsStorage.Objects.Add("gum", gumProj.gameObject);
+
+            //gum end
+
             PrefabsCreator.CreateEntity<Fan>(new EntityBuilder()
                 .SetName("Fan")
                 .SetLayer("ClickableEntities")
@@ -1451,6 +1453,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void SetTags()
         {
+            SetTagsTo(new string[] { TagsStorage.firstPrizeImmunity },
+                Character.Bully, Character.Sweep, Character.Prize);
+
             SetTagsTo(new string[] { TagsStorage.coldSchoolEventImmunity },
                 Character.Pomp, Character.Sweep, Character.Prize, Character.Chalkles);
 

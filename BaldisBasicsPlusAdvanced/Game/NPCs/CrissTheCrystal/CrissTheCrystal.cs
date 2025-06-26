@@ -7,6 +7,7 @@ using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Components;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -250,6 +251,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
         public void TryDestroyCollider(Collider collider)
         {
+
             if (collider != null)
             {
                 if (collider.transform.CompareTag("Wall"))
@@ -279,7 +281,9 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                         collider.transform.parent.GetComponent<Window>()
                             .Break(true); //Why it makes noise? Then ask First Prize why he makes, when
                                         //he tries to push player to a wall
-                    else if (collider.transform.parent.TryGetComponent(out StandardDoor door))
+
+                    //Decided to cancel doors burning since it's really bad idea from the technical point
+                    /*else if (collider.transform.parent.TryGetComponent(out StandardDoor door))
                     {
                         door.Unlock();
                         door.Open(true, false);
@@ -289,7 +293,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                         door.tag = "Untagged";
                         //GameObject.Destroy(door); //Still can't do that because it registered not only by some room
                         //but it may be registered by some mod too
-                        MeshRenderer[] renderers = collider.transform.parent.GetComponentsInChildren<MeshRenderer>();
+                        Renderer[] renderers = collider.transform.parent.GetComponentsInChildren<MeshRenderer>();
                         for (int i = 0; i < renderers.Length; i++)
                         {
                             Material[] materials = renderers[i].materials;
@@ -318,6 +322,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                         swingDoor.tag = "Untagged";
                         //GameObject.Destroy(door); //Still can't do that because it registered not only by some room
                         //but it may be registered by some mod too
+
                         MeshRenderer[] renderers = collider.transform.parent.GetComponentsInChildren<MeshRenderer>();
                         for (int i = 0; i < renderers.Length; i++)
                         {
@@ -336,7 +341,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                         {
                             GameObject.Destroy(colliders[i]);
                         }
-                    }
+                    }*/
 
                 }
             }

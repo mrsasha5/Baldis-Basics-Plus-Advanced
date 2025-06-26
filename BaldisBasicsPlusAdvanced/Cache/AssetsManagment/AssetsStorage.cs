@@ -209,6 +209,13 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                 LoadSound("food_plate_drop", "PlateDrop");
                 LoadSound("food_plate_lift", "PlateLift");
                 LoadSound("chip_crunch", "ChipCrunch");
+                LoadSound("vent_vacuum", "Vent_Vacuum"); //Store here
+                //LoadSound("vent_travel", "Vent_Travel"); //BRUH, Mystman uses AudioClip
+                sounds.Add(
+                    "vent_travel",
+                    ObjectCreators.CreateSoundObject(AssetsHelper.LoadAsset<AudioClip>("Vent_Travel"), "Adv_Sub_Vent_Air",
+                        SoundType.Effect, Color.white)
+                );
 
                 LoadSprite("elv_button_up", "Button_Up");
                 LoadSprite("elv_button_down", "Button_Down");
@@ -610,10 +617,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                 advancedClassLamp.transform.localPosition = Vector3.up * 8.95f;
                 advancedClassLamp.transform.parent.gameObject.ConvertToPrefab(true);
 
-                StoreRoomPatches.posterKitchenPre = ObjectCreators.CreatePosterObject(
-                        AssetsHelper.TextureFromFile("Textures/Posters/adv_poster_kitchen_stove.png"),
-                        PosterSerializableData.GetFromFile(AssetsHelper.modPath + "Textures/Posters/adv_poster_kitchen_stove.json").Texts);
-
                 cached = true;
 
                 if (Debugging)
@@ -669,14 +672,8 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                 LevelAsset pitStop = AssetsHelper.LoadAsset<LevelAsset>("Pitstop");
                 RoomData hall = pitStop.rooms.Find(x => x.category == RoomCategory.Null);
 
-                //PIT overrides
-                if (!PitOverrides.EnglishClassDisabled)
+                if (!PitOverrides.AccelerationPlateDisabled)
                 {
-                    StandardDoorMats engDoorMats = Array.Find(UnityEngine.Object.FindObjectsOfType<StandardDoorMats>(),
-                    x => x.name == "EnglishDoorSet");
-
-                    //Adding special trigger, Acceleration Plate
-
                     hall.basicObjects.Add(
                         new BasicObjectData()
                         {
@@ -698,8 +695,13 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                             position = new Vector3(335f, 0f, 35f)
                         }
                     );
-                    //End
+                }
 
+                //PIT overrides
+                if (!PitOverrides.EnglishClassDisabled)
+                {
+                    StandardDoorMats engDoorMats = Array.Find(UnityEngine.Object.FindObjectsOfType<StandardDoorMats>(),
+                    x => x.name == "EnglishDoorSet");
 
                     RoomData roomData = new RoomData()
                     {
@@ -774,21 +776,23 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                     });
                 }
 
-#warning add API option to disable
-                if (true)
+                if (!PitOverrides.KitchenStoveDisabled)
                 {
                     hall.basicObjects.Add(new BasicObjectData()
                     {
                         prefab = ObjectsStorage.Objects["johnny_kitchen_stove"].transform,
-                        position = new Vector3(355f, 0f, 145f)
+                        position = new Vector3(365f, 0f, 145f)
                     });
 
-                    /*pitStop.posters.Add(new PosterData()
+                    pitStop.posters.Add(new PosterData()
                     {
-                        poster = posterObj,
-                        position = new IntVector2(36, 14),
-                        direction = Direction.North
-                    });*/
+                        poster = ObjectCreators.CreatePosterObject(
+                            AssetsHelper.TextureFromFile("Textures/Posters/adv_poster_kitchen_stove.png"),
+                            PosterSerializableData.GetFromFile(
+                                AssetsHelper.modPath + "Textures/Posters/adv_poster_kitchen_stove.json").Texts),
+                        position = new IntVector2(36, 13),
+                        direction = Direction.East
+                    });
 
                 }
 

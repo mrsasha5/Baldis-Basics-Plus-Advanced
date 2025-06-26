@@ -11,6 +11,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         [SerializeField]
         protected int cookingPrice;
 
+        private StoreRoomFunction func;
+
+        public void Assign(StoreRoomFunction func) => this.func = func; 
+
         protected override void SetValues(PlateData plateData)
         {
             base.SetValues(plateData);
@@ -31,15 +35,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             if (!isYTPsEnough)
             {
-#warning temp solution
-                StoreRoomPatches.PlayJohnnyUnafforable();
+                StoreRoomPatches.PlayJohnnyUnafforable(func);
             }
 
             if (result)
             {
                 usedCount++;
                 SetVisualUses(usedCount, plateData.uses);
-                StoreRoomPatches.PlayJohnnyBuy();
+                StoreRoomPatches.PlayJohnnyBuy(func);
                 CoreGameManager.Instance.AddPoints(-cookingPrice, 0, true);
 
             }

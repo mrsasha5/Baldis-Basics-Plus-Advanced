@@ -30,8 +30,7 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                 Dependency dependency = new Dependency();
 
                 if (_line.StartsWith("FORCED ")) dependency.forced = true;
-                else if (_line.StartsWith("NON-FORCED ")) ;
-                else 
+                else if (!_line.StartsWith("NON-FORCED "))
                     throw new StandardViolationException("Any dependency always should start with \"FORCED\" or \"NON-FORCED\" text.");
 
                 if (dependency.forced) _line = _line.Replace("FORCED ", "");
@@ -115,8 +114,7 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
 
                         string srcAvailable = lines[i + 5 + offset].Trim().Replace("Source code: ", "");
                         if (srcAvailable == "yes") convertedData.sourceCodeAvailable = true;
-                        else if (srcAvailable == "no") ;
-                        else 
+                        else if (srcAvailable != "no")
                             throw new StandardViolationException("Source code field should contain only \"yes\" or \"no\" value.");
                     }
                     catch (Exception e)

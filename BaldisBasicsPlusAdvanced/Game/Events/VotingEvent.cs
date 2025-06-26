@@ -94,6 +94,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         [SerializeField]
         private bool includeOpenToGenScreens;
 
+        [SerializeField]
+        private float minScreensDistance;
+
         //private LockedDoorsFunction lockedDoorsFunc;
 
         private static List<LevelType> highCeilingLevelTypes = new List<LevelType>()
@@ -115,6 +118,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
         private static TextMeshProUGUI[] texts = new TextMeshProUGUI[2];
 
+        private static List<Cell> usedCells = new List<Cell>();
+
         public bool RoomAssigned { get; private set; }
 
         public EnvironmentController Ec => ec;
@@ -124,14 +129,26 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             return VotingPickup.TopicIsActive<T>();
         }
 
+        private bool IsEnoughDistance(Cell cell1, Cell cell2)
+        {
+            if (Vector3.Distance(cell1.CenterWorldPosition, cell2.CenterWorldPosition) > minScreensDistance)
+            {
+                return true;
+            }
+            return false;
+        }
+
         private void OnDestroy()
         {
             if (texts[0] != null) Destroy(texts[0].gameObject);
             if (texts[1] != null) Destroy(texts[1].gameObject);
+
+            usedCells.Clear();
         }
 
         public void InitializePrefab(int variant)
         {
+            minScreensDistance = 50f;
             balloonsOnChunk = 2;
             chunkSize = 8;
             tileShapesForScreen = TileShapeMask.Straight;
@@ -502,7 +519,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             return false;
         }
 
-#warning try to avoid nearest tiles
         private void BuildScreens(System.Random rng)
         {
             List<Cell> cells = ec.mainHall.GetTilesOfShape(tileShapesForScreen, screenCoverage, includeOpenToGenScreens);
@@ -513,7 +529,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             int counter = rng.Next(minMaxScreens.x, minMaxScreens.z + 1);
             while (counter > 0)
             {
+                if (cells.Count == 0) break;
+
                 int index = rng.Next(0, cells.Count);
+
+                bool ignored = false;
 
                 Direction direction = Direction.North;
 
@@ -525,9 +545,23 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                     if (directions.Count > 0) direction = directions[0];
                 }
 
-                BuildScreen(cells[index], direction);
+                for (int i = 0; i < usedCells.Count; i++)
+                {
+                    if (!IsEnoughDistance(cells[index], usedCells[i]))
+                    {
+                        ignored = true;
+                        break;
+                    }
+                }
+
+                if (!ignored)
+                {
+                    BuildScreen(cells[index], direction);
+                    counter--;
+                }
+
                 cells.RemoveAt(index);
-                counter--;
+
             }
         }
 

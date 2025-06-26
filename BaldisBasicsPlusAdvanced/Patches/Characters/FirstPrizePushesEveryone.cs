@@ -1,7 +1,7 @@
-﻿using BaldisBasicsPlusAdvanced.Helpers;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
-using System.Linq;
+using MTM101BaldAPI.Registers;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Patches.Characters
@@ -11,41 +11,34 @@ namespace BaldisBasicsPlusAdvanced.Patches.Characters
     internal class FirstPrizePushesEveryone
     {
 
-#warning update this code completely
-        private static readonly string[] exceptionCharacters = new string[] 
-        { "ChalkFace(Clone)", "Bully(Clone)", "Gotta Sweep(Clone)", "FirstPrize(Clone)" }; 
-        //based on Mystman methods... but I think that's not good idea
-
         [HarmonyPatch("OnStateTriggerEnter")]
         [HarmonyPrefix]
-        private static void OnTriggerEnter(FirstPrize_Active __instance, Collider other)
+        private static void OnTriggerEnter(FirstPrize_Active __instance, Collider other, ref MoveModsManager ___moveModsMan)
         {
-            if (other.TryGetComponent(out ITM_AlarmClock _) || 
-                (OptionsDataManager.ExtraSettings.GetValue<bool>("first_prize_extensions") && other.CompareTag("NPC")))
+            if (other.CompareTag("NPC") &&
+                OptionsDataManager.ExtraSettings.GetValue<bool>("first_prize_extensions"))
             {
-                if (!exceptionCharacters.Contains(other.name))
-                {
-                    ReflectionHelper.GetValue<MoveModsManager>(__instance, "moveModsMan")
-                        .AddMoveMod(other.transform);
-                    other.transform.position = __instance.Npc.gameObject.transform.position 
-                        + __instance.Npc.gameObject.transform.forward * 4f;
-                }
+                if (other.GetComponent<NPC>().GetMeta().tags.Contains(TagsStorage.firstPrizeImmunity))
+                    return;
+
+                ___moveModsMan.AddMoveMod(other.transform);
+                other.transform.position = __instance.Npc.gameObject.transform.position 
+                    + __instance.Npc.gameObject.transform.forward * 4f;
                 
             }
         }
 
         [HarmonyPatch("OnStateTriggerExit")]
         [HarmonyPrefix]
-        private static void OnTriggerExit(FirstPrize_Active __instance, Collider other)
+        private static void OnTriggerExit(FirstPrize_Active __instance, Collider other, ref MoveModsManager ___moveModsMan)
         {
-            if (other.TryGetComponent(out ITM_AlarmClock _) || 
-                (OptionsDataManager.ExtraSettings.GetValue<bool>("first_prize_extensions") && other.CompareTag("NPC")))
+            if (other.CompareTag("NPC") && 
+                OptionsDataManager.ExtraSettings.GetValue<bool>("first_prize_extensions"))
             {
-                if (!exceptionCharacters.Contains(other.name))
-                {
-                    ReflectionHelper.GetValue<MoveModsManager>(__instance, "moveModsMan")
-                        .Remove(other.transform);
-                }
+                if (other.GetComponent<NPC>().GetMeta().tags.Contains(TagsStorage.firstPrizeImmunity))
+                    return;
+
+                ___moveModsMan.Remove(other.transform);
             }
         }
     }

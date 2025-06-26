@@ -23,7 +23,6 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             npc.StartCoroutine(Waits());
         }
 
-#warning Oh no, these damn doors and windows
         private IEnumerator ShootLaser()
         {
             npc.Navigator.maxSpeed = 0;

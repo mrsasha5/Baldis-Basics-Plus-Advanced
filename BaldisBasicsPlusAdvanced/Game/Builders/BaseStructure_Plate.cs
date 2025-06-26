@@ -1,6 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
@@ -42,6 +43,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         [SerializeField]
         protected WeightedGameObject[] roomPrefabs;
 
+        [SerializeField]
+        protected float minPlatesDistance;
+
         protected List<BasePlate> generatedPlates;
 
         public virtual void InitializePrefab(int variant)
@@ -51,6 +55,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             coverageToFit = CellCoverage.None;
             includeHalls = true;
             roomPlatesCoverageMustHaveWalls = true;
+            minPlatesDistance = 50f;
             //avoidCloseTiles = true;
         }
 
@@ -63,10 +68,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         public override void PostOpenCalcGenerate(LevelGenerator lg, System.Random rng)
         {
             base.PostOpenCalcGenerate(lg, rng);
-            if (includeHalls) Build(lg, rng, isRoomCells: false);
+            if (includeHalls) Build(lg, rng, roomCells: false);
         }
 
-#warning TODO: invent calculation algorithm to avoid plates accumulation
         protected virtual List<Cell> GetCells()
         {
             List<Cell> tilesOfShape = ec.mainHall.GetTilesOfShape(tileShapes, coverageToFit, includeOpenTiles);
@@ -88,26 +92,70 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             return potentialDoorTiles;
         }
 
-        public virtual void Build(LevelBuilder lb, System.Random rng, bool isRoomCells)
+        public virtual void Build(LevelBuilder lb, System.Random rng, bool roomCells)
         {
-            List<Cell> cells = isRoomCells ? GetRoomCells() : GetCells();
+            List<Cell> ignoredCells = new List<Cell>();
 
-            int num = isRoomCells ? rng.Next(parameters.minMax[1].x, parameters.minMax[1].z + 1) :
+            List<Cell> cellsToAvoid = new List<Cell>();
+
+            foreach (BasePlate plate in FindObjectsOfType<BasePlate>())
+            {
+                cellsToAvoid.Add(ec.CellFromPosition(plate.transform.position));
+            }
+
+            List<Cell> cells = roomCells ? GetRoomCells() : GetCells();
+
+            int num = roomCells ? rng.Next(parameters.minMax[1].x, parameters.minMax[1].z + 1) :
                                     rng.Next(parameters.minMax[0].x, parameters.minMax[0].z + 1);
-            for (int i = 0; i < num; i++)
+
+            int i = 0;
+
+            for (; i < num; i++)
             {
                 if (cells.Count <= 0)
                 {
                     break;
                 }
 
-                int index = 0;
+                int index = rng.Next(0, cells.Count);
 
-                /*if (isRoomCells || !avoidCloseTiles)*/ index = rng.Next(0, cells.Count);
+                bool ignored = false;
 
-                BuildPrefab(cells[index], rng, isRoomCells);
+                for (int i2 = 0; i2 < cellsToAvoid.Count; i2++)
+                {
+                    if (!IsEnoughDistance(cells[index], cellsToAvoid[i2]))
+                    {
+                        ignored = true;
+                        break;
+                    }
+                }
 
-                cells.RemoveAt(index);
+                if (!ignored)
+                {
+                    BuildPrefab(cells[index], rng, roomCells);
+
+                    cellsToAvoid.Add(cells[index]);
+
+                    cells.RemoveAt(index);
+                }
+                else
+                {
+                    ignoredCells.Add(cells[index]);
+                }
+            }
+
+            for (; i < num; i++)
+            {
+                if (ignoredCells.Count <= 0)
+                {
+                    break;
+                }
+
+                int index = rng.Next(0, ignoredCells.Count);
+
+                BuildPrefab(ignoredCells[index], rng, roomCells);
+
+                ignoredCells.RemoveAt(index);
             }
         }
 
@@ -116,10 +164,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             base.OnGenerationFinished(lb);
             if (lb is LevelGenerator)
             {
-                if (includeRooms) Build(lb, lb.controlledRNG, isRoomCells: true);
+                if (includeRooms) Build(lb, lb.controlledRNG, roomCells: true);
                 generatedPlates.Clear();
             }
-            
+
         }
 
         public virtual BasePlate BuildPrefab(Cell cell, System.Random rng, bool inRoom)
@@ -129,13 +177,22 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 cell.room.objectObject.transform);
             plate.transform.position = cell.FloorWorldPosition;
 
-            Direction dir = RandomBuildDirection(cell, plateCoverage, useWallDirection: true, rng);//cell.RandomUncoveredDirection(rng);
+            Direction dir = RandomBuildDirection(cell, plateCoverage, useWallDirection: true, rng);
 
             if (dir != Direction.Null) plate.transform.rotation = dir.ToRotation();
-            
+
             cell.HardCover(plateCoverage);
             generatedPlates.Add(plate);
             return plate;
+        }
+
+        protected bool IsEnoughDistance(Cell cell1, Cell cell2)
+        {
+            if (Vector3.Distance(cell1.CenterWorldPosition, cell2.CenterWorldPosition) > minPlatesDistance)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
