@@ -167,7 +167,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
                     RoomCategory category = roomData.weightedRoomAsset.selection.category;
 
-                    if (category == RoomCategory.Special && !group.potentialRooms.Contains(roomData.weightedRoomAsset))
+                    if (category == RoomCategory.Special && !levelObject.potentialSpecialRooms.Contains(roomData.weightedRoomAsset))
                     {
                         levelObject.potentialSpecialRooms = levelObject.potentialSpecialRooms.AddToArray(roomData.weightedRoomAsset);
                     }
