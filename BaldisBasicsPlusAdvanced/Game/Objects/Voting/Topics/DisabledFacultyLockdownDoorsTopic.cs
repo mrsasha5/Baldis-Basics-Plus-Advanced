@@ -6,7 +6,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
     public class DisabledFacultyLockdownDoorsTopic : BaseTopic
     {
 
-        public override string Desc => "Adv_Text_School_Council_Topic10".Localize();
+        public override string Desc => "Adv_SC_Topic_FacultySuperDoors".Localize();
+
+        public override string BasicInfo => "Adv_SC_Topic_FacultySuperDoors_BasicInfo".Localize();
 
         public override bool IsAvailable()
         {

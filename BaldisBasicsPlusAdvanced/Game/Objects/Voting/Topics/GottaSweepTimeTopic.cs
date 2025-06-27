@@ -7,7 +7,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
     public class GottaSweepTimeTopic : BaseTopic
     {
 
-        public override string Desc => "Adv_Text_School_Council_Topic5".Localize();
+        public override string Desc => "Adv_SC_Topic_GottaSweep".Localize();
+
+        public override string BasicInfo => "Adv_SC_Topic_GottaSweep_BasicInfo".Localize();
 
         public override bool IsAvailable()
         {

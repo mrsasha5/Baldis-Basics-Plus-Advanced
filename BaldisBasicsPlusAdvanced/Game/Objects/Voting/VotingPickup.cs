@@ -158,7 +158,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
                 }
             );
 
-            chalkboardMenu.GetText("title").text = Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Text_School_Council_Topic_Base");
+            chalkboardMenu.GetText("title").text = "Adv_SC_Topic_Base".Localize();
             chalkboardMenu.GetText("title").font = bigFont.FontAsset();
             chalkboardMenu.GetText("title").fontSize = bigFont.FontSize();
 
@@ -193,13 +193,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
             if (votingIsGoing && votes.Find(x => x.pm == pm) == null)
             {
                 TMP_Text supportText = UIHelpers.CreateText<TextMeshProUGUI>(bigFont,
-                Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Voting_Plus"),
-                chalkboardMenu.chalkboard.transform, new Vector3(-80f, -80f, 0f), false);
+                    "Adv_Voting_Plus".Localize(),
+                    chalkboardMenu.chalkboard.transform, new Vector3(-80f, -80f, 0f), false);
                 supportText.GetComponent<RectTransform>().sizeDelta = buttonSize;
                 supportText.alignment = TextAlignmentOptions.Top;
 
                 TMP_Text rejectText = UIHelpers.CreateText<TextMeshProUGUI>(bigFont,
-                    Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Voting_Minus"),
+                    "Adv_Voting_Minus".Localize(),
                     chalkboardMenu.chalkboard.transform, new Vector3(80f, -80f, 0f), false);
                 rejectText.GetComponent<RectTransform>().sizeDelta = buttonSize;
                 rejectText.alignment = TextAlignmentOptions.Top;
@@ -236,8 +236,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
             else if (votingWas && votingIsGoing)
             {
                 TMP_Text text = UIHelpers.CreateText<TextMeshProUGUI>(bigFont,
-                Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Voting_Player_Voted"),
-                chalkboardMenu.chalkboard.transform, new Vector3(0f, -50f, 0f), false);
+                    "Adv_Voting_Player_Voted".Localize(),
+                    chalkboardMenu.chalkboard.transform, new Vector3(0f, -50f, 0f), false);
                 text.GetComponent<RectTransform>().sizeDelta = textSize;
                 text.alignment = TextAlignmentOptions.Top;
 

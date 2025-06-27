@@ -8,7 +8,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
     public class NoPlatesCooldownTopic : BaseTopic
     {
-        public override string Desc => "Adv_Text_School_Council_Topic2".Localize();
+        public override string Desc => "Adv_SC_Topic_PlatesCooldown".Localize();
+
+        public override string BasicInfo => "Adv_SC_Topic_PlatesCooldown_BasicInfo".Localize();
 
         public override BaseTopic Clone()
         {

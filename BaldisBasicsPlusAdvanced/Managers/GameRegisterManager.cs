@@ -1,7 +1,7 @@
 ﻿#region Used Namespaces
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Events;
-using BaldisBasicsPlusAdvanced.Game.GameItems;
+using BaldisBasicsPlusAdvanced.Game.InventoryItems;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
 using MTM101BaldAPI.Registers;
@@ -33,8 +33,8 @@ using BaldisBasicsPlusAdvanced.Compats.LevelEditor;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Game.Objects.Food;
-using BaldisBasicsPlusAdvanced.Game.GameItems.Food;
-using BaldisBasicsPlusAdvanced.Game.GameItems.Drinks;
+using BaldisBasicsPlusAdvanced.Game.InventoryItems.Food;
+using BaldisBasicsPlusAdvanced.Game.InventoryItems.Drinks;
 using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using PlusLevelFormat;
 using PlusLevelLoader;

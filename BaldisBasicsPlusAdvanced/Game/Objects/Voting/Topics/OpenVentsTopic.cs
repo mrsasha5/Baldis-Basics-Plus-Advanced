@@ -8,7 +8,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
     public class OpenVentsTopic : BaseTopic
     {
 
-        public override string Desc => "Adv_Text_School_Council_Topic9".Localize();
+        public override string Desc => "Adv_SC_Topic_Ventilation".Localize();
+
+        public override string BasicInfo => "Adv_SC_Topic_Ventilation_BasicInfo".Localize();
 
         public override bool IsAvailable()
         {

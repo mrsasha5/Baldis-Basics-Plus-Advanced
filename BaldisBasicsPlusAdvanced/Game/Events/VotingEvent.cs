@@ -140,8 +140,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
         private void OnDestroy()
         {
-            if (texts[0] != null) Destroy(texts[0].gameObject);
-            if (texts[1] != null) Destroy(texts[1].gameObject);
+            for (int i = 0; i < texts.Length; i++)
+            {
+                if (texts[i] != null) Destroy(texts[i].gameObject);
+            }
 
             usedCells.Clear();
         }
@@ -432,11 +434,18 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             audMan.PlaySingle(AssetsStorage.sounds["adv_bell"]);
 
             InvokeTvEnumerator("Exclamation", 3f);
-            InvokeTvEnumerator("Static", 1f);
+            InvokeTvEnumerator("Static", 0.25f);
 
             AddEnumeratorToTv(TvController());
 
             InvokeTvEnumerator("Static", 0.25f);
+
+            if (ballot.VotingPickup.VotingIsWon())
+            {
+                AddEnumeratorToTv(ShowBasicInfo());
+
+                InvokeTvEnumerator("Static", 0.25f);
+            }
         }
 
         private IEnumerator TvController()
@@ -447,7 +456,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             ReflectionHelper.UseRequiredMethod(tvBase, "ResetScreen");
 
-            AudioManager audMan = ec.GetAudMan();
+            //AudioManager audMan = ec.GetAudMan();
 
             if (texts[0] == null)
             {
@@ -471,8 +480,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             ballot.VotingPickup.Topic.OnVotingEndedPost(ballot.VotingPickup.VotingIsWon());
 
-            float baseTime = 10f;
-            float time = baseTime;
+            float time = 7f;
 
             while (time > 0f)
             {
@@ -484,6 +492,36 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             Destroy(texts[0].gameObject);
             Destroy(texts[1].gameObject);
+
+            ReflectionHelper.SetValue<bool>(tvBase, "busy", false);
+            ReflectionHelper.UseRequiredMethod(tvBase, "QueueCheck");
+        }
+
+        private IEnumerator ShowBasicInfo()
+        {
+            Canvas canvas = Singleton<CoreGameManager>.Instance.GetHud(0).Canvas();
+
+            BaldiTV tvBase = canvas.GetComponentInChildren<BaldiTV>();
+
+            ReflectionHelper.UseRequiredMethod(tvBase, "ResetScreen");
+
+            float time = 7f;
+
+            texts[0] = UIHelpers.CreateText<TextMeshProUGUI>(
+                BaldiFonts.ComicSans12,
+                ballot.VotingPickup.Topic.BasicInfo,
+                tvBase.transform,
+                new Vector3(68f, -80f, 0f));
+            texts[0].rectTransform.sizeDelta = new Vector2(100f, 50f);
+            texts[0].alignment = TextAlignmentOptions.Center;
+
+            while (time > 0f)
+            {
+                time -= Time.deltaTime;
+                yield return null;
+            }
+
+            Destroy(texts[0].gameObject);
 
             ReflectionHelper.SetValue<bool>(tvBase, "busy", false);
             ReflectionHelper.UseRequiredMethod(tvBase, "QueueCheck");

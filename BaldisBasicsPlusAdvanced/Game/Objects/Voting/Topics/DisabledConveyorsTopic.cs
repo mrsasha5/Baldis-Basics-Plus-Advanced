@@ -8,7 +8,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
     public class DisabledConveyorsTopic : BaseTopic
     {
 
-        public override string Desc => "Adv_Text_School_Council_Topic7".Localize();
+        public override string Desc => "Adv_SC_Topic_Belts".Localize();
+
+        public override string BasicInfo => "Adv_SC_Topic_Belts_BasicInfo".Localize();
 
         public override bool IsAvailable()
         {

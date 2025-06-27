@@ -9,7 +9,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
     public class ConvertVendingMachinesTopic : BaseTopic
     {
 
-        public override string Desc => "Adv_Text_School_Council_Topic6".Localize();
+        public override string Desc => "Adv_SC_Topic_VendingMachines".Localize();
+
+        public override string BasicInfo => "Adv_SC_Topic_VendingMachines_BasicInfo".Localize();
 
         public override bool IsAvailable()
         {

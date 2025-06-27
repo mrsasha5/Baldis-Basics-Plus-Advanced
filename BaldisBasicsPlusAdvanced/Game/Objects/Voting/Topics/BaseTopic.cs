@@ -14,7 +14,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 
         public bool Active => active;
 
+        /// <summary>
+        /// Used for topic description on chalkboard.
+        /// You should localize it yourself.
+        /// </summary>
         public virtual string Desc => "No description";
+
+        /// <summary>
+        /// Used for TV when topic wins.
+        /// You should localize it yourself.
+        /// </summary>
+        public virtual string BasicInfo => "99";
 
         public void Initialize(VotingEvent votingEvent, EnvironmentController ec)
         {

@@ -5,7 +5,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
     public class BrokenZiplinesTopic : BaseTopic
     {
-        public override string Desc => "Adv_Text_School_Council_Topic8".Localize();
+        public override string Desc => "Adv_SC_Topic_Ziplines".Localize();
+
+        public override string BasicInfo => "Adv_SC_Topic_Ziplines_BasicInfo".Localize();
 
         public override bool IsAvailable()
         {

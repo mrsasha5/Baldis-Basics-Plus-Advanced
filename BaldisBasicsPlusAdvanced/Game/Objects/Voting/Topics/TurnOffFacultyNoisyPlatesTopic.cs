@@ -7,7 +7,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
     public class TurnOffFacultyNoisyPlatesTopic : BaseTopic
     {
-        public override string Desc => "Adv_Text_School_Council_Topic4".Localize();
+        public override string Desc => "Adv_SC_Topic_NoisyPlates".Localize();
+
+        public override string BasicInfo => "Adv_SC_Topic_NoisyPlates_BasicInfo".Localize();
 
         public override bool IsAvailable()
         {

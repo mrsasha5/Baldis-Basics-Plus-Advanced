@@ -20,7 +20,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
             RoomCategory.Special
         };
 
-        public override string Desc => "Adv_Text_School_Council_Topic1".Localize();
+        public override string Desc => "Adv_SC_Topic_Electricity".Localize();
+
+        public override string BasicInfo => "Adv_SC_Topic_Electricity_BasicInfo".Localize();
 
         public override bool IsAvailable()
         {
