@@ -389,7 +389,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             {
                 if (pagesText != null)
                     pagesText.text = 
-                        string.Format(Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Expel_Hammer_Pages"), 0, 0);
+                        string.Format("Adv_Expel_Hammer_Pages".Localize(), 0, 0);
                 return new List<NPC>();
             }
 
@@ -397,8 +397,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             int i = 0;
             foreach (NPC npc in characters)
             {
-                if (i >= textButtons.Count - 1) break;
-                textButtons[i].text.text = Singleton<LocalizationManager>.Instance.GetLocalizedText(npc.GetMeta().nameLocalizationKey);
+                if (i >= textButtons.Count) break;
+                textButtons[i].text.text = npc.GetMeta().nameLocalizationKey.Localize();
                 textButtons[i].OnPress = new UnityEvent();
                 textButtons[i].OnPress.AddListener(
                     delegate()
@@ -411,14 +411,14 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             for (int j = 0; j < i; j++)
             {
-                if (j >= textButtons.Count - 1) break;
+                if (j >= textButtons.Count) break;
                 textButtons[j].gameObject.SetActive(true);
             }
 
             if (pagesText != null)
                 pagesText.text = 
-                    string.Format(Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Expel_Hammer_Pages"), 
-                        currentPageIndex + 1, pages.Count);
+                    string.Format("Adv_Expel_Hammer_Pages".Localize(), 
+                        index + 1, pages.Count);
 
             return pages[index];
         }

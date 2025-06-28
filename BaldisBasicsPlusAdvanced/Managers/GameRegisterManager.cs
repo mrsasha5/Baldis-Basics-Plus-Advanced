@@ -771,8 +771,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     minMax = new IntVector2[] { new IntVector2(2, 5), new IntVector2(0, 2) },
                 })
                 .SetBannedFloors(1)
-#warning return 75
-                .SetWeight(floor: 2, 7500000)
+                .SetWeight(floor: 2, 75)
                 .SetEndless(true)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory, LevelType.Laboratory, LevelType.Maintenance);
 
