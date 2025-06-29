@@ -68,7 +68,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
             Vector3 newArrowSize = new Vector3(64f, 64f, 2f);
 
             TextMeshPro titleText = 
-                ObjectsCreator.CreateSpatialText(
+                ObjectsCreator.CreateTextMesh(
                     BaldiFonts.ComicSans12, new Vector2(20f, 2.5f), transform, new Vector3(0f, 5.5f, distanceOffset));
             titleText.name = "Title";
             titleText.text = string.Format(LocalizationManager.Instance.GetLocalizedText("Adv_ExpelHammer_Character_Info"), 
@@ -120,7 +120,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
             {
                 
                 TextMeshPro tmpText = 
-                    ObjectsCreator.CreateSpatialText(BaldiFonts.ComicSans12, new Vector2(16f, 2.5f), 
+                    ObjectsCreator.CreateTextMesh(BaldiFonts.ComicSans12, new Vector2(16f, 2.5f), 
                         transform, new Vector3(0f, height, distanceOffset));
 
                 InteractionTextObject textObj = tmpText.gameObject.AddComponent<InteractionTextObject>()

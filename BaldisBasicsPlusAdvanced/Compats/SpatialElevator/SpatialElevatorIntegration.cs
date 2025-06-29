@@ -1,6 +1,8 @@
-﻿using BaldisBasicsPlusAdvanced.Helpers;
+﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
+using The3DElevator.Extensions;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator
@@ -8,9 +10,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator
     public class SpatialElevatorIntegration : CompatibilityModule
     {
 
-#warning add config value
-
         public static GameObject monitorPre;
+
+        public override bool IsIntegrable()
+        {
+            return base.IsIntegrable() && AdvancedCore.spatialElevatorIntegrationEnabled;
+        }
 
         public SpatialElevatorIntegration() : base()
         {

@@ -1,17 +1,12 @@
 ﻿using System.Collections;
-using System.Text;
 using BaldisBasicsPlusAdvanced.Attributes;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
-using BaldisBasicsPlusAdvanced.Compats.SpatialElevator;
 using BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
-using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
-using MTM101BaldAPI;
 using MTM101BaldAPI.UI;
-using The3DElevator.MonoBehaviours;
+using The3DElevator.MonoBehaviours.ElevatorCoreComponents;
 using TMPro;
 using UnityEngine;
 
@@ -25,7 +20,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Patches
         private static TextMeshPro tmpText;
 
         [HarmonyPatch("Initialize")]
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         private static void OnInitialize(LobbyElevator __instance)
         {
 
@@ -43,8 +38,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Patches
                 Collider collider = screenObj.GetComponent<Collider>();
                 GameObject.Destroy(collider);
 
-                tmpText = ObjectsCreator.CreateSpatialText(
-                    BaldiFonts.ComicSans12, new Vector2(35f, 100f), mainParent, new Vector3(0f, 0f, 0.55f));
+                tmpText = ObjectsCreator.CreateTextMesh(
+                    BaldiFonts.ComicSans12, new Vector2(35f, 100f), mainParent, new Vector3(0f, 0f, 0.3f));
                 tmpText.transform.localScale = Vector3.one * 0.5f;
                 tmpText.color = Color.green;
 

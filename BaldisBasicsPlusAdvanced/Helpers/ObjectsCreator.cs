@@ -19,10 +19,10 @@ namespace BaldisBasicsPlusAdvanced.Helpers
     public class ObjectsCreator
     {
 
-        public static TextMeshPro CreateSpatialText(BaldiFonts font, Vector2? size = null, Transform parent = null, 
+        public static TextMeshPro CreateTextMesh(BaldiFonts font, Vector2? size = null, Transform parent = null, 
             Vector3? position = null)
         {
-            RectTransform rect = new GameObject("SpatialText").AddComponent<RectTransform>();
+            RectTransform rect = new GameObject("TextMeshPro").AddComponent<RectTransform>();
 
             if (size != null)
                 rect.sizeDelta = (Vector2)size;

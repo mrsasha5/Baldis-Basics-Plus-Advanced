@@ -39,6 +39,8 @@ namespace BaldisBasicsPlusAdvanced
 
         internal static bool editorIntegrationEnabled;
 
+        internal static bool spatialElevatorIntegrationEnabled;
+
         //internal static float updateCheckIntervalTime;
 
         internal static bool updateChecksEnabled;
@@ -83,8 +85,12 @@ namespace BaldisBasicsPlusAdvanced
             if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
             Directory.CreateDirectory(tempPath);
 
-            editorIntegrationEnabled = Config.Bind("Integration", "Editor", defaultValue: true, 
+            editorIntegrationEnabled = Config.Bind("Integration", "Editor", defaultValue: true,
                 "If disabled, then items and other things from this mod will not load in the editor!").Value;
+            spatialElevatorIntegrationEnabled = Config.Bind("Integration", "Spatial Elevator", defaultValue: true,
+                "If disabled, then integration with 3D Elevator will be disabled! " +
+                "Not recommended to disable since you'll lose access to the content like this: tips & Hammer of Force.").Value;
+
             notificationsEnabled = Config.Bind("Settings", "Notifications", defaultValue: true, 
                 "Disables/enables notifications.").Value;
             
