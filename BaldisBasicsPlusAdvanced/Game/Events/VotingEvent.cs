@@ -434,7 +434,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             audMan.PlaySingle(AssetsStorage.sounds["adv_bell"]);
 
             InvokeTvEnumerator("Exclamation", 3f);
-            InvokeTvEnumerator("Static", 0.25f);
+            InvokeTvEnumerator("Static", 0.5f);
 
             AddEnumeratorToTv(TvController());
 
@@ -504,6 +504,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             BaldiTV tvBase = canvas.GetComponentInChildren<BaldiTV>();
 
             ReflectionHelper.UseRequiredMethod(tvBase, "ResetScreen");
+
+            AudioManager audMan = ec.GetAudMan();
+            audMan.PlaySingle(AssetsStorage.sounds["adv_bal_super_wow"]);
 
             float time = 7f;
 
