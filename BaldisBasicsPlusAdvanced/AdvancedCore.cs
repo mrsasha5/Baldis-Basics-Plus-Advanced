@@ -110,9 +110,8 @@ namespace BaldisBasicsPlusAdvanced
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), false);
             LoadingEvents.RegisterOnAssetsLoaded(Info, OnAssetsLoadedPost(), true);
 
-#warning REMOVE ON RELEASE
             //damn, I even can't change text size without patches
-            MTM101BaldiDevAPI.AddWarningScreen(
+            /*MTM101BaldiDevAPI.AddWarningScreen(
                 "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
                 "Remember about main conditions for the beta testers. " +
                 "You must observe them until they are declared obsolete by me.\n" +
@@ -126,7 +125,7 @@ namespace BaldisBasicsPlusAdvanced
                 "If this build was leaked without permission and you have installed it... " +
                 "Please note that as a NON-BETA TESTER YOU WILL NOT RECEIVE FEEDBACK IN CASE OF A BROKEN GAME. " +
                 "You can close game until it will be launched fully.",
-                false);
+                false);*/
 
             GameRegisterManager.InitializeDoNotDestroyOnLoadObjects();
         }

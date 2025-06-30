@@ -44,7 +44,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
             priceTagPre = ___mapTag;
 
             int hammerPrice = (int)(___storeData.mapPrice * 1.2f);
-            int refreshPrice = ___storeData.totalShopItems * 10;
 
             PriceTag hammerPriceTag = null;
 
@@ -52,15 +51,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
             {
                 hammerPriceTag = CreatePriceTag(hammerPrice.ToString());
                 hammerPriceTag.transform.localPosition = new Vector3(20f, 2.65f, 46f);
-            }
-
-            if (!PitOverrides.RefreshPickupDisabled)
-            {
-                PriceTag refreshPriceTag = CreatePriceTag(refreshPrice.ToString());
-                refreshPriceTag.transform.localPosition = new Vector3(10f, 2.65f, 46f);
-
-                RefreshPickup refreshPickup = CreatePickup<RefreshPickup>(refreshPriceTag, refreshPrice, new Vector3(10f, 5f, 48f));
-                refreshPickup.storeRoomFunc = storeFunc;
             }
 
             if (Singleton<BaseGameManager>.Instance is PitstopGameManager && !PitOverrides.ExpelHammerPickupDisabled)

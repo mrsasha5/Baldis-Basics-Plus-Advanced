@@ -6,10 +6,7 @@
 //Anyways it was a good time and you was a part of main basics collection of items from the mod
 
 
-#warning REMOVE IN 0.11 release
-
-
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+/*using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
 using BaldisBasicsPlusAdvanced.Patches;
 using UnityEngine;
@@ -52,3 +49,4 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems.Drinks
         }
     }
 }
+*/

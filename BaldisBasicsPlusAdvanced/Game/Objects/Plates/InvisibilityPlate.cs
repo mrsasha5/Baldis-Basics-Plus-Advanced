@@ -33,7 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
                 BaseControllerSystem controllerSystem = entity.GetComponent<BaseControllerSystem>();
 
                 if (controllerSystem.CreateController(out InvisibilityController controller))
-                    controller.SetValuesToStart(chalkEffectTime: 0f, beginsIn: 1f, endsIn: effectTime);
+                    controller.SetValuesToStart(chalkEffectTime: 0f, beginsIn: 0f, endsIn: effectTime);
 
                 SetCooldown(cooldown);
             }

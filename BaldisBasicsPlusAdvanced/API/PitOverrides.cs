@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+﻿using System;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 
 namespace BaldisBasicsPlusAdvanced.API
 {
@@ -16,8 +17,6 @@ namespace BaldisBasicsPlusAdvanced.API
         private static bool accelerationPlateDisabled;
 
         private static int hammerPickupDisables;
-
-        private static int refreshPickupDisables;
 
         /// <summary>
         /// If you turn it off, you won't be able to turn it on again.
@@ -42,10 +41,8 @@ namespace BaldisBasicsPlusAdvanced.API
         /// </summary>
         public static bool ExpelHammerPickupDisabled => hammerPickupDisables > 0;
 
-        /// <summary>
-        /// This can be easily turned on and off any time, but be aware of other mods!
-        /// </summary>
-        public static bool RefreshPickupDisabled => refreshPickupDisables > 0;
+        [Obsolete("No longer exists since it's 0.11 addition!")]
+        public static bool RefreshPickupDisabled => true;
 
         /// <summary>
         /// It must be called only before mod assets will be loaded.
@@ -62,7 +59,6 @@ namespace BaldisBasicsPlusAdvanced.API
             DisableKitchenStove();
             DisableEnglishClass();
             SetExpelHammerPickup(active: false);
-            SetRefreshPickup(active: false);
         }
 
         /// <summary>
@@ -114,15 +110,9 @@ namespace BaldisBasicsPlusAdvanced.API
             if (hammerPickupDisables < 0) hammerPickupDisables = 0;
         }
 
-        public static void SetRefreshPickup(bool active)
-        {
-            if (active)
-                refreshPickupDisables--;
-            else
-                refreshPickupDisables++;
 
-            if (refreshPickupDisables < 0) refreshPickupDisables = 0;
-        }
+        [Obsolete("No longer exists since it's 0.11 addition!")]
+        public static void SetRefreshPickup(bool active) { }
 
 
     }

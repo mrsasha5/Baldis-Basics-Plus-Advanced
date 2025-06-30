@@ -19,7 +19,6 @@ using HarmonyLib;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
 using BaldisBasicsPlusAdvanced.Game.Rooms.Functions;
-using UnityEngine.UI;
 using MTM101BaldAPI.UI;
 using TMPro;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
@@ -34,7 +33,6 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Game.Objects.Food;
 using BaldisBasicsPlusAdvanced.Game.InventoryItems.Food;
-using BaldisBasicsPlusAdvanced.Game.InventoryItems.Drinks;
 using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using PlusLevelFormat;
 using PlusLevelLoader;
@@ -50,7 +48,6 @@ using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
-using Newtonsoft.Json;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 #endregion
 
@@ -245,8 +242,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 largeSpriteFileName: "adv_mysterious_teleporter_large.png",
                 generatorCost: 60,
                 price: 500,
-                tags: new string[] { 
-                    "BBE_RNGLibraryItem",
+                tags: new string[]
+                {
                     TagsStorage.contraband
                 },
                 flags: ItemFlags.CreatesEntity
@@ -258,7 +255,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetWeight(floor: 2, 50)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
 
-            PrefabsCreator.CreateItem<InvisibilityPotionItem>(
+            /*PrefabsCreator.CreateItem<InvisibilityPotionItem>(
                 nameKey: "Adv_Item_InvisibilityPotion",
                 descKey: "Adv_Item_InvisibilityPotion_Desc",
                 enumName: "InvisibilityPotion",
@@ -274,7 +271,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetSpawnsOnFieldTrips(true)
                 .SetSpawnsOnParty(true)
                 .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);*/
 
             PrefabsCreator.CreateItem<IceBootsItem>(
                 nameKey: "Adv_Item_IceBoots",

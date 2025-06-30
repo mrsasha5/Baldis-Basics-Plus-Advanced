@@ -1,8 +1,7 @@
-﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
-using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
+﻿using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
+using MTM101BaldAPI.Registers;
 using System.Collections;
 using UnityEngine;
 
@@ -39,8 +38,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                     if (owner == ControllerOwner.Player)
                     {
                         SetInvisibility(pm, true);
+                        //AssetsStorage.sprites["adv_gauge_invisibility"]
                         gauge = Singleton<CoreGameManager>.Instance.GetHud(0).gaugeManager
-                            .ActivateNewGauge(AssetsStorage.sprites["adv_gauge_invisibility"], effectTime);
+                            .ActivateNewGauge(ItemMetaStorage.Instance.FindByEnum(Items.InvisibilityElixir).value.itemSpriteSmall, 
+                            effectTime);
                     }
                     else if (owner == ControllerOwner.NPC)
                         SetInvisibility(npc, true);
@@ -73,13 +74,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             pm.SetHidden(hide);
             AudioManager audMan = ec.GetAudMan();
 
-            if (hide)
+            /*if (hide)
             {
                 audMan.PlaySingle(AssetsStorage.sounds["adv_disappearing"]);
             } else if (controllerSystem.GetControllersCount<InvisibilityController>() <= 1)
             {
                 audMan.PlaySingle(AssetsStorage.sounds["adv_appearing"]);
-            }
+            }*/
         }
 
         private void SetInvisibility(NPC npc, bool hide)
@@ -87,7 +88,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             npc.GetComponent<Entity>().SetVisible(!hide);
             PropagatedAudioManager audMan = npc.GetComponent<PropagatedAudioManager>();
 
-            if (audMan != null)
+            /*if (audMan != null)
             {
                 if (hide)
                 {
@@ -97,8 +98,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 {
                     audMan.PlaySingle(AssetsStorage.sounds["adv_appearing"]);
                 }
-
-            }
+            }*/
         }
 
     }

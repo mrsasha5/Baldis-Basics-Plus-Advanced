@@ -90,17 +90,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private void Disappear(NPC npc, bool hide)
         {
             npc.GetComponent<Entity>().SetVisible(!hide);
-            PropagatedAudioManager audMan = npc.GetComponent<PropagatedAudioManager>();
 
-            if (audMan != null)
+            //I leave this sound as unique part of the event
+            AudioManager audMan = ObjectsCreator.CreatePropagatedAudMan(Vector3.zero, destroyWhenAudioEnds: true);
+            audMan.transform.SetParent(npc.transform, false);
+            
+            if (hide)
             {
-                if (hide) {
-                    audMan.PlaySingle(AssetsStorage.sounds["adv_disappearing"]);
-                } else
-                {
-                    audMan.PlaySingle(AssetsStorage.sounds["adv_appearing"]);
-                }
-                    
+                audMan.PlaySingle(AssetsStorage.sounds["adv_disappearing"]);
+            } else
+            {
+                audMan.PlaySingle(AssetsStorage.sounds["adv_appearing"]);
             }
         }
 

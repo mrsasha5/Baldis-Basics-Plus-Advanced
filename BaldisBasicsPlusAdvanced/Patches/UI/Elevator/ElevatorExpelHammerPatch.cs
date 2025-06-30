@@ -470,7 +470,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             {
                 NPC npc = npcs[i];
                 NPCMetadata meta = npc.GetMeta();
-                LevelObject ld = Singleton<BaseGameManager>.Instance.levelObject;
+                LevelObject ld = CoreGameManager.Instance.sceneObject.levelObject;
 
                 if (meta.tags.Contains(TagsStorage.expelHammerImmunity) || meta.tags.Contains("faculty") ||
                     meta.tags.Contains("teacher")) continue;

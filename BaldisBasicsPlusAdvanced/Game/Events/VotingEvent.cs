@@ -456,8 +456,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             ReflectionHelper.UseRequiredMethod(tvBase, "ResetScreen");
 
-            //AudioManager audMan = ec.GetAudMan();
-
             if (texts[0] == null)
             {
                 texts[0] = UIHelpers.CreateText<TextMeshProUGUI>(BaldiFonts.ComicSans12, "Adv_Voting_Result".Localize(), tvBase.transform,
@@ -505,8 +503,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             ReflectionHelper.UseRequiredMethod(tvBase, "ResetScreen");
 
-            AudioManager audMan = ec.GetAudMan();
-            audMan.PlaySingle(AssetsStorage.sounds["adv_bal_super_wow"]);
+            //AudioManager audMan = ec.GetAudMan();
+            //audMan.PlaySingle(AssetsStorage.sounds["adv_bal_super_wow"]);
 
             float time = 7f;
 

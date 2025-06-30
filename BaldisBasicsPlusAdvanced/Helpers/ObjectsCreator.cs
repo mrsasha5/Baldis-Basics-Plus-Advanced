@@ -159,9 +159,9 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static AudioManager CreateAudMan(Vector3 pos)
         {
-            GameObject gm = new GameObject("AudioManager");
-            gm.transform.position = pos;
-            return CreateAudMan(gm);
+            GameObject audMan = new GameObject("AudioManager");
+            audMan.transform.position = pos;
+            return CreateAudMan(audMan);
         }
 
         public static AudioManager CreateAudMan(GameObject obj)
