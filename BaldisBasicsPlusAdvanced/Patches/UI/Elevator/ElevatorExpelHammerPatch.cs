@@ -327,14 +327,14 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 expelButton.OnHighlight.AddListener(
                     delegate ()
                     {
-                        ElevatorTipsPatch.SetOverride(true, "Adv_Elv_ExpelTip", true);
+                        ElevatorTipsPatch.SetOverride(true, "Adv_Elv_ExpelTip", false);
                     }
                 );
 
                 expelButton.OffHighlight.AddListener(
                     delegate ()
                     {
-                        ElevatorTipsPatch.SetOverride(false, "", true);
+                        ElevatorTipsPatch.SetOverride(false, "", false);
                     }
                 );
             }

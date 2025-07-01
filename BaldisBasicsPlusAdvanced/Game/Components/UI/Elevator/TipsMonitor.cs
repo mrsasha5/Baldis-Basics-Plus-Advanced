@@ -39,6 +39,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
             audMan = ObjectsCreator.CreateAudMan(gameObject);
             audMan.ignoreListenerPause = true;
             audMan.useUnscaledPitch = true;
+            ReflectionHelper.SetValue<bool>(audMan, "disableSubtitles", true);
 
             Image image =
                 UIHelpers.CreateImage(AssetsStorage.spriteSheets["adv_tips_screen"][0], transform, Vector3.zero, false);
@@ -95,7 +96,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
             activated = false;
             SetStaticAnimation();
-
         }
 
         private void OnAnimationStart(string name)
@@ -103,6 +103,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
             switch (name)
             {
                 case "static":
+                    
                     tmp.enabled = false;
 
                     audMan.QueueAudio(AssetsStorage.sounds["static"]);
@@ -196,7 +197,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
         public void Override(string text)
         {
-            SetStaticAnimation();
+            if (activated) SetStaticAnimation();
             tmp.text = text;
         }
 

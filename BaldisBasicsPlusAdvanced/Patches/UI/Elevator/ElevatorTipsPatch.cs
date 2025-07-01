@@ -41,6 +41,13 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             return LocalizationManager.Instance.GetLocalizedText(tipKeys[tipNum]);
         }
 
+        [HarmonyPatch("ButtonPressed")]
+        [HarmonyPostfix]
+        private static void OnPressed(ref bool ___readyToStart)
+        {
+            if (___readyToStart) monitor.Deactivate();
+        }
+
         [HarmonyPatch("Start")]
         [HarmonyPrefix]
         private static void OnStart(ElevatorScreen __instance, ref Canvas ___canvas)
@@ -63,7 +70,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             TipsMonitor tipsScreen = new GameObject("Tips Screen", typeof(RectTransform))
                     .AddComponent<TipsMonitor>();
             tipsScreen.transform.SetParent(elvScreen.Canvas.transform, false);
-            tipsScreen.transform.localPosition = new Vector3(0f, 148f, 0f);
+            tipsScreen.transform.localPosition = new Vector3(0f, 144f, 0f);
             tipsScreen.Initialize(text);
             tipsScreen.transform.SetSiblingIndex(elvScreen.GetComponentInChildren<BigScreen>().transform.GetSiblingIndex());
             return tipsScreen;
@@ -74,15 +81,16 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             SetOverride(monitor, state, key, overrideWorksEvenTipsDisabled);
         }
 
+#warning TODO: overrideWorksEvenTipsDisabled checking
         public static void SetOverride(TipsMonitor monitor, bool state, string key, bool overrideWorksEvenTipsDisabled = false)
         {
             if (state)
             {
                 if (monitor != null && (LoadTip || overrideWorksEvenTipsDisabled))
                 {
-                    if (!LoadTip) monitor.Activate();
                     string text = LocalizationManager.Instance.GetLocalizedText(key);
                     monitor.Override(text);
+                    if (!LoadTip) monitor.Activate();
                 }
             }
             else
