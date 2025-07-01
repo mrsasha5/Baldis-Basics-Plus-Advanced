@@ -5,6 +5,7 @@ using HarmonyLib;
 using MTM101BaldAPI;
 using System;
 using System.Linq;
+using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Managers
 {
@@ -13,7 +14,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         private static void RegisterLevelData(string name, int floor, CustomLevelObject levelObject)
         {
-
+            
             foreach (string itemName in ObjectsStorage.ItemObjects.Keys)
             {
                 ItemSpawningData itemSpawnData = (ItemSpawningData)ObjectsStorage.SpawningData["item_" + itemName];
@@ -244,6 +245,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     });
                 }
             }
+
+            if (name == "END") return;
 
             if (mainLevel.levelObject != null)
             {

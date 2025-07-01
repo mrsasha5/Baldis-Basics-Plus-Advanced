@@ -18,7 +18,9 @@ using MTM101BaldAPI.SaveSystem;
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
+using System.Reflection;
 using UnityEngine;
 using static BepInEx.BepInDependency;
 
@@ -33,7 +35,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "Baldi's Basics Plus Advanced Edition";
 
-        public const string version = "0.2.5";
+        public const string version = "0.2.5.1";
 
         internal static string tempPath;
 
@@ -110,7 +112,6 @@ namespace BaldisBasicsPlusAdvanced
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), false);
             LoadingEvents.RegisterOnAssetsLoaded(Info, OnAssetsLoadedPost(), true);
 
-            //damn, I even can't change text size without patches
             /*MTM101BaldiDevAPI.AddWarningScreen(
                 "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
                 "Remember about main conditions for the beta testers. " +
@@ -132,9 +133,9 @@ namespace BaldisBasicsPlusAdvanced
 
         private static IEnumerator ModLoader()
         {
-            IntegrationManager.Prepare();
+            IntegrationManager.Prepare();            
 
-            harmony.PatchAllConditionals(); //I can't check installed some mods, because priority is different and this is solution of problem
+            harmony.PatchAllConditionals();
 
             IEnumerator assetsLoading = OnAssetsLoadedPre();
             bool move = true;
@@ -145,7 +146,9 @@ namespace BaldisBasicsPlusAdvanced
                     move = assetsLoading.MoveNext();
                 } catch (Exception e)
                 {
+                    Logging.LogWarning($"Exception occured on state: {assetsLoading.Current.ToString()}");
                     ObjectsCreator.CauseCrash(e);
+                    
                     move = false;
                 }
                 yield return assetsLoading.Current;
@@ -209,7 +212,7 @@ namespace BaldisBasicsPlusAdvanced
             yield return "Loading extensions for the Level Loader...";
             LevelLoaderIntegration.Initialize();
             yield return "Initializing events...";
-            GameRegisterManager.InitializeGameEvents();
+            GameRegisterManager.InitializeRandomEvents();
             yield return "Initializing builders...";
             GameRegisterManager.InitializeObjectBuilders();
             yield return "Initializing posters...";

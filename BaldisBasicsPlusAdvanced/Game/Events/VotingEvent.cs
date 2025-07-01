@@ -172,6 +172,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             foreach (string path in Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/Voting/",
                 "*.cbld", SearchOption.AllDirectories))
             {
+
                 WeightedRoomAsset weightedRoom = new WeightedRoomAsset()
                 {
                     selection = RoomHelper.CreateAssetFromPath(

@@ -1,14 +1,11 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Patches;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
 using MTM101BaldAPI.UI;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static Rewired.Platforms.Custom.CustomPlatformUnifiedKeyboardSource.KeyPropertyMap;
-using static UnityEngine.Random;
 
 namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 {

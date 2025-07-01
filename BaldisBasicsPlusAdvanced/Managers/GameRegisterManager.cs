@@ -586,7 +586,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         #region Random Events Initialization
 
-        public static void InitializeGameEvents()
+        public static void InitializeRandomEvents()
         {
             PrefabsCreator.CreateEvent<DisappearingCharactersEvent>(
                 name: "Disappearing Characters",
@@ -1251,15 +1251,14 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeRoomAssets()
         {
-            string[] filesPath = Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/", "*.*", SearchOption.AllDirectories);
+
+            string[] filesPath = Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/", "*.cbld", SearchOption.AllDirectories);
 
             foreach (string path in filesPath)
             {
                 string extensionName = Path.GetExtension(path);
 
                 string folderPath = path.Replace(Path.GetFileName(path), "");
-
-                if (extensionName != ".cbld") continue;
 
                 if (!File.Exists(folderPath + Path.GetFileNameWithoutExtension(path) + ".json")) 
                         continue;
