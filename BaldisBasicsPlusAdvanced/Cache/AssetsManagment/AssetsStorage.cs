@@ -1,11 +1,13 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.LevelEditor;
+using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
+using MTM101BaldAPI.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -71,6 +73,8 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
         public static readonly AssetDictionary<SoundObject> sounds = new AssetDictionary<SoundObject>();
 
         public static readonly AssetDictionary<Sprite> sprites = new AssetDictionary<Sprite>();
+
+        public static readonly AssetDictionary<Sprite[]> spriteSheets = new AssetDictionary<Sprite[]>();
 
         public static readonly AssetDictionary<Texture2D> textures = new AssetDictionary<Texture2D>();
 
@@ -205,6 +209,11 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                 sounds.Add(
                     "vent_travel",
                     ObjectCreators.CreateSoundObject(AssetsHelper.LoadAsset<AudioClip>("Vent_Travel"), "Adv_Sub_Vent_Air",
+                        SoundType.Effect, Color.white)
+                );
+                sounds.Add(
+                    "static",
+                    ObjectCreators.CreateSoundObject(AssetsHelper.LoadAsset<AudioClip>("Static"), "",
                         SoundType.Effect, Color.white)
                 );
 
@@ -368,6 +377,17 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                 {
                     LoadModTexture("adv_pulley_base" + (i + 1), $"Objects/Pulley/adv_pulley_base{i + 1}.png");
                 }
+
+                LoadModSprite("adv_tip_screen_forward", "UI/SwingingTipsScreen/adv_tip_screen_forward.png");
+
+                spriteSheets.Add("adv_tip_screen_forward_static_sheet", 
+                    AssetLoader.SpritesFromSpritesheet(2, 1, 1f, Vector2.one * 0.5f,
+                    AssetsHelper.TextureFromFile("Textures/UI/SwingingTipsScreen/adv_tip_screen_forward_static_sheet.png")));
+
+                spriteSheets.Add("adv_tips_screen", AssetLoader.SpritesFromSpritesheet(3, 2, 1f, Vector2.one * 0.5f,
+                    AssetsHelper.TextureFromFile("Textures/UI/SwingingTipsScreen/adv_swinging_tip_screen_sheet.png")));
+                spriteSheets["adv_tips_screen"] = 
+                    spriteSheets["adv_tips_screen"].Take(spriteSheets["adv_tips_screen"].Length - 1).ToArray();
 
                 LoadModSprite("adv_pulley", "Objects/Pulley/adv_pulley_handle.png", 25f);
 
@@ -659,6 +679,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
                 //Elevator screen overrides
                 ElevatorScreen elvScreen = AssetsHelper.LoadAsset<ElevatorScreen>("ElevatorScreen");
                 elvScreen.GetComponent<AudioManager>().positional = false;
+                //Elevator ends
 
                 LevelAsset pitStop = AssetsHelper.LoadAsset<LevelAsset>("Pitstop");
                 RoomData hall = pitStop.rooms.Find(x => x.category == RoomCategory.Null);

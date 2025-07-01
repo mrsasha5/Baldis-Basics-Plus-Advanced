@@ -1,10 +1,9 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
-using MTM101BaldAPI.UI;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
@@ -14,9 +13,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
     {
         private static ElevatorScreen elvScreen;
 
-        private static Canvas canvas;
-
-        private static TextMeshProUGUI tipText;
+        private static TipsMonitor monitor;
 
         private static string originalText;
 
@@ -27,6 +24,12 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             if (!LoadTip) return "";
             return LocalizationManager.Instance.GetLocalizedText("Adv_Elv_Tip_Base") + "\n" + GetRandomTip();
+        }
+
+        public static string GetRawTip()
+        {
+            if (!LoadTip) return "";
+            return GetRandomTip();
         }
 
         public static string GetRandomTip()
@@ -43,46 +46,51 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         private static void OnStart(ElevatorScreen __instance, ref Canvas ___canvas)
         {
             elvScreen = __instance;
-            canvas = ___canvas;
 
             LocalizationManager localization = Singleton<LocalizationManager>.Instance;
 
-            originalText = GetTipText();
+            originalText = GetRawTip();
 
-            CreateTipText(originalText);
+            monitor = CreateTipText(originalText);
+            monitor.gameObject.SetActive(false);
+
+            if (LoadTip)
+                __instance.OnLoadReady += monitor.Activate;
         }
 
-        private static void CreateTipText(string text)
+        private static TipsMonitor CreateTipText(string text)
         {
-            tipText = UIHelpers.CreateText<TextMeshProUGUI>(BaldiFonts.ComicSans12, text, canvas.transform, new Vector3(0, 150, 0), false);
-            tipText.fontSize = 12;
-            tipText.alignment = TextAlignmentOptions.Top;
-
-            tipText.GetComponent<RectTransform>().sizeDelta = new Vector2(325, 50);
-
-            tipText.transform.SetSiblingIndex(elvScreen.GetComponentInChildren<BigScreen>().transform.GetSiblingIndex());
+            TipsMonitor tipsScreen = new GameObject("Tips Screen", typeof(RectTransform))
+                    .AddComponent<TipsMonitor>();
+            tipsScreen.transform.SetParent(elvScreen.Canvas.transform, false);
+            tipsScreen.transform.localPosition = new Vector3(0f, 148f, 0f);
+            tipsScreen.Initialize(text);
+            tipsScreen.transform.SetSiblingIndex(elvScreen.GetComponentInChildren<BigScreen>().transform.GetSiblingIndex());
+            return tipsScreen;
         }
 
-        public static void SetOverride(bool state, string key, bool asTip, bool overrideWorksEvenTipsDisabled = false)
+        public static void SetOverride(bool state, string key, bool overrideWorksEvenTipsDisabled = false)
         {
-            SetOverride(tipText, state, key, asTip, overrideWorksEvenTipsDisabled);
+            SetOverride(monitor, state, key, overrideWorksEvenTipsDisabled);
         }
 
-        public static void SetOverride(TMP_Text tipText, bool state, string key, bool asTip, bool overrideWorksEvenTipsDisabled = false)
+        public static void SetOverride(TipsMonitor monitor, bool state, string key, bool overrideWorksEvenTipsDisabled = false)
         {
             if (state)
             {
-                if (tipText != null && (OptionsDataManager.ExtraSettings.GetValue<bool>("tips") || overrideWorksEvenTipsDisabled))
+                if (monitor != null && (LoadTip || overrideWorksEvenTipsDisabled))
                 {
-                    string text = Singleton<LocalizationManager>.Instance.GetLocalizedText(key);
-                    tipText.text = asTip ? Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Elv_Tip_Base") + "\n" + text : text;
+                    if (!LoadTip) monitor.Activate();
+                    string text = LocalizationManager.Instance.GetLocalizedText(key);
+                    monitor.Override(text);
                 }
             }
             else
             {
-                if (tipText != null)
+                if (monitor != null)
                 {
-                    tipText.text = originalText;
+                    if (!LoadTip) monitor.Deactivate();
+                    else monitor.ResetOverride();
                 }
             }
         }
