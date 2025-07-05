@@ -44,6 +44,11 @@ namespace BaldisBasicsPlusAdvanced.Compats
 
         }
 
+        protected virtual void InitializeOnAssetsLoadPost()
+        {
+
+        }
+
         public class VersionInfo
         {
             private string minVersion;

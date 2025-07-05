@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
@@ -177,10 +178,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             if (!broken && canAcceptNPCs && !moving && ignoresNpcsTime <= 0f && other.CompareTag("NPC"))
             {
                 NPC npc = other.GetComponent<NPC>();
-                if (npc.GetMeta().tags.Contains("student") && SetEntity(npc.GetComponent<Entity>(), kickEntity: false))
+                if (npc.GetMeta().tags.Contains(TagsStorage.student) && SetEntity(npc.GetComponent<Entity>(), kickEntity: false))
                 {
                     SetMoving();
-                    ignoresNpcsTime = Random.Range(5f, 15f);
+                    ignoresNpcsTime = Random.Range(20f, 60f);
                 }
             }
         }

@@ -11,57 +11,30 @@ using System.Linq;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using static BaldisBasicsPlusAdvanced.Game.Components.UI.NotificationManager;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
-using BaldisBasicsPlusAdvanced.SaveSystem;
 using System.IO;
-using MTM101BaldAPI.SaveSystem;
-using MTM101BaldAPI.AssetTools;
-using UnityCipher;
 using BaldisBasicsPlusAdvanced.SaveSystem.Managers;
+using BaldisBasicsPlusAdvanced.Patches;
+using System.Diagnostics;
 
 namespace BaldisBasicsPlusAdvanced.AutoUpdate
 {
-    public class AutoUpdateManager// : Singleton<AutoUpdateManager>
+    public class AutoUpdateManager : Singleton<AutoUpdateManager>
     {
 
         internal static Thread thread;
 
-        /*private static bool updateFound;
+        private bool archiveIsExtracted;
 
-        private float cooldown;
+        private bool updateFound;
 
-        private float time;
-
-        internal void Initialize(float cooldown)
+        public void Check()
         {
-            this.cooldown = cooldown;
-            time = 1f;
+            if (NotificationManager.Instance.GenericNotificationsHidden) return;
+
+            StartCoroutine(Checker());
         }
 
-        private void Update()
-        {
-            if (time > 0f)
-            {
-                time -= Time.unscaledDeltaTime;
-
-                if (time <= 0f)
-                {
-                    time = cooldown;
-
-                    Check();
-                }
-            }
-        }*/
-
-        public static void Check()
-        {
-            //Instance?.gameObject.SetActive(false);
-
-            if (Singleton<NotificationManager>.Instance.GenericNotificationsHidden) return;
-
-            AdvancedCore.Instance.StartCoroutine(Checker());
-        }
-
-        private static IEnumerator Checker()
+        private IEnumerator Checker()
         {
             string url = "https://api.github.com/repos/mrsasha5/Baldis-Basics-Plus-Advanced/releases?page=";
             int page = 1;
@@ -141,35 +114,6 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                     data.fileExtension = Path.GetExtension(element["assets"][0]["name"].Value<string>());
 
                     yield return null;
-
-                    //test
-                    /*Debug.Log("--------------------------");
-                    Debug.Log($"Actual release date: {data.releaseDate.ToString()}");
-                    Debug.Log($"Version: {data.modVersion}");
-                    Debug.Log("Game versions: ");
-                    foreach (string version in data.gameVersions)
-                    {
-                        Debug.Log(version);
-                    }
-                    Debug.Log("Dependencies:");
-                    foreach (BuildDataStandard.Dependency dependency in data.dependencies)
-                    {
-                        Debug.Log("-----");
-                        Debug.Log($"GUID: {dependency.GUID}");
-                        Debug.Log($"Is forced: {dependency.forced}");
-                        Debug.Log($"Versions:");
-                        foreach (string version in dependency.versions)
-                        {
-                            Debug.Log(version);
-                        }
-                        Debug.Log("-----");
-                    }
-                    Debug.Log($"Changelogs:");
-                    foreach (string changelogLink in data.changelogLinks)
-                    {
-                        Debug.Log(changelogLink);
-                    }
-                    Debug.Log($"Source code: {data.sourceCodeAvailable}");*/
                 }
             }
 
@@ -187,6 +131,7 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
 
             void SetExceptionMessage(string text, float time = 10f)
             {
+                text = text.Localize();
                 AdvancedCore.Logging.LogWarning(text);
                 notif.tmpText.text = text;
                 notif.time = time;
@@ -203,21 +148,24 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                 {
                     case CompatibilityAnalyzer.Result.Success:
                         notif.tmpText.text =
-                            "Found compatible version of the BB+ Advanced Edition! Press " +
-                            $"{KeyBindingsManager.Keys["update_mod"].Button.ToString()} " +
-                            $"to download a new version!\nAbility ends in: {(int)notif.time}s";
+                            string.Format(
+                                "Adv_Notif_UpdateIsFound".Localize(), 
+                                KeyBindingsManager.Keys["update_mod"].Button.ToString(), 
+                                (int)notif.time);
                         break;
                     case CompatibilityAnalyzer.Result.ForcedDependenciesFits:
                         notif.tmpText.text =
-                            "Found a new version of the BB+ Advanced Edition! Some non-forced dependencies may need updating. " +
-                            $"Continue? ({KeyBindingsManager.Keys["update_mod"].Button.ToString()})\n" +
-                            $"Ability ends in: {(int)notif.time}s";
+                            string.Format(
+                                "Adv_Notif_UpdateWithFittingForcedDeps".Localize(),
+                                KeyBindingsManager.Keys["update_mod"].Button.ToString(),
+                                (int)notif.time);
                         break;
                     case CompatibilityAnalyzer.Result.NewForcedDependenciesAdded:
                         notif.tmpText.text =
-                            "Found a new version of the BB+ Advanced Edition! But you should install new dependencies yourself. " +
-                            $"Continue? ({KeyBindingsManager.Keys["update_mod"].Button.ToString()})\n" +
-                            $"Ability ends in: {(int)notif.time}s";
+                            string.Format(
+                                "Adv_Notif_UpdateWithNewDeps".Localize(),
+                                KeyBindingsManager.Keys["update_mod"].Button.ToString(),
+                                (int)notif.time);
                         break;
                 }
                 
@@ -245,7 +193,8 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                 {
                     while (!downloadRequest.downloadHandler.isDone)
                     {
-                        notif.tmpText.text = $"Downloading {(int)(downloadRequest.downloadProgress * 100f)}%";
+                        notif.tmpText.text = string.Format("Adv_Notif_DownloadingProgress".Localize(),
+                            downloadRequest.downloadProgress * 100f);
                         yield return null;
                     }
 
@@ -258,8 +207,10 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                     while (notif.time > 0f)
                     {
                         notif.tmpText.text =
-                            $"Something went wrong! Retry? ({KeyBindingsManager.Keys["update_mod"].Button.ToString()})\n" +
-                            $"Ability ends in: {(int)notif.time}";
+                            string.Format(
+                                "Adv_Notif_RetryQuestion".Localize(),
+                                KeyBindingsManager.Keys["update_mod"].Button.ToString(),
+                                (int)notif.time);
 
                         if (Input.GetKeyDown(KeyBindingsManager.Keys["update_mod"].Button))
                         {
@@ -280,23 +231,25 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
 
                 try
                 {
+                    if (Directory.Exists("Adv_TEMP")) Directory.Delete("Adv_TEMP", recursive: true);
                     Directory.CreateDirectory("Adv_TEMP");
+
                     using (FileStream fs = new FileStream($"Adv_TEMP/build{selectedData.fileExtension}", 
-                        FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                        FileMode.Open, FileAccess.Write))
                     {
                         fs.Write(downloadRequest.downloadHandler.data, 0, downloadRequest.downloadHandler.data.Length);
                     }
                 } 
                 catch (Exception e)
                 {
-                    SetExceptionMessage("Something went wrong during creating file!");
+                    SetExceptionMessage("Adv_Notif_ExtractingError");
                     AdvancedCore.Logging.LogError(e);
                     yield break;
                 }
 
                 if (selectedData.fileExtension != ".zip")
                 {
-                    SetExceptionMessage($"Extension {selectedData.fileExtension} is unsupported!");
+                    SetExceptionMessage(string.Format("Adv_Notif_ExtensionError", selectedData.fileExtension));
                     yield break;
                 }
 
@@ -310,53 +263,37 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                     yield return null;
                 }
 
-                List<PlatformID> supportedPlatforms = new List<PlatformID>() 
+                List<PlatformID> windowsIds = new List<PlatformID>() 
                 { PlatformID.Win32S, PlatformID.Win32Windows, PlatformID.Win32NT, PlatformID.WinCE};
 
-                if (!supportedPlatforms.Contains(Environment.OSVersion.Platform))
+                if (!windowsIds.Contains(Environment.OSVersion.Platform))
                 {
-                    AdvancedCore.preparedToInstalling = false;
-                    SetExceptionMessage(
-                        "Auto-installation is not supported for your OS! Install it yourself (all mod files stored in Adv_TEMP).");
+                    SetExceptionMessage("Adv_Notif_AutoInstallerOsSupportError");
                     yield break;
                 }
 
-                try
+                if (archiveIsExtracted)
                 {
-                    foreach (string filePath in Directory.GetFiles("Adv_TEMP/AutoUpdater"))
+                    try
                     {
-                        File.Move(filePath, AdvancedCore.tempPath + Path.GetFileName(filePath));
+                        File.Move("Adv_TEMP/AutoUpdater/Windows/Installer.bat", "Adv_Installer.bat");
+                    } catch
+                    {
+                        SetExceptionMessage("Adv_Notif_MovingFilesError");
+                        yield break;
                     }
-                }
-                catch (Exception e)
-                {
-                    SetExceptionMessage("Something went wrong during moving files!");
-                    AdvancedCore.Logging.LogError(e);
-                }
+                    ProcessStartInfo processInfo = new ProcessStartInfo("cmd.exe",
+                        $"/c Adv_Installer.bat");
+                    processInfo.CreateNoWindow = false;
+                    processInfo.WindowStyle = ProcessWindowStyle.Minimized;
 
-                try
-                {
-                    File.WriteAllText(AdvancedCore.tempPath + "AutoUpdater_MainPath.txt",
-                        Directory.GetCurrentDirectory() + "/");
-                }
-                catch (Exception e)
-                {
-                    SetExceptionMessage("Something went wrong during moving files!");
-                    AdvancedCore.Logging.LogError(e);
-                }
-                
+                    Process.Start(processInfo);
 
-                if (AdvancedCore.preparedToInstalling)
-                {
                     notif.sound = AssetsStorage.sounds["adv_bal_super_wow"];
                     notif.time = 10f;
-                    notif.tmpText.text = "Close game to get auto-installation! If something go wrong, you can do it yourself (all mod files stored in Adv_TEMP).";
+                    notif.tmpText.text = "Adv_Notif_InstallerIsReady";
                 }
-                else
-                {
-                    AdvancedCore.preparedToInstalling = false;
-                    SetExceptionMessage("Something went wrong during extracting! Continue installing by yourself.");
-                }
+                else SetExceptionMessage("Adv_Notif_ExtractingError");
 
             }
             
@@ -366,14 +303,8 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
         {
             try
             {
-                /*using (FileStream encodedFs = new FileStream("Adv_TEMP/build.zip", FileMode.Open, FileAccess.ReadWrite))
-                {
-                    byte[] decodedBytes = RijndaelEncryption.Decrypt(encodedFs.ToByteArray(), "");
-                    encodedFs.Write(decodedBytes, 0, decodedBytes.Length);
-                }*/
-
                 ZipFile.ExtractToDirectory("Adv_TEMP/build.zip", "Adv_TEMP");
-                AdvancedCore.preparedToInstalling = true;
+                Instance.archiveIsExtracted = true;
             }
             catch (Exception e)
             {

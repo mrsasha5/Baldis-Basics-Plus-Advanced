@@ -49,6 +49,7 @@ using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
+using BaldisBasicsPlusAdvanced.AutoUpdate;
 #endregion
 
 namespace BaldisBasicsPlusAdvanced.Managers
@@ -121,13 +122,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
             notifMan.gameObject.SetActive(false);
             GameObject.DontDestroyOnLoad(notifMan);
 
-            /*if (AdvancedCore.updateChecksEnabled && AdvancedCore.updateCheckIntervalTime > 0f)
+            if (AdvancedCore.updateChecksEnabled)
             {
                 AutoUpdateManager updatesMan = new GameObject("AutoUpdatesManager").AddComponent<AutoUpdateManager>();
                 GameObject.DontDestroyOnLoad(updatesMan);
-                updatesMan.gameObject.SetActive(false);
-                updatesMan.Initialize(AdvancedCore.updateCheckIntervalTime);
-            }*/
+            }
         }
 
         #endregion
@@ -183,7 +182,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 "Adv_NPC_CrissTheCrystal", "Adv_NPC_CrissTheCrystal_Desc")
                 .AddLooker()
                 .AddMetaFlag(NPCFlags.StandardNoCollide)
-                .SetMetaTags(new string[] { "student" })
+                .SetMetaTags(new string[] { TagsStorage.student })
             )
                 .SetBannedFloors(1)
                 .SetWeight(2, 50)

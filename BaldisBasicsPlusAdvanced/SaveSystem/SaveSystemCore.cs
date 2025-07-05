@@ -25,8 +25,7 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem
             PlayerDataManager.Load();
             KeyBindingsManager.Load();
 
-            AutoUpdateManager.Check();
-            //Singleton<AutoUpdateManager>.Instance.gameObject.SetActive(true);
+            AutoUpdateManager.Instance?.Check();
         }
 
         public static void Save()

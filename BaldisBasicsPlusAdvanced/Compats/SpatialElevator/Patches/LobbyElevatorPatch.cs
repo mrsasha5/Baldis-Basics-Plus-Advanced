@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using BaldisBasicsPlusAdvanced.Attributes;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
@@ -24,7 +23,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Patches
         private static void OnInitialize(LobbyElevator __instance)
         {
 
-            if (ElevatorTipsPatch.LoadTip)
+            /*if (ElevatorTipsPatch.LoadTip)
             {
                 Transform mainParent = new GameObject("Screen").transform;
                 mainParent.SetParent(__instance.transform, false);
@@ -39,14 +38,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Patches
                 GameObject.Destroy(collider);
 
                 tmpText = ObjectsCreator.CreateTextMesh(
-                    BaldiFonts.ComicSans12, new Vector2(35f, 100f), mainParent, new Vector3(0f, 0f, 0.3f));
+                    BaldiFonts.ComicSans12, new Vector2(35f, 100f), mainParent, new Vector3(0f, 12f, 4.05f));
                 tmpText.transform.localScale = Vector3.one * 0.5f;
                 tmpText.color = Color.green;
 
-                screenObj.transform.localScale = new Vector3(5f, 6f, 1f);
+                screenObj.transform.localScale = Vector3.one * 0.5f;
 
                 __instance.StartCoroutine(TextLoader());
-            }
+            }*/
 
             SpatialChalkboard board = 
                 new GameObject("Spatial Chalkboard").AddComponent<SpatialChalkboard>();
@@ -91,7 +90,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Patches
 
             tmpText.text = "";
 
-            string text = ElevatorTipsPatch.GetTipText();
+            string text = ElevatorTipsPatch.GetRawTip();
 
             int index = 0;
 

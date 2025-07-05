@@ -3,7 +3,12 @@
     public class TagsStorage
     {
 
-        #region API 
+        #region Development API 
+
+        //NPCs
+        public const string teacher = "teacher";
+        public const string faculty = "faculty";
+        public const string student = "student";
 
         //Items
         public const string food = "food";

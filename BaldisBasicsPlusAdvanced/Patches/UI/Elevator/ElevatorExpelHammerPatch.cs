@@ -461,19 +461,19 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             List<NPC> potentialCharacters = new List<NPC>();
 
-            if (Singleton<BaseGameManager>.Instance == null) return potentialCharacters;
-            if (Singleton<BaseGameManager>.Instance.Ec == null) return potentialCharacters;
+            if (BaseGameManager.Instance == null) return potentialCharacters;
+            if (BaseGameManager.Instance.Ec == null) return potentialCharacters;
 
-            List<NPC> npcs = Singleton<BaseGameManager>.Instance.Ec.npcsToSpawn;
+            List<NPC> npcs = BaseGameManager.Instance.Ec.npcsToSpawn;
 
             for (int i = 0; i < npcs.Count; i++)
             {
                 NPC npc = npcs[i];
                 NPCMetadata meta = npc.GetMeta();
-                LevelObject ld = CoreGameManager.Instance.sceneObject.levelObject;
+                LevelGenerationParameters ld = BaseGameManager.Instance.levelObject;
 
-                if (meta.tags.Contains(TagsStorage.expelHammerImmunity) || meta.tags.Contains("faculty") ||
-                    meta.tags.Contains("teacher")) continue;
+                if (meta.tags.Contains(TagsStorage.expelHammerImmunity) || meta.tags.Contains(TagsStorage.faculty) ||
+                    meta.tags.Contains(TagsStorage.teacher)) continue;
 
                 //forced npcs and potential baldis
                 if (!meta.tags.Contains(TagsStorage.expelHammerWeakness) &&

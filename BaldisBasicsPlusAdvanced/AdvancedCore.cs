@@ -49,8 +49,6 @@ namespace BaldisBasicsPlusAdvanced
 
         internal static bool notificationsEnabled;
 
-        internal static bool preparedToInstalling;
-
         private static AdvancedCore instance;
 
         public static AdvancedCore Instance => instance;
@@ -61,21 +59,10 @@ namespace BaldisBasicsPlusAdvanced
 
         private static Harmony harmony;
 
-        private void OnApplicationQuit()
+        /*private void OnApplicationQuit()
         {
             if (AutoUpdateManager.thread != null) AutoUpdateManager.thread.Abort();
-
-            //I think in the future I'll make something like bat files and etc if they will be working like I want
-            if (preparedToInstalling)
-            {
-                Process process = new Process();
-                process.StartInfo = new ProcessStartInfo();
-                process.StartInfo.WorkingDirectory = tempPath;
-                process.StartInfo.FileName = "AutoUpdater.exe";
-                process.StartInfo.Arguments = System.AppDomain.CurrentDomain.Id.ToString();
-                process.Start();
-            }
-        }
+        }*/
 
         private void Awake()
         {
@@ -176,6 +163,8 @@ namespace BaldisBasicsPlusAdvanced
                 ApiManager.onAssetsPostLoading.Invoke();
                 ApiManager.onAssetsPostLoading = null;
             }
+
+            IntegrationManager.InvokeOnAssetsLoadPost();
 
             GC.Collect();
         }

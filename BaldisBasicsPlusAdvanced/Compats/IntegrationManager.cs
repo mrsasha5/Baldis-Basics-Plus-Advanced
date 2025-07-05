@@ -87,8 +87,25 @@ namespace BaldisBasicsPlusAdvanced.Compats
                     ObjectsCreator.CauseCrash($"Baldi's Basics Plus Advanced Edition. Required dependency is missing!" +
                         $"\nGUID of the required mod: {modules[i].Guid}", AssetsStorage.weirdErrorSound);
                 }
+                else
+                {
+                    modules.RemoveAt(i);
+                    i--;
+                }
             }
         }
 
+        internal static void InvokeOnAssetsLoadPost()
+        {
+            for (int i = 0; i < modules.Count; i++)
+            {
+                if (modules[i].IsIntegrable())
+                {
+                    modules[i].GetType().GetMethod("InitializeOnAssetsLoadPost", 
+                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                        .Invoke(modules[i], null);
+                }
+            }
+        }
     }
 }

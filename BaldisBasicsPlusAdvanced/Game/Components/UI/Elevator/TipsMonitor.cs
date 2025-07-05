@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Patches;
 using MTM101BaldAPI.Components;
 using MTM101BaldAPI.UI;
 using TMPro;
@@ -32,6 +34,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
         private IEnumerator staticEnumerator;
 
+        private int index;
+
         public void Initialize(string originalText)
         {
             this.originalText = originalText;
@@ -43,7 +47,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
             Image image =
                 UIHelpers.CreateImage(AssetsStorage.spriteSheets["adv_tips_screen"][0], transform, Vector3.zero, false);
-            image.rectTransform.localScale = new Vector3(1.2f, 1.2f, 1f);
+            image.rectTransform.localScale = new Vector3(1.1f, 1.1f, 1f);
 
             Image imageForward =
                 UIHelpers.CreateImage(AssetsStorage.sprites["adv_tip_screen_forward"], transform, Vector3.zero, false);
@@ -144,6 +148,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                List<string> tips = ApiManager.GetAllTips();
+                
+                if (index > tips.Count - 1) index = 0;
+
+                tmp.text = tips[index].Localize();
+                SetStaticAnimation();
+                index++;
+            }
+
             //MTM101 add delegates like onAnimationEnd and etc
             //DON'T TORTURE ME
             if (playingAnim == null && animator.currentAnimationName != "")

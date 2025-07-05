@@ -70,7 +70,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             TipsMonitor tipsScreen = new GameObject("Tips Screen", typeof(RectTransform))
                     .AddComponent<TipsMonitor>();
             tipsScreen.transform.SetParent(elvScreen.Canvas.transform, false);
-            tipsScreen.transform.localPosition = new Vector3(0f, 144f, 0f);
+            tipsScreen.transform.localPosition = new Vector3(0f, 153f, 0f);
             tipsScreen.Initialize(text);
             tipsScreen.transform.SetSiblingIndex(elvScreen.GetComponentInChildren<BigScreen>().transform.GetSiblingIndex());
             return tipsScreen;

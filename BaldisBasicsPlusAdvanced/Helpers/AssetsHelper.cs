@@ -33,6 +33,16 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             return Chainloader.PluginInfos.ContainsKey(mod);
         }
 
+        public static T LoadAsset<T>() where T : UnityEngine.Object
+        {
+            if (AssetsStorage.Debugging)
+            {
+                AdvancedCore.Logging.LogInfo("Loading asset of type: " + typeof(T).FullName);
+            }
+            return (from x in Resources.FindObjectsOfTypeAll<T>()
+                    select x).First();
+        }
+
         public static T LoadAsset<T>(string name) where T : UnityEngine.Object
         {
             if (AssetsStorage.Debugging)

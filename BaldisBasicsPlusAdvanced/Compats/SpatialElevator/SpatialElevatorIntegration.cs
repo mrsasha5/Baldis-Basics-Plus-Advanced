@@ -1,14 +1,15 @@
 ﻿using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
+using MTM101BaldAPI.UI;
+using The3DElevator.MonoBehaviours.ElevatorCoreComponents;
+using TMPro;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator
 {
     public class SpatialElevatorIntegration : CompatibilityModule
     {
-
-        public static GameObject monitorPre;
 
         public override bool IsIntegrable()
         {
@@ -21,11 +22,34 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator
             versionInfo = new VersionInfo(this);
         }
 
-        protected override void Initialize()
+        protected override void InitializeOnAssetsLoadPost()
         {
-            base.Initialize();
-            monitorPre = AssetLoader.ModelFromFile(AssetsHelper.modPath + "Models/TipScreen.obj");
-            monitorPre.ConvertToPrefab(true); //Is it on purpose it does not convert model instance to the prefab???
+            base.InitializeOnAssetsLoadPost();
+
+            TextMeshPro tmpText = ObjectsCreator.CreateTextMesh(
+                BaldiFonts.ComicSans12, new Vector2(35f, 100f), null, Vector3.zero);
+            tmpText.transform.localScale = Vector3.one * 0.5f;
+            tmpText.color = Color.green;
+
+            LobbyElevator elv = AssetsHelper.LoadAsset<LobbyElevator>();
+
+            Transform mainParent = new GameObject("Screen").transform;
+            mainParent.SetParent(elv.transform, false);
+            mainParent.localPosition = new Vector3(0f, 10f, 18f);
+            mainParent.localRotation = Quaternion.Euler(0f, 180f, 0f);
+
+            GameObject screenObj = GameObject.Instantiate(
+                AssetLoader.ModelFromFile(AssetsHelper.modPath + "Models/TipsScreen/TipThing.obj"));
+            screenObj.name = "Model";
+            screenObj.transform.SetParent(mainParent, false);
+
+            Collider collider = screenObj.GetComponent<Collider>();
+            GameObject.Destroy(collider);
+
+            tmpText.transform.parent = mainParent;
+            tmpText.transform.localPosition = new Vector3(0f, 12f, 4.05f);
+
+            screenObj.transform.localScale = Vector3.one * 0.5f;
         }
 
     }

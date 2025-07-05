@@ -575,7 +575,7 @@ namespace BaldisBasicsPlusAdvanced.API
         {
             List<PluginInfo> exceptedPlugins = new List<PluginInfo>();
 
-            foreach (PluginInfo info in ObjectsStorage.SymbolMachineWords.Keys.ToArray())
+            foreach (PluginInfo info in ObjectsStorage.SymbolMachineWords.Keys)
             {
                 if (!pluginInfos.Contains(info))
                 {
@@ -617,7 +617,7 @@ namespace BaldisBasicsPlusAdvanced.API
         {
             List<string> tips = new List<string>();
 
-            foreach (List<string> partOfTips in ObjectsStorage.TipKeys.Values.ToArray())
+            foreach (List<string> partOfTips in ObjectsStorage.TipKeys.Values)
             {
                 tips.AddRange(partOfTips);
             }
@@ -713,7 +713,7 @@ namespace BaldisBasicsPlusAdvanced.API
         {
             List<PluginInfo> exceptedPlugins = new List<PluginInfo>();
 
-            foreach (PluginInfo info in ObjectsStorage.TipKeys.Keys.ToArray())
+            foreach (PluginInfo info in ObjectsStorage.TipKeys.Keys)
             {
                 if (!pluginInfos.Contains(info))
                 {

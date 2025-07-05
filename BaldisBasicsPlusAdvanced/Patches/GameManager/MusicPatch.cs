@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using BaldisBasicsPlusAdvanced.Compats;
-using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
 using BaldisBasicsPlusAdvanced.Helpers;
 using HarmonyLib;
 
 namespace BaldisBasicsPlusAdvanced.Patches.GameManager
 {
     [HarmonyPatch(typeof(MainGameManager))]
+    [HarmonyPatch(typeof(EndlessGameManager))]
     internal class MusicPatch
     {
 
