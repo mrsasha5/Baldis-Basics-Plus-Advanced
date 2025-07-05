@@ -299,15 +299,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             }
         }
 
-        private static Principal GetPrincipal()
+        private Principal GetPrincipal()
         {
             Principal fallback = null;
-            foreach (NPC npc in BaseGameManager.Instance.Ec.Npcs)
+            foreach (NPC npc in ec.Npcs)
             {
-                if (npc is not Principal pri) continue;
-                fallback = pri;
-                if (pri.Character == Character.Principal)
-                    return pri;
+                if (!(npc is Principal)) continue;
+        
+                if (npc.Character == Character.Principal)
+                    return (Principal)npc;
+        
+                fallback = (Principal)npc;
             }
             return fallback;
         }
