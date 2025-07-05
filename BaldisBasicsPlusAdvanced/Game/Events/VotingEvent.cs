@@ -299,6 +299,21 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             }
         }
 
+        private Principal GetPrincipal()
+        {
+            Principal fallback = null;
+            foreach (NPC npc in ec.Npcs)
+            {
+                if (!(npc is Principal)) continue;
+        
+                if (npc.Character == Character.Principal)
+                    return (Principal)npc;
+        
+                fallback = (Principal)npc;
+            }
+            return fallback;
+        }
+
         public override void Begin()
         {
             base.Begin();
@@ -320,7 +335,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             StartCoroutine(AttentionUpdater());
 
-            Principal principal = FindObjectOfType<Principal>();
+            Principal principal = GetPrincipal();
 
             if (principal != null)
             {
