@@ -277,9 +277,11 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                     try
                     {
                         File.Move("Adv_TEMP/AutoUpdater/Windows/Installer.bat", "Adv_Installer.bat");
-                    } catch
+                    } 
+                    catch (Exception e)
                     {
                         SetExceptionMessage("Adv_Notif_MovingFilesError");
+                        AdvancedCore.Logging.LogError(e);
                         yield break;
                     }
                     ProcessStartInfo processInfo = new ProcessStartInfo("cmd.exe",

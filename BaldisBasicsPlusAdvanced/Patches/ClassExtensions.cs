@@ -240,7 +240,6 @@ namespace BaldisBasicsPlusAdvanced.Patches
             for (int i = 0; i < originalFields.Length; i++)
             {
                 ReflectionHelper.SetValue(target, originalFields[i].Name, ReflectionHelper.GetValue(@object, originalFields[i].Name));
-                //targetFields[i].SetValue(targetFields[i], originalFields[i].GetValue(originalFields[i]));
             }
 
         }

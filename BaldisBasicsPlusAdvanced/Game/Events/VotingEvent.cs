@@ -302,6 +302,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private Principal GetPrincipal()
         {
             Principal fallback = null;
+
             foreach (NPC npc in ec.Npcs)
             {
                 if (!(npc is Principal)) continue;
@@ -311,6 +312,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         
                 fallback = (Principal)npc;
             }
+
             return fallback;
         }
 

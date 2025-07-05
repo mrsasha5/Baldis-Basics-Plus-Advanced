@@ -3,9 +3,6 @@ using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
 using MTM101BaldAPI.UI;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,6 +31,15 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Menu
                 image.transform.rotation = quaternion;
 
                 __instance.gameObject.AddComponent<NotifiedMainMenu>().notifImage = image;
+            }
+
+            if (AdvancedCore.updateChecksEnabled)
+            {
+                Image updateCenterImage = UIHelpers.CreateImage(AssetsStorage.sprites["adv_arrows"], __instance.transform,
+                    Vector3.zero, correctPosition: false);
+                updateCenterImage.ToCenter();
+
+                updateCenterImage.transform.localPosition = new Vector3(0f, 0f, 0f);
             }
         }
 
