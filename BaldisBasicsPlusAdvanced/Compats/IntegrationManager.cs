@@ -104,9 +104,10 @@ namespace BaldisBasicsPlusAdvanced.Compats
                         i--;
                     }
                 }
-                catch
+                catch (Exception e)
                 {
                     InvokeCrash(modules[i]);
+                    AdvancedCore.Logging.LogError(e);
                 }
                 
             }
@@ -122,9 +123,10 @@ namespace BaldisBasicsPlusAdvanced.Compats
                         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                         .Invoke(modules[i], null);
                 }
-                catch
+                catch (Exception e)
                 {
                     InvokeCrash(modules[i]);
+                    AdvancedCore.Logging.LogError(e);
                 }
                 
             }

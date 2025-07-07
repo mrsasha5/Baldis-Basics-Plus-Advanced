@@ -27,6 +27,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 GameCamera gameCamera = Singleton<CoreGameManager>.Instance.GetCamera(pm.playerNumber);
 
                 fan.Initialize(pm.ec, gameCamera.transform.position, gameCamera.transform.rotation, livingTime: 20f, turnOff: true);
+                fan.Clicked(0);
 
                 Destroy(gameObject);
                 return true;

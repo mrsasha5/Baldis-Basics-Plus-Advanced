@@ -51,6 +51,7 @@ using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 using BaldisBasicsPlusAdvanced.AutoUpdate;
 using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
+using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
 #endregion
 
 namespace BaldisBasicsPlusAdvanced.Managers
@@ -840,7 +841,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateOverlay("ElephantOverlay", AssetsStorage.sprites["adv_elephant_overlay"], true);
             PrefabsCreator.CreateOverlay("ShieldOverlay", AssetsStorage.sprites["adv_protected_overlay"], true);
 
-            //initializing Chalkboard Menu
+            //Initializing Chalkboard Menu
             Canvas canvas = ObjectsCreator.CreateCanvas(setGlobalCam: true);
             canvas.name = "Chalkboard Menu";
 
@@ -884,8 +885,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
             canvas.SetCursorInitiator(setAutoInitiator: true);
 
             ObjectsStorage.Objects.Add("chalkboard_menu", canvas.gameObject);
+            //Chalkboard Menu ends
 
             PrefabsCreator.CreateObjectPrefab<CreditsScreen>("Credits Screen", "credits_screen");
+            PrefabsCreator.CreateObjectPrefab<UpdatesCenterMenu>("Updates Center", "updates_center");
         }
 
         #endregion

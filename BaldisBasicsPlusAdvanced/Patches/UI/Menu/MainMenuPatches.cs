@@ -1,5 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
+using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
 using MTM101BaldAPI.UI;
@@ -33,14 +34,18 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Menu
                 __instance.gameObject.AddComponent<NotifiedMainMenu>().notifImage = image;
             }
 
-            if (AdvancedCore.updateChecksEnabled)
+            /*if (AdvancedCore.updateChecksEnabled)
             {
-                Image updateCenterImage = UIHelpers.CreateImage(AssetsStorage.sprites["adv_arrows"], __instance.transform,
-                    Vector3.zero, correctPosition: false);
-                updateCenterImage.ToCenter();
-
-                updateCenterImage.transform.localPosition = new Vector3(0f, 0f, 0f);
-            }
+                StandardMenuButton updatesCenterButton = ObjectsCreator.CreateSpriteButton(
+                    AssetsStorage.sprites["adv_arrows"], 
+                    new Vector3(-217f, 153f, 0f), __instance.transform);
+                updatesCenterButton.transform.localScale = Vector3.one * 0.5f;
+                updatesCenterButton.OnPress.AddListener(delegate ()
+                {
+                    
+                });
+                updatesCenterButton.transform.SetSiblingIndex(__instance.transform.childCount - 3);
+            }*/
         }
 
     }
