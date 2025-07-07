@@ -19,9 +19,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelEditor
             priority = 127;
         }
 
+        protected override void InitializePre()
+        {
+            base.InitializePre();
+            CreateConfigValue("Legacy Level Editor", 
+                "Adds support for Legacy Level Editor like new objects, activities and other content which can be used on your levels!\n" +
+                "Please note: backward compatibility of maps on old versions is not guaranteed.");
+        }
+
         public override bool IsIntegrable()
         {
-            return AssetsHelper.ModInstalled(guid) && IntegrationManager.LevelLoaderInstalled && AdvancedCore.editorIntegrationEnabled;
+            return AssetsHelper.ModInstalled(guid) && IntegrationManager.LevelLoaderInstalled;
         }
 
         protected override void Initialize()

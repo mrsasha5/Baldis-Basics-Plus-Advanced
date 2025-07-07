@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using BaldisBasicsPlusAdvanced.Compats;
+using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
 using BaldisBasicsPlusAdvanced.Helpers;
 using HarmonyLib;
 
@@ -16,7 +18,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameManager
 
         public static bool IsMusicAvailable(BaseGameManager man)
         {
-            return /*!IntegrationManager.IsActive<CustomMusicsIntegration>() && */ //Soon
+            return !IntegrationManager.IsActive<CustomMusicsIntegration>() &&
                 man.levelObject != null && musicNames.ContainsKey(man.levelObject.type) &&
                 musicNames[man.levelObject.type].Count > 0;
         }

@@ -50,6 +50,7 @@ using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 using BaldisBasicsPlusAdvanced.AutoUpdate;
+using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
 #endregion
 
 namespace BaldisBasicsPlusAdvanced.Managers
@@ -61,6 +62,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeMidis()
         {
+            FarmFieldTripManager.farmTripMusicKey =
+                AssetLoader.MidiFromFile(AssetsHelper.modPath + "Audio/Music/FieldTrips/Adv_BSideSkid_CornTime.mid",
+                    "Adv_BSideSkid_CornTime");
+
+            if (IntegrationManager.IsActive<CustomMusicsIntegration>()) return;
+
             void LoadFrom(string floorName, LevelType type)
             {
                 string[] paths = Directory.GetFiles(AssetsHelper.modPath + "Audio/Music/Floors/" + floorName);
@@ -75,9 +82,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             LoadFrom("Laboratory", LevelType.Laboratory);
             LoadFrom("Maintenance", LevelType.Maintenance);
             LoadFrom("Factory", LevelType.Factory);
-            FarmFieldTripManager.farmTripMusicKey = 
-                AssetLoader.MidiFromFile(AssetsHelper.modPath + "Audio/Music/FieldTrips/Adv_BSideSkid_CornTime.mid",
-                    "Adv_BSideSkid_CornTime");
         }
 
         #endregion

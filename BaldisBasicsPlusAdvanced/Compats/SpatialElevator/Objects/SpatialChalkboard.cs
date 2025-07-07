@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
 using BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction;
+using BaldisBasicsPlusAdvanced.Game;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using MTM101BaldAPI.Registers;
@@ -10,11 +11,13 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
 {
-    public class SpatialChalkboard : MonoBehaviour
+    public class SpatialChalkboard : MonoBehaviour, IPrefab
     {
 
+        [SerializeField]
         private AudioManager audMan;
 
+        [SerializeField]
         private MeshRenderer renderer;
 
         private List<IInteractionObject> allElements = new List<IInteractionObject>();
@@ -46,12 +49,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
             //Adv_Expel_Hammer_Pages
         }
 
-        public void Initialize()
+        public void InitializePrefab(int variant)
         {
-            const float distanceOffset = 0.05f;
-
-            instance = this;
-
             audMan = ObjectsCreator.CreateAudMan(gameObject);
             audMan.ignoreListenerPause = true;
             audMan.useUnscaledPitch = true;
@@ -61,6 +60,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
             renderer.transform.SetParent(transform, false);
             renderer.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
             renderer.transform.localScale = new Vector3(25f, 20f, 1f);
+        }
+
+        public void Initialize()
+        {
+            const float distanceOffset = 0.05f;
+
+            instance = this;
 
             float height = 2.5f;
             float offset = -2.5f;

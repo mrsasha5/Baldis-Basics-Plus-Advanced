@@ -8,6 +8,7 @@ using BaldisBasicsPlusAdvanced.Managers;
 using BaldisBasicsPlusAdvanced.Menu;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using MTM101BaldAPI;
@@ -38,10 +39,6 @@ namespace BaldisBasicsPlusAdvanced
         public const string version = "0.2.5.2";
 
         internal static string tempPath;
-
-        internal static bool editorIntegrationEnabled;
-
-        internal static bool spatialElevatorIntegrationEnabled;
 
         //internal static float updateCheckIntervalTime;
 
@@ -74,12 +71,6 @@ namespace BaldisBasicsPlusAdvanced
             if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
             Directory.CreateDirectory(tempPath);
 
-            editorIntegrationEnabled = Config.Bind("Integration", "Editor", defaultValue: true,
-                "If disabled, then items and other things from this mod will not load in the editor!").Value;
-            spatialElevatorIntegrationEnabled = Config.Bind("Integration", "Spatial Elevator", defaultValue: true,
-                "If disabled, then integration with 3D Elevator will be disabled! " +
-                "Not recommended to disable since you'll lose access to the content like this: tips & Hammer of Force.").Value;
-
             notificationsEnabled = Config.Bind("Settings", "Notifications", defaultValue: true, 
                 "Disables/enables notifications.").Value;
             
@@ -97,7 +88,7 @@ namespace BaldisBasicsPlusAdvanced
             ModdedSaveGame.AddSaveHandler(LevelDataManager.Instance);
             GeneratorManagement.Register(this, GenerationModType.Addend, GenerationPatchingManager.RegisterMainLevelData);
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), false);
-            LoadingEvents.RegisterOnAssetsLoaded(Info, OnAssetsLoadedPost(), true);
+            LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoaderPost(), true);
 
             /*MTM101BaldiDevAPI.AddWarningScreen(
                 "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
@@ -116,6 +107,28 @@ namespace BaldisBasicsPlusAdvanced
                 false);*/
 
             GameRegisterManager.InitializeDoNotDestroyOnLoadObjects();
+        }
+
+        private static IEnumerator ModLoaderPost()
+        {
+            IEnumerator assetsLoading = OnAssetsLoadedPost();
+            bool move = true;
+            while (move)
+            {
+                try
+                {
+                    move = assetsLoading.MoveNext();
+                }
+                catch (Exception e)
+                {
+                    Logging.LogWarning($"Exception occured on state: {assetsLoading.Current.ToString()}");
+                    ObjectsCreator.CauseCrash(e);
+
+                    move = false;
+                }
+                yield return assetsLoading.Current;
+            }
+            yield break;
         }
 
         private static IEnumerator ModLoader()
@@ -145,7 +158,7 @@ namespace BaldisBasicsPlusAdvanced
 
         private static IEnumerator OnAssetsLoadedPost()
         {
-            yield return 3;
+            yield return 4;
 
             yield return "Loading Kitchen Stove recipes...";
 
@@ -163,6 +176,8 @@ namespace BaldisBasicsPlusAdvanced
                 ApiManager.onAssetsPostLoading.Invoke();
                 ApiManager.onAssetsPostLoading = null;
             }
+
+            yield return "Invoking OnAssetsLoadPost for modules...";
 
             IntegrationManager.InvokeOnAssetsLoadPost();
 

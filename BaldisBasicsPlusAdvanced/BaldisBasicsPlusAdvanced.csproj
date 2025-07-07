@@ -40,6 +40,9 @@
     <Reference Include="BaldiLevelEditor">
       <HintPath>..\Dependencies\BaldiLevelEditor.dll</HintPath>
     </Reference>
+    <Reference Include="BBPlusCustomMusics">
+      <HintPath>..\Dependencies\BBPlusCustomMusics.dll</HintPath>
+    </Reference>
     <Reference Include="BepInEx">
       <HintPath>..\Dependencies\BepInEx.dll</HintPath>
     </Reference>

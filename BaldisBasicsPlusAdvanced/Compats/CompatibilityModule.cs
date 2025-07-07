@@ -1,6 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Helpers;
 using BepInEx;
 using BepInEx.Bootstrap;
+using BepInEx.Configuration;
 using System.Collections.Generic;
 
 namespace BaldisBasicsPlusAdvanced.Compats
@@ -14,6 +15,8 @@ namespace BaldisBasicsPlusAdvanced.Compats
         protected string guid = "OHNO!";
 
         protected VersionInfo versionInfo;
+
+        protected ConfigEntry<bool> configValue;
 
         protected int priority;
 
@@ -30,10 +33,15 @@ namespace BaldisBasicsPlusAdvanced.Compats
 
         public virtual bool IsIntegrable()
         {
-            return AssetsHelper.ModInstalled(guid) && versionInfo.IsPluginCorrect();
+            return AssetsHelper.ModInstalled(guid) && versionInfo.IsPluginCorrect() && configValue.Value;
         }
 
-        private void InitializePre()
+        protected void CreateConfigValue(string name, string desc, bool defValue = true)
+        {
+            configValue = AdvancedCore.Instance.Config.Bind("Integration", name, defaultValue: defValue, desc);
+        }
+
+        protected virtual void InitializePre()
         {
             if (!Chainloader.PluginInfos.ContainsKey(guid)) return;
             plugin = Chainloader.PluginInfos[guid].Instance;
@@ -53,6 +61,8 @@ namespace BaldisBasicsPlusAdvanced.Compats
         {
             private string minVersion;
 
+            private bool exceptMinVersion;
+
             private List<string> versionsIgnored = new List<string>();
 
             private List<string> bannedVersions = new List<string>();
@@ -70,8 +80,9 @@ namespace BaldisBasicsPlusAdvanced.Compats
 
                 if (minVersion != null)
                 {
-                    if (!versionsIgnored.Contains(module.plugin.Info.Metadata.Version.ToString()) 
-                        && module.plugin.Info.Metadata.Version < new System.Version(minVersion))
+                    if (!versionsIgnored.Contains(module.plugin.Info.Metadata.Version.ToString()) && 
+                        ((exceptMinVersion && module.plugin.Info.Metadata.Version <= new System.Version(minVersion)) ||
+                        (!exceptMinVersion && module.plugin.Info.Metadata.Version < new System.Version(minVersion))))
                     {
                         return false;
                     }
@@ -100,9 +111,10 @@ namespace BaldisBasicsPlusAdvanced.Compats
                 return this;
             }
 
-            public VersionInfo SetMinVersion(string version)
+            public VersionInfo SetMinVersion(string version, bool exceptCurrent)
             {
                 if (minVersion == null) minVersion = version;
+                exceptMinVersion = exceptCurrent;
                 return this;
             }
 

@@ -7,7 +7,6 @@
 /Dependencies/*
 !/Dependencies/OHarmony.dll
 !/Dependencies/OHarmony.xml
-!/Dependencies/BaldiLevelEditor.dll
 !/Dependencies/BepInEx.Harmony.dll
 !/Dependencies/BepInEx.Harmony.xml
 !/Dependencies/BepInEx.Preloader.dll
@@ -15,8 +14,6 @@
 !/Dependencies/BepInEx.dll
 !/Dependencies/BepInEx.xml
 !/Dependencies/HarmonyXInterop.dll
-!/Dependencies/MTM101BaldAPI.dll
-!/Dependencies/MTM101BaldAPI.xml
 !/Dependencies/Mono.Cecil.Mdb.dll
 !/Dependencies/Mono.Cecil.Pdb.dll
 !/Dependencies/Mono.Cecil.Rocks.dll
@@ -25,10 +22,20 @@
 !/Dependencies/MonoMod.RuntimeDetour.xml
 !/Dependencies/MonoMod.Utils.dll
 !/Dependencies/MonoMod.Utils.xml
+
+# API
+!/Dependencies/MTM101BaldAPI.dll
+!/Dependencies/MTM101BaldAPI.xml
 !/Dependencies/Newtonsoft.Json.dll
+
+# Level Editor & Level Loading System
+!/Dependencies/BaldiLevelEditor.dll
 !/Dependencies/PlusLevelFormat.dll
 !/Dependencies/PlusLevelLoader.dll
+
+# Pixelguy's mods
 !/Dependencies/The3DElevator.dll
+!/Dependencies/BBPlusCustomMusics.dll
 
 # User-specific files
 *.rsuser
