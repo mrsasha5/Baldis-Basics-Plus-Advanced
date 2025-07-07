@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
-using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using BaldisBasicsPlusAdvanced.Helpers;
 using System;
 using System.Collections.Generic;
@@ -29,6 +28,13 @@ namespace BaldisBasicsPlusAdvanced.Compats
                 }
             }
             return false;
+        }
+
+        private static void InvokeCrash(CompatibilityModule module)
+        {
+            ObjectsCreator.CauseCrash(
+                $"Advanced Edition integration error!\nFailed by: {module.GetType().Name}\n" +
+                $"You can turn off integation in config ({module.ConfigValue.ToString()})");
         }
 
         internal static void Prepare()
@@ -78,20 +84,31 @@ namespace BaldisBasicsPlusAdvanced.Compats
         {
             for (int i = 0; i < modules.Count; i++)
             {
-                if (modules[i].IsIntegrable())
+                try
                 {
-                    modules[i].GetType().GetMethod("Initialize", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                        .Invoke(modules[i], null);
-                } else if (!modules[i].IsIntegrable() && modules[i].IsForced)
-                {
-                    ObjectsCreator.CauseCrash($"Baldi's Basics Plus Advanced Edition. Required dependency is missing!" +
-                        $"\nGUID of the required mod: {modules[i].Guid}", AssetsStorage.weirdErrorSound);
+                    bool isIntegrable = modules[i].IsIntegrable();
+
+                    if (isIntegrable)
+                    {
+                        modules[i].GetType().GetMethod("Initialize", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                            .Invoke(modules[i], null);
+                    }
+                    else if (!isIntegrable && modules[i].IsForced)
+                    {
+                        ObjectsCreator.CauseCrash($"Baldi's Basics Plus Advanced Edition. Required dependency is missing!" +
+                            $"\nGUID of the integrable mod: {modules[i].Guid}", AssetsStorage.weirdErrorSound);
+                    }
+                    else
+                    {
+                        modules.RemoveAt(i);
+                        i--;
+                    }
                 }
-                else
+                catch
                 {
-                    modules.RemoveAt(i);
-                    i--;
+                    InvokeCrash(modules[i]);
                 }
+                
             }
         }
 
@@ -99,12 +116,17 @@ namespace BaldisBasicsPlusAdvanced.Compats
         {
             for (int i = 0; i < modules.Count; i++)
             {
-                if (modules[i].IsIntegrable())
+                try
                 {
-                    modules[i].GetType().GetMethod("InitializeOnAssetsLoadPost", 
+                    modules[i].GetType().GetMethod("InitializeOnAssetsLoadPost",
                         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                         .Invoke(modules[i], null);
                 }
+                catch
+                {
+                    InvokeCrash(modules[i]);
+                }
+                
             }
         }
     }

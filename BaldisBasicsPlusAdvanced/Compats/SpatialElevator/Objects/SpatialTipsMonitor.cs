@@ -47,7 +47,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
             tmp = GetComponentInChildren<TextMeshPro>();
         }
 
-
         private void Start()
         {
             time = appearingTime;
@@ -72,6 +71,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
         {
             Vector3 vec = transform.localPosition;
             vec.y = 27.92f;
+            vec += Vector3.forward * 9f;
             hole.Appear(vec, new Vector3(90f, 0f, 0f), 6f);
 
             while (hole.IsTransitioning) yield return null;
@@ -99,8 +99,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
                 yield return null;
             }
 
-            tmp.text = ElevatorTipsPatch.GetRawTip();
-
+            StartCoroutine(TextLoader());
         }
 
         private IEnumerator TextLoader()
@@ -108,32 +107,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
             const float symbolCooldown = 0.01f;
 
             float time = 4f;
-            while (time > 0f)
-            {
-                time -= Time.unscaledDeltaTime;
-                yield return null;
-            }
-
-            tmp.text = LocalizationManager.Instance.GetLocalizedText("Adv_Text_Loading");
-
-            int counter = 0;
-
-            time = 0.5f;
-
-            while (time > 0f)
-            {
-                time -= Time.unscaledDeltaTime;
-
-                if (time <= 0f)
-                {
-                    if (counter == 3) break;
-                    counter++;
-                    time = 0.5f;
-                    tmp.text += ".";
-                }
-
-                yield return null;
-            }
 
             tmp.text = "";
 

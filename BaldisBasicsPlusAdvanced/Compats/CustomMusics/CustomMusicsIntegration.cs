@@ -1,5 +1,4 @@
-﻿
-using BaldisBasicsPlusAdvanced.Helpers;
+﻿using BaldisBasicsPlusAdvanced.Helpers;
 using BBPlusCustomMusics.Plugin.Public;
 
 namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics

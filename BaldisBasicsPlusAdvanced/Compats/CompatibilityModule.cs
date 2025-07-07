@@ -26,6 +26,8 @@ namespace BaldisBasicsPlusAdvanced.Compats
 
         public string Guid => guid;
 
+        public ConfigEntry<bool> ConfigValue => configValue;
+
         protected CompatibilityModule()
         {
 
