@@ -47,7 +47,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
             Image image =
                 UIHelpers.CreateImage(AssetsStorage.spriteSheets["adv_tips_screen"][0], transform, Vector3.zero, false);
-            image.rectTransform.localScale = new Vector3(1.1f, 1.1f, 1f);
+            image.rectTransform.localScale = new Vector3(1.105f, 1.105f, 1f);
 
             Image imageForward =
                 UIHelpers.CreateImage(AssetsStorage.sprites["adv_tip_screen_forward"], transform, Vector3.zero, false);
@@ -148,7 +148,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.T))
+            //THE FUCK I PUT IT ON RELEASE IN 0.2.5.2
+            //IT'S FOR DEBUGGING, NOT A FEATURE
+            /*if (Input.GetKeyDown(KeyCode.T))
             {
                 List<string> tips = ApiManager.GetAllTips();
                 
@@ -157,7 +159,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
                 tmp.text = tips[index].Localize();
                 SetStaticAnimation();
                 index++;
-            }
+            }*/
 
             //MTM101 add delegates like onAnimationEnd and etc
             //DON'T TORTURE ME
