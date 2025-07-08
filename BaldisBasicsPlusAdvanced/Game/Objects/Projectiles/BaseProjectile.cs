@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Adjusters;
 using BaldisBasicsPlusAdvanced.Helpers;
 using UnityEngine;

@@ -1,7 +1,7 @@
 ﻿using BaldiLevelEditor;
 using BaldisBasicsPlusAdvanced.Attributes;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats.LevelEditor.EditorTools;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;

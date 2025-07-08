@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using UnityEngine;

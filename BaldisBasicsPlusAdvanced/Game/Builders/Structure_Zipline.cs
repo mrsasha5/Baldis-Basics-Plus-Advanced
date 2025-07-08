@@ -3,7 +3,7 @@ using BaldisBasicsPlusAdvanced.Helpers;
 using System.Collections.Generic;
 using UnityEngine;
 using MTM101BaldAPI;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
 {

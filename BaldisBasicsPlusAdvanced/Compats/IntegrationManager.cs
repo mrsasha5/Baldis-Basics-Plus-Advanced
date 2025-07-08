@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Helpers;
 using System;
 using System.Collections.Generic;
@@ -32,9 +32,11 @@ namespace BaldisBasicsPlusAdvanced.Compats
 
         private static void InvokeCrash(CompatibilityModule module)
         {
-            ObjectsCreator.CauseCrash(
-                $"Advanced Edition integration error!\nFailed by: {module.GetType().Name}\n" +
-                $"You can turn off integation in config ({module.ConfigValue.ToString()})");
+            IntegrationModuleException excp = new IntegrationModuleException($"Failed by: {module.GetType().Name}\n" +
+                $"You can disable the integration if you suspect that the code is outdated.\n" + 
+                $"Config value: {module.ConfigValue.Definition.Key}");
+            excp.stackTrace = "";
+            throw excp;
         }
 
         internal static void Prepare()
@@ -106,8 +108,8 @@ namespace BaldisBasicsPlusAdvanced.Compats
                 }
                 catch (Exception e)
                 {
-                    InvokeCrash(modules[i]);
                     AdvancedCore.Logging.LogError(e);
+                    InvokeCrash(modules[i]);
                 }
                 
             }
@@ -125,11 +127,26 @@ namespace BaldisBasicsPlusAdvanced.Compats
                 }
                 catch (Exception e)
                 {
-                    InvokeCrash(modules[i]);
                     AdvancedCore.Logging.LogError(e);
+                    InvokeCrash(modules[i]);
                 }
-                
+
             }
         }
+
+        private class IntegrationModuleException : Exception
+        {
+
+            public string stackTrace;
+
+            public override string StackTrace => string.IsNullOrEmpty(base.StackTrace) ? base.StackTrace : stackTrace;
+
+            public IntegrationModuleException(string message) : base(message)
+            {
+
+            }
+
+        }
+
     }
 }

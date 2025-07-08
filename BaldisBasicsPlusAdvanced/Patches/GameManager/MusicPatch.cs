@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
 using BaldisBasicsPlusAdvanced.Helpers;
 using HarmonyLib;
+using MTM101BaldAPI.AssetTools;
 
 namespace BaldisBasicsPlusAdvanced.Patches.GameManager
 {
@@ -15,6 +17,12 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameManager
         public static Dictionary<LevelType, List<string>> musicNames = new Dictionary<LevelType, List<string>>();
 
         private static bool methodsLocked;
+
+        public static void Insert(string name, LevelType type)
+        {
+            if (!musicNames.ContainsKey(type)) musicNames.Add(type, new List<string>());
+            musicNames[type].Add(name);
+        }
 
         public static bool IsMusicAvailable(BaseGameManager man)
         {

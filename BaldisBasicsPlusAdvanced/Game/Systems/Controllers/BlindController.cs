@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using BaldisBasicsPlusAdvanced.Patches;
 using System.Collections;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 
 namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 {

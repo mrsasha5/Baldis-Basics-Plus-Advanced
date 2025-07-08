@@ -1,5 +1,5 @@
 ﻿using System;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 
 namespace BaldisBasicsPlusAdvanced.API
 {

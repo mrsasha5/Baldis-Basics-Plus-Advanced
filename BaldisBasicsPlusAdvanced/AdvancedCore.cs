@@ -1,14 +1,13 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
-using BaldisBasicsPlusAdvanced.AutoUpdate;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats;
+using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Managers;
 using BaldisBasicsPlusAdvanced.Menu;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using MTM101BaldAPI;
@@ -18,10 +17,7 @@ using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.SaveSystem;
 using System;
 using System.Collections;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Reflection;
 using UnityEngine;
 using static BepInEx.BepInDependency;
 
@@ -83,12 +79,13 @@ namespace BaldisBasicsPlusAdvanced
             //    "How many seconds should go until mod will check releases again. " +
             //    "If you want to turn off these cyclic checks, then set value less than 0. For example: -1").Value;
 
-            AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English", Language.English);
+            
             PrepareSettingsMenu();
             ModdedSaveGame.AddSaveHandler(LevelDataManager.Instance);
             GeneratorManagement.Register(this, GenerationModType.Addend, GenerationPatchingManager.RegisterMainLevelData);
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), false);
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoaderPost(), true);
+            AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English", Language.English);
 
             /*MTM101BaldiDevAPI.AddWarningScreen(
                 "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
@@ -123,16 +120,18 @@ namespace BaldisBasicsPlusAdvanced
                 {
                     Logging.LogWarning($"Exception occured on state: {assetsLoading.Current.ToString()}");
                     ObjectsCreator.CauseCrash(e);
-
-                    move = false;
                 }
                 yield return assetsLoading.Current;
             }
-            yield break;
         }
 
         private static IEnumerator ModLoader()
         {
+            if (!Directory.Exists(AssetsHelper.modPath))
+            {
+                ObjectsCreator.CauseCrash(new Exception("Mod assets folder is missing!"));
+            }
+
             IntegrationManager.Prepare();            
 
             harmony.PatchAllConditionals();
@@ -144,16 +143,16 @@ namespace BaldisBasicsPlusAdvanced
                 try
                 {
                     move = assetsLoading.MoveNext();
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     Logging.LogWarning($"Exception occured on state: {assetsLoading.Current.ToString()}");
                     ObjectsCreator.CauseCrash(e);
-                    
                     move = false;
                 }
+
                 yield return assetsLoading.Current;
             }
-            yield break;
         }
 
         private static IEnumerator OnAssetsLoadedPost()
@@ -171,15 +170,15 @@ namespace BaldisBasicsPlusAdvanced
             yield return "Initializing Kitchen Stove posters...";
             GameRegisterManager.InitializeKitchenStovePosters();
 
+            yield return "Invoking OnAssetsLoadPost for modules...";
+
+            IntegrationManager.InvokeOnAssetsLoadPost();
+
             if (ApiManager.onAssetsPostLoading != null)
             {
                 ApiManager.onAssetsPostLoading.Invoke();
                 ApiManager.onAssetsPostLoading = null;
             }
-
-            yield return "Invoking OnAssetsLoadPost for modules...";
-
-            IntegrationManager.InvokeOnAssetsLoadPost();
 
             GC.Collect();
         }
@@ -192,11 +191,25 @@ namespace BaldisBasicsPlusAdvanced
                 ApiManager.onAssetsPreLoading = null;
             }
 
+            NotificationManager.Notification notif = CheckAssetsMarker();
+
             int count = 20;
 
+            if (notif != null) count++;
+
             yield return count;
+
+            if (notif != null)
+            {
+                yield return "Waiting until you'll read...";
+                while (!InputManager.Instance.AnyButton(onDown: true)) yield return 0;
+                notif.time = 1f;
+            }
+
             yield return "Caching game assets...";
             AssetsManagerCore.Initialize();
+            if (AssetsStorage.exception != null) throw AssetsStorage.exception;
+
             GameRegisterManager.CreateDoorMats();
             yield return "Initializing vending machines...";
             GameRegisterManager.InitializeVendingMachines();
@@ -253,6 +266,32 @@ namespace BaldisBasicsPlusAdvanced
                 handler.AddCategory<EmergencyOptionsMenu>("Adv_Options_Menu_Emergency_Options");
                 handler.AddCategory<KeyBindingsOptionsMenu>("Adv_Options_Menu_Key_Bindings_Settings");
             };
+        }
+
+        private static NotificationManager.Notification CheckAssetsMarker()
+        {
+            NotificationManager.Notification notif = null;
+
+            string[] versionMarkers =
+                Directory.GetFiles(AssetsHelper.modPath, "*.ver", SearchOption.TopDirectoryOnly);
+
+            if (versionMarkers.Length > 1)
+                notif =
+                    NotificationManager.Instance.Queue("Adv_Notif_AssetsWarning", AssetsStorage.sounds["buzz_elv"], time: 0f);
+            else if (versionMarkers.Length == 1)
+            {
+                if (Path.GetFileNameWithoutExtension(versionMarkers[0]) != AdvancedCore.version)
+                {
+                    notif =
+                        NotificationManager.Instance.Queue("Adv_Notif_IncorrectAssetsWarning", AssetsStorage.sounds["buzz_elv"], time: 0f);
+                }
+            }
+            else
+            {
+                notif =
+                    NotificationManager.Instance.Queue("Adv_Notif_UnknownAssetsVersion", AssetsStorage.sounds["buzz_elv"], time: 0f);
+            }
+            return notif;
         }
 
     }

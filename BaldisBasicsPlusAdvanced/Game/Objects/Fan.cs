@@ -7,7 +7,7 @@ using MTM101BaldAPI.Registers;
 using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Game.Interfaces;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects
 {

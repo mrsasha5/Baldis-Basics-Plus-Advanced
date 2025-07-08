@@ -10,7 +10,7 @@ using System.IO.Compression;
 using System.Linq;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using static BaldisBasicsPlusAdvanced.Game.Components.UI.NotificationManager;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using System.IO;
 using BaldisBasicsPlusAdvanced.SaveSystem.Managers;
 using BaldisBasicsPlusAdvanced.Patches;

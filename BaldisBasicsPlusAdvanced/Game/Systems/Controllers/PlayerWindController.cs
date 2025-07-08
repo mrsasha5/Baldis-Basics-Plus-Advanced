@@ -3,7 +3,7 @@ using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using Rewired.UI.ControlMapper;
 using BaldisBasicsPlusAdvanced.SaveSystem.Managers;
 using BaldisBasicsPlusAdvanced.Cache;

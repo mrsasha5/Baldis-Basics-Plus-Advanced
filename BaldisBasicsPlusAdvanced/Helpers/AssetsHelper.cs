@@ -6,7 +6,7 @@ using BepInEx.Bootstrap;
 using System.Collections.Generic;
 using System.IO;
 using MTM101BaldAPI;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 
 namespace BaldisBasicsPlusAdvanced.Helpers
 {

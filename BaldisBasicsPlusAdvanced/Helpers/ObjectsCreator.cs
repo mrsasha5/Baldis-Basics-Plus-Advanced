@@ -1,6 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.Game.Components;
 using MTM101BaldAPI;
-using MTM101BaldAPI.Registers;
 using System;
 using TMPro;
 using UnityEngine;
@@ -9,8 +8,7 @@ using UnityEngine.UI;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Texts;
 using BaldisBasicsPlusAdvanced.Game.Objects.Pickups;
-using Rewired.Demos;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using MTM101BaldAPI.UI;
 using BaldisBasicsPlusAdvanced.Patches;
 
@@ -18,6 +16,8 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 {
     public class ObjectsCreator
     {
+
+        private static bool crashInvoked;
 
         public static TextMeshPro CreateTextMesh(BaldiFonts font, Vector2? size = null, Transform parent = null, 
             Vector3? position = null)
@@ -314,10 +314,12 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         {
             if (AssetsStorage.weirdErrorSound != null)
             {
+                AudioClip clip = AssetsHelper.LoadAsset<AudioClip>("WeirdError");
                 GameObject gm = new GameObject("99");
                 AudioSource audDevice = gm.AddComponent<AudioSource>();
                 audDevice.PlayOneShot(AssetsStorage.weirdErrorSound);
             }
+            
             MTM101BaldiDevAPI.CauseCrash(AdvancedCore.Instance.Info, e);
         }
 

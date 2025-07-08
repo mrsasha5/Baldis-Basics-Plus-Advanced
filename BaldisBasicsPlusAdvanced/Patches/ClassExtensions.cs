@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using System.Reflection;
 using System;
 using BaldisBasicsPlusAdvanced.Game.Components.Movement;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using MTM101BaldAPI.UI;
 using TMPro;

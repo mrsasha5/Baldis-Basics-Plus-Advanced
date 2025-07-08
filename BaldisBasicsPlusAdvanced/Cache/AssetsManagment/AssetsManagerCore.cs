@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using BaldisBasicsPlusAdvanced.Helpers;
 
-namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagment
+namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 {
     public class AssetsManagerCore
     {

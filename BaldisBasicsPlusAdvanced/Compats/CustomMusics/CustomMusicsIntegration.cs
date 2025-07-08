@@ -1,5 +1,9 @@
-﻿using BaldisBasicsPlusAdvanced.Helpers;
+﻿using System.IO;
+using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Patches.GameManager;
 using BBPlusCustomMusics.Plugin.Public;
+using HarmonyLib;
+using MTM101BaldAPI.AssetTools;
 
 namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics
 {
@@ -25,9 +29,20 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics
             base.InitializeOnAssetsLoadPost();
             MIDIHolder[] holders = 
                 MusicRegister.AddMIDIsFromDirectory(MidiDestiny.Schoolhouse, AssetsHelper.modPath + "Audio/Music/Floors");
+            holders = holders.AddRangeToArray(
+                MusicRegister.AddMIDIsFromDirectory(MidiDestiny.Schoolhouse, AssetsHelper.modPath + "Audio/Music/Floors/Compats"));
+
             for (int i = 0; i < holders.Length; i++)
             {
                 holders[i].allowedFloors = null;
+                if (holders[i].allowedLevelTypes != null)
+                {
+                    foreach (LevelType type in holders[i].allowedLevelTypes)
+                    {
+                        MusicPatch.Insert(holders[i].MidiName, type);
+                    }
+                }
+                
             }
         }
 

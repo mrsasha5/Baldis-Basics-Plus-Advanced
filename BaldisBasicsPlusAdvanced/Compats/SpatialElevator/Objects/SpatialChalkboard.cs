@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction;
 using BaldisBasicsPlusAdvanced.Game;
 using BaldisBasicsPlusAdvanced.Helpers;

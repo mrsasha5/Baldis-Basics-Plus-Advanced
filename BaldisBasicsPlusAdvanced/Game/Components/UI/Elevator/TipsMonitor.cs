@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BaldisBasicsPlusAdvanced.API;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
 using MTM101BaldAPI.Components;

@@ -40,7 +40,7 @@ using BaldisBasicsPlusAdvanced.Compats;
 using MTM101BaldAPI.AssetTools;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
 using BaldisBasicsPlusAdvanced.Patches.Player;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagment;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Portals;
 using MTM101BaldAPI.PlusExtensions;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm;
@@ -74,8 +74,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 string[] paths = Directory.GetFiles(AssetsHelper.modPath + "Audio/Music/Floors/" + floorName);
                 foreach (string path in paths)
                 {
-                    if (!MusicPatch.musicNames.ContainsKey(type)) MusicPatch.musicNames.Add(type, new List<string>());
-                    MusicPatch.musicNames[type].Add(AssetLoader.MidiFromFile(path, Path.GetFileName(path)));
+                    MusicPatch.Insert(AssetLoader.MidiFromFile(path, Path.GetFileName(path)), type);
                 }
             }
 
