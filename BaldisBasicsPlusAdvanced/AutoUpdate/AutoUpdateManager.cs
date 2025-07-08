@@ -235,14 +235,14 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                     Directory.CreateDirectory("Adv_TEMP");
 
                     using (FileStream fs = new FileStream($"Adv_TEMP/build{selectedData.fileExtension}", 
-                        FileMode.Open, FileAccess.Write))
+                        FileMode.OpenOrCreate, FileAccess.Write))
                     {
                         fs.Write(downloadRequest.downloadHandler.data, 0, downloadRequest.downloadHandler.data.Length);
                     }
                 } 
                 catch (Exception e)
                 {
-                    SetExceptionMessage("Adv_Notif_ExtractingError");
+                    SetExceptionMessage("Adv_Notif_WritingFilesError");
                     AdvancedCore.Logging.LogError(e);
                     yield break;
                 }
@@ -293,9 +293,9 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
 
                     notif.sound = AssetsStorage.sounds["adv_bal_super_wow"];
                     notif.time = 10f;
-                    notif.tmpText.text = "Adv_Notif_InstallerIsReady";
+                    notif.tmpText.text = "Adv_Notif_InstallerIsReady".Localize();
                 }
-                else SetExceptionMessage("Adv_Notif_ExtractingError");
+                else SetExceptionMessage("Adv_Notif_ExtractingUpdateError");
 
             }
             
