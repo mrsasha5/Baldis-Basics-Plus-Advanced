@@ -194,7 +194,7 @@ namespace BaldisBasicsPlusAdvanced.AutoUpdate
                     while (!downloadRequest.downloadHandler.isDone)
                     {
                         notif.tmpText.text = string.Format("Adv_Notif_DownloadingProgress".Localize(),
-                            downloadRequest.downloadProgress * 100f);
+                            (int)(downloadRequest.downloadProgress * 100f));
                         yield return null;
                     }
 
