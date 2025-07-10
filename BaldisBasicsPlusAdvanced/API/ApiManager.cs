@@ -31,16 +31,13 @@ namespace BaldisBasicsPlusAdvanced.API
 
         internal static Action onExtraSettingsPostLoading;
 
-        //private static int elevatorTopTextDisables = 0;
-
-        //public static bool ElevatorTopText => elevatorTopTextDisables <= 0;
-
         /// <summary>
         /// It contains data from options menu "Extra Settings".
-        /// Please note that the value may be null.
+        /// Please note that the value will be nullable until player's profile will be loaded.
         /// </summary>
         public static ExtraSettingsData ExtraSettings => OptionsDataManager.ExtraSettings;
 
+        #region Kitchen Stove recipes
         /// <summary>
         /// Return a list of food recipe datas from all mods except specified.
         /// </summary>
@@ -161,6 +158,9 @@ namespace BaldisBasicsPlusAdvanced.API
                 }
             }
         }
+        #endregion
+
+        #region Objects (plates, Spelloons)
 
         /// <summary>
         /// Just creates a plate prefab.
@@ -273,6 +273,10 @@ namespace BaldisBasicsPlusAdvanced.API
 
             return true;
         }
+
+        #endregion
+
+        #region School Council
 
         /// <summary>
         /// Returns a list (new instance) of the specific mod's weighted topics.
@@ -398,16 +402,9 @@ namespace BaldisBasicsPlusAdvanced.API
             }
         }
 
-        /*/// <summary>
-        /// You can dynamically override the text in the elevator!
-        /// </summary>
-        /// <param name="key">Localization key</param>
-        /// <param name="asTip">If true, then your text will appear as a tip.</param>
-        /// <returns>True, if the action was successful.</returns>
-        public static bool SetElevatorText(bool state, string key, bool asTip)
-        {
-            ElevatorTipsPatch.SetOverride(state, key, asTip);
-        }*/
+        #endregion
+
+        #region Delegates
 
         /// <summary>
         /// Invokes transmitted delegate before/after loading Extra Settings.
@@ -432,6 +429,10 @@ namespace BaldisBasicsPlusAdvanced.API
                 onAssetsPostLoading += action;
             else onAssetsPreLoading += action;
         }
+
+        #endregion
+
+        #region Symbol Machine words
 
         /// <summary>
         /// Returns a list of the Symbol Machine words from the desired mod.
@@ -590,6 +591,10 @@ namespace BaldisBasicsPlusAdvanced.API
             return exceptedPlugins;
         }
 
+        #endregion
+
+        #region Tips
+
         /// <summary>
         /// Returns a list of tips (localization keys) from the desired mod.
         /// </summary>
@@ -727,17 +732,6 @@ namespace BaldisBasicsPlusAdvanced.API
             return exceptedPlugins;
         }
 
-        /*public static void SetElevatorTopTextActivity(bool active)
-        {
-            if (active)
-            {
-                elevatorTopTextDisables--;
-            } else
-            {
-                elevatorTopTextDisables++;
-            }
-
-            if (elevatorTopTextDisables < 0) elevatorTopTextDisables = 0;
-        }*/
+        #endregion
     }
 }

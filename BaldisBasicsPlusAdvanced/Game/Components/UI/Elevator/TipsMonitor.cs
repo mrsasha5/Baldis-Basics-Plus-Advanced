@@ -148,7 +148,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
         private void Update()
         {
-            //THE FUCK I PUT IT ON RELEASE IN 0.2.5.2
+            //THE FUCK I PUT IT IN 0.2.5.2 RELEASE
             //IT'S FOR DEBUGGING, NOT A FEATURE
             /*if (Input.GetKeyDown(KeyCode.T))
             {

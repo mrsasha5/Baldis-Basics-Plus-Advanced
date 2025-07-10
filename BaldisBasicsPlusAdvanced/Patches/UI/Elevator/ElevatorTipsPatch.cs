@@ -17,6 +17,10 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         private static string originalText;
 
+        private static Dictionary<string, int> tipUsesDatas = new Dictionary<string, int>();
+
+        private static int tipMaxUses = 3;
+
         public static bool LoadTip => !(ObjectsStorage.TipKeys.Count == 0) &&
                 (OptionsDataManager.ExtraSettings.GetValue<bool>("tips"));
 
@@ -36,9 +40,49 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             List<string> tipKeys = ApiManager.GetAllTips();
 
-            int tipNum = UnityEngine.Random.Range(0, tipKeys.Count);
+            if (tipKeys.Count == 0) return "OHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNO!";
 
-            return LocalizationManager.Instance.GetLocalizedText(tipKeys[tipNum]);
+            bool clearDatas = true;
+            foreach (int val in tipUsesDatas.Values)
+            {
+                if (val <= tipMaxUses)
+                {
+                    clearDatas = false;
+                    break;
+                }
+            }
+            
+            if (clearDatas) tipUsesDatas.Clear();
+
+            string tip = null;
+
+            while (tip == null)
+            {
+                if (tipKeys.Count <= 0) break;
+
+                int tipNum = UnityEngine.Random.Range(0, tipKeys.Count);
+                string _tip = tipKeys[tipNum];
+
+                if (tipUsesDatas.ContainsKey(_tip))
+                {
+                    tipUsesDatas[_tip]++;
+
+                    if (tipUsesDatas[_tip] > tipMaxUses)
+                    {
+                        tipKeys.Remove(_tip);
+                        continue;
+                    }
+
+                    tip = _tip;
+                }
+                else
+                {
+                    tipUsesDatas.Add(_tip, 1);
+                    tip = _tip;
+                }
+            }
+
+            return tip.Localize();
         }
 
         [HarmonyPatch("ButtonPressed")]

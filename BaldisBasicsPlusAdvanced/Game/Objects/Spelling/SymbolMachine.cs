@@ -63,6 +63,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         private IEnumerator currentSwitcher;
 
+        private IEnumerator reinitializer;
+
         private bool playerIsHolding;
 
         private int playerHolding;
@@ -218,6 +220,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         private void Update()
         {
+            if (reinitializer != null && !reinitializer.MoveNext()) reinitializer = null;
+
             for (int i = 0; i < spelloons.Count; i++)
             {
                 if (spelloons[i] == null)
@@ -305,11 +309,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 audMan.PlaySingle(audBuzz);
                 return false;
             }
-            StartCoroutine(ReInitializer());
+            reinitializer = Reinitializer();
             return true;
         }
 
-        private IEnumerator ReInitializer()
+        private IEnumerator Reinitializer()
         {
             reInitializing = true;
             if (isPitFloor) SwitchLight(true);
@@ -318,18 +322,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
             SetFaceTex("adv_symbol_machine_face");
 
-            SoundObject reInitSound = AssetsStorage.sounds["adv_symbol_machine_reinit"];
+            SoundObject reinitSound = AssetsStorage.sounds["adv_symbol_machine_reinit"];
 
-            audMan.PlaySingle(reInitSound);
+            audMan.PlaySingle(reinitSound);
 
             float time = 0f;
 
-            while (audMan.AnyAudioIsPlaying)
+            while (time < reinitSound.soundClip.length)
             {
                 time += Time.deltaTime;
-                SetScreenText(string.Format(
-                Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Phrase_SM_ReInit"),
-                (int)(time / reInitSound.soundClip.length * 100)));
+                SetScreenText(string.Format("Adv_Phrase_SM_ReInit".Localize(),
+                    (int)(time / reinitSound.soundClip.length * 100f)));
                 yield return null;
             }
 
