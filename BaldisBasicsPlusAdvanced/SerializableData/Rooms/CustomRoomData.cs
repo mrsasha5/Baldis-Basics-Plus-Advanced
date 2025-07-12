@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
+using BaldisBasicsPlusAdvanced.Helpers;
 using Newtonsoft.Json;
 
 namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
@@ -44,12 +46,26 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
         [NonSerialized]
         public WeightedRoomAsset weightedRoomAsset;
 
-        public void InheritFrom(CustomRoomData roomData)
+        public void InheritProperties()
+        {
+            if (inheritPath != null)
+            {
+                CustomRoomData data = 
+                    JsonConvert.DeserializeObject<CustomRoomData>(
+                        File.ReadAllText(AssetsHelper.modPath + "Premades/Rooms/" + inheritPath));
+                data.InheritProperties();
+                InheritFrom(data);
+            }
+        }
+
+        private void InheritFrom(CustomRoomData roomData)
         {
             FieldInfo[] fields = typeof(CustomRoomData).GetFields();
             for (int i = 0; i < fields.Length; i++)
             {
-                if (fields[i].GetCustomAttribute<NonSerializedAttribute>() == null && fields[i].GetValue(this) == null)
+                if (fields[i].GetValue(roomData) != null && 
+                    fields[i].GetCustomAttribute<NonSerializedAttribute>() == null && 
+                    fields[i].GetValue(this) == null)
                 {
                     fields[i].SetValue(this, fields[i].GetValue(roomData));
                 }

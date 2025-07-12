@@ -1260,8 +1260,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             foreach (string path in filesPath)
             {
-                string extensionName = Path.GetExtension(path);
-
                 string folderPath = path.Replace(Path.GetFileName(path), "");
 
                 if (!File.Exists(folderPath + Path.GetFileNameWithoutExtension(path) + ".json")) 
@@ -1271,19 +1269,23 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
                 CustomRoomData roomData = JsonConvert.DeserializeObject<CustomRoomData>(jsonData);
 
+                roomData.InheritProperties();
+
                 RoomFunctionContainer funcContainer = null;
 
-                if (!String.IsNullOrEmpty(roomData.functionContainerName))
+                if (!string.IsNullOrEmpty(roomData.functionContainerName))
                 {
                     funcContainer = AssetsHelper.LoadAsset<RoomFunctionContainer>(roomData.functionContainerName);
                 }
 
-                RoomAsset roomAsset = RoomHelper.CreateAssetFromPath(path, (bool)roomData.isOffLimits, 
-                    (bool)roomData.autoAssignRoomFunctionContainer,
-                    funcContainer, isAHallway: (bool)roomData.isAHallway, keepTextures: (bool)roomData.keepTextures);
+                RoomAsset roomAsset = RoomHelper.CreateAssetFromPath(path, 
+                    roomData.isOffLimits == null ? false : (bool)roomData.isOffLimits,
+                    roomData.autoAssignRoomFunctionContainer == null ? false : (bool)roomData.autoAssignRoomFunctionContainer,
+                    funcContainer, isAHallway: roomData.isAHallway == null ? false : (bool)roomData.isAHallway,
+                    keepTextures: roomData.keepTextures == null ? false : (bool)roomData.keepTextures);
 
-                roomAsset.minItemValue = (int)roomData.minItemValue;
-                roomAsset.maxItemValue = (int)roomData.maxItemValue;
+                if (roomData.minItemValue != null) roomAsset.minItemValue = (int)roomData.minItemValue;
+                if (roomData.maxItemValue != null) roomAsset.maxItemValue = (int)roomData.maxItemValue;
 
                 if (!string.IsNullOrEmpty(roomData.doorMatsName))
                     roomAsset.doorMats = Array.Find(ScriptableObject.FindObjectsOfType<StandardDoorMats>(),
