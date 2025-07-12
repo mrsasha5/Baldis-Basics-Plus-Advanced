@@ -126,12 +126,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             notifMan.Initialize();
             notifMan.gameObject.SetActive(false);
             GameObject.DontDestroyOnLoad(notifMan);
-
-            if (AdvancedCore.updateChecksEnabled)
-            {
-                AutoUpdateManager updatesMan = new GameObject("AutoUpdatesManager").AddComponent<AutoUpdateManager>();
-                GameObject.DontDestroyOnLoad(updatesMan);
-            }
         }
 
         #endregion
@@ -1279,7 +1273,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 }
 
                 RoomAsset roomAsset = RoomHelper.CreateAssetFromPath(path, 
-                    roomData.isOffLimits == null ? false : (bool)roomData.isOffLimits,
+                    roomData.offLimits == null ? false : (bool)roomData.offLimits,
                     roomData.autoAssignRoomFunctionContainer == null ? false : (bool)roomData.autoAssignRoomFunctionContainer,
                     funcContainer, isAHallway: roomData.isAHallway == null ? false : (bool)roomData.isAHallway,
                     keepTextures: roomData.keepTextures == null ? false : (bool)roomData.keepTextures);

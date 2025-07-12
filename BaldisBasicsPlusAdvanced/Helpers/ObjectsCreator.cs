@@ -17,8 +17,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
     public class ObjectsCreator
     {
 
-        private static bool crashInvoked;
-
         public static TextMeshPro CreateTextMesh(BaldiFonts font, Vector2? size = null, Transform parent = null, 
             Vector3? position = null)
         {

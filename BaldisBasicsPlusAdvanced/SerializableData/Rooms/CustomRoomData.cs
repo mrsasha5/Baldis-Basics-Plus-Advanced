@@ -23,7 +23,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
 
         public string functionContainerName;
 
-        public bool? isOffLimits;
+        public bool? offLimits;
 
         public bool? autoAssignRoomFunctionContainer;
 
@@ -52,7 +52,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
             {
                 CustomRoomData data = 
                     JsonConvert.DeserializeObject<CustomRoomData>(
-                        File.ReadAllText(AssetsHelper.modPath + "Premades/Rooms/" + inheritPath));
+                        File.ReadAllText(AssetsHelper.modPath + "Premades/Rooms/Patterns/" + inheritPath));
                 data.InheritProperties();
                 InheritFrom(data);
             }

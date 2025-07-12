@@ -160,7 +160,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 {
                     if (name == "END" && !(bool)roomData.endlessMode) continue;
 
-                    if (name != "END" && roomData.bannedFloors.Contains(floor)) continue;
+                    if (name != "END" && roomData.bannedFloors != null && roomData.bannedFloors.Contains(floor)) continue;
 
                     if (roomData.levelTypes != null && roomData.levelTypes.Length > 0 &&
                         !roomData.levelTypes.Contains(levelObject.type.ToString()) &&
@@ -185,7 +185,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             {
                 if (name == "END" && !(bool)roomData.endlessMode) continue;
 
-                if (name != "END" && roomData.bannedFloors.Contains(floor)) continue;
+                if (name != "END" && roomData.bannedFloors != null && roomData.bannedFloors.Contains(floor)) continue;
 
                 if (roomData.levelTypes != null && roomData.levelTypes.Length > 0 &&
                         !roomData.levelTypes.Contains(levelObject.type.ToStringExtended())) continue;

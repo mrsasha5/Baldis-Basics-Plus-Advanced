@@ -2,7 +2,6 @@
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
-using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Managers;
 using BaldisBasicsPlusAdvanced.Menu;
@@ -36,10 +35,6 @@ namespace BaldisBasicsPlusAdvanced
 
         internal static string tempPath;
 
-        //internal static float updateCheckIntervalTime;
-
-        internal static bool updateChecksEnabled;
-
         internal static bool notificationsEnabled;
 
         private static AdvancedCore instance;
@@ -52,10 +47,6 @@ namespace BaldisBasicsPlusAdvanced
 
         private static Harmony harmony;
 
-        /*private void OnApplicationQuit()
-        {
-            if (AutoUpdateManager.thread != null) AutoUpdateManager.thread.Abort();
-        }*/
 
         private void Awake()
         {
@@ -69,17 +60,7 @@ namespace BaldisBasicsPlusAdvanced
 
             notificationsEnabled = Config.Bind("Settings", "Notifications", defaultValue: true, 
                 "Disables/enables notifications.").Value;
-            
-            updateChecksEnabled = 
-                Config.Bind("Updates", "Check Updates", defaultValue: true, 
-                "Checks releases from Github repo and install them if you give permission for this!").Value;
 
-            //updateCheckIntervalTime =
-            //    Config.Bind("Updates", "Interval Time", defaultValue: 600f,
-            //    "How many seconds should go until mod will check releases again. " +
-            //    "If you want to turn off these cyclic checks, then set value less than 0. For example: -1").Value;
-
-            
             PrepareSettingsMenu();
             ModdedSaveGame.AddSaveHandler(LevelDataManager.Instance);
             GeneratorManagement.Register(this, GenerationModType.Addend, GenerationPatchingManager.RegisterMainLevelData);
