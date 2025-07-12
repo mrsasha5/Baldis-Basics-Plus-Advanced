@@ -161,7 +161,7 @@ namespace BaldisBasicsPlusAdvanced
 
             yield return "Loading Kitchen Stove recipes...";
 
-            KitchenStove.LoadRecipesFromAssets();
+            ApiManager.LoadKitchenStoveRecipesFromFolder(AssetsHelper.modPath + "Premades/Recipes/KitchenStove/", true);
 
             yield return "Initializing new MIDIs...";
 

@@ -52,6 +52,7 @@ using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 using BaldisBasicsPlusAdvanced.AutoUpdate;
 using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
+using Newtonsoft.Json;
 #endregion
 
 namespace BaldisBasicsPlusAdvanced.Managers
@@ -638,7 +639,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 maxTime: 100f,
                 flags: RandomEventFlags.AffectsGenerator
                 )
-                .SetWeight(floor: 2, 150)
+                .SetWeight(floor: 2, 125)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory, LevelType.Laboratory, LevelType.Maintenance)
                 //.SetEndless(true) //no endless
                 .SetBannedFloors(1);
@@ -1245,7 +1246,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetFloorTex(AssetsStorage.textures["adv_english_floor"], 100);
 
             EnumExtensions.ExtendEnum<RoomCategory>("SchoolCouncil");
-            //EnumExtensions.ExtendEnum<RoomCategory>("AdvancedClass");
             EnumExtensions.ExtendEnum<RoomCategory>("CornField");
             /*PrefabsCreator.CreateRoomGroup("SchoolCouncil", minRooms: 0, maxRooms: 0, dontSpawn: true)
                 .SetFalseEverywhere()
@@ -1256,7 +1256,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeRoomAssets()
         {
-
             string[] filesPath = Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/", "*.cbld", SearchOption.AllDirectories);
 
             foreach (string path in filesPath)
@@ -1270,7 +1269,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
                 string jsonData = File.ReadAllText(folderPath + Path.GetFileNameWithoutExtension(path) + ".json");
 
-                CustomRoomData roomData = JsonUtility.FromJson<CustomRoomData>(jsonData);
+                CustomRoomData roomData = JsonConvert.DeserializeObject<CustomRoomData>(jsonData);
 
                 RoomFunctionContainer funcContainer = null;
 
@@ -1279,11 +1278,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     funcContainer = AssetsHelper.LoadAsset<RoomFunctionContainer>(roomData.functionContainerName);
                 }
 
-                RoomAsset roomAsset = RoomHelper.CreateAssetFromPath(path, roomData.isOffLimits, roomData.autoAssignRoomFunctionContainer,
-                    funcContainer, isAHallway: roomData.isAHallway, keepTextures: roomData.keepTextures);
+                RoomAsset roomAsset = RoomHelper.CreateAssetFromPath(path, (bool)roomData.isOffLimits, 
+                    (bool)roomData.autoAssignRoomFunctionContainer,
+                    funcContainer, isAHallway: (bool)roomData.isAHallway, keepTextures: (bool)roomData.keepTextures);
 
-                roomAsset.minItemValue = roomData.minItemValue;
-                roomAsset.maxItemValue = roomData.maxItemValue;
+                roomAsset.minItemValue = (int)roomData.minItemValue;
+                roomAsset.maxItemValue = (int)roomData.maxItemValue;
 
                 if (!string.IsNullOrEmpty(roomData.doorMatsName))
                     roomAsset.doorMats = Array.Find(ScriptableObject.FindObjectsOfType<StandardDoorMats>(),
@@ -1299,7 +1299,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 roomData.weightedRoomAsset = new WeightedRoomAsset()
                 {
                     selection = roomAsset,
-                    weight = roomData.weight
+                    weight = (int)roomData.weight
                 };
 
                 ObjectsStorage.RoomDatas.Add(roomData);

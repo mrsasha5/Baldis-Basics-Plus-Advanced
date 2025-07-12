@@ -158,7 +158,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             {
                 foreach (CustomRoomData roomData in ObjectsStorage.RoomDatas)
                 {
-                    if (name == "END" && !roomData.endlessMode) continue;
+                    if (name == "END" && !(bool)roomData.endlessMode) continue;
 
                     if (name != "END" && roomData.bannedFloors.Contains(floor)) continue;
 
@@ -183,7 +183,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             //for halls
             foreach (CustomRoomData roomData in ObjectsStorage.RoomDatas)
             {
-                if (name == "END" && !roomData.endlessMode) continue;
+                if (name == "END" && !(bool)roomData.endlessMode) continue;
 
                 if (name != "END" && roomData.bannedFloors.Contains(floor)) continue;
 
@@ -194,7 +194,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
                 if (category == RoomCategory.Hall)
                 {
-                    if (roomData.isPotentialPostPlotSpecialHall)
+                    if ((bool)roomData.isPotentialPostPlotSpecialHall)
                         levelObject.potentialPostPlotSpecialHalls = 
                             levelObject.potentialPostPlotSpecialHalls.AddToArray(roomData.weightedRoomAsset);
                 }

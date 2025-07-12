@@ -5,12 +5,11 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using BaldisBasicsPlusAdvanced.SaveSystem.Data;
+using BaldisBasicsPlusAdvanced.SerializableData;
 using BepInEx;
 using BepInEx.Logging;
-using HarmonyLib;
 using MTM101BaldAPI;
 using System;
 using System.Collections.Generic;
@@ -38,6 +37,31 @@ namespace BaldisBasicsPlusAdvanced.API
         public static ExtraSettingsData ExtraSettings => OptionsDataManager.ExtraSettings;
 
         #region Kitchen Stove recipes
+
+        /// <summary>
+        /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/> class has it.
+        /// Overloading of LoadKitchenStoveRecipesFromFolder(string, bool, bool, bool) with recommended parameters (still free to use it!).
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="includeSubdirectories"></param>
+        public static void LoadKitchenStoveRecipesFromFolder(string path, bool includeSubdirectories)
+        {
+            LoadKitchenStoveRecipesFromFolder(path, includeSubdirectories, logWarnings: true, sendErrorNotifications: true);
+        }
+
+        /// <summary>
+        /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/> class has it.
+        /// </summary>
+        /// <param name="path">Folder's path.</param>
+        /// <param name="includeSubdirectories"></param>
+        /// <param name="logWarnings">Logs if some recipes loading was failed (each recipe will be showed in console + exception if it exists).</param>
+        /// <param name="sendErrorNotifications">They let user to know if something went wrong during recipes loading (without logging which recipes caused that)!</param>
+        public static void LoadKitchenStoveRecipesFromFolder(string path, bool includeSubdirectories, 
+            bool logWarnings, bool sendErrorNotifications)
+        {
+            KitchenStove.LoadRecipesFromAssets(path, includeSubdirectories, logWarnings, sendErrorNotifications);
+        }
+
         /// <summary>
         /// Return a list of food recipe datas from all mods except specified.
         /// </summary>

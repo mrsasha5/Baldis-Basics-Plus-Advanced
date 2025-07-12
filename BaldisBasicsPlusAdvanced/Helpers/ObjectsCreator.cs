@@ -249,7 +249,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static Canvas CreateCanvas(GameObject gameObj, bool setGlobalCam, float planeDistance = 0.31f)
         {
-            gameObj.layer = LayersHelper.ui; //UI
+            gameObj.layer = LayersHelper.ui;
             Canvas canvas = gameObj.AddComponent<Canvas>();
             CanvasScaler canvasScaler = gameObj.AddComponent<CanvasScaler>();
             gameObj.AddComponent<GraphicRaycaster>();
@@ -259,20 +259,20 @@ namespace BaldisBasicsPlusAdvanced.Helpers
                 | AdditionalCanvasShaderChannels.Tangent;
 
             canvasScaler.referencePixelsPerUnit = 1f;
-            canvasScaler.referenceResolution = new Vector2(480, 360);//480 360
+            canvasScaler.referenceResolution = new Vector2(480, 360);
             canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
             canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
 
             canvasScaler.scaleFactor = 1f;
 
-            //huh?
+            //Huh?
             ReflectionHelper.SetValue<float>(gameObj.AddComponent<PlaneDistance>(), "planeDistance", planeDistance); //2f || 100f || 0.31f?
             canvas.planeDistance = planeDistance;
 
             //NOT UI CAMERA!!!
             //canvas.worldCamera = Singleton<CoreGameManager>.Instance.GetCamera(0).canvasCam;
 
-            //global cam!!!1
+            //Global cam!!!1
             if (setGlobalCam) canvas.worldCamera = Singleton<GlobalCam>.Instance.Cam;
             return canvas;
         }

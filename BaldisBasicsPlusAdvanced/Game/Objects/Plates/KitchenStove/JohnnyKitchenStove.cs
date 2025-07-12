@@ -65,6 +65,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             textBase.gameObject.SetActive(false);
         }
 
+        protected override void OnActivatingPost()
+        {
+            base.OnActivatingPost();
+            activeTime = burningTime; //Prevents for recipe's burning time overrides
+        }
+
         protected override void OnDeactivatingPost()
         {
             base.OnDeactivatingPost();

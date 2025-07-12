@@ -6,6 +6,7 @@ using MTM101BaldAPI.Registers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace BaldisBasicsPlusAdvanced.SerializableData
 {
@@ -16,6 +17,24 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
 
         public SerializableItem[] cookedFood;
 
+        /// <summary>
+        /// Loads Kitchen Stove's recipe from path.
+        /// May cause exception if something will go wrong during deserializing or reading data from file!
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static FoodRecipeSerializableData LoadFromPath(string path)
+        {
+            return JsonConvert.DeserializeObject<FoodRecipeSerializableData>(File.ReadAllText(path));
+        }
+
+        /// <summary>
+        /// Converts <see cref="FoodRecipeSerializableData"/> to <see cref="FoodRecipeData"/>.
+        /// </summary>
+        /// <param name="pluginInfo">This parameter is used to get items firstly from your mod if recipe contains item with modded enum.
+        /// If you are using item from other mod, then use field "GUID" from <see cref="SerializableItem"/> to get item from special mod!
+        /// Otherwise converter will be thinking that you want to get item from your mod.</param>
+        /// <returns></returns>
         public FoodRecipeData ConvertToStandard(PluginInfo pluginInfo)
         {
             FoodRecipeData data = new FoodRecipeData(pluginInfo);
@@ -23,8 +42,6 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
             List<ItemObject> cookedFood = new List<ItemObject>();
             for (int i = 0; i < this.rawFood.Length; i++)
             {
-                //Debug.Log("Name: " + this.rawFood[i].name);
-                //Debug.Log("Uses: " + this.rawFood[i].uses);
                 if (string.IsNullOrEmpty(this.rawFood[i].GUID) && Enum.TryParse(this.rawFood[i].name, out Items @enum))
                 {
                     ItemMetaData meta = ItemMetaStorage.Instance.FindByEnum(@enum);
@@ -84,11 +101,20 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
             return data;
         }
 
+        /// <summary>
+        /// Nothing special, just a class which contains item's data for recipe
+        /// </summary>
         [JsonObject]
         public class SerializableItem
         {
+            /// <summary>
+            /// That's enum actually.
+            /// </summary>
             public string name;
 
+            /// <summary>
+            /// Use it if you need to use item from other mod.
+            /// </summary>
             public string GUID;
 
             public int uses = 0;

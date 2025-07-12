@@ -157,41 +157,44 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         {
         }
 
-        public static void LoadRecipesFromAssets()
+        internal static void LoadRecipesFromAssets(string path, bool includeSubdirs, bool logWarnings, bool sendNotifications)
         {
-            string[] filesPath = Directory.GetFiles(AssetsHelper.modPath + "Premades/Recipes/KitchenStove/", 
-                "*.json", SearchOption.AllDirectories);
+            string[] filePaths = Directory.GetFiles(path, "*.json", 
+                includeSubdirs ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
 
             int ignoredRecipes = 0;
             int brokenRecipes = 0;
 
-            foreach (string path in filesPath)
+            foreach (string filePath in filePaths)
             {
                 try
                 {
-                    FoodRecipeSerializableData data = JsonConvert.DeserializeObject<FoodRecipeSerializableData>(File.ReadAllText(path));
-
-                    if (!data.ConvertToStandard(AdvancedCore.Instance.Info).RegisterRecipe())
+                    if (!FoodRecipeSerializableData.LoadFromPath(filePath)
+                        .ConvertToStandard(AdvancedCore.Instance.Info).RegisterRecipe())
                     {
-                        AdvancedCore.Logging.LogWarning($"Ignored recipe from {path}. Recipe with same raw food already exists.");
+                        if (logWarnings)
+                            AdvancedCore.Logging.LogWarning($"Ignored recipe from {filePath}. Recipe with same raw food already exists.");
                         ignoredRecipes++;
                     }
                 } catch (Exception e)
                 {
-                    AdvancedCore.Logging.LogWarning($"Cannot load recipe from {path}");
-                    AdvancedCore.Logging.LogError($"Error: {e}");
+                    if (logWarnings)
+                    {
+                        AdvancedCore.Logging.LogWarning($"Cannot load recipe from {filePath}");
+                        AdvancedCore.Logging.LogError($"Error: {e}");
+                    }
                     brokenRecipes++;
                 }
                 
             }
 
-            if (brokenRecipes > 0)
+            if (sendNotifications && brokenRecipes > 0)
                 Singleton<NotificationManager>.Instance.Queue(
                     $"Can't load {brokenRecipes} recipes from assets!",
                     AssetsStorage.sounds["elv_buzz"],
                     time: 5f);
 
-            if (ignoredRecipes > 0)
+            if (sendNotifications && ignoredRecipes > 0)
                 Singleton<NotificationManager>.Instance.Queue(
                     $"Ignored {ignoredRecipes} recipes. Recipes with these raw food sets already exist!",
                     AssetsStorage.sounds["elv_buzz"],
@@ -351,8 +354,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 }
             }
 
-            currentRecipe?.onKitchenStoveActivatingPre?.Invoke(this);
             OnActivatingPre();
+            currentRecipe?.onKitchenStoveActivatingPre?.Invoke(this);
         }
 
         protected virtual void OnActivatingPre()
@@ -565,7 +568,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             Destroy(pickup.gameObject);
         }
 
-        public class PickupClickOverrider : BasePickupController
+        private class PickupClickOverrider : BasePickupController
         {
             public KitchenStove stove;
 
@@ -584,7 +587,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             }
         }
 
-        public class InteractionObject : MonoBehaviour, IClickable<int>
+        private class InteractionObject : MonoBehaviour, IClickable<int>
         {
             public KitchenStove stove;
 
@@ -632,7 +635,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             }
         }
 
-        public class BasePickupController : MonoBehaviour, IClickable<int>
+        private class BasePickupController : MonoBehaviour, IClickable<int>
         {
             public Pickup pickup;
 
