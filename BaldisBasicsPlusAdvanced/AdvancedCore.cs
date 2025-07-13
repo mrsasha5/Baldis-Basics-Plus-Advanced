@@ -1,6 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats;
+using BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Managers;

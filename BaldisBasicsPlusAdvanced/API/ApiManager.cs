@@ -46,7 +46,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <param name="includeSubdirectories"></param>
         public static void LoadKitchenStoveRecipesFromFolder(string path, bool includeSubdirectories)
         {
-            LoadKitchenStoveRecipesFromFolder(path, includeSubdirectories, logWarnings: true, sendErrorNotifications: true);
+            LoadKitchenStoveRecipesFromFolder(path, includeSubdirectories, logWarnings: true, sendWarningNotifications: false);
         }
 
         /// <summary>
@@ -55,11 +55,11 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <param name="path">Folder's path.</param>
         /// <param name="includeSubdirectories"></param>
         /// <param name="logWarnings">Logs if some recipes loading was failed (each recipe will be showed in console + exception if it exists).</param>
-        /// <param name="sendErrorNotifications">They let user to know if something went wrong during recipes loading (without logging which recipes caused that)!</param>
+        /// <param name="sendWarningNotifications">They let user to know if something went wrong during recipes loading (without logging which recipes caused that)!</param>
         public static void LoadKitchenStoveRecipesFromFolder(string path, bool includeSubdirectories, 
-            bool logWarnings, bool sendErrorNotifications)
+            bool logWarnings, bool sendWarningNotifications)
         {
-            KitchenStove.LoadRecipesFromAssets(path, includeSubdirectories, logWarnings, sendErrorNotifications);
+            KitchenStove.LoadRecipesFromAssets(path, includeSubdirectories, logWarnings, sendWarningNotifications);
         }
 
         /// <summary>

@@ -123,6 +123,8 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         //mod assets
 
+        #region Main
+
         static AssetsStorage()
         {
             //priority game assets
@@ -272,7 +274,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
                 //mod assets
 
-                if (IntegrationManager.IsActive<LevelEditorIntegration>()) LoadEditorAssets();
+                if (IntegrationManager.IsActive<LevelEditorIntegration>()) LevelEditorIntegration.LoadEditorAssets();
 
                 LoadModTexture("adv_criss_the_crystal", "Npcs/CrissTheCrystal/adv_criss_the_crystal.png");
                 LoadModTexture("adv_criss_the_crystal_crazy", "Npcs/CrissTheCrystal/adv_criss_the_crystal_crazy.png");
@@ -643,23 +645,9 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             }
         }
 
-        public static void Clear()
-        {
-            textures.Clear();
-            sprites.Clear();
-            sounds.Clear();
-            meshes.Clear();
-            materials.Clear();
-            itemObjects.Clear();
-            texts.Clear();
-            gameObjects.Clear();
-        }
+        #endregion
 
-        public static void CreateDoorMats(string nameBase, string texNameBase)
-        {
-            CreateMaterial(nameBase + "_open", "class_standard_open", textures[texNameBase + "_open"]);
-            CreateMaterial(nameBase + "_closed", "class_standard_closed", textures[texNameBase + "_closed"]);
-        }
+        #region Assets' overriding
 
         public static void OverrideAssetsProperties()
         {
@@ -810,41 +798,27 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             }
 
         }
+        #endregion 
 
-        public static void LoadEditorAssets()
+        public static void Clear()
         {
-            LoadModSprite("adv_editor_criss_the_crystal", "Compats/LevelEditor/NPCs/adv_editor_criss_the_crystal.png");
-
-            LoadModSprite("adv_editor_corn_sign1", "Compats/LevelEditor/Objects/adv_editor_corn_sign1.png");
-            LoadModSprite("adv_editor_finish_flag", "Compats/LevelEditor/Objects/adv_editor_finish_flag.png");
-            LoadModSprite("adv_editor_invisibility_plate", "Compats/LevelEditor/Objects/adv_editor_invisibility_plate.png");
-            LoadModSprite("adv_editor_acceleration_plate", "Compats/LevelEditor/Objects/adv_editor_acceleration_plate.png");
-            LoadModSprite("adv_editor_fake_plate", "Compats/LevelEditor/Objects/adv_editor_fake_plate.png");
-            LoadModSprite("adv_editor_noisy_plate", "Compats/LevelEditor/Objects/adv_editor_noisy_plate.png");
-            LoadModSprite("adv_editor_noisy_faculty_plate", "Compats/LevelEditor/Objects/adv_editor_noisy_faculty_plate.png");
-            LoadModSprite("adv_editor_stealing_plate", "Compats/LevelEditor/Objects/adv_editor_stealing_plate.png");
-            LoadModSprite("adv_editor_bully_plate", "Compats/LevelEditor/Objects/adv_editor_bully_plate.png");
-            LoadModSprite("adv_editor_present_plate", "Compats/LevelEditor/Objects/adv_editor_present_plate.png");
-            LoadModSprite("adv_editor_sugar_addiction_plate", "Compats/LevelEditor/Objects/adv_editor_sugar_addiction_plate.png");
-            LoadModSprite("adv_editor_slowdown_plate", "Compats/LevelEditor/Objects/adv_editor_slowdown_plate.png");
-            LoadModSprite("adv_editor_protection_plate", "Compats/LevelEditor/Objects/adv_editor_protection_plate.png");
-            LoadModSprite("adv_editor_teleportation_plate", "Compats/LevelEditor/Objects/adv_editor_teleportation_plate.png");
-            //LoadModSprite("adv_editor_gum_dispenser", "Compats/LevelEditor/Objects/adv_editor_gum_dispenser.png");
-            LoadModSprite("adv_editor_safety_trapdoor", "Compats/LevelEditor/Objects/adv_editor_safety_trapdoor.png");
-            LoadModSprite("adv_editor_voting_ballot", "Compats/LevelEditor/Objects/adv_editor_voting_ballot.png");
-            LoadModSprite("adv_editor_advanced_math_machine", "Compats/LevelEditor/Objects/adv_editor_activity_advanced_math_machine.png");
-            LoadModSprite("adv_editor_advanced_math_machine_corner", "Compats/LevelEditor/Objects/adv_editor_activity_advanced_math_machine_corner.png");
-
-            LoadModSprite("adv_editor_symbol_machine", "Compats/LevelEditor/Objects/adv_editor_symbol_machine.png");
-            LoadModSprite("adv_editor_english_floor", "Compats/LevelEditor/Rooms/adv_room_english.png");
-            LoadModSprite("adv_editor_school_council_floor", "Compats/LevelEditor/Rooms/adv_room_school_council.png");
-            LoadModSprite("adv_editor_english_floor_timer", "Compats/LevelEditor/Rooms/adv_room_english_timer.png");
-            LoadModSprite("adv_editor_advanced_class_floor", "Compats/LevelEditor/Rooms/adv_room_advanced.png");
-            LoadModSprite("adv_editor_corn_field", "Compats/LevelEditor/Rooms/adv_room_corn_field.png");
-            //loadModSprite("adv_editor_plate", "Compats/LevelEditor/Objects/adv_editor_pressure_plate.png");
+            textures.Clear();
+            sprites.Clear();
+            sounds.Clear();
+            meshes.Clear();
+            materials.Clear();
+            itemObjects.Clear();
+            texts.Clear();
+            gameObjects.Clear();
         }
 
-        private static Material CreateMaterialByShader(string key, string shaderNameBase, Texture2D tex)
+        public static void CreateDoorMats(string nameBase, string texNameBase)
+        {
+            CreateMaterial(nameBase + "_open", "class_standard_open", textures[texNameBase + "_open"]);
+            CreateMaterial(nameBase + "_closed", "class_standard_closed", textures[texNameBase + "_closed"]);
+        }
+
+        internal static Material CreateMaterialByShader(string key, string shaderNameBase, Texture2D tex)
         {
             if (Debugging) AdvancedCore.Logging.LogInfo("Creating material by texture: " + tex.name);
             materials.Add(key, new Material(Shader.Find(shaderNameBase)));
@@ -852,7 +826,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             return materials[key];
         }
 
-        private static Material CreateMaterial(string key, string matNameBase, Texture2D tex)
+        internal static Material CreateMaterial(string key, string matNameBase, Texture2D tex)
         {
             if (Debugging) AdvancedCore.Logging.LogInfo("Creating material by texture: " + tex.name);
             materials.Add(key, new Material(materials[matNameBase]));
@@ -860,7 +834,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             return materials[key];
         }
 
-        private static SoundObject LoadModSound(string key, string path, SoundType soundType, string subKey, float subDuration = -1f)
+        internal static SoundObject LoadModSound(string key, string path, SoundType soundType, string subKey, float subDuration = -1f)
         {
             if (Debugging) AdvancedCore.Logging.LogInfo("Loading: " + path);
             if (string.IsNullOrEmpty(subKey)) subDuration = 0f;
@@ -869,7 +843,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             return sound;
         }
 
-        private static SoundObject LoadModSound(string key, string path, SoundType soundType, string subKey, Color color, float subDuration = 2f)
+        internal static SoundObject LoadModSound(string key, string path, SoundType soundType, string subKey, Color color, float subDuration = 2f)
         {
             //if (Debugging) AdvancedCore.Logging.LogInfo("Loading: " + path); //because used in other method
             SoundObject sound = LoadModSound(key, path, soundType, subKey, subDuration);
@@ -877,7 +851,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             return sound;
         }
 
-        private static void LoadModSprite(string key, string path, float pixelsPerUnit = 1f, Vector2? center = null)
+        internal static void LoadModSprite(string key, string path, float pixelsPerUnit = 1f, Vector2? center = null)
         {
             if (Debugging) AdvancedCore.Logging.LogInfo("Loading: " + path);
 
@@ -892,56 +866,49 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             sprites.Add(key, sprite);
         }
 
-        private static void LoadModTexture(string key, string path, bool doNotUnload = false)
+        internal static void LoadModTexture(string key, string path, bool doNotUnload = false)
         {
             if (Debugging) AdvancedCore.Logging.LogInfo("Loading: " + path);
             Texture2D texture = AssetsHelper.TextureFromFile("Textures/" + path);
             textures.Add(key, texture);
         }
 
-        private static void LoadGameObject(string key, string name, bool doNotUnload = false)
+        internal static void LoadGameObject(string key, string name, bool doNotUnload = false)
         {
             if (Debugging) AdvancedCore.Logging.LogInfo("Loading from assets: " + name);
             GameObject _object = AssetsHelper.LoadAsset<GameObject>(name);
             gameObjects.Add(key, _object);
         }
 
-        /*private static void CloneGameObject(string key, string name, bool toPrefab = true, bool setActive = true)
-        {
-            GameObject _object = UnityEngine.Object.Instantiate(AssetsHelper.loadAsset<GameObject>(name));
-            gameObjects.Add(key, _object);
-            if (toPrefab) _object.ConvertToPrefab(true);
-        }*/
-
-        private static void LoadSprite(string key, string name, bool doNotUnload = false)
+        internal static void LoadSprite(string key, string name, bool doNotUnload = false)
         {
             if (Debugging) AdvancedCore.Logging.LogInfo("Loading from assets: " + name);
             Sprite sprite = AssetsHelper.LoadAsset<Sprite>(name);
             sprites.Add(key, sprite, doNotUnload);
         }
 
-        private static void LoadTexture(string key, string name, bool doNotUnload = false)
+        internal static void LoadTexture(string key, string name, bool doNotUnload = false)
         {
             if (Debugging) AdvancedCore.Logging.LogInfo("Loading from assets: " + name);
             Texture2D sprite = AssetsHelper.LoadAsset<Texture2D>(name);
             textures.Add(key, sprite, doNotUnload);
         }
 
-        private static void LoadMaterial(string key, string name, bool doNotUnload = false)
+        internal static void LoadMaterial(string key, string name, bool doNotUnload = false)
         {
             if (Debugging) AdvancedCore.Logging.LogInfo("Loading from assets: " + name);
             Material material = AssetsHelper.LoadAsset<Material>(name);
             materials.Add(key, material, doNotUnload);
         }
 
-        private static void LoadMesh(string key, string name, bool doNotUnload = false)
+        internal static void LoadMesh(string key, string name, bool doNotUnload = false)
         {
             if (Debugging) AdvancedCore.Logging.LogInfo("Loading from assets: " + name);
             Mesh material = AssetsHelper.LoadAsset<Mesh>(name);
             meshes.Add(key, material, doNotUnload);
         }
 
-        private static void LoadSound(string key, string name, bool doNotUnload = false)
+        internal static void LoadSound(string key, string name, bool doNotUnload = false)
         {
             if (Debugging) AdvancedCore.Logging.LogInfo("Loading from assets: " + name);
             SoundObject sound = AssetsHelper.LoadAsset<SoundObject>(name);

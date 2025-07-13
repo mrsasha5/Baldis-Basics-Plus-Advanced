@@ -3,10 +3,11 @@ using BaldisBasicsPlusAdvanced.Attributes;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats.LevelEditor.EditorTools;
-using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using HarmonyLib;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelEditor.Patches.UI
 {
@@ -18,6 +19,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelEditor.Patches.UI
         [HarmonyPostfix]
         private static void AddNewObjects(PlusLevelEditor __instance)
         {
+            void CreateTool<T>(List<EditorTool> categoryList, string key, Sprite sprite) where T : EditorTool
+            {
+                T instance = (T)Activator.CreateInstance(typeof(T), key);
+                typeof(T).GetMethod("SetSprite").Invoke(instance, new object[] { sprite });
+                categoryList.Add(instance);
+            }
+
             List<EditorTool> halls = __instance.toolCats.Find(x => x.name == "halls").tools;
             List<EditorTool> items = __instance.toolCats.Find(x => x.name == "items").tools;
             List<EditorTool> objects = __instance.toolCats.Find(x => x.name == "objects").tools;
@@ -25,27 +33,22 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelEditor.Patches.UI
             List<EditorTool> activities = __instance.toolCats.Find(x => x.name == "activities").tools;
             List<EditorTool> connectables = __instance.toolCats.Find(x => x.name == "connectables").tools;
 
-            ControlledNpcTool crissTool = new ControlledNpcTool("adv_criss_the_crystal");
-            crissTool.SetSprite(AssetsStorage.sprites["adv_editor_criss_the_crystal"]);
-            npcs.Add(crissTool);
+            CreateTool<ControlledItemTool>(npcs, 
+                "adv_criss_the_crystal", AssetsStorage.sprites["adv_editor_criss_the_crystal"]);
 
             foreach (string name in ObjectsStorage.ItemObjects.Keys)
             {
                 if (ObjectsStorage.SpawningData["item_" + name].Editor)
                 {
                     string key = "adv_" + name;
-                    ControlledItemTool itemTool = new ControlledItemTool(key);
-                    itemTool.SetSprite(ObjectsStorage.EditorSprites["item_" + name]);
-                    items.Add(itemTool);
+                    CreateTool<ControlledItemTool>(items, key, ObjectsStorage.EditorSprites["item_" + name]);
                 }
             }
             
             foreach (string name in ObjectsStorage.SodaMachines.Keys)
             {
                 string key = "adv_" + name;
-                ControlledRotatableTool objectTool = new ControlledRotatableTool(key);
-                objectTool.SetSprite(ObjectsStorage.EditorSprites["vending_" + name]);
-                objects.Add(objectTool);
+                CreateTool<ControlledRotatableTool>(objects, key, ObjectsStorage.EditorSprites["vending_" + name]);
             }
 
             foreach (string name in ObjectsStorage.Objects.Keys)
@@ -56,65 +59,49 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelEditor.Patches.UI
 
                     if (plate.EditorToolSprite == null) continue;
 
-                    ControlledRotatableTool plateTool = new ControlledRotatableTool(key);
-                    plateTool.SetSprite(plate.EditorToolSprite);
-                    objects.Add(plateTool);
+                    CreateTool<ControlledRotatableTool>(objects, key, plate.EditorToolSprite);
                 }
             }
 
-            ControlledRotatableTool symbolMachineTool = new ControlledRotatableTool("adv_symbol_machine");
-            symbolMachineTool.SetSprite(AssetsStorage.sprites["adv_editor_symbol_machine"]);
-            objects.Add(symbolMachineTool);
+            CreateTool<ControlledItemTool>(objects, "adv_symbol_machine", 
+                AssetsStorage.sprites["adv_editor_symbol_machine"]);
 
-            ControlledActivityTool advancedMathMachine = new ControlledActivityTool("adv_advanced_math_machine");
-            advancedMathMachine.SetSprite(AssetsStorage.sprites["adv_editor_advanced_math_machine"]);
-            activities.Add(advancedMathMachine);
+            CreateTool<ControlledActivityTool>(activities, "adv_advanced_math_machine", 
+                AssetsStorage.sprites["adv_editor_advanced_math_machine"]);
 
-            ControlledActivityTool advancedMathMachine2 = new ControlledActivityTool("adv_advanced_math_machine_corner");
-            advancedMathMachine2.SetSprite(AssetsStorage.sprites["adv_editor_advanced_math_machine_corner"]);
-            activities.Add(advancedMathMachine2);
+            CreateTool<ControlledActivityTool>(activities, "adv_advanced_math_machine_corner",
+                AssetsStorage.sprites["adv_editor_advanced_math_machine_corner"]);
 
             //ControlledRotatableTool ballotTool = new ControlledRotatableTool("adv_voting_ballot");
             //ballotTool.SetSprite(AssetsStorage.sprites["adv_editor_voting_ballot"]);
             //objects.Add(ballotTool);
 
-            ControlledObjectTool farmFlagTool = new ControlledObjectTool("adv_farm_finish_flag");
-            farmFlagTool.SetSprite(AssetsStorage.sprites["adv_editor_finish_flag"]);
-            objects.Add(farmFlagTool);
+            CreateTool<ControlledObjectTool>(objects, "adv_farm_finish_flag",
+                AssetsStorage.sprites["adv_editor_finish_flag"]);
 
-            ControlledObjectTool farmSignTool = new ControlledObjectTool("adv_farm_sign1");
-            farmSignTool.SetSprite(AssetsStorage.sprites["adv_editor_corn_sign1"]);
-            objects.Add(farmSignTool);
+            CreateTool<ControlledObjectTool>(objects, "adv_farm_sign1",
+                AssetsStorage.sprites["adv_editor_corn_sign1"]);
 
-            //adv_english_class
-            //EnglishClass
-            ControlledFloorTool englishFloorTool = new ControlledFloorTool("adv_english_class");
-            englishFloorTool.SetSprite(AssetsStorage.sprites["adv_editor_english_floor"]);
-            halls.Add(englishFloorTool);
+            CreateTool<ControlledObjectTool>(objects, "adv_trigger_no_plate_cooldown",
+                AssetsStorage.sprites["adv_editor_no_cooldown_plate"]);
 
-            ControlledFloorTool englishFloorTimerTool = new ControlledFloorTool("adv_english_class_timer");
-            englishFloorTimerTool.SetSprite(AssetsStorage.sprites["adv_editor_english_floor_timer"]);
-            halls.Add(englishFloorTimerTool);
+            CreateTool<ControlledObjectTool>(objects, "adv_trigger_low_plate_unpress_time",
+                AssetsStorage.sprites["adv_editor_low_unpress_time"]);
 
-            ControlledFloorTool councilFloor = new ControlledFloorTool("adv_school_council_class");
-            councilFloor.SetSprite(AssetsStorage.sprites["adv_editor_school_council_floor"]);
-            halls.Add(councilFloor);
+            CreateTool<ControlledFloorTool>(halls, "adv_english_class",
+                AssetsStorage.sprites["adv_editor_english_floor"]);
 
-            ControlledFloorTool advancedFloor = new ControlledFloorTool("adv_advanced_class");
-            advancedFloor.SetSprite(AssetsStorage.sprites["adv_editor_advanced_class_floor"]);
-            halls.Add(advancedFloor);
+            CreateTool<ControlledFloorTool>(halls, "adv_english_class_timer",
+                AssetsStorage.sprites["adv_editor_english_floor_timer"]);
 
-            ControlledFloorTool cornFloor = new ControlledFloorTool("adv_corn_field");
-            cornFloor.SetSprite(AssetsStorage.sprites["adv_editor_corn_field"]);
-            halls.Add(cornFloor);
+            CreateTool<ControlledFloorTool>(halls, "adv_school_council_class",
+                AssetsStorage.sprites["adv_editor_school_council_floor"]);
 
-            //ControlledTileBasedTool gumDispenserTool = new ControlledTileBasedTool("adv_gum_dispenser");
-            //gumDispenserTool.SetSprite(AssetsStorage.sprites["adv_editor_gum_dispenser"]);
-            //connectables.Add(gumDispenserTool);
+            CreateTool<ControlledFloorTool>(halls, "adv_advanced_class",
+                AssetsStorage.sprites["adv_editor_advanced_class_floor"]);
 
-            /*PlateTool buttonTool = new PlateTool("adv_pressure_plate");
-            buttonTool.SetSprite(AssetsStorage.sprites["adv_editor_acceleration_plate"]);
-            connectables.Add(buttonTool);*/
+            CreateTool<ControlledFloorTool>(halls, "adv_corn_field",
+                AssetsStorage.sprites["adv_editor_corn_field"]);
         }
 
         

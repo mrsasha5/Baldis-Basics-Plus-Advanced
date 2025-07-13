@@ -169,7 +169,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             List<WeightedRoomAsset> assets = new List<WeightedRoomAsset>();
 
-            foreach (string path in Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/Voting/",
+            foreach (string path in Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/Objects/Voting/",
                 "*.cbld", SearchOption.AllDirectories))
             {
 

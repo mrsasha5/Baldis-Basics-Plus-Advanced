@@ -22,17 +22,18 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         {
             RectTransform rect = new GameObject("TextMeshPro").AddComponent<RectTransform>();
 
-            if (size != null)
-                rect.sizeDelta = (Vector2)size;
-            if (parent != null)
-                rect.SetParent(parent, false);
-            if (position != null)
-                rect.localPosition = (Vector3)position;
-
             TextMeshPro text = rect.gameObject.AddComponent<TextMeshPro>();
             text.alignment = TextAlignmentOptions.Center;
             text.font = font.FontAsset();
             text.fontSize = font.FontSize();
+
+            if (parent != null)
+                rect.SetParent(parent, false);
+            if (position != null)
+                rect.localPosition = (Vector3)position;
+            if (size != null)
+                rect.sizeDelta = (Vector2)size;
+            
 
             return text;
         }

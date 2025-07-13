@@ -41,26 +41,30 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
 
         public bool? squaredShape;
 
-        public string inheritPath;
+        public string[] inheritPaths;
 
         [NonSerialized]
         public WeightedRoomAsset weightedRoomAsset;
 
         public void InheritProperties()
         {
-            if (inheritPath != null)
+            if (inheritPaths != null)
             {
-                CustomRoomData data = 
+                for (int i = 0; i < inheritPaths.Length; i++)
+                {
+                    CustomRoomData data =
                     JsonConvert.DeserializeObject<CustomRoomData>(
-                        File.ReadAllText(AssetsHelper.modPath + "Premades/Rooms/Patterns/" + inheritPath));
-                data.InheritProperties();
-                InheritFrom(data);
+                        File.ReadAllText(AssetsHelper.modPath + "Premades/Rooms/Patterns/" + inheritPaths[i]));
+                    data.InheritProperties();
+                    InheritFrom(data);
+                }
             }
         }
 
         private void InheritFrom(CustomRoomData roomData)
         {
-            FieldInfo[] fields = typeof(CustomRoomData).GetFields();
+            FieldInfo[] fields = typeof(CustomRoomData).
+                GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             for (int i = 0; i < fields.Length; i++)
             {
                 if (fields[i].GetValue(roomData) != null && 

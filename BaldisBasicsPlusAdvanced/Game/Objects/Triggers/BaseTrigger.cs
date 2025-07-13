@@ -1,5 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Helpers;
+using MTM101BaldAPI.UI;
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Triggers
@@ -7,35 +9,32 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Triggers
     public class BaseTrigger : MonoBehaviour, IPrefab
     {
         [SerializeField]
-        private SpriteRenderer renderer;
+        protected SpriteRenderer renderer;
 
         private EnvironmentController ec;
 
-        protected virtual Sprite SpriteToSet => null;
-
-        public void InitializePrefab(int variant)
+        public virtual void InitializePrefab(int variant)
         {
-            if (SpriteToSet == null) return;
-            renderer = ObjectsCreator.CreateSpriteRendererBase(SpriteToSet);
+
+        }
+
+        protected void CreateRenderer(Sprite sprite)
+        {
+            renderer = ObjectsCreator.CreateSpriteRendererBase(sprite);
             renderer.transform.SetParent(transform, false);
         }
 
         private void Start()
         {
-            ec = Singleton<BaseGameManager>.Instance.Ec;
-            ec.OnEnvironmentBeginPlay += SafeInvoker;
-            if (renderer != null) renderer.enabled = false;
+            ec = BaseGameManager.Instance.Ec;
+            ec.OnEnvironmentBeginPlay += OnEnvBeginPlay;
+            if (renderer != null) Destroy(renderer.gameObject);
+            VirtualStart();
         }
 
-        private void SafeInvoker()
+        protected virtual void VirtualStart()
         {
-            try
-            {
-                OnEnvBeginPlay();
-            } catch (Exception e)
-            {
-                AdvancedCore.Logging.LogError(e);
-            }
+
         }
 
         protected virtual void OnEnvBeginPlay()

@@ -1067,6 +1067,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             PrefabsCreator.CreateTrigger<NoPlatesCooldownTrigger>("no_plates_cooldown");
             PrefabsCreator.CreateTrigger<PitStopOverridesTrigger>("pit_stop_overrides");
+            PrefabsCreator.CreateTrigger<NoCooldownPlateCurrentPositionTrigger>("no_plate_cooldown");
+            PrefabsCreator.CreateTrigger<UnpressTimePlateCurrentPositionTrigger>("low_plate_unpress_time");
 
             //triggers end
 
@@ -1250,7 +1252,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeRoomAssets()
         {
-            string[] filesPath = Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/", "*.cbld", SearchOption.AllDirectories);
+            string[] filesPath = Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/Objects", "*.cbld", SearchOption.AllDirectories);
 
             foreach (string path in filesPath)
             {
@@ -1277,6 +1279,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     roomData.autoAssignRoomFunctionContainer == null ? false : (bool)roomData.autoAssignRoomFunctionContainer,
                     funcContainer, isAHallway: roomData.isAHallway == null ? false : (bool)roomData.isAHallway,
                     keepTextures: roomData.keepTextures == null ? false : (bool)roomData.keepTextures);
+
 
                 if (roomData.minItemValue != null) roomAsset.minItemValue = (int)roomData.minItemValue;
                 if (roomData.maxItemValue != null) roomAsset.maxItemValue = (int)roomData.maxItemValue;
