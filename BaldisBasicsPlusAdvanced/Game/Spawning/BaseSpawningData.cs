@@ -1,7 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Patches;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Spawning
 {
@@ -41,18 +41,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Spawning
 
         public int GetWeight(int floor)
         {
-            if (weights.Count == 0) return 0;
-
-            if (weights.ContainsKey(floor))
-            {
-                return weights[floor];
-            }
-            else
-            {
-                int nearestFloor = MathHelper.FindNearestValue(weights.Keys.ToArray(), floor);
-
-                return weights[nearestFloor];
-            }
+            return weights.GetWeight(floor);
         }
 
         public BaseSpawningData SetLevelTypes(params LevelType[] levels)

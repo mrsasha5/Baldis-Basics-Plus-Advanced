@@ -5,6 +5,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.SerializableData;
+using BepInEx;
 using MTM101BaldAPI;
 using MTM101BaldAPI.Registers;
 using Newtonsoft.Json;
@@ -157,7 +158,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         {
         }
 
-        internal static void LoadRecipesFromAssets(string path, bool includeSubdirs, bool logWarnings, bool sendNotifications)
+        internal static void LoadRecipesFromAssets(PluginInfo info, string path, bool includeSubdirs, 
+            bool logWarnings, bool sendNotifications)
         {
             string[] filePaths = Directory.GetFiles(path, "*.json", 
                 includeSubdirs ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
@@ -170,7 +172,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 try
                 {
                     if (!FoodRecipeSerializableData.LoadFromPath(filePath)
-                        .ConvertToStandard(AdvancedCore.Instance.Info).RegisterRecipe())
+                        .ConvertToStandard(info).RegisterRecipe())
                     {
                         if (logWarnings)
                             AdvancedCore.Logging.LogWarning($"Ignored recipe from {filePath}. Recipe with same raw food already exists.");

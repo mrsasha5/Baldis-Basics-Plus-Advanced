@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -9,7 +10,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
     [JsonObject]
     public class CustomRoomData
     {
-        public int? weight;
+        public Dictionary<int, int> weights;
 
         public int? minItemValue;
 
@@ -44,7 +45,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
         public string[] inheritPaths;
 
         [NonSerialized]
-        public WeightedRoomAsset weightedRoomAsset;
+        public RoomAsset roomAsset;
 
         public void InheritProperties()
         {

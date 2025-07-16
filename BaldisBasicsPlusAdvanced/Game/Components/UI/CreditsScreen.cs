@@ -9,7 +9,6 @@ using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
 using MTM101BaldAPI.UI;
-using Rewired;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -150,7 +149,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
             backgroundSprites = new List<Sprite>();
 
-            foreach (string path in Directory.GetFiles(AssetsHelper.modPath + "Textures/CreditsBackgrounds", 
+            foreach (string path in Directory.GetFiles(AssetsHelper.modPath + "Textures/Backgrounds/Credits", 
                 "*.*", SearchOption.AllDirectories))
             {
                 backgroundSprites.Add(AssetsHelper.SpriteFromFile(path.Replace(AssetsHelper.modPath, "")));

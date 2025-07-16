@@ -39,6 +39,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.Movement
             this.makesNoises = makesNoises;
 
             audMan = ObjectsCreator.CreatePropagatedAudMan(entity.transform.position);
+            
+            if (entity is PlayerEntity)
+            {
+                audMan.positional = false;
+            }
+            
             audMan.QueueAudio(AssetsStorage.sounds["whoosh"]);
             audMan.SetLoop(true);
             audMan.transform.SetParent(entity.transform, true);

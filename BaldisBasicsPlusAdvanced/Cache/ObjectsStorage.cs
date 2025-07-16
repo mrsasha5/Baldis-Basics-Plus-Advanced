@@ -8,12 +8,15 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
+using BaldisBasicsPlusAdvanced.SerializableData;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 using BepInEx;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Cache
 {
+    //I should do something with this thing in the future
+    //And generation too
     public class ObjectsStorage
     {
         private static Dictionary<string, Color> roomColors = new Dictionary<string, Color>()
@@ -28,7 +31,11 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         //extra datas
 
+        private static List<CellTextureSerializableData> cellTextureDatas = new List<CellTextureSerializableData>();
+
         private static Dictionary<string, BaseSpawningData> spawningData = new Dictionary<string, BaseSpawningData>();
+
+        public static List<CellTextureSerializableData> CellTextureDatas => cellTextureDatas;
 
         public static Dictionary<string, BaseSpawningData> SpawningData => spawningData;
 

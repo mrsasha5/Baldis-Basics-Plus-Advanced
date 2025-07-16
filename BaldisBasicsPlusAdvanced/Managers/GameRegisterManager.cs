@@ -57,7 +57,7 @@ using Newtonsoft.Json;
 
 namespace BaldisBasicsPlusAdvanced.Managers
 {
-    public class GameRegisterManager
+    internal class GameRegisterManager
     {
 
         #region Main MIDIs Initialization
@@ -164,6 +164,25 @@ namespace BaldisBasicsPlusAdvanced.Managers
             farmScene.AddMeta(AdvancedCore.Instance, new string[] { "adv_special_field_trip" });
 
             binaryReader.Close();
+        }
+
+        #endregion
+
+        #region Cells textures
+
+        public static void InitializeCellTextures()
+        {
+            foreach (string path in 
+                Directory.GetFiles(AssetsHelper.modPath + "Textures/Cells", "*.png", SearchOption.AllDirectories))
+            {
+                CellTextureSerializableData data = CellTextureSerializableData.LoadFrom(path);
+
+                if (data != null)
+                {
+                    ObjectsStorage.CellTextureDatas.Add(data);
+                }
+
+            }
         }
 
         #endregion
@@ -882,7 +901,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             //Chalkboard Menu ends
 
             PrefabsCreator.CreateObjectPrefab<CreditsScreen>("Credits Screen", "credits_screen");
-            PrefabsCreator.CreateObjectPrefab<UpdatesCenterMenu>("Updates Center", "updates_center");
+            //PrefabsCreator.CreateObjectPrefab<UpdatesCenterMenu>("Updates Center", "updates_center");
         }
 
         #endregion
@@ -1280,7 +1299,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     funcContainer, isAHallway: roomData.isAHallway == null ? false : (bool)roomData.isAHallway,
                     keepTextures: roomData.keepTextures == null ? false : (bool)roomData.keepTextures);
 
-
                 if (roomData.minItemValue != null) roomAsset.minItemValue = (int)roomData.minItemValue;
                 if (roomData.maxItemValue != null) roomAsset.maxItemValue = (int)roomData.maxItemValue;
 
@@ -1295,11 +1313,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
                 roomAsset.category = EnumExtensions.GetFromExtendedName<RoomCategory>(roomData.categoryName);
 
-                roomData.weightedRoomAsset = new WeightedRoomAsset()
-                {
-                    selection = roomAsset,
-                    weight = (int)roomData.weight
-                };
+                roomData.roomAsset = roomAsset;
 
                 ObjectsStorage.RoomDatas.Add(roomData);
             }

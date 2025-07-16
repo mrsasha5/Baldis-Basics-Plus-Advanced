@@ -63,7 +63,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelEditor.Patches.UI
                 }
             }
 
-            CreateTool<ControlledItemTool>(objects, "adv_symbol_machine", 
+            CreateTool<ControlledObjectTool>(objects, "adv_symbol_machine", 
                 AssetsStorage.sprites["adv_editor_symbol_machine"]);
 
             CreateTool<ControlledActivityTool>(activities, "adv_advanced_math_machine", 

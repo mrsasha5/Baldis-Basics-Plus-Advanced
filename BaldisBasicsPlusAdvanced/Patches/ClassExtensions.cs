@@ -11,6 +11,7 @@ using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using MTM101BaldAPI.UI;
 using TMPro;
+using System.Linq;
 
 namespace BaldisBasicsPlusAdvanced.Patches
 {
@@ -70,6 +71,22 @@ namespace BaldisBasicsPlusAdvanced.Patches
 
             entity?.ExternalActivity.moveMods.Remove(moveMod);
             gauge?.Deactivate();
+        }
+
+        public static int GetWeight(this Dictionary<int, int> weights, int floor)
+        {
+            if (weights.Count == 0) return 0;
+
+            if (weights.ContainsKey(floor))
+            {
+                return weights[floor];
+            }
+            else
+            {
+                int nearestFloor = MathHelper.FindNearestValue(weights.Keys.ToArray(), floor);
+
+                return weights[nearestFloor];
+            }
         }
 
         public static bool IsEntity(this Collider collider)
@@ -230,7 +247,9 @@ namespace BaldisBasicsPlusAdvanced.Patches
             entity.AddForce(force);
 
             ForcedEntityBehaviour behaviour = entity.gameObject.AddComponent<ForcedEntityBehaviour>();
-            behaviour.Initialize(Singleton<BaseGameManager>.Instance.Ec, entity, force, direction, minSlamMagnitude, behaviour.DefaultSlamDistance, makesNoises);
+            behaviour.Initialize(
+                BaseGameManager.Instance.Ec, entity, force, direction, minSlamMagnitude, 
+                behaviour.DefaultSlamDistance, makesNoises);
         }
 
         public static void CopyAllValuesTo<T>(this T @object, T target)

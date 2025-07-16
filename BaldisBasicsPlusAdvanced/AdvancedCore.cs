@@ -32,7 +32,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "Baldi's Basics Plus Advanced Edition";
 
-        public const string version = "0.2.5.4";
+        public const string version = "0.2.6";
 
         internal static string tempPath;
 
@@ -143,7 +143,8 @@ namespace BaldisBasicsPlusAdvanced
 
             yield return "Loading Kitchen Stove recipes...";
 
-            ApiManager.LoadKitchenStoveRecipesFromFolder(AssetsHelper.modPath + "Premades/Recipes/KitchenStove/", true);
+            ApiManager.LoadKitchenStoveRecipesFromFolder(Instance.Info, 
+                AssetsHelper.modPath + "Premades/Recipes/KitchenStove/", true);
 
             yield return "Initializing new MIDIs...";
 
@@ -175,7 +176,7 @@ namespace BaldisBasicsPlusAdvanced
 
             NotificationManager.Notification notif = CheckAssetsMarker();
 
-            int count = 20;
+            int count = 21;
 
             if (notif != null) count++;
 
@@ -193,6 +194,8 @@ namespace BaldisBasicsPlusAdvanced
             if (AssetsStorage.exception != null) throw AssetsStorage.exception;
 
             GameRegisterManager.CreateDoorMats();
+            yield return "Initializing and setting new cell's textures...";
+            GameRegisterManager.InitializeCellTextures();
             yield return "Initializing vending machines...";
             GameRegisterManager.InitializeVendingMachines();
             yield return "Initializing UI...";

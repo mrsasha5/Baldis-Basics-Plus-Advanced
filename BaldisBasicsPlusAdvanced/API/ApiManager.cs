@@ -42,24 +42,26 @@ namespace BaldisBasicsPlusAdvanced.API
         /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/> class has it.
         /// Overloading of LoadKitchenStoveRecipesFromFolder(string, bool, bool, bool) with recommended parameters (still free to use it!).
         /// </summary>
+        /// <param name="info"></param>
         /// <param name="path"></param>
         /// <param name="includeSubdirectories"></param>
-        public static void LoadKitchenStoveRecipesFromFolder(string path, bool includeSubdirectories)
+        public static void LoadKitchenStoveRecipesFromFolder(PluginInfo info, string path, bool includeSubdirectories)
         {
-            LoadKitchenStoveRecipesFromFolder(path, includeSubdirectories, logWarnings: true, sendWarningNotifications: false);
+            LoadKitchenStoveRecipesFromFolder(info, path, includeSubdirectories, logWarnings: true, sendWarningNotifications: false);
         }
 
         /// <summary>
         /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/> class has it.
         /// </summary>
+        /// <param name="info"></param>
         /// <param name="path">Folder's path.</param>
         /// <param name="includeSubdirectories"></param>
         /// <param name="logWarnings">Logs if some recipes loading was failed (each recipe will be showed in console + exception if it exists).</param>
         /// <param name="sendWarningNotifications">They let user to know if something went wrong during recipes loading (without logging which recipes caused that)!</param>
-        public static void LoadKitchenStoveRecipesFromFolder(string path, bool includeSubdirectories, 
+        public static void LoadKitchenStoveRecipesFromFolder(PluginInfo info, string path, bool includeSubdirectories, 
             bool logWarnings, bool sendWarningNotifications)
         {
-            KitchenStove.LoadRecipesFromAssets(path, includeSubdirectories, logWarnings, sendWarningNotifications);
+            KitchenStove.LoadRecipesFromAssets(info, path, includeSubdirectories, logWarnings, sendWarningNotifications);
         }
 
         /// <summary>

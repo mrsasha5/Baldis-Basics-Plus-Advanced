@@ -1,11 +1,13 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
+using BaldisBasicsPlusAdvanced.Patches;
+using BaldisBasicsPlusAdvanced.SerializableData;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 using HarmonyLib;
 using MTM101BaldAPI;
 using System;
+using System.Diagnostics;
 using System.Linq;
-using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Managers
 {
@@ -14,6 +16,31 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         private static void RegisterLevelData(string name, int floor, CustomLevelObject levelObject)
         {
+            foreach (CellTextureSerializableData cellTexData in ObjectsStorage.CellTextureDatas)
+            {
+                if (name == "END" && !cellTexData.endlessMode) continue;
+
+                if (name != "END" && cellTexData.bannedFloors != null && cellTexData.bannedFloors.Contains(floor)) continue;
+
+                if (cellTexData.levelTypes != null && cellTexData.levelTypes.Length > 0 &&
+                    !cellTexData.levelTypes.Contains(levelObject.type.ToString()) &&
+                        !cellTexData.levelTypes.Contains(levelObject.type.ToStringExtended())) continue;
+
+                WeightedTexture2D weightedTex = new WeightedTexture2D()
+                {
+                    selection = cellTexData.tex,
+                    weight = cellTexData.weights.GetWeight(floor)
+                };
+
+                if (cellTexData.types.Contains("wall"))
+                    levelObject.hallWallTexs = levelObject.hallWallTexs.AddToArray(weightedTex);
+
+                if (cellTexData.types.Contains("ceiling"))
+                    levelObject.hallCeilingTexs = levelObject.hallCeilingTexs.AddToArray(weightedTex);
+
+                if (cellTexData.types.Contains("floor"))
+                    levelObject.hallFloorTexs = levelObject.hallFloorTexs.AddToArray(weightedTex);
+            }
             
             foreach (string itemName in ObjectsStorage.ItemObjects.Keys)
             {
@@ -166,16 +193,21 @@ namespace BaldisBasicsPlusAdvanced.Managers
                         !roomData.levelTypes.Contains(levelObject.type.ToString()) &&
                         !roomData.levelTypes.Contains(levelObject.type.ToStringExtended())) continue;
 
-                    RoomCategory category = roomData.weightedRoomAsset.selection.category;
+                    WeightedRoomAsset weightedRoom = new WeightedRoomAsset()
+                    {
+                        selection = roomData.roomAsset,
+                        weight = roomData.weights.GetWeight(floor)
+                    };
 
-                    if (category == RoomCategory.Special && !levelObject.potentialSpecialRooms.Contains(roomData.weightedRoomAsset))
+                    RoomCategory category = roomData.roomAsset.category;
+
+                    if (category == RoomCategory.Special)
                     {
-                        levelObject.potentialSpecialRooms = levelObject.potentialSpecialRooms.AddToArray(roomData.weightedRoomAsset);
+                        levelObject.potentialSpecialRooms = levelObject.potentialSpecialRooms.AddToArray(weightedRoom);
                     }
-                    else if ((group.name == category.ToString() || group.name == category.ToStringExtended()) 
-                        && !group.potentialRooms.Contains(roomData.weightedRoomAsset))
+                    else if ((group.name == category.ToString() || group.name == category.ToStringExtended()))
                     {
-                        group.potentialRooms = group.potentialRooms.AddToArray(roomData.weightedRoomAsset);
+                        group.potentialRooms = group.potentialRooms.AddToArray(weightedRoom);
                     }
                 }
             }
@@ -190,13 +222,19 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 if (roomData.levelTypes != null && roomData.levelTypes.Length > 0 &&
                         !roomData.levelTypes.Contains(levelObject.type.ToStringExtended())) continue;
 
-                RoomCategory category = roomData.weightedRoomAsset.selection.category;
+                RoomCategory category = roomData.roomAsset.category;
 
                 if (category == RoomCategory.Hall)
                 {
                     if ((bool)roomData.isPotentialPostPlotSpecialHall)
-                        levelObject.potentialPostPlotSpecialHalls = 
-                            levelObject.potentialPostPlotSpecialHalls.AddToArray(roomData.weightedRoomAsset);
+                        levelObject.potentialPostPlotSpecialHalls =
+                            levelObject.potentialPostPlotSpecialHalls.AddToArray(
+                                new WeightedRoomAsset()
+                                    {
+                                        selection = roomData.roomAsset,
+                                        weight = roomData.weights.GetWeight(floor)
+                                    }
+                            );
                 }
             }
 
