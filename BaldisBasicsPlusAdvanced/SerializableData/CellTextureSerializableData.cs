@@ -21,6 +21,8 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
 
         public bool endlessMode;
 
+        public bool replacementWall;
+
         [NonSerialized]
         public Texture2D tex;
 

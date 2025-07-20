@@ -245,7 +245,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         }
 
         /// <summary>
-        /// Another way of registering recipe! Use that one which you prefer! ApiManager.CreateKitchenStoveRecipe(...) or that method!
+        /// Another way of registering recipe! Use that one which you prefer! ApiManager.CreateKitchenStoveRecipe(...) or this method!
         /// </summary>
         /// <returns></returns>
         public bool RegisterRecipe()

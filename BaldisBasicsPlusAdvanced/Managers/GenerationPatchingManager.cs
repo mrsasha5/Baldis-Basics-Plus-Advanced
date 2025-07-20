@@ -32,13 +32,17 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     weight = cellTexData.weights.GetWeight(floor)
                 };
 
-                if (cellTexData.types.Contains("wall"))
+                if (cellTexData.replacementWall && levelObject.hallWallTexs.Length >= 1)
+                {
+                    levelObject.hallWallTexs[0] = weightedTex;
+                }
+                else if (cellTexData.types.Contains("Wall"))
                     levelObject.hallWallTexs = levelObject.hallWallTexs.AddToArray(weightedTex);
 
-                if (cellTexData.types.Contains("ceiling"))
+                if (cellTexData.types.Contains("Ceiling"))
                     levelObject.hallCeilingTexs = levelObject.hallCeilingTexs.AddToArray(weightedTex);
 
-                if (cellTexData.types.Contains("floor"))
+                if (cellTexData.types.Contains("Floor"))
                     levelObject.hallFloorTexs = levelObject.hallFloorTexs.AddToArray(weightedTex);
             }
             

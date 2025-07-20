@@ -196,7 +196,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             screenRect.sizeDelta = new Vector2(21f, 4f);
         }
 
-        public void OnGenerationFinishedInTimedRoom()
+        /*public void OnGenerationFinishedInTimedRoom()
         {
             if (isPitFloor)
             {
@@ -208,13 +208,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                     }
                 }
             }
-        }
+        }*/
 
         private void Start()
         {
             room = transform.parent.parent.GetComponent<RoomController>();
             _roomPowered = room.Powered;
-            if (room.Powered) room.ec.OnEnvironmentBeginPlay += Initialize;
+            room.ec.OnEnvironmentBeginPlay += Initialize;
             isPitFloor = Singleton<BaseGameManager>.Instance is PitstopGameManager;
         }
 
@@ -290,12 +290,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
         {
             if (isPitFloor && Random.value > 0.25f)
             {
-                //SetScreenTextKey("Adv_Phrase_SM_Pit_NotActive");
                 SetScreenText("");
                 return;
             }
 
-            if (isPitFloor) SwitchLight(true);
+            //if (isPitFloor) SwitchLight(true);
             GenerateProblem();
             
         }

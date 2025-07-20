@@ -7,10 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaldisBasicsPlusAdvanced", 
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Beta|Any CPU = Beta|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4381A5C5-CA67-42DA-9419-C30D9EC7F5A3}.Beta|Any CPU.ActiveCfg = Beta|Any CPU
+		{4381A5C5-CA67-42DA-9419-C30D9EC7F5A3}.Beta|Any CPU.Build.0 = Beta|Any CPU
 		{4381A5C5-CA67-42DA-9419-C30D9EC7F5A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4381A5C5-CA67-42DA-9419-C30D9EC7F5A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4381A5C5-CA67-42DA-9419-C30D9EC7F5A3}.Release|Any CPU.ActiveCfg = Release|Any CPU

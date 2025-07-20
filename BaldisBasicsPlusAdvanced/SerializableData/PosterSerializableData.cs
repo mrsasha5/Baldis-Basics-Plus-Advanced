@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using BaldisBasicsPlusAdvanced.Helpers;
+using MTM101BaldAPI;
 using MTM101BaldAPI.UI;
 using Newtonsoft.Json;
 using TMPro;
@@ -10,6 +12,24 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
     [JsonObject(MemberSerialization.Fields)]
     public class PosterSerializableData
     {
+
+        public static PosterObject GetPosterFromFile(string pngPath, bool overrideBasePath = false)
+        {
+            string jsonPath = overrideBasePath ? pngPath.Replace(".png", ".json") : AssetsHelper.modPath + pngPath.Replace(".png", ".json");
+
+            PosterSerializableData posterData = null;
+
+            if (File.Exists(jsonPath))
+            {
+                posterData = GetFromFile(jsonPath);
+            }
+
+            PosterObject posterObject = 
+                ObjectCreators.CreatePosterObject(AssetsHelper.TextureFromFile(pngPath, overrideBasePath),
+                    posterData == null ? new PosterTextData[0] : posterData.Texts);
+
+            return posterObject;
+        }
 
         public static PosterSerializableData GetFromFile(string path)
         {
@@ -77,6 +97,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
         [JsonIgnore]
         private PosterTextData[] posterTextDatas;
 
+        [JsonIgnore]
         public PosterTextData[] Texts => posterTextDatas;
 
         public void ConvertTextsToGameStandard()

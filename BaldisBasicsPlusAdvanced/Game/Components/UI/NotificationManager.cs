@@ -103,8 +103,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             tmpText.color = Color.black;
             tmpText.rectTransform.sizeDelta = new Vector2(140f, 90f);
 
-            //tmpText.gameObject.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-
             imageBg.rectTransform.sizeDelta = new Vector2(150f, 100f);
 
             return notifBase;

@@ -13,6 +13,14 @@ namespace BaldisBasicsPlusAdvanced.Compats
 
         public const string levelLoaderId = "mtm101.rulerp.baldiplus.levelloader";
 
+        public const string recommendedCharactersId = "io.github.uncertainluei.baldiplus.recommendedchars";
+
+        public const string carnivalPackId = "mtm101.rulerp.bbplus.carnivalpackroot";
+
+        public const string criminalPackId = "mtm101.rulerp.baldiplus.criminalpackroot";
+
+        public const string piratePackId = "mtm101.rulerp.baldiplus.piratepack";
+
         private static List<CompatibilityModule> modules = new List<CompatibilityModule>();
 
         public static List<CompatibilityModule> Modules => modules;

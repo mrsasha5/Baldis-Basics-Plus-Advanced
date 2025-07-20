@@ -40,28 +40,68 @@ namespace BaldisBasicsPlusAdvanced.API
 
         /// <summary>
         /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/> class has it.
-        /// Overloading of LoadKitchenStoveRecipesFromFolder(string, bool, bool, bool) with recommended parameters (still free to use it!).
+        /// Overloading of LoadKitchenStoveRecipesFromFolder(string, out List of FoodRecipeData, bool, bool, bool) 
+        /// with recommended parameters (still free to use it!).
         /// </summary>
-        /// <param name="info"></param>
-        /// <param name="path"></param>
+        /// <param name="info">Your plugin info.</param>
+        /// <param name="path">Path of the folder with JSON recipes.</param>
         /// <param name="includeSubdirectories"></param>
-        public static void LoadKitchenStoveRecipesFromFolder(PluginInfo info, string path, bool includeSubdirectories)
+        /// <returns>List of loaded and registered recipes!</returns>
+        public static List<FoodRecipeData> LoadKitchenStoveRecipesFromFolder(PluginInfo info, string path, bool includeSubdirectories)
         {
-            LoadKitchenStoveRecipesFromFolder(info, path, includeSubdirectories, logWarnings: true, sendWarningNotifications: false);
+            return LoadKitchenStoveRecipesFromFolder(info, path, includeSubdirectories, out _);
+        }
+
+        /// <summary>
+        /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/> class has it.
+        /// Overloading of LoadKitchenStoveRecipesFromFolder(string, out List of FoodRecipeData, bool, bool, bool) 
+        /// with recommended parameters (still free to use it!).
+        /// </summary>
+        /// <param name="info">Your plugin info.</param>
+        /// <param name="path">Path of the folder with JSON recipes.</param>
+        /// <param name="includeSubdirectories"></param>
+        /// <param name="failedRecipes">Recipes which were loaded, but not registered by some reason.</param>
+        /// <returns>List of loaded and registered recipes!</returns>
+        public static List<FoodRecipeData> LoadKitchenStoveRecipesFromFolder(PluginInfo info, string path, bool includeSubdirectories, 
+            out List<FoodRecipeData> failedRecipes)
+        {
+            return LoadKitchenStoveRecipesFromFolder(info, path, includeSubdirectories,
+                out failedRecipes, logWarnings: true, sendWarningNotifications: true);
         }
 
         /// <summary>
         /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/> class has it.
         /// </summary>
-        /// <param name="info"></param>
-        /// <param name="path">Folder's path.</param>
+        /// <param name="info">Your plugin info.</param>
+        /// <param name="path">Path of the folder with JSON recipes.</param>
         /// <param name="includeSubdirectories"></param>
+        /// <param name="failedRecipes">Recipes which were loaded, but not registered by some reason.</param>
         /// <param name="logWarnings">Logs if some recipes loading was failed (each recipe will be showed in console + exception if it exists).</param>
         /// <param name="sendWarningNotifications">They let user to know if something went wrong during recipes loading (without logging which recipes caused that)!</param>
-        public static void LoadKitchenStoveRecipesFromFolder(PluginInfo info, string path, bool includeSubdirectories, 
-            bool logWarnings, bool sendWarningNotifications)
+        /// <returns>List of loaded and registered recipes!</returns>
+        public static List<FoodRecipeData> LoadKitchenStoveRecipesFromFolder(PluginInfo info, string path, bool includeSubdirectories,
+            out List<FoodRecipeData> failedRecipes, bool logWarnings, bool sendWarningNotifications)
         {
-            KitchenStove.LoadRecipesFromAssets(info, path, includeSubdirectories, logWarnings, sendWarningNotifications);
+            return KitchenStove.LoadRecipesFromAssets(info, path, includeSubdirectories, 
+                out failedRecipes, logWarnings, sendWarningNotifications);
+        }
+
+        /// <summary>
+        /// Find all Kitchen Stove's recipes which follows condition in delegate <see cref="Predicate{T}"/>.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public static List<FoodRecipeData> FindKitchenStoveRecipes(Predicate<FoodRecipeData> predicate)
+        {
+            List<FoodRecipeData> recipes = new List<FoodRecipeData>();
+            for (int i = 0; i < KitchenStove.Datas.Count; i++)
+            {
+                if (predicate.Invoke(KitchenStove.Datas[i]))
+                {
+                    recipes.Add(KitchenStove.Datas[i]);
+                }
+            }
+            return recipes;
         }
 
         /// <summary>
@@ -150,6 +190,18 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
+        /// Removes all Kitchen Stove's recipes which follows condition in delegate <see cref="Predicate{T}"/>.
+        /// </summary>
+        /// <param name="predicate"></param>
+        public static void RemoveKitchenStoveRecipesBy(Predicate<FoodRecipeData> predicate)
+        {
+            for (int i = 0; i < KitchenStove.Datas.Count; i++)
+            {
+                if (predicate.Invoke(KitchenStove.Datas[i]) && RemoveKitchenStoveRecipe(KitchenStove.Datas[i])) i--;
+            }
+        }
+
+        /// <summary>
         /// Remove all kitchen recipes from mods that array contains.
         /// </summary>
         /// <param name="pluginInfos"></param>
@@ -184,6 +236,7 @@ namespace BaldisBasicsPlusAdvanced.API
                 }
             }
         }
+
         #endregion
 
         #region Objects (plates, Spelloons)
@@ -305,7 +358,9 @@ namespace BaldisBasicsPlusAdvanced.API
         #region School Council
 
         /// <summary>
-        /// Returns a list (new instance) of the specific mod's weighted topics.
+        /// Returns a list (actual reference) of the specific mod's weighted topics.
+        /// Still recommending use prefer to use API methods instead of invoke Remove(), Add() or something other from here.
+        /// Use this data for analyze surely.
         /// </summary>
         /// <param name="pluginInfo"></param>
         /// <returns></returns>

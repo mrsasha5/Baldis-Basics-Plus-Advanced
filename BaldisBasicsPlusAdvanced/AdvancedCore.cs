@@ -18,6 +18,7 @@ using MTM101BaldAPI.SaveSystem;
 using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using static BepInEx.BepInDependency;
 
@@ -69,7 +70,8 @@ namespace BaldisBasicsPlusAdvanced
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoaderPost(), true);
             AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English", Language.English);
 
-            /*MTM101BaldiDevAPI.AddWarningScreen(
+#if BETA
+            MTM101BaldiDevAPI.AddWarningScreen(
                 "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
                 "Remember about main conditions for the beta testers. " +
                 "You must observe them until they are declared obsolete by me.\n" +
@@ -83,7 +85,8 @@ namespace BaldisBasicsPlusAdvanced
                 "If this build was leaked without permission and you have installed it... " +
                 "Please note that as a NON-BETA TESTER YOU WILL NOT RECEIVE FEEDBACK IN CASE OF A BROKEN GAME. " +
                 "You can close game until it will be launched fully.",
-                false);*/
+                false);
+#endif
 
             GameRegisterManager.InitializeDoNotDestroyOnLoadObjects();
         }

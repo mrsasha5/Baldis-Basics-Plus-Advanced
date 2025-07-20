@@ -70,19 +70,23 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             if (IntegrationManager.IsActive<CustomMusicsIntegration>()) return;
 
-            void LoadFrom(string floorName, LevelType type)
+            void LoadFrom(string path, LevelType type)
             {
-                string[] paths = Directory.GetFiles(AssetsHelper.modPath + "Audio/Music/Floors/" + floorName);
-                foreach (string path in paths)
+                string[] paths = Directory.GetFiles(path);
+                foreach (string _path in paths)
                 {
-                    MusicPatch.Insert(AssetLoader.MidiFromFile(path, Path.GetFileName(path)), type);
+                    MusicPatch.Insert(AssetLoader.MidiFromFile(_path, Path.GetFileName(_path)), type);
                 }
             }
 
-            LoadFrom("Schoolhouse", LevelType.Schoolhouse);
-            LoadFrom("Laboratory", LevelType.Laboratory);
-            LoadFrom("Maintenance", LevelType.Maintenance);
-            LoadFrom("Factory", LevelType.Factory);
+            foreach (string folderPath in Directory.GetDirectories(AssetsHelper.modPath + "Audio/Music/Floors/"))
+            {
+                string name = Path.GetDirectoryName(folderPath);
+
+                if (name == "Compats") continue;
+
+                LoadFrom(folderPath, (LevelType)Enum.Parse(typeof(LevelType), name));
+            }
         }
 
         #endregion
@@ -91,7 +95,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeMidisPost()
         {
-            void LoadFrom(string floorName, string typeName)
+            void LoadFrom(string path, string typeName)
             {
                 LevelType type;
                 try
@@ -103,16 +107,18 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     return;
                 }
 
-                string[] paths = Directory.GetFiles(AssetsHelper.modPath + "Audio/Music/Floors/" + floorName);
-                foreach (string path in paths)
+                string[] paths = Directory.GetFiles(path);
+                foreach (string _path in paths)
                 {
                     if (!MusicPatch.musicNames.ContainsKey(type)) MusicPatch.musicNames.Add(type, new List<string>());
-                    MusicPatch.musicNames[type].Add(AssetLoader.MidiFromFile(path, Path.GetFileName(path)));
+                    MusicPatch.musicNames[type].Add(AssetLoader.MidiFromFile(_path, Path.GetFileName(_path)));
                 }
             }
 
-            LoadFrom("Compats/Castle", "Castle");
-            LoadFrom("Compats/Prison", "Prison");
+            foreach (string folderPath in Directory.GetDirectories(AssetsHelper.modPath + "Audio/Music/Floors/Compats"))
+            {
+                LoadFrom(folderPath, Path.GetDirectoryName(folderPath));
+            }
 
         }
 
@@ -143,6 +149,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             farmScene.name = "Farm";
             farmScene.levelTitle = "FRM";
             farmScene.usesMap = false;
+            farmScene.levelAsset.rooms[1].wallTex = AssetsHelper.LoadAsset<Texture2D>("Corn");
 
             ObjectsStorage.SceneObjects.Add("Farm", farmScene);
 
@@ -226,7 +233,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 tags: new string[]
                 {
                     TagsStorage.repairTool,
-                    TagsStorage.contraband
+                    TagsStorage.criminal_contraband
                 }
                 )
                 .SetSpawnsOnRooms(true)
@@ -261,7 +268,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 500,
                 tags: new string[]
                 {
-                    TagsStorage.contraband
+                    TagsStorage.criminal_contraband
                 },
                 flags: ItemFlags.CreatesEntity
                 )
@@ -329,7 +336,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 500,
                 tags: new string[]
                 {
-                    TagsStorage.contraband
+                    TagsStorage.criminal_contraband
                 }
                 )
                 .SetSpawnsOnFieldTrips(true)
@@ -350,7 +357,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 750,
                 tags: new string[]
                 {
-                    TagsStorage.contraband
+                    TagsStorage.criminal_contraband
                 }
                 )
                 .SetSpawnsOnFieldTrips(true)
@@ -1401,7 +1408,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             for (int i = 0; i < datas.Count; i++)
             {
-                posters.Add(CreateRecipePoster(datas[i], "recipe_" + i));
+                posters.Add(CreateRecipePoster(datas[i], "RecipePoster_" + i));
             }
 
             datas.Clear();

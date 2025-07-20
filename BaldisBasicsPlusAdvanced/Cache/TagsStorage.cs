@@ -49,7 +49,7 @@
 
         #region Criminal Pack
 
-        public const string contraband = "crmp_contraband";
+        public const string criminal_contraband = "crmp_contraband";
 
         #endregion
 

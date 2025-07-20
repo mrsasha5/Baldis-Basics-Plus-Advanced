@@ -17,7 +17,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Rooms.Functions
             for (int i = 0; i < symbolMachines.Length; i++)
             {
                 symbolMachines[i].SetTimerMode(true);
-                symbolMachines[i].OnGenerationFinishedInTimedRoom();
+                //symbolMachines[i].OnGenerationFinishedInTimedRoom();
             }
         }
 

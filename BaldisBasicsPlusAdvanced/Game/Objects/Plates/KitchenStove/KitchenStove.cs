@@ -7,8 +7,6 @@ using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using BepInEx;
 using MTM101BaldAPI;
-using MTM101BaldAPI.Registers;
-using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -127,17 +125,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             velocityOverLifetime.y = 24f;
             velocityOverLifetime.radialMultiplier = 1.5f;
 
-            //bruh
-            /*SizeOverLifetimeModule sizeOverLifetime = particleSystem.sizeOverLifetime;
-            sizeOverLifetime.enabled = true;
-            sizeOverLifetime.separateAxes = true;
-
-            AnimationCurve curve = new AnimationCurve();
-            curve.AddKey(0f, 3f);
-            curve.AddKey(1.5f, 0f);
-
-            sizeOverLifetime.z = new MinMaxCurve(1f, curve);*/
-
             burningTime = 10f;
             coolingTime = 10f;
             activeStateOverridden = true;
@@ -158,9 +145,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         {
         }
 
-        internal static void LoadRecipesFromAssets(PluginInfo info, string path, bool includeSubdirs, 
-            bool logWarnings, bool sendNotifications)
+        internal static List<FoodRecipeData> LoadRecipesFromAssets(PluginInfo info, string path, bool includeSubdirs, 
+            out List<FoodRecipeData> failedRecipes, bool logWarnings, bool sendNotifications)
         {
+            List<FoodRecipeData> recipes = new List<FoodRecipeData>();
+            failedRecipes = new List<FoodRecipeData>();
+
             string[] filePaths = Directory.GetFiles(path, "*.json", 
                 includeSubdirs ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
 
@@ -171,13 +161,20 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             {
                 try
                 {
-                    if (!FoodRecipeSerializableData.LoadFromPath(filePath)
-                        .ConvertToStandard(info).RegisterRecipe())
+                    FoodRecipeData data = FoodRecipeSerializableData.LoadFromPath(filePath)
+                        .ConvertToStandard(info);
+
+                    if (!data.RegisterRecipe())
                     {
                         if (logWarnings)
                             AdvancedCore.Logging.LogWarning($"Ignored recipe from {filePath}. Recipe with same raw food already exists.");
                         ignoredRecipes++;
+                        failedRecipes.Add(data);
+                    } else
+                    {
+                        recipes.Add(data);
                     }
+
                 } catch (Exception e)
                 {
                     if (logWarnings)
@@ -191,16 +188,19 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             }
 
             if (sendNotifications && brokenRecipes > 0)
-                Singleton<NotificationManager>.Instance.Queue(
-                    $"Can't load {brokenRecipes} recipes from assets!",
+                NotificationManager.Instance.Queue(
+                    string.Format("Adv_Notif_RecipesError".Localize(),
+                        brokenRecipes, info.Metadata.GUID),
                     AssetsStorage.sounds["elv_buzz"],
                     time: 5f);
 
-            if (sendNotifications && ignoredRecipes > 0)
-                Singleton<NotificationManager>.Instance.Queue(
+            return recipes;
+
+            /*if (sendNotifications && ignoredRecipes > 0)
+                NotificationManager.Instance.Queue(
                     $"Ignored {ignoredRecipes} recipes. Recipes with these raw food sets already exist!",
                     AssetsStorage.sounds["elv_buzz"],
-                    time: 5f);
+                    time: 5f);*/ //I don't think I should do that
 
         }
 

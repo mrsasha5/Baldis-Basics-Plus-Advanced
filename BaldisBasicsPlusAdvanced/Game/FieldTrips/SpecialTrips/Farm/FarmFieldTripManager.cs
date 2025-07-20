@@ -91,8 +91,8 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
             reaperIconGauge = AssetsHelper.SpriteFromFile("Textures/Gauges/adv_gauge_reaper.png");
             baldiPre = AssetsStorage.genericBaldi;
             reaperPre = ObjectsStorage.Objects["farm_reaper"].GetComponent<Reaper>();
-            reaperBaseTime = 60f;
-            timePerCell = 2f;
+            reaperBaseTime = 30f;
+            timePerCell = 1.5f;
             minMaxSigns = new IntVector2(5, 12);
             minMaxItems = new IntVector2(5, 12);
             signShapes = TileShapeMask.Corner | TileShapeMask.End;
@@ -137,7 +137,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
                 ec.name = "EC_FieldTrip_Farm";
                 room = FindObjectOfType<RoomController>();
 
-                /*if (room.functions.TryGetComponent(out SkyboxRoomFunction skyboxFunc))
+                if (room.functions.TryGetComponent(out SkyboxRoomFunction skyboxFunc))
                 {
                     Destroy(skyboxFunc.skybox.gameObject);
                     room.functions.RemoveFunction(skyboxFunc);
@@ -145,7 +145,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
                 if (room.functions.TryGetComponent(out StaminaBoostRoomFunction staminaBoost))
                 {
                     room.functions.RemoveFunction(staminaBoost);
-                }*/
+                }
 
                 rng = new System.Random(Singleton<CoreGameManager>.Instance.Seed());
                 AudioListener.pause = true;

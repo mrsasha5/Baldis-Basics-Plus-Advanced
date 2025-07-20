@@ -3,6 +3,7 @@ using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Patches;
 using MTM101BaldAPI;
 using PlusLevelLoader;
 using System;
@@ -130,28 +131,38 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
             
             PlusLevelLoaderPlugin.Instance.roomSettings["adv_school_council_class"].container =
                 ObjectsStorage.RoomFunctionsContainers["SchoolCouncilFunction"];
-            //PlusLevelLoaderPlugin.Instance.roomSettings["adv_corn_field"].container =
-            //    GameObject.Instantiate(PlusLevelLoaderPlugin.Instance.roomSettings["outside"].container);
+            PlusLevelLoaderPlugin.Instance.roomSettings["adv_corn_field"].container =
+                GameObject.Instantiate(PlusLevelLoaderPlugin.Instance.roomSettings["outside"].container);
 
-            //RoomFunctionContainer cornContainer = PlusLevelLoaderPlugin.Instance.roomSettings["adv_corn_field"].container;
+            RoomFunctionContainer cornContainer = PlusLevelLoaderPlugin.Instance.roomSettings["adv_corn_field"].container;
 
-            //cornContainer.gameObject.ConvertToPrefab(true);
-            //cornContainer.RemoveFunction(cornContainer.GetComponent<SkyboxRoomFunction>());
+            cornContainer.gameObject.ConvertToPrefab(true);
+            cornContainer.RemoveFunction(cornContainer.GetComponent<StaminaBoostRoomFunction>());
 
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("adv_english_ceiling", AssetsStorage.textures["adv_english_ceiling"]);
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("adv_english_wall", AssetsStorage.textures["adv_english_wall"]);
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("adv_english_floor", AssetsStorage.textures["adv_english_floor"]);
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add(
+                "adv_english_ceiling", AssetsStorage.textures["adv_english_ceiling"]);
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add(
+                "adv_english_wall", AssetsStorage.textures["adv_english_wall"]);
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add(
+                "adv_english_floor", AssetsStorage.textures["adv_english_floor"]);
 
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("adv_advanced_class_ceiling", AssetsStorage.textures["adv_advanced_class_ceiling"]);
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("adv_advanced_class_floor", AssetsStorage.textures["adv_advanced_class_floor"]);
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("adv_advanced_class_wall", AssetsStorage.textures["adv_advanced_class_wall"]);
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add(
+                "adv_advanced_class_ceiling", AssetsStorage.textures["adv_advanced_class_ceiling"]);
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add(
+                "adv_advanced_class_floor", AssetsStorage.textures["adv_advanced_class_floor"]);
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add(
+                "adv_advanced_class_wall", AssetsStorage.textures["adv_advanced_class_wall"]);
 
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("adv_school_council_wall", AssetsStorage.textures["adv_school_council_wall"]);
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add(
+                "adv_school_council_wall", AssetsStorage.textures["adv_school_council_wall"]);
 
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("adv_basic_floor", AssetsHelper.LoadAsset<Texture2D>("BasicFloor"));
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add(
+                "adv_basic_floor", AssetsHelper.LoadAsset<Texture2D>("BasicFloor"));
 
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("adv_corn_wall", AssetsHelper.LoadAsset<Texture2D>("Corn"));
-            PlusLevelLoaderPlugin.Instance.textureAliases.Add("adv_corn_floor", AssetsHelper.LoadAsset<Texture2D>("ground2"));
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add("adv_corn_wall", 
+                AssetsHelper.TextureFromFile("Textures/Rooms/CornField/adv_thick_corn_wall.png"));
+            PlusLevelLoaderPlugin.Instance.textureAliases.Add(
+                "adv_corn_floor", AssetsHelper.LoadAsset<Texture2D>("ground2"));
         }
 
         private static void CreateFakeMarker(string name)

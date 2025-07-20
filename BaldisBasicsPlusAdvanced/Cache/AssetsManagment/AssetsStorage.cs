@@ -755,6 +755,30 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                         direction = Direction.East
                     });
 
+                    if (!AssetsHelper.ModInstalled(IntegrationManager.recommendedCharactersId))
+                    {
+                        pitStop.posters.Add(new PosterData()
+                        {
+                            poster = PosterSerializableData.
+                            GetPosterFromFile("Textures/Posters/Advertisement/Adv_Poster_RecommendedCharacters_Ad.png"),
+                            position = new IntVector2(39, 5),
+                            direction = Direction.East
+                        });
+                    }
+
+                    if (!(AssetsHelper.ModInstalled(IntegrationManager.carnivalPackId) ||
+                        AssetsHelper.ModInstalled(IntegrationManager.criminalPackId) ||
+                        AssetsHelper.ModInstalled(IntegrationManager.piratePackId)))
+                    {
+                        pitStop.posters.Add(new PosterData()
+                        {
+                            poster = PosterSerializableData.
+                                GetPosterFromFile("Textures/Posters/Advertisement/Adv_Poster_ContentPacks_Ad.png"),
+                            position = new IntVector2(39, 6),
+                            direction = Direction.East
+                        });
+                    }
+
                     //FluorescentLight
                     //HangingLight
                     pitStop.lights.Add(new LightSourceData()
