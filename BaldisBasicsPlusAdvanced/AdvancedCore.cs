@@ -197,7 +197,7 @@ namespace BaldisBasicsPlusAdvanced
             if (AssetsStorage.exception != null) throw AssetsStorage.exception;
 
             GameRegisterManager.CreateDoorMats();
-            yield return "Initializing and setting new cell's textures...";
+            yield return "Initializing new cell's textures...";
             GameRegisterManager.InitializeCellTextures();
             yield return "Initializing vending machines...";
             GameRegisterManager.InitializeVendingMachines();

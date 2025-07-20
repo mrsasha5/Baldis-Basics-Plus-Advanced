@@ -79,13 +79,17 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 }
             }
 
-            foreach (string folderPath in Directory.GetDirectories(AssetsHelper.modPath + "Audio/Music/Floors/"))
+            foreach (string folderPath in Directory.GetDirectories(AssetsHelper.modPath + "Audio/Music/Floors"))
             {
                 string name = Path.GetDirectoryName(folderPath);
 
                 if (name == "Compats") continue;
 
-                LoadFrom(folderPath, (LevelType)Enum.Parse(typeof(LevelType), name));
+                try
+                {
+                    LoadFrom(folderPath, (LevelType)Enum.Parse(typeof(LevelType), name));
+                }
+                catch { }
             }
         }
 
