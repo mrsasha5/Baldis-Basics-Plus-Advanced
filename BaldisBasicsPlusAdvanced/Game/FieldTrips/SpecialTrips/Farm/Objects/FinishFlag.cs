@@ -46,7 +46,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects
 
             if (variant == 2)
             {
-                ytpsReward = 75;
+                ytpsReward = 25;
                 disappearingSpeed = 0.25f;
             }
             else ytpsReward = -1;
