@@ -185,40 +185,47 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 levelObject.roomGroup = levelObject.roomGroup.AddToArray(roomGroup);
             }
 
-            foreach (RoomGroup group in levelObject.roomGroup)
+            foreach (CustomRoomData roomData in ObjectsStorage.RoomDatas)
             {
-                foreach (CustomRoomData roomData in ObjectsStorage.RoomDatas)
+                if (roomData.isAHallway != null && (bool)roomData.isAHallway) continue;
+
+                if (name == "END" && !(bool)roomData.endlessMode) continue;
+
+                if (name != "END" && roomData.bannedFloors != null && roomData.bannedFloors.Contains(floor)) continue;
+
+                if (roomData.levelTypes != null && roomData.levelTypes.Length > 0 &&
+                    !roomData.levelTypes.Contains(levelObject.type.ToString()) &&
+                    !roomData.levelTypes.Contains(levelObject.type.ToStringExtended())) continue;
+
+                WeightedRoomAsset weightedRoom = new WeightedRoomAsset()
                 {
-                    if (name == "END" && !(bool)roomData.endlessMode) continue;
+                    selection = roomData.roomAsset,
+                    weight = roomData.weights.GetWeight(floor)
+                };
 
-                    if (name != "END" && roomData.bannedFloors != null && roomData.bannedFloors.Contains(floor)) continue;
+                RoomCategory category = roomData.roomAsset.category;
 
-                    if (roomData.levelTypes != null && roomData.levelTypes.Length > 0 &&
-                        !roomData.levelTypes.Contains(levelObject.type.ToString()) &&
-                        !roomData.levelTypes.Contains(levelObject.type.ToStringExtended())) continue;
+                if (category == RoomCategory.Special)
+                {
+                    levelObject.potentialSpecialRooms = levelObject.potentialSpecialRooms.AddToArray(weightedRoom);
+                    continue;
+                }
 
-                    WeightedRoomAsset weightedRoom = new WeightedRoomAsset()
-                    {
-                        selection = roomData.roomAsset,
-                        weight = roomData.weights.GetWeight(floor)
-                    };
-
-                    RoomCategory category = roomData.roomAsset.category;
-
-                    if (category == RoomCategory.Special)
-                    {
-                        levelObject.potentialSpecialRooms = levelObject.potentialSpecialRooms.AddToArray(weightedRoom);
-                    }
-                    else if ((group.name == category.ToString() || group.name == category.ToStringExtended()))
+                foreach (RoomGroup group in levelObject.roomGroup)
+                {
+                    if (group.name == category.ToString() || group.name == category.ToStringExtended())
                     {
                         group.potentialRooms = group.potentialRooms.AddToArray(weightedRoom);
+                        break;
                     }
                 }
             }
 
-            //for halls
+            //For halls
             foreach (CustomRoomData roomData in ObjectsStorage.RoomDatas)
             {
+                if (roomData.isAHallway != null && !(bool)roomData.isAHallway) continue;
+
                 if (name == "END" && !(bool)roomData.endlessMode) continue;
 
                 if (name != "END" && roomData.bannedFloors != null && roomData.bannedFloors.Contains(floor)) continue;

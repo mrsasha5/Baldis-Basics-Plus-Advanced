@@ -2,6 +2,7 @@
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
+using BaldisBasicsPlusAdvanced.Game.Rooms.Functions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
 using MTM101BaldAPI;
@@ -75,6 +76,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 
             PlusLevelLoaderPlugin.Instance.prefabAliases.Add("adv_voting_ballot", ObjectsStorage.Objects["voting_ballot"]);
             PlusLevelLoaderPlugin.Instance.prefabAliases.Add("adv_farm_finish_flag", ObjectsStorage.Objects["farm_flag"]);
+            PlusLevelLoaderPlugin.Instance.prefabAliases.Add("adv_farm_finish_points_flag", ObjectsStorage.Objects["farm_points_flag"]);
             PlusLevelLoaderPlugin.Instance.prefabAliases.Add("adv_farm_sign1", ObjectsStorage.Objects["farm_sign1"]);
 
             PlusLevelLoaderPlugin.Instance.roomSettings.Add("adv_english_class", new RoomSettings(
@@ -134,10 +136,27 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
             PlusLevelLoaderPlugin.Instance.roomSettings["adv_corn_field"].container =
                 GameObject.Instantiate(PlusLevelLoaderPlugin.Instance.roomSettings["outside"].container);
 
+            //Corn Field room function container
             RoomFunctionContainer cornContainer = PlusLevelLoaderPlugin.Instance.roomSettings["adv_corn_field"].container;
+            cornContainer.name = "CornFieldFunctionContainer";
+            cornContainer.gameObject.ConvertToPrefab(true);
+
+            SkyboxRoomFunction skyboxFunc = cornContainer.GetComponent<SkyboxRoomFunction>();
 
             cornContainer.gameObject.ConvertToPrefab(true);
             cornContainer.RemoveFunction(cornContainer.GetComponent<StaminaBoostRoomFunction>());
+
+            MeshRenderer[] renderers = skyboxFunc.skybox.GetComponentsInChildren<MeshRenderer>();
+            for (int i = 0; i < 4; i++)
+            {
+                Vector3 pos = renderers[i].transform.localPosition;
+                pos.y = 35f;
+                renderers[i].transform.localScale = new Vector3(10f, 100f, 1f);
+                renderers[i].transform.localPosition = pos;
+            }
+            Vector3 _pos = renderers[4].transform.localPosition;
+            _pos.y = 85f;
+            renderers[4].transform.localPosition = _pos;
 
             PlusLevelLoaderPlugin.Instance.textureAliases.Add(
                 "adv_english_ceiling", AssetsStorage.textures["adv_english_ceiling"]);

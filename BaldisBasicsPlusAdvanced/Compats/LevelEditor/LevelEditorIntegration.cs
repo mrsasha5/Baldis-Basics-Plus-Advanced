@@ -5,6 +5,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
 using HarmonyLib;
 using PlusLevelFormat;
+using PlusLevelLoader;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -73,10 +74,22 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelEditor
                     ("adv_symbol_machine", 
                     ObjectsStorage.Objects["symbol_machine"].gameObject, Vector3.zero));
 
-                //Farm flag
-                BaldiLevelEditorPlugin.editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>
-                    ("adv_farm_finish_flag", 
-                    ObjectsStorage.Objects["farm_flag"].gameObject, Vector3.up * 5f));
+                //Farm flags
+                EditorObjectType flagEditorRef = EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>
+                    ("adv_farm_finish_flag",
+                    ObjectsStorage.Objects["farm_flag"].gameObject, Vector3.up * 5f);
+                flagEditorRef.prefab.gameObject.GetComponentInChildren<SpriteRenderer>()
+                    .material = AssetsStorage.materials["sprite_standard_no_billboard"];
+
+                BaldiLevelEditorPlugin.editorObjects.Add(flagEditorRef);
+
+                flagEditorRef = EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>
+                    ("adv_farm_finish_points_flag",
+                    ObjectsStorage.Objects["farm_points_flag"].gameObject, Vector3.up * 5f);
+                flagEditorRef.prefab.gameObject.GetComponentInChildren<SpriteRenderer>()
+                    .material = AssetsStorage.materials["sprite_standard_no_billboard"];
+
+                BaldiLevelEditorPlugin.editorObjects.Add(flagEditorRef);
 
                 //Farm sign
                 BaldiLevelEditorPlugin.editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>
@@ -133,6 +146,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelEditor
                 "Compats/LevelEditor/Objects/adv_editor_corn_sign1.png");
             AssetsStorage.LoadModSprite("adv_editor_finish_flag", 
                 "Compats/LevelEditor/Objects/adv_editor_finish_flag.png");
+            AssetsStorage.LoadModSprite("adv_editor_finish_points_flag",
+                "Compats/LevelEditor/Objects/adv_editor_finish_points_flag.png");
+            
             AssetsStorage.LoadModSprite("adv_editor_invisibility_plate", 
                 "Compats/LevelEditor/Objects/adv_editor_invisibility_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_acceleration_plate", 

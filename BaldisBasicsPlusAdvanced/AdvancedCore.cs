@@ -33,7 +33,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "Baldi's Basics Plus Advanced Edition";
 
-        public const string version = "0.2.6";
+        public const string version = "0.2.6.1";
 
         internal static string tempPath;
 
@@ -197,7 +197,7 @@ namespace BaldisBasicsPlusAdvanced
             if (AssetsStorage.exception != null) throw AssetsStorage.exception;
 
             GameRegisterManager.CreateDoorMats();
-            yield return "Initializing new cell's textures...";
+            yield return "Initializing cell's textures...";
             GameRegisterManager.InitializeCellTextures();
             yield return "Initializing vending machines...";
             GameRegisterManager.InitializeVendingMachines();

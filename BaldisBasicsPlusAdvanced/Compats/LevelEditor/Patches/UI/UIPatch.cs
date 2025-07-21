@@ -79,6 +79,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelEditor.Patches.UI
             CreateTool<ControlledObjectTool>(objects, "adv_farm_finish_flag",
                 AssetsStorage.sprites["adv_editor_finish_flag"]);
 
+            CreateTool<ControlledObjectTool>(objects, "adv_farm_finish_points_flag",
+                AssetsStorage.sprites["adv_editor_finish_points_flag"]);
+
             CreateTool<ControlledObjectTool>(objects, "adv_farm_sign1",
                 AssetsStorage.sprites["adv_editor_corn_sign1"]);
 

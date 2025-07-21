@@ -411,7 +411,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 }
                 )
                 .SetSpawnsOnShop(false)
-                .SetSpawnsOnMysteryRooms(true)
                 .SetBannedFloors(1, 3)
                 .SetWeight(floor: 2, 100)
                 .SetLevelTypes(LevelType.Schoolhouse);
@@ -1115,6 +1114,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateObjectPrefab<TeleportationHole>("Teleportation Bomb", "teleportation_bomb");
             PrefabsCreator.CreateObjectPrefab<Reaper>("Farm Reaper", "farm_reaper");
             PrefabsCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_flag");
+            PrefabsCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_points_flag", variant: 2);
 
             GameObject cornSign = new GameObject("Corn Sign");
             ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_corn_sign1"])

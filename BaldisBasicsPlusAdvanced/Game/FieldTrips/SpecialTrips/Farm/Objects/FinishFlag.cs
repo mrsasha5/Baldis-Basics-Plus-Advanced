@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using System.Collections;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm;
 using BaldisBasicsPlusAdvanced.Helpers;
 using UnityEngine;
@@ -9,6 +10,17 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects
     {
         [SerializeField]
         private SpriteRenderer renderer;
+
+        [SerializeField]
+        private BoxCollider collider;
+
+        [SerializeField]
+        private int ytpsReward;
+
+        [SerializeField]
+        private float disappearingSpeed;
+
+        private bool touched;
 
         private FarmFieldTripManager fieldTripManager;
 
@@ -28,17 +40,56 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects
             renderer.transform.parent.SetParent(transform, false);
             renderer.transform.parent.localPosition = Vector3.up * 84f;
 
-            BoxCollider collider = gameObject.AddComponent<BoxCollider>();
+            collider = gameObject.AddComponent<BoxCollider>();
             collider.size = Vector3.one * 10f;
             collider.isTrigger = true;
+
+            if (variant == 2)
+            {
+                ytpsReward = 75;
+                disappearingSpeed = 0.25f;
+            }
+            else ytpsReward = -1;
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (fieldTripManager != null && other.CompareTag("Player"))
+            if (other.CompareTag("Player") && !touched)
             {
-                fieldTripManager.OnWin();
+                touched = true;
+
+                if (fieldTripManager != null)
+                {
+                    fieldTripManager.OnWin();
+                }
+
+                if (ytpsReward > 0)
+                {
+                    CoreGameManager.Instance.AddPoints(ytpsReward, 0, playAnimation: true);
+                    CoreGameManager.Instance.audMan.PlaySingle(AssetsStorage.sounds["ytp_pickup_2"]);
+                    StartCoroutine(Disappear());
+                }
             }
+        }
+
+        private IEnumerator Disappear()
+        {
+            MaterialPropertyBlock _propertyBlock = new MaterialPropertyBlock();
+
+            float percent = 1f;
+
+            Color color = renderer.color;
+
+            while (percent > 0f)
+            {
+                percent -= Time.deltaTime * disappearingSpeed;
+                if (percent < 0f) percent = 0f;
+                color.a = percent;
+                renderer.color = color;
+                yield return null;
+            }
+
+            Destroy(gameObject);
         }
     }
 }
