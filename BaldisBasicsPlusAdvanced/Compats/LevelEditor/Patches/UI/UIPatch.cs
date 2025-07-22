@@ -33,7 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelEditor.Patches.UI
             List<EditorTool> activities = __instance.toolCats.Find(x => x.name == "activities").tools;
             List<EditorTool> connectables = __instance.toolCats.Find(x => x.name == "connectables").tools;
 
-            CreateTool<ControlledItemTool>(npcs, 
+            CreateTool<ControlledNpcTool>(npcs, 
                 "adv_criss_the_crystal", AssetsStorage.sprites["adv_editor_criss_the_crystal"]);
 
             foreach (string name in ObjectsStorage.ItemObjects.Keys)
