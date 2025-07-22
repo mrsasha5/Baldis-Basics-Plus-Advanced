@@ -53,6 +53,7 @@ using BaldisBasicsPlusAdvanced.AutoUpdate;
 using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
 using Newtonsoft.Json;
+using BaldisBasicsPlusAdvanced.Patches.UI;
 #endregion
 
 namespace BaldisBasicsPlusAdvanced.Managers
