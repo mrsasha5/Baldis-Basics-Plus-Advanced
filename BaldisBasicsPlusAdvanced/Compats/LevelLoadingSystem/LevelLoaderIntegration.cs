@@ -116,7 +116,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 ));
 
             PlusLevelLoaderPlugin.Instance.roomSettings.Add("adv_corn_field", new RoomSettings(
-                EnumExtensions.GetFromExtendedName<RoomCategory>("CornField"),
+                RoomCategory.Special,
                 RoomType.Room,
                 ObjectsStorage.RoomColors["CornField"],
                 AssetsHelper.LoadAsset<StandardDoorMats>("ClassDoorSet")

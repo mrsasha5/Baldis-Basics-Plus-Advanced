@@ -14,6 +14,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
 
         private static Map map;
 
+        private static IntVector2 _gridPosition;
 
         [HarmonyPatch("Awake")]
         [HarmonyPostfix]
@@ -21,7 +22,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
         {
             map = __instance;
         }
-
 
         [HarmonyPatch("Update")]
         [HarmonyTranspiler]
@@ -33,7 +33,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
                 instructions.Select((CodeInstruction c) => new CodeInstruction(c)).ToList()); //For context:
                                                                                               //I can't use constructor
                                                                                               //Since it contains ILGenerator variable
-
             CodeInstruction hackyInstruction = matcher
                 .MatchForward(false, new CodeMatch(OpCodes.Beq))
                 .InstructionAt(0);
@@ -82,10 +81,10 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
 
         private static bool CanFillAllTiles()
         {
-            if (map.targets[0].CurrentRoom == null) return false;
+            _gridPosition = IntVector2.GetGridPosition(map.targets[0].transform.position);
 
-            return map.targets[0].CurrentRoom.type != RoomType.Hall 
-                && map.targets[0].CurrentRoom.functions.name != "CornFieldFunctionContainer(Clone)";
+            return map.Ec.cells[_gridPosition.x, _gridPosition.z].room.type != RoomType.Hall 
+                && map.Ec.cells[_gridPosition.x, _gridPosition.z].room.functions.name != "CornFieldFunctionContainer(Clone)";
         }
 
     }

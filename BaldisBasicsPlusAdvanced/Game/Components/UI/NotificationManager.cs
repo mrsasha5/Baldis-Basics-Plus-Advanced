@@ -86,26 +86,22 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
         private GameObject CreateNotification(string key)
         {
-            GameObject notifBase = new GameObject("NotifBase", typeof(RectTransform));
-            notifBase.transform.SetParent(canvas.transform, false);
-            RectTransform rectTransform = notifBase.GetComponent<RectTransform>();
-            rectTransform.anchoredPosition = Vector3.zero;
-            rectTransform.anchorMin = new Vector2(1f, 0f);
-            rectTransform.anchorMax = new Vector2(0.5f, 0f);
-            notifBase.transform.localPosition = Vector3.right * 245f + Vector3.up * -230f;
-
-            Image imageBg = UIHelpers.CreateImage(AssetsStorage.sprites["tooltip_bg"], notifBase.transform, Vector3.zero, correctPosition: false);
+            Image imageBg = UIHelpers.CreateImage(
+                AssetsStorage.sprites["tooltip_bg"], canvas.transform, Vector3.zero, correctPosition: false);
             imageBg.type = Image.Type.Sliced;
+            imageBg.rectTransform.anchoredPosition = Vector3.zero;
+            imageBg.rectTransform.anchorMin = new Vector2(1f, 1f);
+            imageBg.rectTransform.anchorMax = new Vector2(1f, 1f);
+            imageBg.rectTransform.sizeDelta = new Vector2(150f, 100f);
+            imageBg.rectTransform.transform.localPosition = Vector3.right * 245f + Vector3.up * -230f;
 
-            TextMeshProUGUI tmpText = UIHelpers.CreateText<TextMeshProUGUI>(BaldiFonts.ComicSans12, "", notifBase.transform, Vector3.zero);
+            TextMeshProUGUI tmpText = UIHelpers.CreateText<TextMeshProUGUI>(BaldiFonts.ComicSans12, "", imageBg.transform, Vector3.zero);
             tmpText.text = Singleton<LocalizationManager>.Instance.GetLocalizedText(key);
             tmpText.alignment = TextAlignmentOptions.Center;
             tmpText.color = Color.black;
             tmpText.rectTransform.sizeDelta = new Vector2(140f, 90f);
 
-            imageBg.rectTransform.sizeDelta = new Vector2(150f, 100f);
-
-            return notifBase;
+            return imageBg.gameObject;
         }
 
         private IEnumerator NotificationAnimator(bool appearing)

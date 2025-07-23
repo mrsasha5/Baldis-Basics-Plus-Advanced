@@ -41,7 +41,8 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects
             renderer.transform.parent.localPosition = Vector3.up * 84f;
 
             collider = gameObject.AddComponent<BoxCollider>();
-            collider.size = Vector3.one * 10f;
+            collider.size = Vector3.one * 10f + Vector3.up * 90f;
+            collider.center = Vector3.up * 45f;
             collider.isTrigger = true;
 
             if (variant == 2)

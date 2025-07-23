@@ -1270,12 +1270,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetFloorTex(AssetsStorage.textures["adv_english_floor"], 100);
 
             EnumExtensions.ExtendEnum<RoomCategory>("SchoolCouncil");
-            EnumExtensions.ExtendEnum<RoomCategory>("CornField");
-            /*PrefabsCreator.CreateRoomGroup("SchoolCouncil", minRooms: 0, maxRooms: 0, dontSpawn: true)
-                .SetFalseEverywhere()
-                .ConvertTo<RoomGroupSpawningData>()
-                .Group
-                .SetWallTex(AssetsStorage.textures["adv_school_council_wall"], 100);*/
         }
 
         public static void InitializeRoomAssets()

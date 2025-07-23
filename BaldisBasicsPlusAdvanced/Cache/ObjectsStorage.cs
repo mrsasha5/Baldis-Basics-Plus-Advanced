@@ -24,7 +24,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
             { "English", Color.magenta },
             { "SchoolCouncil", new Color(0.4335f, 0.1679f, 0.1601f) }, //111 43 41
             { "AdvancedClass", Color.green },
-            { "CornField", Color.green }
+            { "CornField", Color.cyan }
         };
 
         public static Dictionary<string, Color> RoomColors => roomColors;

@@ -18,7 +18,6 @@ using MTM101BaldAPI.SaveSystem;
 using System;
 using System.Collections;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 using static BepInEx.BepInDependency;
 
@@ -33,7 +32,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "Baldi's Basics Plus Advanced Edition";
 
-        public const string version = "0.2.6.2";
+        public const string version = "0.2.6.3";
 
         internal static string tempPath;
 
