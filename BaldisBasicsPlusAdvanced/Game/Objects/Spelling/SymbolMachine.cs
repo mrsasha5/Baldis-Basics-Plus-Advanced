@@ -315,7 +315,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
         private IEnumerator Reinitializer()
         {
             reInitializing = true;
-            if (isPitFloor) SwitchLight(true);
+            //if (isPitFloor) SwitchLight(true);
 
             if (!completed) OnCompleted(decidedCorrectly: false);
 
@@ -376,7 +376,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             }
         }
 
-        private void SwitchLight(bool setOn, float? hideFaceIn = null)
+        /*private void SwitchLight(bool setOn, float? hideFaceIn = null)
         {
             switcherAnimations.Enqueue(LightsSwitcher(setOn, hideFaceIn));
         }
@@ -426,7 +426,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                     yield return null;
                 }
             }
-        }
+        }*/
 
         public void Clicked(int player)
         {
@@ -486,7 +486,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
             StartCoroutine(SpelloonPopper());
 
-            if (isPitFloor) SwitchLight(false, hideFaceIn: 15f);
+            //if (isPitFloor) SwitchLight(false, hideFaceIn: 15f);
         }
 
         public void SetSymbolTimer(bool active, float symbolTime)
