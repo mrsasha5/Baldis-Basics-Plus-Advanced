@@ -32,7 +32,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "Baldi's Basics Plus Advanced Edition";
 
-        public const string version = "0.2.6.3";
+        public const string version = "0.2.6.4";
 
         internal static string tempPath;
 
@@ -47,7 +47,6 @@ namespace BaldisBasicsPlusAdvanced
         internal static ManualLogSource Logging => Instance.Logger;
 
         private static Harmony harmony;
-
 
         private void Awake()
         {
@@ -141,19 +140,11 @@ namespace BaldisBasicsPlusAdvanced
 
         private static IEnumerator OnAssetsLoadedPost()
         {
-            yield return 4;
-
-            yield return "Loading Kitchen Stove recipes...";
-
-            ApiManager.LoadKitchenStoveRecipesFromFolder(Instance.Info, 
-                AssetsHelper.modPath + "Premades/Recipes/KitchenStove/", true);
+            yield return 2;
 
             yield return "Initializing new MIDIs...";
 
             GameRegisterManager.InitializeMidisPost();
-
-            yield return "Initializing Kitchen Stove posters...";
-            GameRegisterManager.InitializeKitchenStovePosters();
 
             yield return "Invoking OnAssetsLoadPost for modules...";
 

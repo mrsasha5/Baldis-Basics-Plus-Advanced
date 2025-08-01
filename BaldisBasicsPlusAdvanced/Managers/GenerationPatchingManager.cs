@@ -1,12 +1,15 @@
-﻿using BaldisBasicsPlusAdvanced.Cache;
+﻿using BaldisBasicsPlusAdvanced.API;
+using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
+using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 using HarmonyLib;
 using MTM101BaldAPI;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BaldisBasicsPlusAdvanced.Managers
@@ -14,8 +17,17 @@ namespace BaldisBasicsPlusAdvanced.Managers
     internal class GenerationPatchingManager
     {
 
+        private static bool recipesLoaded;
+
         private static void RegisterLevelData(string name, int floor, CustomLevelObject levelObject)
         {
+            if (!recipesLoaded)
+            {
+                ApiManager.LoadKitchenStoveRecipesFromFolder(AdvancedCore.Instance.Info,
+                    AssetsHelper.modPath + "Premades/Recipes/KitchenStove/", true);
+                recipesLoaded = true;
+            }
+
             foreach (CellTextureSerializableData cellTexData in ObjectsStorage.CellTextureDatas)
             {
                 if (name == "END" && !cellTexData.endlessMode) continue;
@@ -249,6 +261,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 }
             }
 
+            InitializeKitchenStovePosters(levelObject);
         }
 
         public static void RegisterMainLevelData(string name, int floor, SceneObject mainLevel)
@@ -309,6 +322,33 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     RegisterLevelData(name, floor, (CustomLevelObject)weightedLevelObj.selection);
                 }
             }
+        }
+
+        private static void InitializeKitchenStovePosters(LevelObject obj)
+        {
+            List<FoodRecipeData> datas = ApiManager.GetAllKitchenStoveRecipes();
+            List<PosterObject> posters = new List<PosterObject>();
+
+            for (int i = 0; i < datas.Count; i++)
+            {
+                posters.Add(datas[i].Poster);
+            }
+
+            datas.Clear();
+
+            int weight = 100 / posters.Count;
+
+            for (int i = 0; i < posters.Count; i++)
+            {
+                obj.posters = obj.posters.AddToArray(
+                new WeightedPosterObject()
+                {
+                    selection = posters[i],
+                    weight = weight
+                });
+            }
+
+            posters.Clear();
         }
 
     }

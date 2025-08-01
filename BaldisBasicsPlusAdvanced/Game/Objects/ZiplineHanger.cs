@@ -178,7 +178,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             if (!broken && canAcceptNPCs && !moving && ignoresNpcsTime <= 0f && other.CompareTag("NPC"))
             {
                 NPC npc = other.GetComponent<NPC>();
-                if (npc.GetMeta().tags.Contains(TagsStorage.student) && SetEntity(npc.GetComponent<Entity>(), kickEntity: false))
+
+                Cell destPoint = ec.CellFromPosition(nextPos == 1 ? positions.Key : positions.Value);
+
+                //ec.FindPath(npc.Navigator._startTile, npc.Navigator._targetTile, PathType.Nav, out List<Cell> path, out bool success);
+
+                if (/*success && path.Contains(destPoint)
+                    && */SetEntity(npc.Navigator.Entity, kickEntity: false))
                 {
                     SetMoving();
                     ignoresNpcsTime = Random.Range(20f, 60f);
@@ -220,7 +226,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             {
                 transform.position = new Vector3(positions.Value.x, 5f, positions.Value.z);
             }
-            
 
             if (entity != null)
             {

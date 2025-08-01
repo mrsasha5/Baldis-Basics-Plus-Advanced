@@ -1,28 +1,50 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
+using BaldisBasicsPlusAdvanced.Helpers;
 using BepInEx;
+using MTM101BaldAPI.PlusExtensions;
+using MTM101BaldAPI.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using TMPro;
+using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 {
     /// <summary>
-    /// Please do not try to add for the one array more than "MaxFoodCount" from the KitchenStove property.
+    /// Please do not try in one array to add more elements than "MaxFoodCount" from the KitchenStove property.
     /// I just will cut the array.
     /// </summary>
     public class FoodRecipeData
     {
-        private ItemObject[] rawFood;
 
-        private ItemObject[] cookedFood;
+        #region Values for poster
 
-        private bool soundOverridden;
+        private static Texture2D posterTex = AssetsHelper.TextureFromFile("Textures/Posters/adv_poster_recipe_example.png");
+
+        private static IntVector2[] posterRawFoodPositions = new IntVector2[]
+                { new IntVector2(23, -118), new IntVector2(61, -118),
+                    new IntVector2(23, -155), new IntVector2(61, -155) };
+        private static IntVector2[] posterCookedFoodPositions = new IntVector2[]
+            { new IntVector2(163, -118), new IntVector2(202, -118),
+                    new IntVector2(163, -155), new IntVector2(202, -155) };
+
+        #endregion
 
         private SoundObject sound;
+
+        private bool soundOverridden;
 
         private float? coolingTime;
 
         private float? cookingTime;
+
+        private ItemObject[] rawFood;
+
+        private ItemObject[] cookedFood;
+
+        private ExtendedPosterObject posterObj;
 
         internal Action<KitchenStove> onKitchenStoveActivatingPre;
 
@@ -45,6 +67,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         public float? CookingTime => cookingTime;
 
         public bool SoundOverridden => soundOverridden;
+
+        internal ExtendedPosterObject Poster => posterObj;
 
         /// <summary>
         /// Initialization of the class.
@@ -76,6 +100,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 rawFood = newArray;
             }
             this.rawFood = rawFood;
+            RefreshOverlayData();
             return this;
         }
 
@@ -98,6 +123,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 cookedFood = newArray;
             }
             this.cookedFood = cookedFood;
+            RefreshOverlayData();
             return this;
         }
 
@@ -246,11 +272,84 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         /// <summary>
         /// Another way of registering recipe! Use that one which you prefer! ApiManager.CreateKitchenStoveRecipe(...) or this method!
+        /// Register this on pre-loading! Not after invoking generation changes.
         /// </summary>
         /// <returns></returns>
         public bool RegisterRecipe()
         {
             return ApiManager.CreateKitchenStoveRecipe(this);
+        }
+
+        internal FoodRecipeData CreateRecipePoster()
+        {
+            posterObj = ScriptableObject.CreateInstance<ExtendedPosterObject>();
+            Poster.name = $"RecipePoster_{KitchenStove.Datas.Count + 1}";
+            Poster.baseTexture = posterTex;
+            Poster.textData = new PosterTextData[]
+            {
+                new PosterTextData()
+                {
+                    textKey = "Adv_PST_Recipe_1",
+                    position = new IntVector2(32, 165),
+                    color = Color.black,
+                    alignment = TextAlignmentOptions.Center,
+                    style = FontStyles.Bold,
+                    font = BaldiFonts.ComicSans24.FontAsset(),
+                    fontSize = (int)BaldiFonts.ComicSans24.FontSize(),
+                    size = new IntVector2(200, 50)
+                },
+                new PosterTextData()
+                {
+                    textKey = "Adv_PST_Recipe_2",
+                    position = new IntVector2(32, 140),
+                    color = Color.black,
+                    alignment = TextAlignmentOptions.Center,
+                    style = FontStyles.Normal,
+                    font = BaldiFonts.ComicSans12.FontAsset(),
+                    fontSize = (int)BaldiFonts.ComicSans12.FontSize(),
+                    size = new IntVector2(200, 50)
+                },
+                new PosterTextData()
+                {
+                    textKey = "Adv_PST_Recipe_3",
+                    position = new IntVector2(32, 128),
+                    color = Color.black,
+                    alignment = TextAlignmentOptions.Center,
+                    style = FontStyles.Normal,
+                    font = BaldiFonts.ComicSans12.FontAsset(),
+                    fontSize = (int)BaldiFonts.ComicSans12.FontSize(),
+                    size = new IntVector2(200, 50)
+                }
+            };
+
+            RefreshOverlayData();
+
+            return this;
+        }
+
+        private FoodRecipeData RefreshOverlayData()
+        {
+            if (Poster == null) return this;
+
+            Poster.overlayData = new PosterImageData[RawFood.Length + CookedFood.Length];
+
+            IntVector2 itemSpriteSize = new IntVector2(32, 32);
+
+            for (int i = 0; i < RawFood.Length; i++)
+            {
+                Poster.overlayData[i] =
+                    new PosterImageData(RawFood[i].itemSpriteSmall.texture, posterRawFoodPositions[i],
+                    itemSpriteSize);
+            }
+
+            for (int i = 0; i < CookedFood.Length; i++)
+            {
+                Poster.overlayData[RawFood.Length + i] =
+                    new PosterImageData(CookedFood[i].itemSpriteSmall.texture, posterCookedFoodPositions[i],
+                    itemSpriteSize);
+            }
+
+            return this;
         }
 
     }

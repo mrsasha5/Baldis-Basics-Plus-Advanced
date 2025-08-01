@@ -159,11 +159,14 @@ namespace BaldisBasicsPlusAdvanced.API
 
         /// <summary>
         /// Creates a new Kitchen Stove recipe! Also instead of using this, you can invoke RegisterRecipe() from the FoodRecipeData!
+        /// Register this on pre-loading! Not after invoking generation changes.
         /// </summary>
         /// <param name="data"></param>
         /// <returns>False, if raw food components already used by other recipe and your recipe has different cooked components.</returns>
         public static bool CreateKitchenStoveRecipe(FoodRecipeData data)
         {
+            data.CreateRecipePoster();
+
             for (int i = 0; i < KitchenStove.Datas.Count; i++)
             {
                 if (KitchenStove.Datas[i].IsEqual(data))
