@@ -31,13 +31,13 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 {
                     NPC npc = hit.transform.GetComponent<NPC>();
 
-                    if (!Refl_IsUsable(npc, pm)) return false;
+                    if (!ReflEvent_IsUsable(npc, pm)) return false;
 
                     object result = ReflectionHelper.UseMethod(npc, "Adv_IsSquashable"); //only for NPC
                     if (result == null || ((bool)result)) entity.Squish(squishTime);
 
                     OnUsed(pm);
-                    Refl_OnHammerUse(npc, pm);
+                    ReflEvent_OnHammerUse(npc, pm);
                     return entity.Squished;
                 }
 
@@ -54,12 +54,12 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 //ray don't ignores any colliders
                 if (hit.transform.TryGetComponent(out Window window) && !window.open)
                 {
-                    if (!Refl_IsUsable(window, pm)) return false;
+                    if (!ReflEvent_IsUsable(window, pm)) return false;
 
-                    if (Refl_IsBreakable(window)) window.Break(true);
+                    if (ReflEvent_IsBreakable(window)) window.Break(true);
 
                     OnUsed(pm);
-                    Refl_OnHammerUse(window, pm);
+                    ReflEvent_OnHammerUse(window, pm);
                     return window.open;
                 }
 
@@ -67,12 +67,12 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 {
                     if (door.locked)
                     {
-                        if (!Refl_IsUsable(door, pm)) return false;
+                        if (!ReflEvent_IsUsable(door, pm)) return false;
 
-                        if (Refl_IsBreakable(door)) door.Unlock();
+                        if (ReflEvent_IsBreakable(door)) door.Unlock();
 
                         OnUsed(pm);
-                        Refl_OnHammerUse(door, pm);
+                        ReflEvent_OnHammerUse(door, pm);
                         return !door.locked;
                     }
                 }
@@ -81,12 +81,12 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 {
                     if (standardDoor.locked)
                     {
-                        if (!Refl_IsUsable(standardDoor, pm)) return false;
+                        if (!ReflEvent_IsUsable(standardDoor, pm)) return false;
 
-                        if (Refl_IsBreakable(standardDoor)) standardDoor.Unlock();
+                        if (ReflEvent_IsBreakable(standardDoor)) standardDoor.Unlock();
 
                         OnUsed(pm);
-                        Refl_OnHammerUse(standardDoor, pm);
+                        ReflEvent_OnHammerUse(standardDoor, pm);
                         return !standardDoor.locked;
                     }
                 }
@@ -95,19 +95,19 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             return false;
         }
 
-        private void Refl_OnHammerUse(object @object, PlayerManager pm)
+        private void ReflEvent_OnHammerUse(object @object, PlayerManager pm)
         {
             ReflectionHelper.UseMethod(@object, "Adv_OnHammerHit", pm);
         }
 
-        private bool Refl_IsBreakable(object @object)
+        private bool ReflEvent_IsBreakable(object @object)
         {
             object isBreakable = ReflectionHelper.UseMethod(@object, "Adv_IsBreakable");
 
             return isBreakable == null || ((bool)isBreakable);
         }
 
-        private bool Refl_IsUsable(object @object, PlayerManager pm)
+        private bool ReflEvent_IsUsable(object @object, PlayerManager pm)
         {
             object isUsable = ReflectionHelper.UseMethod(@object, "Adv_OnHammerPreHit", pm);
 

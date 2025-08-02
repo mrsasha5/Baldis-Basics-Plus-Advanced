@@ -68,8 +68,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         private bool moving;
 
-        private float ignoresNpcsTime;
-
         private bool broken;
 
         private float distance;
@@ -80,7 +78,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         private int uses;
 
-        private int nextPos;
+        private int positionIndex;
 
         private Vector3 direction;
 
@@ -144,8 +142,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         private void Update()
         {
-            if (ignoresNpcsTime > 0f) ignoresNpcsTime -= Time.deltaTime * ec.EnvironmentTimeScale;
-
             if (moving)
             {
                 speed += Time.deltaTime * acceleration * ec.EnvironmentTimeScale;
@@ -175,19 +171,27 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!broken && canAcceptNPCs && !moving && ignoresNpcsTime <= 0f && other.CompareTag("NPC"))
+            if (!broken && canAcceptNPCs && !moving && other.CompareTag("NPC"))
             {
                 NPC npc = other.GetComponent<NPC>();
 
-                Cell destPoint = ec.CellFromPosition(nextPos == 1 ? positions.Key : positions.Value);
+                Cell currentCell = ec.CellFromPosition(npc.transform.position);
+                Cell destPoint = ec.CellFromPosition(positionIndex == 1 ? positions.Key : positions.Value);
 
-                //ec.FindPath(npc.Navigator._startTile, npc.Navigator._targetTile, PathType.Nav, out List<Cell> path, out bool success);
+                ec.FindPath(npc.Navigator._startTile, npc.Navigator._targetTile, PathType.Nav, out List<Cell> path, out bool success);
 
-                if (/*success && path.Contains(destPoint)
-                    && */SetEntity(npc.Navigator.Entity, kickEntity: false))
+                int destIndex = path.IndexOf(destPoint);
+                int curCellIndex = path.IndexOf(currentCell);
+
+                if (success && curCellIndex != -1 && 
+                    (destIndex != -1 ? (curCellIndex < destIndex) : 
+                        (Vector3.Distance(npc.Navigator._targetTile.FloorWorldPosition, destPoint.FloorWorldPosition) <= 50f)) && 
+                        ReflEvent_OnTakingZiplinePre(npc) &&
+                        SetEntity(npc.Navigator.Entity, kickEntity: false))
                 {
                     SetMoving();
-                    ignoresNpcsTime = Random.Range(20f, 60f);
+                    npc.transform.forward = direction;
+                    ReflEvent_OnTakingZipline(npc);
                 }
             }
         }
@@ -219,7 +223,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         {
             if (!hasInfinityUses) uses--;
             moving = false;
-            if (nextPos == 0)
+            if (positionIndex == 0)
             {
                 transform.position = new Vector3(positions.Key.x, 5f, positions.Key.z);
             } else
@@ -266,15 +270,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         {
             if (!moving)
             {
-                nextPos++;
+                positionIndex++;
 
-                if (nextPos >= 2) nextPos = 0;
+                if (positionIndex >= 2) positionIndex = 0;
 
                 moving = true;
                 speed = startSpeed;
                 direction = (positions.Key - positions.Value).normalized;
                 direction.y = 0f;
-                if (nextPos == 1) direction *= -1;
+                if (positionIndex == 1) direction *= -1f;
 
                 distance = Vector3.Distance(positions.Key, positions.Value);
                 audMan.PlaySingle(AssetsStorage.sounds["grapple_clang"]);
@@ -287,6 +291,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 return true;
             }
             return false;
+        }
+
+        private void ReflEvent_OnTakingZipline(Object @object)
+        {
+            ReflectionHelper.UseMethod(@object, "Adv_OnTakingZipline", overrider);
+        }
+
+        private bool ReflEvent_OnTakingZiplinePre(Object @object)
+        {
+            object result = ReflectionHelper.UseMethod(@object, "Adv_OnTakingZiplinePre");
+            return result == null || (bool)result;
         }
 
         private void KickEntity(Entity entity)

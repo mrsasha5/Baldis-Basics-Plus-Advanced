@@ -66,19 +66,19 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             if (other.tag == "NPC" && other.TryGetComponent(out Entity entity))
             {
                 NPC npc = other.GetComponent<NPC>();
-                if (Refl_IsFreezable(npc))
+                if (ReflEvent_IsFreezable(npc))
                 {
                     NPCControllerSystem controllerSystem = npc.GetControllerSystem();
                     controllerSystem.CreateController(out FrozennessController frozennessController);
                     frozennessController.SetTime(10f);
                 }
 
-                if (Refl_IsPushable(npc))
+                if (ReflEvent_IsPushable(npc))
                 {
                     entity.AddForce(new Force(forward, pushSpeed, pushAcceleration));
                     ec.GetAudMan().PlaySingle(AssetsStorage.sounds["bang"]);
                     ec.MakeNoise(entity.transform.position, 64); //like First Prize
-                    Refl_OnIceBootsHit(npc, pm);
+                    ReflEvent_OnIceBootsHit(npc, pm);
                 }
             }
         }
@@ -101,10 +101,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 //ray don't ignores any colliders
                 if (hit.transform.tag == "Window" && hit.transform.TryGetComponent(out Window window) && !window.IsOpen)
                 {
-                    if (Refl_IsPushable(window))
+                    if (ReflEvent_IsPushable(window))
                     {
                         window.Break(true);
-                        Refl_OnIceBootsHit(window, pm);
+                        ReflEvent_OnIceBootsHit(window, pm);
                     }
                 }
             }
@@ -159,18 +159,18 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             BreakBoots();
         }
 
-        private void Refl_OnIceBootsHit(object @object, PlayerManager pm)
+        private void ReflEvent_OnIceBootsHit(object @object, PlayerManager pm)
         {
             ReflectionHelper.UseMethod(@object, "Adv_OnIceBootsHit", pm);
         }
 
-        private bool Refl_IsFreezable(object @object)
+        private bool ReflEvent_IsFreezable(object @object)
         {
             object isFreezable = ReflectionHelper.UseMethod(@object, "Adv_IsFreezable");
             return isFreezable == null || ((bool)isFreezable);
         }
 
-        private bool Refl_IsPushable(object @object)
+        private bool ReflEvent_IsPushable(object @object)
         {
             object isPushable = ReflectionHelper.UseMethod(@object, "Adv_IsPushable");
             return isPushable == null || ((bool)isPushable);

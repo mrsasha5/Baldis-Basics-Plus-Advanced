@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using System.Reflection;
 
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
@@ -12,17 +11,13 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static object UseMethod(object instance, string methodName, params object[] parameters)
         {
-            if (instance.GetType().GetMethod(methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) != null) //to avoid logs
+            if (instance.GetType().GetMethod(
+                methodName, AccessTools.all) != null) //to avoid logs
             {
                 return Traverse.Create(instance).Method(methodName, parameters).GetValue();
             }
             return null;
         }
-
-        /*public static T UseMethod<T>(object instance, string methodName, params object[] parameters)
-        {
-            return Traverse.Create(instance).Method(methodName, parameters).GetValue<T>();
-        }*/
 
         public static object GetValue(object instance, string fieldName)
         {
@@ -43,21 +38,18 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         {
             Traverse.Create(instance).Field(fieldName).SetValue(setVal);
         }
-
-        // For static fields!
+        
         public static void Static_SetValue<T>(string fieldName, object setVal)
         {
             Traverse.Create<T>().Field(fieldName).SetValue(setVal);
         }
-
-        // For static fields!
+        
         public static J Static_GetValue<T, J>(string fieldName)
         {
             return Traverse.Create<T>().Field(fieldName).GetValue<J>();
         }
 
-        // For static fields!
-        public static void GetValue<T, J>(string fieldName, out J result)
+        public static void Static_GetValue<T, J>(string fieldName, out J result)
         {
             result = Traverse.Create<T>().Field(fieldName).GetValue<J>();
         }

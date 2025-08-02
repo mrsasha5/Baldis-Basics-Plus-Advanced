@@ -40,15 +40,15 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                     && hit.transform.TryGetComponent(out Entity entity) && !entity.Frozen)
                 {
                     NPC npc = hit.transform.GetComponent<NPC>();
-                    if (npc == null || (npc != null && Refl_IsUsable(npc, pm)))
+                    if (npc == null || (npc != null && ReflEvent_IsUsable(npc, pm)))
                     {
                         PlaySound(pm);
                         pm.RuleBreak("Bullying", 1f);
 
-                        if (npc == null || (npc != null && Refl_IsPushable(npc))) Push(entity, pm);
+                        if (npc == null || (npc != null && ReflEvent_IsPushable(npc))) Push(entity, pm);
 
                         Destroy(gameObject);
-                        if (npc != null) Relf_OnBoxingGloveHit(npc, pm);
+                        if (npc != null) ReflEvent_OnBoxingGloveHit(npc, pm);
                         return ReturnOnUse();
                     }
                     Destroy(base.gameObject);
@@ -61,15 +61,15 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 //ray don't ignores any colliders
                 if (hit.transform.tag == "Window" && hit.transform.TryGetComponent(out Window window) && !window.open)
                 {
-                    if (Refl_IsUsable(window, pm))
+                    if (ReflEvent_IsUsable(window, pm))
                     {
                         PlaySound(pm);
                         pm.RuleBreak("Bullying", 1f);
 
-                        if (Refl_IsPushable(window)) window.Break(true);
+                        if (ReflEvent_IsPushable(window)) window.Break(true);
 
                         Destroy(gameObject);
-                        Relf_OnBoxingGloveHit(window, pm);
+                        ReflEvent_OnBoxingGloveHit(window, pm);
                         if (!window.open) return false;
                         return ReturnOnUse();
                     }
@@ -111,18 +111,18 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             yield break;
         }
 
-        private void Relf_OnBoxingGloveHit(object @object, PlayerManager pm)
+        private void ReflEvent_OnBoxingGloveHit(object @object, PlayerManager pm)
         {
             ReflectionHelper.UseMethod(@object, "Adv_OnBoxingGloveHit", pm);
         }
 
-        private bool Refl_IsPushable(object @object)
+        private bool ReflEvent_IsPushable(object @object)
         {
             object isPushable = ReflectionHelper.UseMethod(@object, "Adv_IsPushable");
             return isPushable == null || ((bool)isPushable);
         }
 
-        private bool Refl_IsUsable(object @object, PlayerManager pm)
+        private bool ReflEvent_IsUsable(object @object, PlayerManager pm)
         {
             object result = ReflectionHelper.UseMethod(@object, "Adv_OnBoxingGlovePreHit", pm);
             return result == null || ((bool)result);

@@ -20,12 +20,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
         public override void EntityTriggerEnter(Collider other)
         {
             if (flying && other.isTrigger && other.CompareTag("NPC") && other.TryGetComponent(out NPC npc)
-                && PlayerIsLauncher && Refl_OnMysteriousTeleporterPreHit(npc, (PlayerManager)launcher))
+                && PlayerIsLauncher && ReflEvent_OnMysteriousTeleporterPreHit(npc, (PlayerManager)launcher))
             {
                 SetCorruptionEffect(npc);
                 SetFlying(false);
                 Destroy(gameObject);
-                if (PlayerIsLauncher) Refl_OnMysteriousTeleporterHit(npc, (PlayerManager)launcher);
+                if (PlayerIsLauncher) ReflEvent_OnMysteriousTeleporterHit(npc, (PlayerManager)launcher);
             }
         }
 
@@ -63,13 +63,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             };
         }
 
-        private bool Refl_OnMysteriousTeleporterPreHit(object @object, PlayerManager pm)
+        private bool ReflEvent_OnMysteriousTeleporterPreHit(object @object, PlayerManager pm)
         {
             object result = ReflectionHelper.UseMethod(@object, "Adv_OnMysteriousTeleporterPreHit", pm);
             return result == null || (bool)result;
         }
 
-        private void Refl_OnMysteriousTeleporterHit(object @object, PlayerManager pm)
+        private void ReflEvent_OnMysteriousTeleporterHit(object @object, PlayerManager pm)
         {
             ReflectionHelper.UseMethod(@object, "Adv_OnMysteriousTeleporterHit", pm);
         }
