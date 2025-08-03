@@ -94,6 +94,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Spawning
             weights.Clear();
             forced = false;
             SetBannedFloors();
+            SetLevelTypes();
             return this;
         }
 

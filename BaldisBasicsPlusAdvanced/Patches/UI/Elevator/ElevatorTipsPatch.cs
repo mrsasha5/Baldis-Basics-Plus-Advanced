@@ -1,8 +1,10 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
+using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -93,7 +95,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         }
 
         [HarmonyPatch("Start")]
-        [HarmonyPrefix]
+        [HarmonyPostfix]
         private static void OnStart(ElevatorScreen __instance, ref Canvas ___canvas)
         {
             elvScreen = __instance;
@@ -105,8 +107,14 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             monitor = CreateTipText(originalText);
             monitor.gameObject.SetActive(false);
 
-            if (LoadTip)
-                __instance.OnLoadReady += monitor.Activate;
+            if (LoadTip) elvScreen.StartCoroutine(ElevatorWaiter());
+        }
+
+        private static IEnumerator ElevatorWaiter()
+        {
+            List<IEnumerator> enumerators = ReflectionHelper.GetValue<List<IEnumerator>>(elvScreen, "queuedEnumerators");
+            while (enumerators.Count > 0 || ReflectionHelper.GetValue<bool>(elvScreen, "busy")) yield return null;
+            monitor.Activate();
         }
 
         private static TipsMonitor CreateTipText(string text)
@@ -125,7 +133,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             SetOverride(monitor, state, key, overrideWorksEvenTipsDisabled);
         }
 
-#warning TODO: overrideWorksEvenTipsDisabled checking
         public static void SetOverride(TipsMonitor monitor, bool state, string key, bool overrideWorksEvenTipsDisabled = false)
         {
             if (state)

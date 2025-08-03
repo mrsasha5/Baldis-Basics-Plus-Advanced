@@ -1,6 +1,6 @@
 ﻿namespace BaldisBasicsPlusAdvanced.Cache
 {
-    public class TagsStorage
+    internal class TagsStorage
     {
 
         #region Development API 

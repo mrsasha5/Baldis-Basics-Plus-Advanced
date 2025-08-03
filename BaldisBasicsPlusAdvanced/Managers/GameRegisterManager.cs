@@ -692,7 +692,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     weight = 25,
                     selection = ItemMetaStorage.Instance.FindByEnum(Items.GrapplingHook).itemObjects.Last()
                 },
-            }).SetForced(true);
+            })
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Maintenance, LevelType.Factory)
+                .SetForced(true);
         }
 
         #endregion
