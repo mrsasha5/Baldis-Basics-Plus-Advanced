@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.AutoUpdate
 {
-    public class CompatibilityAnalyzer
+    internal class CompatibilityAnalyzer
     {
 
         public enum Result

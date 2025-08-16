@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using BaldisBasicsPlusAdvanced.AutoUpdate;
+﻿using System.IO;
 using BaldisBasicsPlusAdvanced.SaveSystem.Managers;
 using MTM101BaldAPI.SaveSystem;
 
@@ -24,8 +20,6 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem
             OptionsDataManager.Load();
             PlayerDataManager.Load();
             KeyBindingsManager.Load();
-
-            //AutoUpdateManager.Instance?.Check();
         }
 
         public static void Save()

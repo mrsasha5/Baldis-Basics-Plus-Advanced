@@ -1,9 +1,4 @@
 ﻿using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine.UIElements;
-using UnityEngine;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
 
 namespace BaldisBasicsPlusAdvanced.Patches.Systems.Player

@@ -13,6 +13,7 @@ using UnityEngine.UI;
 
 namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 {
+#warning Fix visual issue
     public class TipsMonitor : MonoBehaviour
     {
 
@@ -32,9 +33,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
         private bool activated;
 
+        private List<IEnumerator> animations;
+
         private IEnumerator staticEnumerator;
 
-        private int index;
+        //private int index;
 
         public void Initialize(string originalText)
         {
@@ -79,7 +82,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
                 { "disappearing", AssetsStorage.spriteSheets["adv_tips_screen"].Reverse().ToArray()}
             }, fps: 1);
         }
-
 
         public void Activate()
         {
@@ -198,7 +200,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
             animator.SetDefaultAnimation("", 1f);
         }
 
-        public bool SetStaticAnimation()
+        public void SetStaticAnimation()
         {
             maskAnimator.image.enabled = true;
             maskAnimator.SetDefaultAnimation("static", 10f);
@@ -209,7 +211,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
             staticEnumerator = AnimatorBreaker(maskAnimator, 0.25f);
 
             StartCoroutine(staticEnumerator);
-            return true;
         }
 
         public void Override(string text)

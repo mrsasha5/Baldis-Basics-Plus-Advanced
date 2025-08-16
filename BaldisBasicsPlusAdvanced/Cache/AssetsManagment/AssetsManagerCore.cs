@@ -3,7 +3,7 @@ using BaldisBasicsPlusAdvanced.Helpers;
 
 namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 {
-    public class AssetsManagerCore
+    internal class AssetsManagerCore
     {
 
         public static void Initialize()

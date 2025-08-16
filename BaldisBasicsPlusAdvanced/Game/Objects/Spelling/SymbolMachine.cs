@@ -1,17 +1,13 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
-using BaldisBasicsPlusAdvanced.Game.Rooms.Functions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
-using BaldisBasicsPlusAdvanced.Patches.GameEventsProvider;
-using BepInEx;
 using MTM101BaldAPI;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.UI;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -93,8 +89,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         private float time;
 
-        private bool lightsActivated;
-
         private bool timerActive;
 
         private bool playerRewarded;
@@ -107,11 +101,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         public bool TimerActive => timerActive;
 
-        public bool Completed => completed;
+        public bool IsCompleted => completed;
 
         public bool PlayerRewarded => playerRewarded;
 
         public float SymbolTime => symbolTime;
+
+        public RoomController Room => room;
 
         public void InitializePrefab(int variant)
         {
@@ -196,20 +192,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             screenRect.sizeDelta = new Vector2(21f, 4f);
         }
 
-        /*public void OnGenerationFinishedInTimedRoom()
-        {
-            if (isPitFloor)
-            {
-                for (int i = 0; i < room.cells.Count; i++)
-                {
-                    if (room.cells[i].hasLight)
-                    {
-                        room.cells[i].SetLight(false);
-                    }
-                }
-            }
-        }*/
-
         private void Start()
         {
             room = transform.parent.parent.GetComponent<RoomController>();
@@ -266,7 +248,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 time -= Time.deltaTime;
                 int time2 = (int)time;
 
-                if (time <= 0f) OnCompleted(decidedCorrectly: false);
+                if (time <= 0f) OnCompleted(solved: false);
                 else if (time1 != time2)
                 {
                     UpdateTextProgress();
@@ -294,9 +276,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 return;
             }
 
-            //if (isPitFloor) SwitchLight(true);
-            GenerateProblem();
-            
+            GenerateProblem();            
         }
 
         public bool ReInit()
@@ -315,9 +295,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
         private IEnumerator Reinitializer()
         {
             reInitializing = true;
-            //if (isPitFloor) SwitchLight(true);
 
-            if (!completed) OnCompleted(decidedCorrectly: false);
+            if (!completed) OnCompleted(solved: false);
 
             SetFaceTex("adv_symbol_machine_face");
 
@@ -376,58 +355,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             }
         }
 
-        /*private void SwitchLight(bool setOn, float? hideFaceIn = null)
-        {
-            switcherAnimations.Enqueue(LightsSwitcher(setOn, hideFaceIn));
-        }
-
-        private IEnumerator LightsSwitcher(bool setOn, float? hideFaceIn = null)
-        {
-            if (lightsActivated == setOn) yield break;
-
-            List<Cell> lightSources = new List<Cell>();
-            for (int i = 0; i < room.cells.Count; i++)
-            {
-                if (room.cells[i].hasLight) lightSources.Add(room.cells[i]);
-            }
-
-            float time = 2f;
-
-            while (lightSources.Count > 0)
-            {
-                time -= Time.deltaTime * room.ec.EnvironmentTimeScale;
-
-                if (time <= 0f)
-                {
-                    lightSources[0].SetLight(setOn);
-                    lightSources.RemoveAt(0);
-                    time = 2f;
-                }
-
-                yield return null;
-            }
-
-            lightsActivated = setOn;
-
-            if (hideFaceIn != null)
-            {
-                time = (float)hideFaceIn;
-
-                while (time > 0f && completed)
-                {
-                    time -= Time.deltaTime * room.ec.EnvironmentTimeScale;
-
-                    if (time <= 0f && completed)
-                    {
-                        SetScreenText("");
-                        SetFaceTex("adv_symbol_machine_face");
-                    }
-
-                    yield return null;
-                }
-            }
-        }*/
-
         public void Clicked(int player)
         {
             if (room.Powered && playerIsHolding && !completed && spelloons[playerHolding].trackingPlayer)
@@ -441,13 +368,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 {
                     rightSymbols++;
                     UpdateTextProgress();
-                    if (answerField == answer.ToLower()) OnCompleted(decidedCorrectly: true);
+                    if (answerField == answer.ToLower()) OnCompleted(solved: true);
                     else audMan.PlaySingle(AssetsStorage.sounds["bell"]);
                     time = symbolTime;
                 }
                 else
                 {
-                    OnCompleted(decidedCorrectly: false);
+                    OnCompleted(solved: false);
                 }
 
                 if (spelloons.Count - 1 >= playerHolding)
@@ -461,10 +388,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             }
         }
 
-        private void OnCompleted(bool decidedCorrectly)
+        public void OnCompleted(bool solved)
         {
+            if (completed) return;
+
             completed = true;
-            if (decidedCorrectly)
+            if (solved)
             {
                 audMan.PlaySingle(AssetsStorage.sounds["activity_correct"]);
                 SetScreenTextKey(GetPhrase(good: true));
@@ -485,21 +414,18 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             timerActive = false;
 
             StartCoroutine(SpelloonPopper());
-
-            //if (isPitFloor) SwitchLight(false, hideFaceIn: 15f);
         }
 
-        public void SetSymbolTimer(bool active, float symbolTime)
+        public void UpdateSymbolTimer(bool active, float symbolTime)
         {
-            this.timerActive = active;
+            timerActive = active;
             if (symbolTime == float.NegativeInfinity)
             {
                 makeFailedOnUpdate = true;
                 return;
             }
             this.symbolTime = symbolTime;
-            this.time = symbolTime;
-            
+            time = symbolTime;
         }
 
         public void NumberDropped()
@@ -558,7 +484,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 SpawnSpelloon(symbol);
             }
 
-
             for (int i = 0; i < potentialSymbols.Count; i++)
             {
                 if (spelloons.Count >= maxSpelloonsCount) break;
@@ -566,7 +491,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 if (symbolsSpawned.Contains(symbol)) continue;
                 SpawnSpelloon(symbol);
             }
-
         }
 
         private void UpdateTextProgress()
@@ -576,9 +500,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Phrase_SM_Timed"),
                 answer, (int)time + 1));
             else
-            screenText.SetText(string.Format(
-                Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Phrase_SM_Progress"),
-                answer, (float)rightSymbols / (float)answer.Length * 100f));
+                screenText.SetText(string.Format(
+                    Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Phrase_SM_Progress"),
+                    answer, (float)rightSymbols / (float)answer.Length * 100f));
         }
 
         private void SetScreenText(string text)

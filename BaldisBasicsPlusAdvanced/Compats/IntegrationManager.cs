@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace BaldisBasicsPlusAdvanced.Compats
 {
-    public class IntegrationManager
+    internal class IntegrationManager
     {
         public static bool LevelLoaderInstalled => AssetsHelper.ModInstalled(levelLoaderId);
 

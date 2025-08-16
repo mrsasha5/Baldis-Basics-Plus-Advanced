@@ -614,7 +614,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
         public static void InitializeRandomEvents()
         {
             PrefabsCreator.CreateEvent<DisappearingCharactersEvent>(
-                name: "Disappearing Characters",
+                name: "Event_DisappearingCharacters",
                 soundKey: "adv_bal_event_disappearing_characters",
                 enumName: "DisappearingCharacters",
                 minTime: 60f,
@@ -627,7 +627,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetBannedFloors(1, 3);
 
             PrefabsCreator.CreateEvent<ColdSchoolEvent>(
-                name: "Cold School",
+                name: "Event_ColdSchool",
                 soundKey: "adv_bal_event_cold_machine",
                 enumName: "ColdSchool",
                 minTime: 60f,
@@ -640,7 +640,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetBannedFloors(1);
 
             PrefabsCreator.CreateEvent<PortalChaosEvent>(
-                name: "Portal Chaos",
+                name: "Event_PortalChaos",
                 enumName: "PortalChaos",
                 soundKey: "adv_bal_event_portals",
                 minTime: 75f,
@@ -653,7 +653,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetBannedFloors(1);
 
             PrefabsCreator.CreateEvent<VotingEvent>(
-                name: "Voting",
+                name: "Event_Voting",
                 enumName: "Voting",
                 soundKey: "adv_bal_event_voting",
                 minTime: 100f,

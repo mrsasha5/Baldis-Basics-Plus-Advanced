@@ -32,7 +32,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "Baldi's Basics Plus Advanced Edition";
 
-        public const string version = "0.2.6.4";
+        public const string version = "0.2.6.5";
 
         internal static string tempPath;
 

@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 
 namespace BaldisBasicsPlusAdvanced.Patches.GameManager
 {
@@ -7,11 +8,38 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameManager
     {
         private static int pauseDisables;
 
+        public static Action onFailPress;
+
+        [HarmonyPatch("Start")] //Game itself doesn't use Boom()...
+        [HarmonyPostfix]
+        private static void OnStart()
+        {
+            pauseDisables = 0;
+            onFailPress = null;
+        }
+
         [HarmonyPatch("Pause")]
         [HarmonyPrefix]
-        private static bool OnPause()
+        private static bool OnPause(ref bool ___paused)
         {
-            return pauseDisables < 1;
+            if (___paused) return true;
+
+            if (pauseDisables < 1) return true;
+
+            onFailPress?.Invoke();
+            return false;
+        }
+
+        [HarmonyPatch("OpenMap")]
+        [HarmonyPrefix]
+        private static bool OnOpenMap(ref bool ___paused)
+        {
+            if (___paused) return true;
+
+            if (pauseDisables < 1) return true;
+
+            onFailPress?.Invoke();
+            return false;
         }
 
         public static void SetPauseDisable(bool state)
@@ -23,13 +51,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameManager
             else pauseDisables--;
 
             if (pauseDisables < 0) pauseDisables = 0;
-        }
-
-        [HarmonyPatch("Boom")]
-        [HarmonyPostfix]
-        private static void OnBoom()
-        {
-            pauseDisables = 0;
         }
 
     }

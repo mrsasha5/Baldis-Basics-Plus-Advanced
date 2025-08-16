@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.AutoUpdate
 {
-    public class BuildDataStandard
+    internal class BuildDataStandard
     {
 
         //not a part of build information on Github, taken from Github jsons

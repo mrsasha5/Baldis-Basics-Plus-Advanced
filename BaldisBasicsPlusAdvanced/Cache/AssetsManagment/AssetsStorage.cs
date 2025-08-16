@@ -18,7 +18,7 @@ using UnityEngine;
 namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 {
 
-    public class AssetsStorage
+    internal class AssetsStorage
     {
 
         public class AssetDictionary<T>

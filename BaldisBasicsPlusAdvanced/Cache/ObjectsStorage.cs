@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using BaldisBasicsPlusAdvanced.Game.Events;
+﻿using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Game.Objects.SodaMachines;
 using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
 using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
-using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
 using BaldisBasicsPlusAdvanced.SerializableData;
@@ -17,7 +13,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
 {
     //I should do something with this thing in the future
     //And generation too
-    public class ObjectsStorage
+    internal class ObjectsStorage
     {
         private static Dictionary<string, Color> roomColors = new Dictionary<string, Color>()
         {

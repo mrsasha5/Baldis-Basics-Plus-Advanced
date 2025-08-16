@@ -12,7 +12,8 @@ namespace BaldisBasicsPlusAdvanced.Patches
         [HarmonyPostfix]
         private static void OnStart(EnvironmentController __instance)
         {
-            if (__instance.GetComponent<PlayerInteractionController>() == null) __instance.gameObject.AddComponent<PlayerInteractionController>();
+            if (__instance.GetComponent<PlayerInteractionController>() == null) 
+                __instance.gameObject.AddComponent<PlayerInteractionController>();
         }
     }
 }

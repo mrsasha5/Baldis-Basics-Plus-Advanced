@@ -1,5 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.AutoUpdate;
-using BaldisBasicsPlusAdvanced.SaveSystem;
+﻿using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
 using System;
 

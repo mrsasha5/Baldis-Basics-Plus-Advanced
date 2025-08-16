@@ -18,7 +18,7 @@ using System.Diagnostics;
 
 namespace BaldisBasicsPlusAdvanced.AutoUpdate
 {
-    public class AutoUpdateManager : Singleton<AutoUpdateManager>
+    internal class AutoUpdateManager : Singleton<AutoUpdateManager>
     {
 
         internal static Thread thread;

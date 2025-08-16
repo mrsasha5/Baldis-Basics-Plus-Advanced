@@ -12,7 +12,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
     //But he uses that for black hole which is not worried about how close player is
     //It just has another trigger collider and another class for checking if entity is triggered
 
-    public class EntitySucker : MonoBehaviour
+    public class AdvancedEntityPull : MonoBehaviour
     {
 
         public delegate void OnEntityCatched(EntitySuckingData entityData);
@@ -20,7 +20,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         public class EntitySuckingData
         {
 
-            private EntitySucker sucker;
+            private AdvancedEntityPull pull;
 
             public Entity entity;
 
@@ -28,15 +28,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             public bool catched;
 
-            public EntitySuckingData(EntitySucker sucker)
+            public EntitySuckingData(AdvancedEntityPull pull)
             {
-                this.sucker = sucker;
+                this.pull = pull;
             }
 
             public void Release()
             {
                 entity.ExternalActivity.moveMods.Remove(moveMod);
-                sucker.entities.Remove(this);
+                pull.entities.Remove(this);
             }
 
         }
