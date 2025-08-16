@@ -390,6 +390,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                     AssetsHelper.TextureFromFile("Textures/UI/SwingingTipsScreen/adv_swinging_tip_screen_sheet.png")));
                 spriteSheets["adv_tips_screen"] =
                     spriteSheets["adv_tips_screen"].Take(spriteSheets["adv_tips_screen"].Length - 1).ToArray();
+                spriteSheets.Add("adv_tips_screen_reversed", spriteSheets["adv_tips_screen"].Reverse().ToArray());
 
                 LoadModSprite("adv_pulley", "Objects/Pulley/adv_pulley_handle.png", 25f);
 
