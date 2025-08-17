@@ -64,6 +64,9 @@
     <Reference Include="com.unity.multiplayer-hlapi.Runtime">
       <HintPath>..\Dependencies\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="FundakaExtender">
+      <HintPath>..\Dependencies\FundakaExtender.dll</HintPath>
+    </Reference>
     <Reference Include="HarmonyXInterop">
       <HintPath>..\Dependencies\HarmonyXInterop.dll</HintPath>
     </Reference>

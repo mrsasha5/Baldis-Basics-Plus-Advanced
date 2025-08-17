@@ -5,7 +5,6 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
 using HarmonyLib;
 using PlusLevelFormat;
-using PlusLevelLoader;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -19,12 +18,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelEditor
         {
             guid = "mtm101.rulerp.baldiplus.leveleditor";
             priority = 127;
-        }
+            versionInfo = new VersionInfo(this);
 
-        protected override void InitializePre()
-        {
-            base.InitializePre();
-            CreateConfigValue("Legacy Level Editor", 
+            CreateConfigValue("Legacy Level Editor",
                 "Adds support for Legacy Level Editor like new objects, activities and other content which can be used on your levels!\n" +
                 "Please note: backward compatibility of maps on old versions is not guaranteed.");
         }

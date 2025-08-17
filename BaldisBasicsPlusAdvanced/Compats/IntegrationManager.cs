@@ -1,5 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Helpers;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Reflection;
 
 namespace BaldisBasicsPlusAdvanced.Compats
 {
+
     internal class IntegrationManager
     {
         public static bool LevelLoaderInstalled => AssetsHelper.ModInstalled(levelLoaderId);
@@ -36,15 +38,6 @@ namespace BaldisBasicsPlusAdvanced.Compats
                 }
             }
             return false;
-        }
-
-        private static void InvokeCrash(CompatibilityModule module)
-        {
-            IntegrationModuleException excp = new IntegrationModuleException($"Failed by: {module.GetType().Name}\n" +
-                $"You can disable the integration if you suspect that the code is outdated.\n" + 
-                $"Config value: {module.ConfigValue.Definition.Key}");
-            excp.stackTrace = "";
-            throw excp;
         }
 
         internal static void Prepare()
@@ -82,63 +75,46 @@ namespace BaldisBasicsPlusAdvanced.Compats
 
             modules.Sort((m1, m2) => m2.Priority.CompareTo(m1.Priority));
 
+            MethodInfo method = typeof(CompatibilityModule)
+                .GetMethod("InitializePre", AccessTools.all);
+
             for (int i = 0; i < modules.Count; i++)
             {
-                typeof(CompatibilityModule)
-                    .GetMethod("InitializePre", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    .Invoke(modules[i], null);
+                method.Invoke(modules[i], null);
             }
         }
 
         internal static void Initialize()
         {
+            MethodInfo method = typeof(CompatibilityModule)
+                .GetMethod("Initialize", AccessTools.all);
             for (int i = 0; i < modules.Count; i++)
             {
-                try
-                {
-                    bool isIntegrable = modules[i].IsIntegrable();
+                bool isIntegrable = modules[i].IsIntegrable();
 
-                    if (isIntegrable)
-                    {
-                        modules[i].GetType().GetMethod("Initialize", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                            .Invoke(modules[i], null);
-                    }
-                    else if (!isIntegrable && modules[i].IsForced)
-                    {
-                        ObjectsCreator.CauseCrash($"Baldi's Basics Plus Advanced Edition. Required dependency is missing!" +
-                            $"\nGUID of the integrable mod: {modules[i].Guid}", AssetsStorage.weirdErrorSound);
-                    }
-                    else
-                    {
-                        modules.RemoveAt(i);
-                        i--;
-                    }
-                }
-                catch (Exception e)
+                if (isIntegrable)
                 {
-                    AdvancedCore.Logging.LogError(e);
-                    InvokeCrash(modules[i]);
+                    method.Invoke(modules[i], null);
                 }
-                
+                else if (!isIntegrable && modules[i].IsForced)
+                {
+                    ObjectsCreator.CauseCrash($"Baldi's Basics Plus Advanced Edition. Required dependency is missing!" +
+                        $"\nGUID of the integrable mod: {modules[i].Guid}", AssetsStorage.weirdErrorSound);
+                }
+                else
+                {
+                    modules.RemoveAt(i);
+                    i--;
+                }
             }
         }
 
         internal static void InvokeOnAssetsLoadPost()
         {
+            MethodInfo method = typeof(CompatibilityModule).GetMethod("InitializeOnAssetsLoadPost", AccessTools.all);
             for (int i = 0; i < modules.Count; i++)
             {
-                try
-                {
-                    modules[i].GetType().GetMethod("InitializeOnAssetsLoadPost",
-                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                        .Invoke(modules[i], null);
-                }
-                catch (Exception e)
-                {
-                    AdvancedCore.Logging.LogError(e);
-                    InvokeCrash(modules[i]);
-                }
-
+                method.Invoke(modules[i], null);
             }
         }
 

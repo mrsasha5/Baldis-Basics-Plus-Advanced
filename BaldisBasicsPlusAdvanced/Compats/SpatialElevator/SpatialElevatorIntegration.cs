@@ -13,18 +13,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator
     public class SpatialElevatorIntegration : CompatibilityModule
     {
 
-        protected override void InitializePre()
-        {
-            base.InitializePre();
-            CreateConfigValue("3D Elevator",
-                "Adds a basic mod features for 3D Elevator!\n" +
-                "Not recommended to disable since you'll lose access to the content like: tips & Hammer of Force.");
-        }
-
         public SpatialElevatorIntegration() : base()
         {
             guid = "pixelguy.pixelmodding.baldiplus.3delevator";
             versionInfo = new VersionInfo(this);
+
+            CreateConfigValue("3D Elevator",
+                "Adds a basic mod features for 3D Elevator!\n" +
+                "Not recommended to disable since you'll lose access to the content like: tips & Hammer of Force.");
         }
 
         protected override void InitializeOnAssetsLoadPost()

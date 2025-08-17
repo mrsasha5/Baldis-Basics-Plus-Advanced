@@ -54,9 +54,9 @@ namespace BaldisBasicsPlusAdvanced
 
             instance = this;
 
-            tempPath = Application.persistentDataPath + "/Modded/" + modId + "/TEMP/";
-            if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
-            Directory.CreateDirectory(tempPath);
+            //tempPath = Application.persistentDataPath + "/Modded/" + modId + "/TEMP/";
+            //if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
+            //Directory.CreateDirectory(tempPath);
 
             notificationsEnabled = Config.Bind("Settings", "Notifications", defaultValue: true, 
                 "Disables/enables notifications.").Value;
@@ -115,9 +115,7 @@ namespace BaldisBasicsPlusAdvanced
                 ObjectsCreator.CauseCrash(new Exception("Mod assets folder is missing!"));
             }
 
-            IntegrationManager.Prepare();            
-
-            harmony.PatchAllConditionals();
+            AssetsManagerCore.InitializePre();
 
             IEnumerator assetsLoading = OnAssetsLoadedPre();
             bool move = true;
@@ -129,9 +127,14 @@ namespace BaldisBasicsPlusAdvanced
                 }
                 catch (Exception e)
                 {
-                    Logging.LogWarning($"Exception occured on state: {assetsLoading.Current.ToString()}");
+                    if (assetsLoading.Current != null)
+                    {
+                        Logging.LogWarning($"Exception occured on state: {assetsLoading.Current.ToString()}");   
+                    } else Logging.LogWarning($"Exception occured on null state!");
+
                     ObjectsCreator.CauseCrash(e);
-                    move = false;
+
+                    //move = false;
                 }
 
                 yield return assetsLoading.Current;
@@ -169,7 +172,7 @@ namespace BaldisBasicsPlusAdvanced
 
             NotificationManager.Notification notif = CheckAssetsMarker();
 
-            int count = 21;
+            int count = 24;
 
             if (notif != null) count++;
 
@@ -181,6 +184,11 @@ namespace BaldisBasicsPlusAdvanced
                 while (!InputManager.Instance.AnyButton(onDown: true)) yield return 0;
                 notif.time = 1f;
             }
+
+            yield return "Preparing Integration Manager...";
+            IntegrationManager.Prepare();
+            yield return "Patching game...";
+            harmony.PatchAllConditionals();
 
             yield return "Caching game assets...";
             AssetsManagerCore.Initialize();

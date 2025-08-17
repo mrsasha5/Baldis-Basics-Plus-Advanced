@@ -6,39 +6,36 @@ namespace BaldisBasicsPlusAdvanced.Helpers
     public class LayersHelper
     {
 
-        public readonly static LayerMask windows;
+        public static LayerMask windows;
 
-        public readonly static LayerMask clickableCollidable; //entities???
+        public static LayerMask clickableCollidable; //entities???
 
-        public readonly static LayerMask ignoreRaycast;
+        public static LayerMask ignoreRaycast;
 
-        public readonly static LayerMask ignoreRaycastB;
+        public static LayerMask ignoreRaycastB;
 
         //public readonly static LayerMask blockRaycast = LayerMask.NameToLayer("Block Raycast");
 
-        public readonly static LayerMask standardEntities;
+        public static LayerMask standardEntities;
 
-        public readonly static LayerMask clickableEntities;
+        public static LayerMask clickableEntities;
 
-        public readonly static LayerMask billboard;
+        public static LayerMask billboard;
 
-        public readonly static LayerMask ui;
+        public static LayerMask ui;
 
-        public readonly static LayerMask takenBalloonLayer;
+        public static LayerMask takenBalloonLayer;
 
-        //public readonly static LayerMask map = LayerMask.NameToLayer("Map");
+        public static LayerMask gumCollisionMask;
 
-        public readonly static LayerMask gumCollisionMask;
+        public static LayerMask entityCollisionMask;
 
-        public readonly static LayerMask entityCollisionMask;
-
-        // A specific layer used by the Principal's Locker component to see the npcs.
         //public readonly static LayerMask principalLookerMask = 2326529;
 
         //18 - ClickableCollidable
-        public readonly static int ignorableCollidableObjects;
+        public static int ignorableCollidableObjects;
 
-        static LayersHelper()
+        public static void Initialize()
         {
             windows = LayerMask.NameToLayer("Windows");
             clickableCollidable = LayerMask.NameToLayer("ClickableCollidable");
