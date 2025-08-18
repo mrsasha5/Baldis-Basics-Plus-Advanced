@@ -1,5 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Managers;
 using MTM101BaldAPI.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
         public Notification Message => currentNotif;
 
-        public bool GenericNotificationsHidden => !AdvancedCore.notificationsEnabled;
+        public bool GenericNotificationsHidden => !ConfigManager.notificationsEnabled.Value;
 
         public void Initialize()
         {

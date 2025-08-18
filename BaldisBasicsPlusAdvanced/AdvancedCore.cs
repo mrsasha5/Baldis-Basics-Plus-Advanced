@@ -36,8 +36,6 @@ namespace BaldisBasicsPlusAdvanced
 
         internal static string tempPath;
 
-        internal static bool notificationsEnabled;
-
         private static AdvancedCore instance;
 
         public static AdvancedCore Instance => instance;
@@ -58,8 +56,7 @@ namespace BaldisBasicsPlusAdvanced
             //if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
             //Directory.CreateDirectory(tempPath);
 
-            notificationsEnabled = Config.Bind("Settings", "Notifications", defaultValue: true, 
-                "Disables/enables notifications.").Value;
+            ConfigManager.Initialize();
 
             PrepareSettingsMenu();
             ModdedSaveGame.AddSaveHandler(LevelDataManager.Instance);
@@ -67,6 +64,8 @@ namespace BaldisBasicsPlusAdvanced
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), false);
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoaderPost(), true);
             AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English", Language.English);
+            //It would be great if API was providing ability to set SearchOption.
+            AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English/Compats", Language.English);
 
 #if BETA
             MTM101BaldiDevAPI.AddWarningScreen(
@@ -192,8 +191,6 @@ namespace BaldisBasicsPlusAdvanced
 
             yield return "Caching game assets...";
             AssetsManagerCore.Initialize();
-            if (AssetsStorage.exception != null) throw AssetsStorage.exception;
-
             GameRegisterManager.CreateDoorMats();
             yield return "Initializing textures for cells...";
             GameRegisterManager.InitializeCellTextures();
@@ -236,7 +233,7 @@ namespace BaldisBasicsPlusAdvanced
             GameRegisterManager.InitializeTrips();
             yield return "Loading new MIDIs...";
             GameRegisterManager.InitializeMidis();
-            yield return "Integrating with other mods...";
+            yield return "Initializing integration modules...";
             IntegrationManager.Initialize();
 
             GC.Collect();
@@ -249,7 +246,6 @@ namespace BaldisBasicsPlusAdvanced
             CustomOptionsCore.OnMenuInitialize += delegate (OptionsMenu menu, CustomOptionsHandler handler)
             {
                 handler.AddCategory<ExtraOptionsMenu>("Adv_Options_Menu_Extra_Settings");
-                handler.AddCategory<EmergencyOptionsMenu>("Adv_Options_Menu_Emergency_Options");
                 handler.AddCategory<KeyBindingsOptionsMenu>("Adv_Options_Menu_Key_Bindings_Settings");
             };
         }

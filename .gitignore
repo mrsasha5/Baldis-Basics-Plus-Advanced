@@ -37,9 +37,6 @@
 !/Dependencies/The3DElevator.dll
 !/Dependencies/BBPlusCustomMusics.dll
 
-# Whiytelly's mods
-!/Dependencies/FundakaExtender.dll
-
 # User-specific files
 *.rsuser
 *.suo

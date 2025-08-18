@@ -38,7 +38,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                     if (owner == ControllerOwner.Player)
                     {
                         SetInvisibility(pm, true);
-                        //AssetsStorage.sprites["adv_gauge_invisibility"]
                         gauge = Singleton<CoreGameManager>.Instance.GetHud(0).gaugeManager
                             .ActivateNewGauge(ItemMetaStorage.Instance.FindByEnum(Items.InvisibilityElixir).value.itemSpriteSmall, 
                             effectTime);

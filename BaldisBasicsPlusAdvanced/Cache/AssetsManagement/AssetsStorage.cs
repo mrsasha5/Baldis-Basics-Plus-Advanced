@@ -65,8 +65,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         private static bool overridden = false;
 
-        public static Exception exception;
-
         public static bool Debugging => false;
 
         public static bool Cached => cached;
@@ -111,8 +109,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         public static TextAsset campingMidi;
 
-        //public static readonly GameObject exitConfirmChalkboardStore;
-
         public static GameButton gameButton;
 
         public static CoverCloud coverCloud;
@@ -123,6 +119,8 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         public static CursorController cursor;
 
+        #region Critical Assets for Systems (Notifications System, Invoking Crash Screen with Sound...)
+
         public static void InitializePre()
         {
             weirdErrorSound = AssetsHelper.LoadAsset<AudioClip>("WeirdError");
@@ -130,7 +128,9 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadSprite("tooltip_bg", "TooltipBG");
         }
 
-        #region Main
+        #endregion
+
+        #region Main Assets
 
         public static void Initialize()
         {
@@ -396,7 +396,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadModSprite("adv_pulley", "Objects/Pulley/adv_pulley_handle.png", 25f);
 
             LoadModSprite("adv_gauge_protection", "Gauges/adv_gauge_protection.png");
-            LoadModSprite("adv_gauge_invisibility", "Gauges/adv_gauge_invisibility.png");
 
             LoadModSprite("adv_obstacle_trick", "Objects/Plates/FakePlate/adv_obstacle_trick.png", 20f);
             LoadModSprite("adv_boxing_glove_trick", "Objects/Plates/FakePlate/adv_boxing_glove_trick.png", 20f);
@@ -423,11 +422,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
             //Lamps!!!
             LoadModSprite("adv_advanced_class_lamp", "Rooms/AdvancedClass/adv_advanced_class_lamp.png", 50f);
-
-            /*for (int i = 1; i <= 4; i++)
-            {
-                LoadModSprite("adv_gum_dispenser_" + i, "Objects/GumDispenser/adv_gum_dispenser_" + i + ".png", 25f);
-            }*/
 
             string alphabet = "abcdefghijklmnopqrstuvwxyz";
             for (int i = 0; i < alphabet.Length; i++)
