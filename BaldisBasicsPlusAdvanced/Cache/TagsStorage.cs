@@ -13,6 +13,7 @@
         //Items
         public const string food = "food";
         public const string drink = "drink";
+        public const string shopItem = "shop_dummy";
 
         #endregion
 

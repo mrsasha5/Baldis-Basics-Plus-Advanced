@@ -18,6 +18,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 {
     public class PrefabsCreator
     {
+
         private const string editorPath = "Textures/Compats/LevelEditor/";
 
         public static T CreateEntity<T>(EntityBuilder builder, int variant = 1) where T : MonoBehaviour, IEntityPrefab
@@ -314,7 +315,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             ObjectsStorage.RoomFunctionsContainers.Add(name, container);
         }
 
-        public static RoomGroupSpawningData CreateRoomGroup(string name, int minRooms, int maxRooms)
+        public static RoomGroupSpawningData CreateRoomGroup(string name, int minRooms, int maxRooms, string lightName = "FluorescentLight")
         {
             EnumExtensions.ExtendEnum<RoomCategory>(name);
             ObjectsStorage.RoomGroups.Add(name,
@@ -348,7 +349,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
                     {
                         new WeightedTransform()
                         {
-                            selection = AssetsHelper.LoadAsset<Transform>("HangingLight"),
+                            selection = AssetsHelper.LoadAsset<Transform>(lightName),
                             weight = 100
                         }
                     }

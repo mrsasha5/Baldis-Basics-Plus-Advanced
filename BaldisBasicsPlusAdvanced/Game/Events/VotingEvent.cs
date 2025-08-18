@@ -124,9 +124,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
         public EnvironmentController Ec => ec;
 
+        public static bool IsTopicActive<T>() where T : BaseTopic
+        {
+            return VotingBallot.IsTopicActive<T>();
+        }
+
+        [Obsolete]
         public static bool TopicIsActive<T>() where T : BaseTopic
         {
-            return VotingPickup.TopicIsActive<T>();
+            return IsTopicActive<T>();
         }
 
         private bool IsEnoughDistance(Cell cell1, Cell cell2)
@@ -243,7 +249,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                     for (int i = 0; i < screenTexts.Count; i++)
                     {
                         screenTexts[i].text = string.Format("Adv_Voting_Ended".Localize(),
-                            $"{ballot.VotingPickup.CountPosVotes()} : <color=#ff0000>{ballot.VotingPickup.CountNegVotes()}</color>");
+                            $"{ballot.CountPosVotes()} : <color=#ff0000>{ballot.CountNegVotes()}</color>");
                     }
                     break;
             }
@@ -252,7 +258,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private void LateUpdate()
         {
             if (!RoomAssigned) return;
-            ballot?.VotingPickup.Topic?.LateUpdate();
+            ballot?.Topic?.LateUpdate();
         }
 
         private void Update()
@@ -260,7 +266,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             if (!RoomAssigned) return;
             if (!ballot.Initialized && councilRoomFunc.LevelBuilder != null
                 && councilRoomFunc.LevelBuilder.levelCreated) ballot.Initialize(crng, this, room.ec);
-            ballot?.VotingPickup.Topic?.Update();
+            ballot?.Topic?.Update();
 
             if (active)
             {
@@ -268,7 +274,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                 {
                     ballot.Timer.UpdateTime(remainingTime);
 
-                    if (ballot.VotingPickup.ShouldVotingBeEnded())
+                    if (ballot.ShouldVotingBeEnded())
                         EndVoting();
                     
                     UpdateTexts();
@@ -380,7 +386,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         {
             foreach (NPC npc in ec.Npcs)
             {
-                if (npc.Navigator.enabled && !ballot.VotingPickup.ContainsVoteFrom(npc))
+                if (npc.Navigator.enabled && !ballot.ContainsVoteFrom(npc))
                 {
                     NavigationState_VotingEvent navigationState_VotingEvent = new NavigationState_VotingEvent(npc, 31, room);
                     npc.navigationStateMachine.ChangeState(navigationState_VotingEvent);
@@ -396,7 +402,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             EndVoting();
         }
 
-        private void EndVoting() => OnVotingEnds(ballot.VotingPickup.VotingIsWon());
+        private void EndVoting() => OnVotingEnds(ballot.IsVotingWon());
 
         private void OnVotingEnds(bool isWin)
         {
@@ -458,7 +464,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             InvokeTvEnumerator("Static", 0.25f);
 
-            if (ballot.VotingPickup.VotingIsWon())
+            if (ballot.IsVotingWon())
             {
                 AddEnumeratorToTv(ShowBasicInfo());
 
@@ -484,17 +490,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             if (texts[1] == null)
             {
                 texts[1] = UIHelpers.CreateText<TextMeshProUGUI>(BaldiFonts.BoldComicSans24,
-                "<color=#00ff00>" + ballot.VotingPickup.CountPosVotes() + "</color> : <color=#ff0000>" + ballot.VotingPickup.CountNegVotes()
+                "<color=#00ff00>" + ballot.CountPosVotes() + "</color> : <color=#ff0000>" + ballot.CountNegVotes()
                 + "</color>", tvBase.transform,
                 new Vector3(70f, -90f, 0f));
                 texts[1].alignment = TextAlignmentOptions.Center;
             } else
             {
-                texts[1].text = "<color=#ff0000>" + ballot.VotingPickup.CountPosVotes() + "</color> : <color=#00ff00>" + ballot.VotingPickup.CountNegVotes()
+                texts[1].text = "<color=#ff0000>" + ballot.CountPosVotes() + "</color> : <color=#00ff00>" + ballot.CountNegVotes()
                 + "</color>";
             }
 
-            ballot.VotingPickup.Topic.OnVotingEndedPost(ballot.VotingPickup.VotingIsWon());
+            ballot.Topic.OnVotingEndedPost(ballot.IsVotingWon());
 
             float time = 7f;
 
@@ -528,7 +534,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             texts[0] = UIHelpers.CreateText<TextMeshProUGUI>(
                 BaldiFonts.ComicSans12,
-                ballot.VotingPickup.Topic.BasicInfo,
+                ballot.Topic.BasicInfo,
                 tvBase.transform,
                 new Vector3(68f, -80f, 0f));
             texts[0].rectTransform.sizeDelta = new Vector2(100f, 50f);

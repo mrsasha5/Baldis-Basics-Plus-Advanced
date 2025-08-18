@@ -18,7 +18,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Characters
         [HarmonyPrefix]
         private static bool OnObservePlayer(PlayerManager player)
         {
-            if (!VotingEvent.TopicIsActive<PrincipalIgnoresSomeRulesTopic>()) return true;
+            if (!VotingEvent.IsTopicActive<PrincipalIgnoresSomeRulesTopic>()) return true;
             return !allowedRulesWhenTopicActive.Contains(player.ruleBreak);
         }
 

@@ -22,9 +22,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
         private string originalText;
 
-        private bool activated;
-
         private List<IEnumerator> animations;
+
+        private IEnumerator staticAnimatation;
 
         //private int index;
 
@@ -65,18 +65,25 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
         private void Update()
         {
-            if (animations.Count > 0)
+            if (animations.Count > 0 && staticAnimatation == null)
             {
                 if (!animations[0].MoveNext())
                 {
                     animations.RemoveAt(0);
                 }
             }
+
+            if (staticAnimatation != null && !staticAnimatation.MoveNext())
+            {
+                staticAnimatation = null;
+            }
         }
 
         private void PrepareShowTip()
         {
             images[1].gameObject.SetActive(true);
+            SetStaticAnimation(onAnimationEnd: ShowTip);
+            //staticAnimatation.MoveNext(); //Begin immediately
         }
 
         private void ShowTip()
@@ -88,12 +95,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
         private void PrepareHideTip()
         {
             tmp.enabled = false;
+            SetStaticAnimation(onAnimationEnd: HideTip);
+            //staticAnimatation.MoveNext();
         }
 
         private void HideTip()
         {
             images[1].gameObject.SetActive(false);
-            images[1].enabled = false;
         }
 
         private void OnStaticStart()
@@ -110,47 +118,53 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
         public void Activate()
         {
             gameObject.SetActive(true);
-            QueueAnimation(images[0], AssetsStorage.spriteSheets["adv_tips_screen"], time: 1f);
-            QueueStaticAnimation(onAnimationStart: PrepareShowTip, onAnimationEnd: ShowTip);
+            QueueAnimation(images[0], AssetsStorage.spriteSheets["adv_tips_screen"], time: 0.75f, 
+                onAnimationEnd: PrepareShowTip);
         }
 
         public void Deactivate()
         {
-            QueueStaticAnimation(onAnimationStart: PrepareHideTip, onAnimationEnd: HideTip);
-            QueueAnimation(images[0], AssetsStorage.spriteSheets["adv_tips_screen_reversed"], time: 1f);
+            QueueAnimation(images[0], AssetsStorage.spriteSheets["adv_tips_screen_reversed"], time: 0.75f,
+                onAnimationStart: PrepareHideTip);
         }
 
         public void Override(string text)
         {
-            if (activated) QueueStaticAnimation(onAnimationStart: PrepareHideTip, onAnimationEnd: ShowTip);
+            tmp.enabled = false;
+            PrepareShowTip();
             tmp.text = text;
         }
 
         public void ResetOverride()
         {
-            QueueStaticAnimation(onAnimationStart: PrepareHideTip, onAnimationEnd: ShowTip);
+            tmp.enabled = false;
+            PrepareShowTip();
             tmp.text = originalText;
         }
 
-        private void QueueStaticAnimation(Action onAnimationStart = null, Action onAnimationEnd = null)
+        private void SetStaticAnimation(Action onAnimationStart = null, Action onAnimationEnd = null)
         {
             onAnimationStart += OnStaticStart;
             onAnimationEnd += OnStaticEnd;
-            QueueRepeatableAnimation(
+            staticAnimatation = RepeatableAnimator(
                 images[1], AssetsStorage.spriteSheets["adv_tip_screen_forward_static_sheet"],
                     time: 0.25f, speed: 10f, onAnimationStart, onAnimationEnd);
         }
 
-        private void QueueRepeatableAnimation(Image image, Sprite[] sprites, float time, float speed,
+        private IEnumerator QueueRepeatableAnimation(Image image, Sprite[] sprites, float time, float speed,
             Action onAnimationStart = null, Action onAnimationEnd = null)
         {
-            animations.Add(RepeatableAnimator(image, sprites, time, speed, onAnimationStart, onAnimationEnd));
+            IEnumerator enumerator = RepeatableAnimator(image, sprites, time, speed, onAnimationStart, onAnimationEnd);
+            animations.Add(enumerator);
+            return enumerator;
         }
 
-        private void QueueAnimation(Image image, Sprite[] sprites, float time,
+        private IEnumerator QueueAnimation(Image image, Sprite[] sprites, float time,
             Action onAnimationStart = null, Action onAnimationEnd = null)
         {
-            animations.Add(Animator(image, sprites, time, onAnimationStart, onAnimationEnd));
+            IEnumerator enumerator = Animator(image, sprites, time, onAnimationStart, onAnimationEnd);
+            animations.Add(enumerator);
+            return enumerator;
         }
 
         private IEnumerator RepeatableAnimator(Image image, Sprite[] sprites, float time, float speed,

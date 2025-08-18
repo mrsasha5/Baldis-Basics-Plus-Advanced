@@ -196,12 +196,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             return recipes;
 
-            /*if (sendNotifications && ignoredRecipes > 0)
-                NotificationManager.Instance.Queue(
-                    $"Ignored {ignoredRecipes} recipes. Recipes with these raw food sets already exist!",
-                    AssetsStorage.sounds["elv_buzz"],
-                    time: 5f);*/ //I don't think I should do that
-
         }
 
         protected override void VirtualAwake()

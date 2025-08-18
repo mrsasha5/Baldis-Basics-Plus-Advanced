@@ -128,16 +128,16 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             return tipsScreen;
         }
 
-        public static void SetOverride(bool state, string key, bool overrideWorksEvenTipsDisabled = false)
+        public static void SetOverride(bool state, string key)
         {
-            SetOverride(monitor, state, key, overrideWorksEvenTipsDisabled);
+            SetOverride(monitor, state, key);
         }
 
-        public static void SetOverride(TipsMonitor monitor, bool state, string key, bool overrideWorksEvenTipsDisabled = false)
+        public static void SetOverride(TipsMonitor monitor, bool state, string key)
         {
             if (state)
             {
-                if (monitor != null && (LoadTip || overrideWorksEvenTipsDisabled))
+                if (monitor != null && LoadTip)
                 {
                     string text = LocalizationManager.Instance.GetLocalizedText(key);
                     monitor.Override(text);
