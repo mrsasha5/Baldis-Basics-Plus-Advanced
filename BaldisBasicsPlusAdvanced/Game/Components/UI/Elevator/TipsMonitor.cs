@@ -182,7 +182,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
                 time += Time.unscaledDeltaTime;
                 currentIndex += Time.unscaledDeltaTime * speed;
 
-                if (currentIndex > sprites.Length) currentIndex = 0f;
+                if (currentIndex >= sprites.Length) currentIndex = 0f;
 
                 image.sprite = sprites[(int)currentIndex];
 
@@ -206,6 +206,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
             while (time < maxTime)
             {
                 time += Time.unscaledDeltaTime;
+
+                if (time > maxTime) time = maxTime;
 
                 image.sprite = sprites[(int)(time / maxTime * maxIndex)];
 
