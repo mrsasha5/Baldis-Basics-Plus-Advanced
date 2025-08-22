@@ -1,5 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
+using BBPlusCustomMusics.MonoBehaviours;
 using BBPlusCustomMusics.Plugin.Public;
 using HarmonyLib;
 
@@ -7,6 +8,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics
 {
     public class CustomMusicsIntegration : CompatibilityModule
     {
+
+        public static BoomBox BoomBoxPre { get; private set; }
+
 
         public CustomMusicsIntegration() : base()
         {
@@ -21,6 +25,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics
         protected override void InitializeOnAssetsLoadPost()
         {
             base.InitializeOnAssetsLoadPost();
+            BoomBoxPre = AssetsHelper.LoadAsset<BoomBox>();
+
             MIDIHolder[] holders = 
                 MusicRegister.AddMIDIsFromDirectory(MidiDestiny.Schoolhouse, AssetsHelper.modPath + "Audio/Music/Floors");
             holders = holders.AddRangeToArray(

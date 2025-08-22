@@ -127,6 +127,15 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             return standardButton;
         }
 
+        public static StandardMenuButton AddButtonProperties(Image image)
+        {
+            StandardMenuButton standardButton = image.gameObject.AddComponent<StandardMenuButton>();
+            standardButton.InitializeAllEvents();
+            standardButton.image = image;
+            standardButton.tag = "Button";
+            return standardButton;
+        }
+
         public static StandardMenuButton AddButtonProperties(TMP_Text text, UnityAction call, bool underlineOnHighlight = false)
         {
             StandardMenuButton standardMenuButton = AddButtonProperties(text, underlineOnHighlight);

@@ -351,7 +351,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             }
 
             OnActivatingPre();
-            currentRecipe?.onKitchenStoveActivatingPre?.Invoke(this);
+            currentRecipe?.onKitchenStovePreActivating?.Invoke(this);
         }
 
         protected virtual void OnActivatingPre()
@@ -372,7 +372,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             audMan.QueueAudio(audBurningLoop);
             audMan.SetLoop(true);
 
-            currentRecipe?.onKitchenStoveActivatingPost?.Invoke(this);
+            currentRecipe?.onKitchenStovePostActivating?.Invoke(this);
         }
 
         protected virtual void OnDeactivatingPre()
@@ -404,7 +404,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 } else
                     audMan.PlaySingle(AssetsStorage.sounds["adv_magic_1"]);
 
-                currentRecipe.onKitchenStoveDeactivatingPre?.Invoke(this);
+                currentRecipe.onKitchenStovePreDeactivating?.Invoke(this);
             }
 
             if (pickups.Count == 0) interaction.gameObject.SetActive(true);
@@ -425,7 +425,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 }
             }
 
-            currentRecipe?.onKitchenStoveDeactivatingPost?.Invoke(this);
+            currentRecipe?.onKitchenStovePostDeactivating?.Invoke(this);
             currentRecipe = null;
         }
 

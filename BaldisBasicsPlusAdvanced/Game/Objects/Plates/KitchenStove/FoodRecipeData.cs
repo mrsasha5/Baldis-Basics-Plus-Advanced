@@ -46,13 +46,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         private ExtendedPosterObject posterObj;
 
-        internal Action<KitchenStove> onKitchenStoveActivatingPre;
+        internal Action<KitchenStove> onKitchenStovePreActivating;
 
-        internal Action<KitchenStove> onKitchenStoveActivatingPost;
+        internal Action<KitchenStove> onKitchenStovePostActivating;
 
-        internal Action<KitchenStove> onKitchenStoveDeactivatingPre;
+        internal Action<KitchenStove> onKitchenStovePreDeactivating;
 
-        internal Action<KitchenStove> onKitchenStoveDeactivatingPost;
+        internal Action<KitchenStove> onKitchenStovePostDeactivating;
 
         internal List<PluginInfo> pluginInfos = new List<PluginInfo>();
 
@@ -137,8 +137,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         /// <returns></returns>
         public FoodRecipeData AddListenerOnKitchenStoveActivating(Action<KitchenStove> action, bool post)
         {
-            if (post) onKitchenStoveActivatingPost += action;
-            else onKitchenStoveActivatingPre += action;
+            if (post) onKitchenStovePostActivating += action;
+            else onKitchenStovePreActivating += action;
             return this;
         }
 
@@ -152,8 +152,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         /// <returns></returns>
         public FoodRecipeData AddListenerOnKitchenStoveDeactivating(Action<KitchenStove> action, bool post)
         {
-            if (post) onKitchenStoveDeactivatingPost += action;
-            else onKitchenStoveDeactivatingPre += action;
+            if (post) onKitchenStovePostDeactivating += action;
+            else onKitchenStovePreDeactivating += action;
             return this;
         }
 

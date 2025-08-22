@@ -14,6 +14,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
     public class TipsMonitor : MonoBehaviour
     {
 
+        public class MonitorOverrider
+        {
+
+            public int priority;
+
+            public string text;
+
+        }
+
+
         private AudioManager audMan;
 
         private Image[] images;
@@ -25,6 +35,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
         private List<IEnumerator> animations;
 
         private IEnumerator staticAnimatation;
+
+        private bool activated;
+
+        public Action updateUntilResetOverride;
+
+        public TMP_Text Tmp => tmp;
 
         //private int index;
 
@@ -77,6 +93,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
             {
                 staticAnimatation = null;
             }
+
+            updateUntilResetOverride?.Invoke();
         }
 
         private void PrepareShowTip()
@@ -119,27 +137,38 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
         {
             gameObject.SetActive(true);
             QueueAnimation(images[0], AssetsStorage.spriteSheets["adv_tips_screen"], time: 0.75f, 
-                onAnimationEnd: PrepareShowTip);
+                onAnimationEnd: delegate() { PrepareShowTip(); activated = true; });
         }
 
         public void Deactivate()
         {
             QueueAnimation(images[0], AssetsStorage.spriteSheets["adv_tips_screen_reversed"], time: 0.75f,
-                onAnimationStart: PrepareHideTip);
+                onAnimationStart: delegate () { PrepareHideTip(); activated = false; });
         }
 
-        public void Override(string text)
+        public bool Override(string text)
         {
-            tmp.enabled = false;
-            PrepareShowTip();
-            tmp.text = text;
+            if (activated)
+            {
+                tmp.enabled = false;
+                PrepareShowTip();
+                tmp.text = text;
+                return true;
+            }
+            return false;
         }
 
-        public void ResetOverride()
+        public bool ResetOverride()
         {
-            tmp.enabled = false;
-            PrepareShowTip();
-            tmp.text = originalText;
+            updateUntilResetOverride = null;
+            if (activated)
+            {
+                tmp.enabled = false;
+                PrepareShowTip();
+                tmp.text = originalText;
+                return true;
+            }
+            return false;
         }
 
         private void SetStaticAnimation(Action onAnimationStart = null, Action onAnimationEnd = null)

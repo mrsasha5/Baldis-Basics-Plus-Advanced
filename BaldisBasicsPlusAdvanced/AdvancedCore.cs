@@ -32,7 +32,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "Baldi's Basics Plus Advanced Edition";
 
-        public const string version = "0.2.7.1";
+        public const string version = "0.2.7.2";
 
         internal static string tempPath;
 
@@ -62,7 +62,7 @@ namespace BaldisBasicsPlusAdvanced
             ModdedSaveGame.AddSaveHandler(LevelDataManager.Instance);
             GeneratorManagement.Register(this, GenerationModType.Addend, GenerationPatchingManager.RegisterMainLevelData);
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), false);
-            LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoaderPost(), true);
+            LoadingEvents.RegisterOnAssetsLoaded(Info, ModPostLoader(), true);
             AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English", Language.English);
             //It would be great if API was providing ability to set SearchOption.
             AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English/Compats", Language.English);
@@ -88,9 +88,9 @@ namespace BaldisBasicsPlusAdvanced
             GameRegisterManager.InitializeDoNotDestroyOnLoadObjects();
         }
 
-        private static IEnumerator ModLoaderPost()
+        private static IEnumerator ModPostLoader()
         {
-            IEnumerator assetsLoading = OnAssetsLoadedPost();
+            IEnumerator assetsLoading = OnAssetsPostLoad();
             bool move = true;
             while (move)
             {
@@ -116,7 +116,7 @@ namespace BaldisBasicsPlusAdvanced
 
             AssetsManagerCore.InitializePre();
 
-            IEnumerator assetsLoading = OnAssetsLoadedPre();
+            IEnumerator assetsLoading = OnAssetsPreLoad();
             bool move = true;
             while (move)
             {
@@ -140,7 +140,7 @@ namespace BaldisBasicsPlusAdvanced
             }
         }
 
-        private static IEnumerator OnAssetsLoadedPost()
+        private static IEnumerator OnAssetsPostLoad()
         {
             yield return 2;
 
@@ -161,7 +161,7 @@ namespace BaldisBasicsPlusAdvanced
             GC.Collect();
         }
 
-        private static IEnumerator OnAssetsLoadedPre()
+        private static IEnumerator OnAssetsPreLoad()
         {
             if (ApiManager.onAssetsPreLoading != null)
             {

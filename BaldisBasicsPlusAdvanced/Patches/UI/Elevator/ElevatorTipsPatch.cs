@@ -4,6 +4,7 @@ using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
     [HarmonyPatch(typeof(ElevatorScreen))]
     internal class ElevatorTipsPatch
     {
-        private static ElevatorScreen elvScreen;
+        public static ElevatorScreen elvScreen;
 
         private static TipsMonitor monitor;
 
@@ -128,29 +129,34 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             return tipsScreen;
         }
 
-        public static void SetOverride(bool state, string key)
+        public static bool SetOverride(bool state, string key, out TipsMonitor monitor, Action onUpdate = null)
         {
-            SetOverride(monitor, state, key);
+            monitor = ElevatorTipsPatch.monitor;
+            return SetOverride(monitor, state, key, onUpdate);
         }
 
-        public static void SetOverride(TipsMonitor monitor, bool state, string key)
+        public static bool SetOverride(TipsMonitor monitor, bool state, string key, Action onUpdate = null)
         {
             if (state)
             {
                 if (monitor != null && LoadTip)
                 {
                     string text = LocalizationManager.Instance.GetLocalizedText(key);
-                    monitor.Override(text);
-                    if (!LoadTip) monitor.Activate();
+                    if (monitor.Override(text))
+                    {
+                        monitor.updateUntilResetOverride = onUpdate;
+                        return true;
+                    }
                 }
+                return false;
             }
             else
             {
-                if (monitor != null)
+                if (monitor != null && LoadTip)
                 {
-                    if (!LoadTip) monitor.Deactivate();
-                    else monitor.ResetOverride();
+                    return monitor.ResetOverride();
                 }
+                return false;
             }
         }
 
