@@ -9,9 +9,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics
     public class CustomMusicsIntegration : CompatibilityModule
     {
 
-        public static BoomBox BoomBoxPre { get; private set; }
-
-
         public CustomMusicsIntegration() : base()
         {
             guid = "pixelguy.pixelmodding.baldiplus.custommusics";
@@ -25,7 +22,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics
         protected override void InitializeOnAssetsLoadPost()
         {
             base.InitializeOnAssetsLoadPost();
-            BoomBoxPre = AssetsHelper.LoadAsset<BoomBox>();
 
             MIDIHolder[] holders = 
                 MusicRegister.AddMIDIsFromDirectory(MidiDestiny.Schoolhouse, AssetsHelper.modPath + "Audio/Music/Floors");

@@ -3,6 +3,7 @@ using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.SpatialElevator;
 using BaldisBasicsPlusAdvanced.Game.Components.Movement;
+using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
@@ -17,7 +18,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#warning refresh the code
+#warning Refresh the code
 
 namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 {
@@ -60,6 +61,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         private static bool state;
 
         private static bool shouldInitialize;
+
+        private static TipsMonitor.MonitorOverrider overrider;
 
         public static int MaxCountOnPage => maxCountOnPage;
 
@@ -327,14 +330,15 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 expelButton.OnHighlight.AddListener(
                     delegate ()
                     {
-                        ElevatorTipsPatch.SetOverride(true, "Adv_Elv_ExpelTip", out _);
+                        overrider = ElevatorTipsPatch.SetOverride("Adv_Elv_ExpelTip", priority: 127);
                     }
                 );
 
                 expelButton.OffHighlight.AddListener(
                     delegate ()
                     {
-                        ElevatorTipsPatch.SetOverride(false, null, out _);
+                        overrider?.Release();
+                        overrider = null;
                     }
                 );
             }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using MTM101BaldAPI.UI;
 using TMPro;
 using UnityEngine;
@@ -17,12 +18,20 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
         public class MonitorOverrider
         {
 
+            public TipsMonitor monitor;
+
             public int priority;
 
             public string text;
 
-        }
+            public Action onUpdate;
 
+            public void Release()
+            {
+                monitor.ResetOverrider(this);
+            }
+
+        }
 
         private AudioManager audMan;
 
@@ -34,11 +43,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
         private List<IEnumerator> animations;
 
+        private List<MonitorOverrider> overriders;
+
         private IEnumerator staticAnimatation;
 
         private bool activated;
 
-        public Action updateUntilResetOverride;
+        private bool levelGenError;
+
+        private MonitorOverrider overrider;
 
         public TMP_Text Tmp => tmp;
 
@@ -47,6 +60,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
         public void Initialize(string originalText)
         {
             animations = new List<IEnumerator>();
+            overriders = new List<MonitorOverrider>();
             images = new Image[2];
 
             this.originalText = originalText;
@@ -81,6 +95,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
         private void Update()
         {
+            if (CoreGameManager.Instance.levelGenError && !levelGenError)
+            {
+                ElevatorTipsPatch.SetOverride("Adv_Elv_LevelGenErrorTip", priority: 128);
+                levelGenError = true;
+            }
+
             if (animations.Count > 0 && staticAnimatation == null)
             {
                 if (!animations[0].MoveNext())
@@ -94,7 +114,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
                 staticAnimatation = null;
             }
 
-            updateUntilResetOverride?.Invoke();
+            overrider?.onUpdate?.Invoke();
         }
 
         private void PrepareShowTip()
@@ -146,29 +166,69 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
                 onAnimationStart: delegate () { PrepareHideTip(); activated = false; });
         }
 
-        public bool Override(string text)
+        public MonitorOverrider Override(string text, int priority = 0)
         {
-            if (activated)
-            {
-                tmp.enabled = false;
-                PrepareShowTip();
-                tmp.text = text;
-                return true;
-            }
-            return false;
+            MonitorOverrider overrider = new MonitorOverrider();
+            overrider.text = text;
+            overrider.monitor = this;
+            overrider.priority = priority;
+            overriders.Add(overrider);
+
+            MonitorOverrider lastOverrider = this.overrider;
+            UpdateCurrentOverrider();
+            if (lastOverrider != this.overrider) OverrideText(this.overrider.text);
+
+            return overrider;
         }
 
-        public bool ResetOverride()
+        public void ResetOverrider(MonitorOverrider overrider)
         {
-            updateUntilResetOverride = null;
+            overriders.Remove(overrider);
+            MonitorOverrider lastOverrider = this.overrider;
+            UpdateCurrentOverrider();
+            if (lastOverrider == this.overrider) return;
+
+            if (this.overrider == null)
+            {
+                OverrideText(originalText);
+            }
+            else
+            {
+                OverrideText(this.overrider.text);
+            }         
+        }
+
+        private void OverrideText(string text)
+        {
+            tmp.text = text;
+
             if (activated)
             {
                 tmp.enabled = false;
                 PrepareShowTip();
-                tmp.text = originalText;
-                return true;
             }
-            return false;
+        }
+
+        private void UpdateCurrentOverrider()
+        {
+            if (overriders.Count == 0)
+            {
+                overrider = null;
+                return;
+            }
+
+            int maxIndex = 0;
+            int maxPriority = overriders[0].priority;
+            for (int i = 0; i < overriders.Count; i++)
+            {
+                if (overriders[i].priority >= maxPriority)
+                {
+                    maxIndex = i;
+                    maxPriority = overriders[i].priority;
+                }
+            }
+
+            overrider = overriders[maxIndex];
         }
 
         private void SetStaticAnimation(Action onAnimationStart = null, Action onAnimationEnd = null)

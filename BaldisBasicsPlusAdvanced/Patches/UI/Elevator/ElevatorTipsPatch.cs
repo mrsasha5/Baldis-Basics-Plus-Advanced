@@ -1,13 +1,16 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
+using BBPlusCustomMusics.MonoBehaviours;
 using HarmonyLib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 {
@@ -23,6 +26,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         private static Dictionary<string, int> tipUsesDatas = new Dictionary<string, int>();
 
         private static int tipMaxUses = 3;
+
+        private static TipsMonitor.MonitorOverrider tubesOverrider;
 
         public static bool LoadTip => !(ObjectsStorage.TipKeys.Count == 0) &&
                 (OptionsDataManager.ExtraSettings.GetValue<bool>("tips"));
@@ -108,7 +113,31 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             monitor = CreateTipText(originalText);
             monitor.gameObject.SetActive(false);
 
-            if (LoadTip) elvScreen.StartCoroutine(ElevatorWaiter());
+            if (LoadTip)
+            {
+                elvScreen.StartCoroutine(ElevatorWaiter());
+
+                Image tubesImage = Array.Find(
+                    __instance.GetComponentsInChildren<Image>(), x => x.name == "Lives");
+
+                StandardMenuButton button = ObjectsCreator.CreateSpriteButton(AssetsStorage.sprites["transparent"],
+                    new Vector3(200f, 0f, 0f), __instance.Canvas.transform);
+                button.name = "LivesCursorChecker";
+                button.transform.SetSiblingIndex(tubesImage.transform.GetSiblingIndex() + 1);
+                button.image.rectTransform.sizeDelta = new Vector2(100f, 232f);
+                button.eventOnHigh = true;
+                button.OnHighlight.AddListener(
+                    () => tubesOverrider = SetOverride(
+                        string.Format("Adv_Elv_TubesTip".Localize(), CoreGameManager.Instance.Lives + 1,
+                        ReflectionHelper.GetValue<int>(CoreGameManager.Instance, "extraLives"),
+                        CoreGameManager.Instance.Attempts
+                        )));
+                button.OffHighlight.AddListener(delegate ()
+                {
+                    tubesOverrider?.Release();
+                    tubesOverrider = null;
+                });
+            }
         }
 
         private static IEnumerator ElevatorWaiter()
@@ -129,35 +158,14 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             return tipsScreen;
         }
 
-        public static bool SetOverride(bool state, string key, out TipsMonitor monitor, Action onUpdate = null)
+        public static TipsMonitor.MonitorOverrider SetOverride(string key, int priority = 0)
         {
-            monitor = ElevatorTipsPatch.monitor;
-            return SetOverride(monitor, state, key, onUpdate);
-        }
-
-        public static bool SetOverride(TipsMonitor monitor, bool state, string key, Action onUpdate = null)
-        {
-            if (state)
+            if (monitor != null && LoadTip)
             {
-                if (monitor != null && LoadTip)
-                {
-                    string text = LocalizationManager.Instance.GetLocalizedText(key);
-                    if (monitor.Override(text))
-                    {
-                        monitor.updateUntilResetOverride = onUpdate;
-                        return true;
-                    }
-                }
-                return false;
+                string text = LocalizationManager.Instance.GetLocalizedText(key);
+                return monitor.Override(text, priority);
             }
-            else
-            {
-                if (monitor != null && LoadTip)
-                {
-                    return monitor.ResetOverride();
-                }
-                return false;
-            }
+            return null;
         }
 
     }

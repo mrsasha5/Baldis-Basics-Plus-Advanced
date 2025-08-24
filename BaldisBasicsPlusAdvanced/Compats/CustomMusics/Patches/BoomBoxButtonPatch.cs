@@ -11,8 +11,9 @@ using UnityEngine.UI;
 
 namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
 {
-    [ConditionalPatchIntegrableMod(typeof(CustomMusicsIntegration))]
     [HarmonyPatch(typeof(ElevatorScreen))]
+    [ConditionalPatchIntegrableMod(typeof(CustomMusicsIntegration))]
+    
     internal class BoomBoxButtonPatch
     {
 
@@ -22,21 +23,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
 
         private static Image boomBoxImage;
 
-        private static TipsMonitor monitor;
+        private static TipsMonitor.MonitorOverrider overrider;
 
         private static string text;
-
-        private static bool overridden;
-
 
         [HarmonyPatch("Start")]
         [HarmonyPostfix]
         private static void OnStart(ElevatorScreen __instance)
         {
-            overridden = false;
             boomBox = __instance.GetComponentInChildren<BoomBox>();
             boomBoxImage = boomBox.GetComponent<Image>();
-            if (button == null)
+            if (button == null && ElevatorTipsPatch.LoadTip)
             {
                 text = "Adv_CustomMusics_Elv_Tip".Localize();
 
@@ -49,19 +46,26 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
                 button.OnPress.AddListener(OnPress);
                 button.OnHighlight.AddListener(OnHighlightButton);
                 button.OffHighlight.AddListener(OnUnhighlightButton);
+                button.OnRelease.AddListener(OnReleaseButton);
             }
         }
 
         private static void OnPress()
         {
-            if (OverrideTips())
+            boomBoxImage.color = Color.red;
+            if (overrider == null)
             {
-                overridden = true;
+                OverrideTips();
             }
-            else if (ResetOverride())
+            else
             {
-                overridden = false;
+                ResetOverride();
             }
+        }
+
+        private static void OnReleaseButton()
+        {
+            boomBoxImage.color = Color.green;
         }
 
         private static void OnHighlightButton()
@@ -76,7 +80,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
 
         private static void Update()
         {
-            monitor.Tmp.text = GetTip();
+            overrider.monitor.Tmp.text = GetTip();
         }
 
         private static string GetTip()
@@ -86,14 +90,16 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
                 MusicManager.Instance.MidiPlayer.MPTK_Duration.ToString("mm':'ss"));
         }
 
-        private static bool OverrideTips()
+        private static void OverrideTips()
         {
-            return ElevatorTipsPatch.SetOverride(true, GetTip(), out monitor, Update);
+            overrider = ElevatorTipsPatch.SetOverride(GetTip(), priority: 0);
+            if (overrider != null) overrider.onUpdate += Update;
         }
 
-        private static bool ResetOverride()
+        private static void ResetOverride()
         {
-            return ElevatorTipsPatch.SetOverride(false, null, out _);
+            overrider?.Release();
+            overrider = null;
         }
 
     }
