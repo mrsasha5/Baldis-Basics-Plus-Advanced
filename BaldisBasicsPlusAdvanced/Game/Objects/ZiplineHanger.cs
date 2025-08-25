@@ -186,7 +186,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 if (success && curCellIndex != -1 && 
                     (destIndex != -1 ? (curCellIndex < destIndex) : 
                         (Vector3.Distance(npc.Navigator._targetTile.FloorWorldPosition, destPoint.FloorWorldPosition) <= 50f)) && 
-                        ReflEvent_OnTakingZiplinePre(npc) &&
+                        (LegacyReflEvent_OnTakingZiplinePre(npc) && ReflEvent_OnPreTakingZipline(npc)) &&
                         SetEntity(npc.Navigator.Entity, kickEntity: false))
                 {
                     SetMoving();
@@ -293,12 +293,21 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             return false;
         }
 
+        [System.Obsolete]
         private void ReflEvent_OnTakingZipline(Object @object)
         {
             ReflectionHelper.UseMethod(@object, "Adv_OnTakingZipline", overrider);
         }
 
-        private bool ReflEvent_OnTakingZiplinePre(Object @object)
+        [System.Obsolete]
+        private bool ReflEvent_OnPreTakingZipline(Object @object)
+        {
+            object result = ReflectionHelper.UseMethod(@object, "Adv_OnPreTakingZipline");
+            return result == null || (bool)result;
+        }
+
+        [System.Obsolete]
+        private bool LegacyReflEvent_OnTakingZiplinePre(Object @object)
         {
             object result = ReflectionHelper.UseMethod(@object, "Adv_OnTakingZiplinePre");
             return result == null || (bool)result;

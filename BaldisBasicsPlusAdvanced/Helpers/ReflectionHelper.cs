@@ -11,8 +11,9 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static object UseMethod(object instance, string methodName, params object[] parameters)
         {
+//Ops, this condition makes caching not really useful
             if (instance.GetType().GetMethod(
-                methodName, AccessTools.all) != null) //to avoid logs
+                methodName, AccessTools.all) != null)
             {
                 return Traverse.Create(instance).Method(methodName, parameters).GetValue();
             }

@@ -159,17 +159,20 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             BreakBoots();
         }
 
+        [System.Obsolete]
         private void ReflEvent_OnIceBootsHit(object @object, PlayerManager pm)
         {
             ReflectionHelper.UseMethod(@object, "Adv_OnIceBootsHit", pm);
         }
 
+        [System.Obsolete]
         private bool ReflEvent_IsFreezable(object @object)
         {
             object isFreezable = ReflectionHelper.UseMethod(@object, "Adv_IsFreezable");
             return isFreezable == null || ((bool)isFreezable);
         }
 
+        [System.Obsolete]
         private bool ReflEvent_IsPushable(object @object)
         {
             object isPushable = ReflectionHelper.UseMethod(@object, "Adv_IsPushable");

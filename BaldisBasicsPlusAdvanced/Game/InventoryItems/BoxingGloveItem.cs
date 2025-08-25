@@ -2,6 +2,7 @@
 using BaldisBasicsPlusAdvanced.Game.Objects.Projectiles;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -111,17 +112,20 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             yield break;
         }
 
+        [Obsolete]
         private void ReflEvent_OnBoxingGloveHit(object @object, PlayerManager pm)
         {
             ReflectionHelper.UseMethod(@object, "Adv_OnBoxingGloveHit", pm);
         }
 
+        [Obsolete]
         private bool ReflEvent_IsPushable(object @object)
         {
             object isPushable = ReflectionHelper.UseMethod(@object, "Adv_IsPushable");
             return isPushable == null || ((bool)isPushable);
         }
 
+        [Obsolete]
         private bool ReflEvent_IsUsable(object @object, PlayerManager pm)
         {
             object result = ReflectionHelper.UseMethod(@object, "Adv_OnBoxingGlovePreHit", pm);

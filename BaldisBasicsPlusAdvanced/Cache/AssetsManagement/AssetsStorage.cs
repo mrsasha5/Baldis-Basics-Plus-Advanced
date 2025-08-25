@@ -395,6 +395,11 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
             LoadModSprite("adv_pulley", "Objects/Pulley/adv_pulley_handle.png", 25f);
 
+            for (int i = 1; i <= 3; i++)
+            {
+                LoadModSprite($"adv_elevator_tubes_glow_{i}", $"UI/Elevator/TubesGlow/Adv_Elevator_TubesGlow_{i}.png");
+            }
+
             LoadModSprite("adv_gauge_protection", "Gauges/adv_gauge_protection.png");
 
             LoadModSprite("adv_obstacle_trick", "Objects/Plates/FakePlate/adv_obstacle_trick.png", 20f);

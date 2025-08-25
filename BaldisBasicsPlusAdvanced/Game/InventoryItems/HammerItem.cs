@@ -4,6 +4,7 @@ using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using System;
 
 namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 {
@@ -95,11 +96,13 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             return false;
         }
 
+        [Obsolete]
         private void ReflEvent_OnHammerUse(object @object, PlayerManager pm)
         {
             ReflectionHelper.UseMethod(@object, "Adv_OnHammerHit", pm);
         }
 
+        [Obsolete]
         private bool ReflEvent_IsBreakable(object @object)
         {
             object isBreakable = ReflectionHelper.UseMethod(@object, "Adv_IsBreakable");
@@ -107,6 +110,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             return isBreakable == null || ((bool)isBreakable);
         }
 
+        [Obsolete]
         private bool ReflEvent_IsUsable(object @object, PlayerManager pm)
         {
             object isUsable = ReflectionHelper.UseMethod(@object, "Adv_OnHammerPreHit", pm);

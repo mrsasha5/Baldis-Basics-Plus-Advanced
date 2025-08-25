@@ -26,6 +26,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
             public Action onUpdate;
 
+            public void UpdateText(string text)
+            {
+                this.text = text;
+                if (monitor.overrider == this)
+                {
+                    monitor.tmp.text = this.text;
+                }
+            }
+
             public void Release()
             {
                 monitor.ResetOverrider(this);
@@ -52,10 +61,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
         private bool levelGenError;
 
         private MonitorOverrider overrider;
-
-        public TMP_Text Tmp => tmp;
-
-        //private int index;
 
         public void Initialize(string originalText)
         {
@@ -89,8 +94,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.rectTransform.sizeDelta = new Vector2(325, 50);
             tmp.enabled = false;
-
-            //AssetsStorage.spriteSheets["adv_tip_screen_forward_static_sheet"]
         }
 
         private void Update()
@@ -121,7 +124,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
         {
             images[1].gameObject.SetActive(true);
             SetStaticAnimation(onAnimationEnd: ShowTip);
-            //staticAnimatation.MoveNext(); //Begin immediately
         }
 
         private void ShowTip()
@@ -134,7 +136,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
         {
             tmp.enabled = false;
             SetStaticAnimation(onAnimationEnd: HideTip);
-            //staticAnimatation.MoveNext();
         }
 
         private void HideTip()

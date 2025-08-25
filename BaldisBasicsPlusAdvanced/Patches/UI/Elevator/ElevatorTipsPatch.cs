@@ -4,8 +4,8 @@ using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
-using BBPlusCustomMusics.MonoBehaviours;
 using HarmonyLib;
+using MTM101BaldAPI.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +28,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         private static int tipMaxUses = 3;
 
         private static TipsMonitor.MonitorOverrider tubesOverrider;
+
+        private static Image tubesGlowImage;
 
         public static bool LoadTip => !(ObjectsStorage.TipKeys.Count == 0) &&
                 (OptionsDataManager.ExtraSettings.GetValue<bool>("tips"));
@@ -73,13 +75,13 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
                 if (tipUsesDatas.ContainsKey(_tip))
                 {
-                    tipUsesDatas[_tip]++;
-
                     if (tipUsesDatas[_tip] > tipMaxUses)
                     {
                         tipKeys.Remove(_tip);
                         continue;
                     }
+
+                    tipUsesDatas[_tip]++;
 
                     tip = _tip;
                 }
@@ -91,6 +93,22 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             }
 
             return tip.Localize();
+        }
+
+        [HarmonyPatch("UpdateLives")]
+        [HarmonyPostfix]
+        private static void OnUpdateLives()
+        {
+            int currentLives = CoreGameManager.Instance.Lives + 1;
+
+            tubesOverrider?.UpdateText(string.Format("Adv_Elv_TubesTip".Localize(), currentLives,
+                    ReflectionHelper.GetValue<int>(CoreGameManager.Instance, "extraLives"),
+                    CoreGameManager.Instance.Attempts));
+
+            if (currentLives > 3) currentLives = 3;
+
+            if (tubesGlowImage != null) 
+                tubesGlowImage.sprite = AssetsStorage.sprites[$"adv_elevator_tubes_glow_{currentLives}"];
         }
 
         [HarmonyPatch("ButtonPressed")]
@@ -116,28 +134,49 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             if (LoadTip)
             {
                 elvScreen.StartCoroutine(ElevatorWaiter());
-
-                Image tubesImage = Array.Find(
-                    __instance.GetComponentsInChildren<Image>(), x => x.name == "Lives");
-
-                StandardMenuButton button = ObjectsCreator.CreateSpriteButton(AssetsStorage.sprites["transparent"],
-                    new Vector3(200f, 0f, 0f), __instance.Canvas.transform);
-                button.name = "LivesCursorChecker";
-                button.transform.SetSiblingIndex(tubesImage.transform.GetSiblingIndex() + 1);
-                button.image.rectTransform.sizeDelta = new Vector2(100f, 232f);
-                button.eventOnHigh = true;
-                button.OnHighlight.AddListener(
-                    () => tubesOverrider = SetOverride(
-                        string.Format("Adv_Elv_TubesTip".Localize(), CoreGameManager.Instance.Lives + 1,
-                        ReflectionHelper.GetValue<int>(CoreGameManager.Instance, "extraLives"),
-                        CoreGameManager.Instance.Attempts
-                        )));
-                button.OffHighlight.AddListener(delegate ()
-                {
-                    tubesOverrider?.Release();
-                    tubesOverrider = null;
-                });
+                InitializeTubesButton(__instance);
             }
+        }
+
+        private static void InitializeTubesButton(ElevatorScreen elvScreen)
+        {
+            Image tubesImage = Array.Find(
+                    elvScreen.GetComponentsInChildren<Image>(), x => x.name == "Lives");
+
+            int glowNum = CoreGameManager.Instance.Lives + 1;
+
+            if (glowNum > 3) glowNum = 3;
+
+            tubesGlowImage = UIHelpers.CreateImage(AssetsStorage.sprites[$"adv_elevator_tubes_glow_{glowNum}"],
+                parent: elvScreen.Canvas.transform, Vector3.zero, correctPosition: false);
+
+            tubesGlowImage.transform.SetSiblingIndex(tubesImage.transform.GetSiblingIndex() + 1);
+            tubesGlowImage.ToCenter();
+            tubesGlowImage.transform.localPosition = Vector3.right * 161f;
+            tubesGlowImage.gameObject.SetActive(false);
+
+            StandardMenuButton button = ObjectsCreator.CreateSpriteButton(AssetsStorage.sprites["transparent"],
+                Vector3.right * 200f, elvScreen.Canvas.transform);
+            button.name = "LivesCursorChecker";
+            button.transform.SetSiblingIndex(tubesGlowImage.transform.GetSiblingIndex() + 1);
+            button.image.rectTransform.sizeDelta = new Vector2(100f, 232f);
+            button.eventOnHigh = true;
+            button.OnHighlight.AddListener(delegate()
+            {
+                tubesOverrider = SetOverride(
+                    string.Format("Adv_Elv_TubesTip".Localize(), CoreGameManager.Instance.Lives + 1,
+                    ReflectionHelper.GetValue<int>(CoreGameManager.Instance, "extraLives"),
+                    CoreGameManager.Instance.Attempts));
+                tubesGlowImage?.gameObject.SetActive(true);
+            }
+            );
+            button.OffHighlight.AddListener(delegate ()
+            {
+                tubesGlowImage?.gameObject.SetActive(false);
+                tubesOverrider?.Release();
+                tubesOverrider = null;
+            });
+            
         }
 
         private static IEnumerator ElevatorWaiter()

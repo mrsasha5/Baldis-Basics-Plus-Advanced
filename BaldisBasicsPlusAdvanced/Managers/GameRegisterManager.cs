@@ -54,6 +54,7 @@ using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
 using Newtonsoft.Json;
 using BaldisBasicsPlusAdvanced.Patches.UI;
+using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 #endregion
 
 namespace BaldisBasicsPlusAdvanced.Managers

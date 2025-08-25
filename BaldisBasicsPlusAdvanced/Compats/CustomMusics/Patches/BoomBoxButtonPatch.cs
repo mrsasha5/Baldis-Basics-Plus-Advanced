@@ -80,7 +80,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
 
         private static void Update()
         {
-            overrider.monitor.Tmp.text = GetTip();
+            overrider.UpdateText(GetTip());
         }
 
         private static string GetTip()
