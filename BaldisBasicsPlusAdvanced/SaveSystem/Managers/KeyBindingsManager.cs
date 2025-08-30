@@ -22,16 +22,24 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Managers
 
             if (File.Exists(SaveSystemCore.Path + keyBindingsFile))
             {
-                string[] lines = File.ReadAllLines(SaveSystemCore.Path + keyBindingsFile);
-                foreach (string line in lines)
+                try
                 {
-                    //0 - id
-                    //1 - button
-                    string[] values = line.Split(new char[] { ' ' });
-                    if (keyBindings.ContainsKey(values[0]))
+                    string[] lines = File.ReadAllLines(SaveSystemCore.Path + keyBindingsFile);
+                    foreach (string line in lines)
                     {
-                        keyBindings[values[0]].OverrideButton((KeyCode)Enum.Parse(typeof(KeyCode), values[1]));
+                        //0 - id
+                        //1 - button
+                        string[] values = line.Split(new char[] { ' ' });
+                        if (keyBindings.ContainsKey(values[0]))
+                        {
+                            keyBindings[values[0]].OverrideButton((KeyCode)Enum.Parse(typeof(KeyCode), values[1]));
+                        }
                     }
+                }
+                catch
+                {
+                    SetBindingDefaultValues();
+                    RewriteBindings();
                 }
             }
             else

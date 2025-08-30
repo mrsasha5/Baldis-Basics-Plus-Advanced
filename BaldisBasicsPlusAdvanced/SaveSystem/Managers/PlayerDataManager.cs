@@ -29,9 +29,18 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem
             }
             else
             {
-                data = JsonConvert.DeserializeObject<PlayerSaveData>(
-                    RijndaelEncryption.Decrypt(File.ReadAllText(SaveSystemCore.Path + file), 
-                    SaveSystemCore.FileName));
+                try
+                {
+                    data = JsonConvert.DeserializeObject<PlayerSaveData>(
+                        RijndaelEncryption.Decrypt(File.ReadAllText(SaveSystemCore.Path + file),
+                            SaveSystemCore.FileName));
+                }
+                catch
+                {
+                    AdvancedCore.Logging.LogError("PlayerDataManager cannot load player's data! Creating new one...");
+                    data = new PlayerSaveData();
+                    Save();
+                }
             }
         }
 

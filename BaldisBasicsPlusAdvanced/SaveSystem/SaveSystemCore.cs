@@ -29,7 +29,7 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem
 
         private static void PrepareFolder()
         {
-            path = ModdedSaveSystem.GetSaveFolder(AdvancedCore.Instance, Singleton<PlayerFileManager>.Instance.fileName) + "/";
+            path = ModdedSaveSystem.GetSaveFolder(AdvancedCore.Instance, FileName) + "/";
             Directory.CreateDirectory(path);
         }
 
