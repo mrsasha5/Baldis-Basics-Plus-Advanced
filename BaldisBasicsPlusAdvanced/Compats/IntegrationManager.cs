@@ -98,8 +98,8 @@ namespace BaldisBasicsPlusAdvanced.Compats
                 }
                 else if (!isIntegrable && modules[i].IsForced)
                 {
-                    ObjectsCreator.CauseCrash($"Baldi's Basics Plus Advanced Edition. Required dependency is missing!" +
-                        $"\nGUID of the integrable mod: {modules[i].Guid}", AssetsStorage.weirdErrorSound);
+                    throw new Exception($"Baldi's Basics Plus Advanced Edition. Required dependency is missing!" +
+                        $"\nGUID of the integrable mod: {modules[i].Guid}");
                 }
                 else
                 {

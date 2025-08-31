@@ -474,6 +474,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             {
                 NPC npc = npcs[i];
                 NPCMetadata meta = npc.GetMeta();
+
+                if (meta == null) continue; //9.0 API change
+
                 LevelGenerationParameters ld = BaseGameManager.Instance.levelObject;
 
                 if (meta.tags.Contains(TagsStorage.expelHammerImmunity) || meta.tags.Contains(TagsStorage.faculty) ||

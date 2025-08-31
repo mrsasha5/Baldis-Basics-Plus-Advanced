@@ -151,9 +151,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
             }
         }
 
-        public void EntityTriggerEnter(Collider other)
+        public void EntityTriggerEnter(Collider other, bool validCollision)
         {
-            if (ready && this.target == null && !other.TryGetComponent(out GroundDough _)
+            if (validCollision && ready && this.target == null && !other.TryGetComponent(out GroundDough _)
                 && other.TryGetComponent(out Entity target) && target.Grounded)
             {
                 this.target = target;
@@ -182,12 +182,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
             gauge?.Deactivate();
         }
 
-        public void EntityTriggerStay(Collider other)
+        public void EntityTriggerStay(Collider other, bool validCollision)
         {
 
         }
 
-        public void EntityTriggerExit(Collider other)
+        public void EntityTriggerExit(Collider other, bool validCollision)
         {
             
         }

@@ -1,4 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
@@ -39,29 +40,25 @@ namespace BaldisBasicsPlusAdvanced.API
         #region Kitchen Stove recipes
 
         /// <summary>
-        /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/> class has it.
-        /// Overloading of LoadKitchenStoveRecipesFromFolder(string, out List of FoodRecipeData, bool, bool, bool) 
-        /// with recommended parameters (still free to use it!).
+        /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/>.
         /// </summary>
-        /// <param name="info">Your plugin info.</param>
-        /// <param name="path">Path of the folder with JSON recipes.</param>
-        /// <param name="includeSubdirectories"></param>
-        /// <returns>List of loaded and registered recipes!</returns>
+        /// <param name="info"></param>
+        /// <param name="path">JSON recipes folder location.</param>
+        /// <param name="includeSubdirectories">Should the mod check files in subdirectories from path.</param>
+        /// <returns>List of loaded and registered recipes.</returns>
         public static List<FoodRecipeData> LoadKitchenStoveRecipesFromFolder(PluginInfo info, string path, bool includeSubdirectories)
         {
             return LoadKitchenStoveRecipesFromFolder(info, path, includeSubdirectories, out _);
         }
 
         /// <summary>
-        /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/> class has it.
-        /// Overloading of LoadKitchenStoveRecipesFromFolder(string, out List of FoodRecipeData, bool, bool, bool) 
-        /// with recommended parameters (still free to use it!).
+        /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/>.
         /// </summary>
-        /// <param name="info">Your plugin info.</param>
-        /// <param name="path">Path of the folder with JSON recipes.</param>
-        /// <param name="includeSubdirectories"></param>
+        /// <param name="info"></param>
+        /// <param name="path">JSON recipes folder location.</param>
+        /// <param name="includeSubdirectories">Should the mod check files in subdirectories from path.</param>
         /// <param name="failedRecipes">Recipes which were loaded, but not registered by some reason.</param>
-        /// <returns>List of loaded and registered recipes!</returns>
+        /// <returns>List of loaded and registered recipes.</returns>
         public static List<FoodRecipeData> LoadKitchenStoveRecipesFromFolder(PluginInfo info, string path, bool includeSubdirectories, 
             out List<FoodRecipeData> failedRecipes)
         {
@@ -70,15 +67,16 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/> class has it.
+        /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/>.
         /// </summary>
-        /// <param name="info">Your plugin info.</param>
-        /// <param name="path">Path of the folder with JSON recipes.</param>
-        /// <param name="includeSubdirectories"></param>
+        /// <param name="info"></param>
+        /// <param name="path">JSON recipes folder location.</param>
+        /// <param name="includeSubdirectories">Should the mod check files in subdirectories from path.</param>
         /// <param name="failedRecipes">Recipes which were loaded, but not registered by some reason.</param>
-        /// <param name="logWarnings">Logs if some recipes loading was failed (each recipe will be showed in console + exception if it exists).</param>
-        /// <param name="sendWarningNotifications">They let user to know if something went wrong during recipes loading (without logging which recipes caused that)!</param>
-        /// <returns>List of loaded and registered recipes!</returns>
+        /// <param name="logWarnings">Logs if some recipes loading was failed.</param>
+        /// <param name="sendWarningNotifications">They let user to know if something went wrong during 
+        /// recipes loading (without logging which recipes caused that)!</param>
+        /// <returns>List of loaded and registered recipes.</returns>
         public static List<FoodRecipeData> LoadKitchenStoveRecipesFromFolder(PluginInfo info, string path, bool includeSubdirectories,
             out List<FoodRecipeData> failedRecipes, bool logWarnings, bool sendWarningNotifications)
         {
@@ -87,10 +85,10 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Find all Kitchen Stove's recipes which follows condition in delegate <see cref="Predicate{T}"/>.
+        /// Finds all Kitchen Stove's recipes by condition in <see cref="Predicate{T}"/>.
         /// </summary>
         /// <param name="predicate"></param>
-        /// <returns></returns>
+        /// <returns>List (new instance).</returns>
         public static List<FoodRecipeData> FindKitchenStoveRecipes(Predicate<FoodRecipeData> predicate)
         {
             List<FoodRecipeData> recipes = new List<FoodRecipeData>();
@@ -105,42 +103,44 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Return a list of food recipe datas from all mods except specified.
+        /// Returns a list of food recipe datas except provided mods.
         /// </summary>
         /// <param name="pluginInfos"></param>
-        /// <returns></returns>
+        /// <returns>List (new instance).</returns>
         public static List<FoodRecipeData> GetAllKitchenStoveRecipesExcept(params PluginInfo[] pluginInfos)
         {
             List<FoodRecipeData> datas = new List<FoodRecipeData>();
-            foreach (FoodRecipeData data in KitchenStove.Datas)
+            for (int i = 0; i < KitchenStove.Datas.Count; i++)
             {
-                foreach (PluginInfo pluginInfo in pluginInfos)
+                bool getRecipe = true;
+                for (int j = 0; j < pluginInfos.Length; j++)
                 {
-                    if (!data.pluginInfos.Contains(pluginInfo))
+                    if (KitchenStove.Datas[i].pluginInfos.Contains(pluginInfos[j]))
                     {
-                        datas.Add(data);
+                        getRecipe = false;
                         break;
                     }
                 }
+                if (getRecipe) datas.Add(KitchenStove.Datas[i]);
             }
             return datas;
         }
 
         /// <summary>
-        /// Return a list of food recipe datas from specified mods.
+        /// Returns a list of food recipe datas from provided mods.
         /// </summary>
         /// <param name="pluginInfos"></param>
-        /// <returns></returns>
+        /// <returns>List (new instance).</returns>
         public static List<FoodRecipeData> GetAllKitchenStoveRecipesFrom(params PluginInfo[] pluginInfos)
         {
             List<FoodRecipeData> datas = new List<FoodRecipeData>();
-            foreach (FoodRecipeData data in KitchenStove.Datas)
+            for (int i = 0; i < KitchenStove.Datas.Count; i++)
             {
-                foreach (PluginInfo pluginInfo in pluginInfos)
+                for (int j = 0; j < pluginInfos.Length; j++)
                 {
-                    if (data.pluginInfos.Contains(pluginInfo))
+                    if (KitchenStove.Datas[i].pluginInfos.Contains(pluginInfos[j]))
                     {
-                        datas.Add(data);
+                        datas.Add(KitchenStove.Datas[i]);
                         break;
                     }
                 }
@@ -151,7 +151,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <summary>
         /// Returns all recipes that have been added to the Kitchen Stove.
         /// </summary>
-        /// <returns>New instance of the original reference.</returns>
+        /// <returns>List (new instance).</returns>
         public static List<FoodRecipeData> GetAllKitchenStoveRecipes()
         {
             return new List<FoodRecipeData>(KitchenStove.Datas);
@@ -171,7 +171,8 @@ namespace BaldisBasicsPlusAdvanced.API
             {
                 if (KitchenStove.Datas[i].IsEqual(data))
                 {
-                    if (!KitchenStove.Datas[i].pluginInfos.Contains(data.pluginInfos[0])) KitchenStove.Datas[i].pluginInfos.Add(data.pluginInfos[0]);
+                    if (!KitchenStove.Datas[i].pluginInfos.Contains(data.pluginInfos[0]))
+                        KitchenStove.Datas[i].pluginInfos.Add(data.pluginInfos[0]);
                     return true;
                 } else if (KitchenStove.Datas[i].IsIdentical(data))
                 {
@@ -193,7 +194,7 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Removes all Kitchen Stove's recipes which follows condition in delegate <see cref="Predicate{T}"/>.
+        /// Removes all Kitchen Stove's recipes by condition in <see cref="Predicate{T}"/>.
         /// </summary>
         /// <param name="predicate"></param>
         public static void RemoveKitchenStoveRecipesBy(Predicate<FoodRecipeData> predicate)
@@ -205,37 +206,45 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Remove all kitchen recipes from mods that array contains.
+        /// Removes all Kitchen Stove's recipes from provided mods.
         /// </summary>
         /// <param name="pluginInfos"></param>
         public static void RemoveAllKitchenStoveRecipesFrom(params PluginInfo[] pluginInfos)
         {
-            foreach (PluginInfo plugin in pluginInfos)
+            for (int i = 0; i < KitchenStove.Datas.Count; i++)
             {
-                for (int i = 0; i < KitchenStove.Datas.Count; i++)
+                for (int j = 0; j < pluginInfos.Length; j++)
                 {
-                    if (KitchenStove.Datas[i].pluginInfos.Contains(plugin))
+                    if (KitchenStove.Datas[i].pluginInfos.Contains(pluginInfos[j]))
                     {
                         RemoveKitchenStoveRecipe(KitchenStove.Datas[i]);
+                        i--;
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Remove all kitchen recipes from mods that array not contains.
+        /// Removes all Kitchen Stove's recipes except provided mods.
         /// </summary>
         /// <param name="pluginInfos"></param>
         public static void RemoveAllKitchenStoveRecipesExcept(params PluginInfo[] pluginInfos)
         {
-            foreach (PluginInfo plugin in pluginInfos)
+            for (int i = 0; i < KitchenStove.Datas.Count; i++)
             {
-                for (int i = 0; i < KitchenStove.Datas.Count; i++)
+                bool removeRecipe = true;
+                for (int j = 0; j < pluginInfos.Length; j++)
                 {
-                    if (!KitchenStove.Datas[i].pluginInfos.Contains(plugin))
+                    if (KitchenStove.Datas[i].pluginInfos.Contains(pluginInfos[j]))
                     {
-                        RemoveKitchenStoveRecipe(KitchenStove.Datas[i]);
+                        removeRecipe = false;
+                        break;
                     }
+                }
+                if (removeRecipe)
+                {
+                    RemoveKitchenStoveRecipe(KitchenStove.Datas[i]);
+                    i--;
                 }
             }
         }
@@ -246,11 +255,9 @@ namespace BaldisBasicsPlusAdvanced.API
 
         /// <summary>
         /// Just creates a plate prefab.
-        /// Remember that classes outside of the API can be updated without any saving of old parts of the code!
-        /// If you find it difficult to figure out how this works, then study the code of existing slabs!
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="name"></param>
+        /// <param name="name">Prefab name.</param>
         /// <returns></returns>
         public static T CreatePlate<T>(string name) where T : BasePlate
         {
@@ -260,27 +267,28 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <summary>
         /// Registers new symbol and creates a Spelloon with sprite!
         /// </summary>
-        /// <param name="symbol"></param>
+        /// <param name="symbol">If it is provided as upper case, it will be converted to lower case.</param>
         /// <param name="sprite"></param>
         /// <returns>False if Spelloon already exists!</returns>
         public static bool CreateNewSpelloon(string symbol, Sprite sprite)
         {
-            string _symbol = symbol.ToLower();//symbol.ToString().ToLower();
+            symbol = symbol.ToLower();
 
-            if (ObjectsStorage.Spelloons.ContainsKey("spelloon_" + _symbol))
+            if (ObjectsStorage.Spelloons.ContainsKey("spelloon_" + symbol))
             {
-                logger?.LogWarning($"Spelloon \"{symbol}\" already exists!");
+                logger.LogWarning($"Spelloon \"{symbol}\" already exists!");
                 return false;
             }
 
-            MathMachineNumber mathNumComp = GameObject.Instantiate(AssetsHelper.LoadAsset<MathMachineNumber>("MathNum_0"));
+            MathMachineNumber mathNumComp = GameObject.Instantiate(
+                AssetsStorage.gameObjects["math_num_0"].GetComponent<MathMachineNumber>());
             GameObject.Destroy(mathNumComp);
             mathNumComp.gameObject.ConvertToPrefab(true);
 
             Spelloon spelloon = mathNumComp.gameObject.AddComponent<Spelloon>();
-            spelloon.name = "Spelloon_" + _symbol;
+            spelloon.name = "Spelloon_" + symbol;
             spelloon.InitializePrefab(1);
-            spelloon.InitializePrefabPost(_symbol, sprite);
+            spelloon.InitializePrefabPost(symbol, sprite);
 
             SymbolMachine[] machines = AssetsHelper.LoadAssets<SymbolMachine>();
 
@@ -289,20 +297,22 @@ namespace BaldisBasicsPlusAdvanced.API
                 if (!machines[i].potentialSymbols.Contains(spelloon.Value)) machines[i].potentialSymbols.Add(spelloon.Value);
             }
             
-            ObjectsStorage.Spelloons.Add("spelloon_" + _symbol, spelloon);
+            ObjectsStorage.Spelloons.Add("spelloon_" + symbol, spelloon);
             return true;
         }
 
         /// <summary>
         /// Unloads Spelloon and all words that contain its symbol!
         /// </summary>
-        /// <param name="symbol"></param>
+        /// <param name="symbol">If it is provided as upper case, it will be converted to lower case.</param>
         /// <returns></returns>
         public static bool UnloadSpelloon(string symbol)
         {
+            symbol = symbol.ToLower();
+
             if (!ObjectsStorage.Spelloons.ContainsKey("spelloon_" + symbol))
             {
-                logger?.LogWarning($"Spelloon \"{symbol}\" doesn't exist!");
+                logger.LogWarning($"Spelloon \"{symbol}\" doesn't exist!");
                 return false;
             }
 
@@ -311,7 +321,7 @@ namespace BaldisBasicsPlusAdvanced.API
             List<string> words = GetAllSymbolMachineWords();
             for (int i = 0; i < words.Count; i++)
             {
-                if (!words[i].Contains(symbol))
+                if (!words[i].Contains(symbol) && !words[i].Contains(symbol.ToUpper()))
                 {
                     words.RemoveAt(i);
                     i--;
@@ -338,14 +348,15 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <summary>
         /// Replaces Spelloon's sprite!
         /// </summary>
-        /// <param name="symbol"></param>
+        /// <param name="symbol">If it is provided as upper case, it will be converted to lower case.</param>
         /// <param name="sprite"></param>
         /// <returns>Returns false if Spelloon doesn't exist!</returns>
         public static bool UpdateSpelloonSprite(string symbol, Sprite sprite)
         {
+            symbol = symbol.ToLower();
             if (!ObjectsStorage.Spelloons.ContainsKey("spelloon_" + symbol))
             {
-                logger?.LogWarning($"Spelloon \"{symbol}\" doesn't exist!");
+                logger.LogWarning($"Spelloon \"{symbol}\" doesn't exist!");
                 return false;
             }
 
@@ -360,25 +371,28 @@ namespace BaldisBasicsPlusAdvanced.API
 
         #region School Council
 
-        /// <summary>
-        /// Returns a list (actual reference) of the specific mod's weighted topics.
-        /// Still recommending use prefer to use API methods instead of invoke Remove(), Add() or something other from here.
-        /// Use this data for analyze surely.
-        /// </summary>
         /// <param name="pluginInfo"></param>
-        /// <returns></returns>
-        public static List<WeightedCouncilTopic> GetAllWeigthedSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
+        /// <returns>List (new instance).</returns>
+        public static List<WeightedCouncilTopic> GetAllWeightedSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
         {
-            return ObjectsStorage.Topics[pluginInfo];
+            if (!ObjectsStorage.Topics.ContainsKey(pluginInfo))
+                return null;
+
+            return new List<WeightedCouncilTopic>(ObjectsStorage.Topics[pluginInfo]);
         }
 
-        /// <summary>
-        /// Returns a list (new instance) of the specific mod's topics.
-        /// </summary>
-        /// <param name="pluginInfo"></param>
-        /// <returns></returns>
+        [Obsolete("Use GetAllWeightedSchoolCouncilTopicsFrom!")]
+        public static List<WeightedCouncilTopic> GetAllWeigthedSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
+        {
+            return GetAllWeightedSchoolCouncilTopicsFrom(pluginInfo);
+        }
+
+        [Obsolete("Use GetAllWeightedSchoolCouncilTopicsFrom!")]
         public static List<BaseTopic> GetAllSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
         {
+            if (!ObjectsStorage.Topics.ContainsKey(pluginInfo))
+                return null;
+
             List<BaseTopic> topics = new List<BaseTopic>();
             List<WeightedCouncilTopic> _topics = ObjectsStorage.Topics[pluginInfo];
 
@@ -390,6 +404,10 @@ namespace BaldisBasicsPlusAdvanced.API
             return topics;
         }
 
+        /// <summary>
+        /// Gets all topics from all mods.
+        /// </summary>
+        /// <returns>List (new instance).</returns>
         public static List<BaseTopic> GetAllSchoolCouncilTopics()
         {
             List<BaseTopic> topics = new List<BaseTopic>();
@@ -413,7 +431,9 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <param name="weight"></param>
         public static void CreateSchoolCouncilTopic<T>(PluginInfo pluginInfo, int weight = 100) where T : BaseTopic, new()
         {
-            if (!ObjectsStorage.Topics.ContainsKey(pluginInfo)) ObjectsStorage.Topics.Add(pluginInfo, new List<WeightedCouncilTopic>());
+            if (!ObjectsStorage.Topics.ContainsKey(pluginInfo)) 
+                ObjectsStorage.Topics.Add(pluginInfo, new List<WeightedCouncilTopic>());
+
             ObjectsStorage.Topics[pluginInfo].Add(new WeightedCouncilTopic()
             {
                 selection = new T(),
@@ -422,45 +442,45 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Unloads all School Council's topics except specific mods.
+        /// Unloads all voting topics except provided mods.
         /// </summary>
         /// <param name="pluginInfos"></param>
-        /// <returns>List that contains plugins from which topics were removed.</returns>
+        /// <returns>Plugins which topics were removed.</returns>
         public static List<PluginInfo> UnloadAllSchoolCouncilTopicsExcept(params PluginInfo[] pluginInfos)
         {
-            List<PluginInfo> exceptedPlugins = new List<PluginInfo>();
+            List<PluginInfo> unloadedPlugins = new List<PluginInfo>();
             foreach (PluginInfo pluginInfo in ObjectsStorage.Topics.Keys.ToArray())
             {
                 if (!pluginInfos.Contains(pluginInfo))
                 {
                     ObjectsStorage.Topics.Remove(pluginInfo);
-                    exceptedPlugins.Add(pluginInfo);
+                    unloadedPlugins.Add(pluginInfo);
                 }
             }
-            return exceptedPlugins;
+            return unloadedPlugins;
         }
 
         /// <summary>
-        /// Unloads all School Council's topics from specific mods.
+        /// Unloads all voting topics from provided mods.
         /// </summary>
         /// <param name="pluginInfos"></param>
-        /// <returns>List that contains plugins from which topics were removed.</returns>
+        /// <returns>Plugins which topics were removed.</returns>
         public static List<PluginInfo> UnloadAllSchoolCouncilTopicsFrom(params PluginInfo[] pluginInfos)
         {
-            List<PluginInfo> exceptedPlugins = new List<PluginInfo>();
+            List<PluginInfo> unloadedPlugins = new List<PluginInfo>();
             foreach (PluginInfo pluginInfo in pluginInfos)
             {
                 if (ObjectsStorage.Topics.ContainsKey(pluginInfo))
                 {
                     ObjectsStorage.Topics.Remove(pluginInfo);
-                    exceptedPlugins.Add(pluginInfo);
+                    unloadedPlugins.Add(pluginInfo);
                 }
             }
-            return exceptedPlugins;
+            return unloadedPlugins;
         }
 
         /// <summary>
-        /// Unloads all School Council's topics.
+        /// Unloads all voting topics.
         /// </summary>
         public static void UnloadAllSchoolCouncilTopics()
         {
@@ -468,7 +488,7 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Unloads School Council's topics by reference.
+        /// Unloads voting topics by references.
         /// </summary>
         /// <param name="topics"></param>
         public static void UnloadSchoolCouncilTopics(params BaseTopic[] topics)
@@ -519,27 +539,37 @@ namespace BaldisBasicsPlusAdvanced.API
         #region Symbol Machine words
 
         /// <summary>
-        /// Returns a list of the Symbol Machine words from the desired mod.
+        /// Returns a list of the Symbol Machine words from the provided mods.
         /// </summary>
-        /// <param name="pluginInfo">Current mod info.</param>
-        /// <returns>Current list reference. Changes to this list lead to changes in the display of words. Result may be null!</returns>
+        /// <param name="pluginInfos"></param>
+        /// <returns>List (new instance).</returns>
+        public static List<string> GetAllSymbolMachineWordsFrom(params PluginInfo[] pluginInfos)
+        {
+            List<string> words = new List<string>();
+            foreach (KeyValuePair<PluginInfo, List<string>> pair in ObjectsStorage.SymbolMachineWords)
+            {
+                words.AddRange(pair.Value);
+            }
+
+            return words;
+        }
+
+        [Obsolete("Use overload with array argument!")]
         public static List<string> GetAllSymbolMachineWordsFrom(PluginInfo pluginInfo)
         {
             if (!ObjectsStorage.SymbolMachineWords.ContainsKey(pluginInfo))
             {
-                logger?.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
+                logger.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
                 return null;
             }
 
-            List<string> tips = ObjectsStorage.TipKeys[pluginInfo];
-
-            return tips;
+            return new List<string>(ObjectsStorage.SymbolMachineWords[pluginInfo]);
         }
 
         /// <summary>
-        /// Returns a list of all the Symbol Machine words. Not a valid reference.
+        /// Returns all Symbol Machine words.
         /// </summary>
-        /// <returns>Any changes to the list will not affect the words displayed.</returns>
+        /// <returns>List (new instance).</returns>
         public static List<string> GetAllSymbolMachineWords()
         {
             List<string> words = new List<string>();
@@ -553,15 +583,13 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Adds a new words for the Symbol Machine. Transmitting words that contain more than 5 characters is unacceptable.
-        /// Words that do not meet the allowed number of characters will simply be ignored.
-        /// Add words, not localization keys.
-        /// Add words using the API!
+        /// Adds a new words for the Symbol Machine.
+        /// Max length - 5.
+        /// Do not use localization keys.
         /// </summary>
-        /// <param name="pluginInfo">Current mod info.</param>
-        /// <param name="words">String array that contains words.</param>
-        /// <returns>Current list reference. Changes to this list lead to changes in the display of tips.
-        /// It recommended using only for analysis.</returns>
+        /// <param name="pluginInfo"></param>
+        /// <param name="words">Words to add.</param>
+        /// <returns>List (reference). Do not modify.</returns>
         public static List<string> AddNewSymbolMachineWords(PluginInfo pluginInfo, params string[] words)
         {
             if (!ObjectsStorage.SymbolMachineWords.ContainsKey(pluginInfo)) ObjectsStorage.SymbolMachineWords.Add(pluginInfo, new List<string>());
@@ -570,7 +598,7 @@ namespace BaldisBasicsPlusAdvanced.API
             {
                 if (words[i].Length > 5)
                 {
-                    logger?.LogWarning("Word " + words[i] + " skipped, because max length is 5 symbols!");
+                    logger.LogWarning("Word " + words[i] + " skipped, because max length is 5 symbols!");
                     continue;
                 }
                 ObjectsStorage.SymbolMachineWords[pluginInfo].Add(words[i]);
@@ -580,10 +608,10 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Unloads words for the Symbol Machine, that were added by any mods.
-        /// Words are not localization keys, you must specify an English word.
+        /// Unloads provided words from the Symbol Machine from all mods.
+        /// Words are not localization keys.
         /// </summary>
-        /// <param name="words"></param>
+        /// <param name="words">Words to remove.</param>
         public static void UnloadSymbolMachineWordsFromAllMods(params string[] words)
         {
             foreach (List<string> _words in ObjectsStorage.SymbolMachineWords.Values)
@@ -599,18 +627,16 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Unloads words for the Symbol Machine, that were added by current mod.
-        /// Words are not localization keys, you must specify an English word.
+        /// Unloads words from the Symbol Machine from provided mod.
         /// </summary>
-        /// <param name="pluginInfo">Current mod info.</param>
-        /// <param name="words">String array that contains words.</param>
-        /// <returns>Current list reference. Changes to this list lead to changes in the display of tips.
-        /// It recommended using only for analysis.</returns>
+        /// <param name="pluginInfo"></param>
+        /// <param name="words">Words to unload.</param>
+        /// <returns>List (new instance). May return null if plugin is not found.</returns>
         public static List<string> UnloadSymbolMachineWords(PluginInfo pluginInfo, params string[] words)
         {
             if (!ObjectsStorage.SymbolMachineWords.ContainsKey(pluginInfo))
             {
-                logger?.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
+                logger.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
                 return null;
             }
 
@@ -624,19 +650,19 @@ namespace BaldisBasicsPlusAdvanced.API
                 ObjectsStorage.SymbolMachineWords[pluginInfo].Remove(words[i]);
             }
 
-            return ObjectsStorage.SymbolMachineWords[pluginInfo];
+            return new List<string>(ObjectsStorage.SymbolMachineWords[pluginInfo]);
         }
 
         /// <summary>
-        /// Unloads all words for the Symbol Machine, that were added by current mod.
+        /// Unloads all words from the Symbol Machine from provided mod.
         /// </summary>
-        /// <param name="pluginInfo">Current mod info.</param>
+        /// <param name="pluginInfo"></param>
         /// <returns>True, if the action was successful.</returns>
         public static bool UnloadAllSymbolMachineWordsFrom(PluginInfo pluginInfo)
         {
             if (!ObjectsStorage.SymbolMachineWords.ContainsKey(pluginInfo))
             {
-                logger?.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
+                logger.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
                 return false;
             }
             ObjectsStorage.SymbolMachineWords.Remove(pluginInfo);
@@ -644,7 +670,7 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Unloads absolutely all words for the Symbol Machine.
+        /// Unloads all words from the Symbol Machine.
         /// </summary>
         public static void UnloadAllSymbolMachineWords()
         {
@@ -652,27 +678,24 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Unloads all words for the Symbol Machine from mods that are not listed in the array.
+        /// Unloads all words from the Symbol Machine except ones from provided mods.
         /// </summary>
-        /// <param name="pluginInfos">Current mods info.</param>
-        /// <returns>It contains mods that have registered their words and their words have been deleted. It is useful for analysis.</returns>
+        /// <param name="pluginInfos"></param>
+        /// <returns>Mods that have registered their words and their words have been deleted.</returns>
         public static List<PluginInfo> UnloadAllSymbolMachineWordsExcept(params PluginInfo[] pluginInfos)
         {
-            List<PluginInfo> exceptedPlugins = new List<PluginInfo>();
+            List<PluginInfo> unloadedPlugins = new List<PluginInfo>();
 
-            foreach (PluginInfo info in ObjectsStorage.SymbolMachineWords.Keys)
+            foreach (PluginInfo info in ObjectsStorage.SymbolMachineWords.Keys.ToArray())
             {
                 if (!pluginInfos.Contains(info))
                 {
                     ObjectsStorage.SymbolMachineWords.Remove(info);
-                }
-                else
-                {
-                    exceptedPlugins.Add(info);
+                    unloadedPlugins.Add(info);
                 }
             }
 
-            return exceptedPlugins;
+            return unloadedPlugins;
         }
 
         #endregion
@@ -680,28 +703,25 @@ namespace BaldisBasicsPlusAdvanced.API
         #region Tips
 
         /// <summary>
-        /// Returns a list of tips (localization keys) from the desired mod.
+        /// Returns a list of tips (localization keys) from provided mod.
         /// </summary>
-        /// <param name="pluginInfo">Current mod info.</param>
-        /// <returns>Current list reference. Changes to this list lead to changes in the display of tips.
-        /// It recommended using only for analysis. Result may be null!</returns>
+        /// <param name="pluginInfo"></param>
+        /// <returns>List (new instance).</returns>
         public static List<string> GetAllTipsFrom(PluginInfo pluginInfo)
         {
             if (!ObjectsStorage.TipKeys.ContainsKey(pluginInfo))
             {
-                logger?.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
+                logger.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
                 return null;
             }
 
-            List<string> tips = ObjectsStorage.TipKeys[pluginInfo];
-
-            return tips;
+            return new List<string>(ObjectsStorage.TipKeys[pluginInfo]);
         }
 
         /// <summary>
-        /// Returns a list of all tips (localization keys). Not a valid reference.
+        /// Returns a list of all tips (localization keys).
         /// </summary>
-        /// <returns>Any changes to the list will not affect the tips displayed.</returns>
+        /// <returns>List (new instance).</returns>
         public static List<string> GetAllTips()
         {
             List<string> tips = new List<string>();
@@ -716,12 +736,10 @@ namespace BaldisBasicsPlusAdvanced.API
 
         /// <summary>
         /// Adds a new tips for the elevator.
-        /// Add localization keys, not translated tips!
         /// </summary>
-        /// <param name="pluginInfo">Current mod info.</param>
-        /// <param name="localizationKeys">String array that contains localization keys.</param>
-        /// <returns>Current list reference. Changes to this list lead to changes in the display of tips.
-        /// It recommended using only for analysis.</returns>
+        /// <param name="pluginInfo"></param>
+        /// <param name="localizationKeys">Tips.</param>
+        /// <returns>List of tips (new instance) from provided mod.</returns>
         public static List<string> AddNewTips(PluginInfo pluginInfo, params string[] localizationKeys)
         {
             if (!ObjectsStorage.TipKeys.ContainsKey(pluginInfo)) ObjectsStorage.TipKeys.Add(pluginInfo, new List<string>());
@@ -733,22 +751,20 @@ namespace BaldisBasicsPlusAdvanced.API
                 tips.Add(localizationKeys[i]);
             }
 
-            return tips;
+            return new List<string>(tips);
         }
 
         /// <summary>
-        /// Unloads a tips for the elevator, that were added by current mod.
-        /// Unload localization keys, not translated tips!
+        /// Unloads a tips from the elevator from provided mod.
         /// </summary>
-        /// <param name="pluginInfo">Current mod info.</param>
-        /// <param name="localizationKeys">String array that contains localization keys.</param>
-        /// <returns>Current list reference. Changes to this list lead to changes in the display of tips.
-        /// It recommended using only for analysis. Result may be null!</returns>
+        /// <param name="pluginInfo"></param>
+        /// <param name="localizationKeys">Tips.</param>
+        /// <returns>List of tips (new instance) from provided mod. Do not modify! Use for analyze.</returns>
         public static List<string> UnloadTips(PluginInfo pluginInfo, params string[] localizationKeys)
         {
             if (!ObjectsStorage.TipKeys.ContainsKey(pluginInfo))
             {
-                logger?.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
+                logger.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
                 return null;
             }
 
@@ -758,7 +774,7 @@ namespace BaldisBasicsPlusAdvanced.API
             {
                 if (!tips.Contains(localizationKeys[i]))
                 {
-                    logger?.LogWarning("Tip " + localizationKeys[i] + " doesn't exist in collection!");
+                    logger.LogWarning("Tip " + localizationKeys[i] + " doesn't exist in collection!");
                     continue;
                 }
                 tips.Remove(localizationKeys[i]);
@@ -768,7 +784,7 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Unloads absolutely all tips from the elevator!
+        /// Unloads all tips from the elevator!
         /// </summary>
         public static void UnloadAllTips()
         {
@@ -776,16 +792,15 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Unloads absolutely all tips from the elevator, that were added by current mod.
-        /// Returns true, if the action was successful.
+        /// Unloads all tips from the elevator from provided mod.
         /// </summary>
-        /// <param name="pluginInfo">Current mod info.</param>
+        /// <param name="pluginInfo"></param>
         /// <returns>Returns true, if the action was successful.</returns>
         public static bool UnloadAllTipsFrom(PluginInfo pluginInfo)
         {
             if (!ObjectsStorage.TipKeys.ContainsKey(pluginInfo))
             {
-                logger?.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
+                logger.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
                 return false;
             }
 
@@ -794,26 +809,24 @@ namespace BaldisBasicsPlusAdvanced.API
         }
 
         /// <summary>
-        /// Unloads all tips for the elevator from mods that are not listed in the array.
+        /// Unloads all tips from the elevator except provided mods.
         /// </summary>
-        /// <param name="pluginInfos">Current mods info.</param>
-        /// <returns>It contains mods that have registered their tips and their tips have been deleted. It is useful for analysis.</returns>
+        /// <param name="pluginInfos"></param>
+        /// <returns>Mods that have registered their words and their words have been deleted.</returns>
         public static List<PluginInfo> UnloadAllTipsExcept(params PluginInfo[] pluginInfos)
         {
-            List<PluginInfo> exceptedPlugins = new List<PluginInfo>();
+            List<PluginInfo> unloadedPlugins = new List<PluginInfo>();
 
-            foreach (PluginInfo info in ObjectsStorage.TipKeys.Keys)
+            foreach (PluginInfo info in ObjectsStorage.TipKeys.Keys.ToArray())
             {
                 if (!pluginInfos.Contains(info))
                 {
                     ObjectsStorage.TipKeys.Remove(info);
-                } else
-                {
-                    exceptedPlugins.Add(info);
+                    unloadedPlugins.Add(info);
                 }
             }
             
-            return exceptedPlugins;
+            return unloadedPlugins;
         }
 
         #endregion

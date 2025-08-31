@@ -8,17 +8,19 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static LayerMask windows;
 
-        public static LayerMask clickableCollidable; //entities???
-
         public static LayerMask ignoreRaycast;
 
         public static LayerMask ignoreRaycastB;
 
-        //public readonly static LayerMask blockRaycast = LayerMask.NameToLayer("Block Raycast");
+        public static LayerMask npcs;
+
+        public static LayerMask player; 
 
         public static LayerMask standardEntities;
 
         public static LayerMask clickableEntities;
+
+        public static LayerMask clickableCollidableEntities;
 
         public static LayerMask billboard;
 
@@ -30,39 +32,55 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static LayerMask entityCollisionMask;
 
-        //public readonly static LayerMask principalLookerMask = 2326529;
-
-        //18 - ClickableCollidable
         public static int ignorableCollidableObjects;
 
         public static void Initialize()
         {
-            windows = LayerMask.NameToLayer("Windows");
-            clickableCollidable = LayerMask.NameToLayer("ClickableCollidable");
-            standardEntities = LayerMask.NameToLayer("StandardEntities");
-            clickableEntities = LayerMask.NameToLayer("ClickableEntities");
-            ignoreRaycast = LayerMask.NameToLayer("Ignore Raycast");
-            ignoreRaycastB = LayerMask.NameToLayer("Ignore Raycast B");
-            billboard = LayerMask.NameToLayer("Billboard");
-            ui = LayerMask.NameToLayer("UI");
+#if DEBUG
+            AdvancedCore.Logging.LogInfo("[LayersHelper] All game layers:");
+            for (int i = 0; i < 32; i++)
+            {
+                
+                AdvancedCore.Logging.LogInfo($"{i} | {LayerMask.LayerToName(i)}");
+            }
+#endif
+
+            windows = LayerFromName("Windows");
+            standardEntities = LayerFromName("StandardEntities");
+            clickableEntities = LayerFromName("ClickableEntities");
+            clickableCollidableEntities = LayerFromName("ClickableCollidableEntities");
+            ignoreRaycast = LayerFromName("Ignore Raycast");
+            ignoreRaycastB = LayerFromName("Ignore Raycast B");
+            billboard = LayerFromName("Billboard");
+            ui = LayerFromName("UI");
+            npcs = LayerFromName("NPCs");
+            player = LayerFromName("Player");
             gumCollisionMask = 2113537;
             entityCollisionMask = 2113541;
             ignorableCollidableObjects =
             //btw, doors uses entity buffers
-            ~(LayerMask.GetMask("NPCs", "Player", "Ignore Raycast", "StandardEntities", "ClickableEntities" //"Ignore Raycast B" needed?
+            ~(LayerMask.GetMask("NPCs", "Player", "Ignore Raycast", "StandardEntities", "ClickableEntities"
                 , "EntityBuffer", "Block Raycast") | 1 << 18);
             takenBalloonLayer = 29;
+        }
+
+        public static LayerMask LayerFromName(string name)
+        {
+            LayerMask layer = LayerMask.NameToLayer(name);
+            if (layer < 0)
+            {
+                throw new ArgumentException($"Layer {name} doesn't exist!");
+            }
+            return layer;
         }
 
 #warning I should find another way in the future
         public static void SetIgnoreCollisionForPlayer(bool state)
         {
-            //Debug.Log("Ignores standard: " + Physics.GetIgnoreLayerCollision(LayerMask.NameToLayer("Player"), standardEntities));
-            //Debug.Log("Ignores clickable: " + Physics.GetIgnoreLayerCollision(LayerMask.NameToLayer("Player"), clickableEntities));
-            int layer = LayerMask.NameToLayer("Player");
-            Physics.IgnoreLayerCollision(layer, standardEntities, state);
-            Physics.IgnoreLayerCollision(layer, clickableEntities, state);
-            Physics.IgnoreLayerCollision(layer, LayerMask.NameToLayer("NPCs"), state);
+            Physics.IgnoreLayerCollision(player, standardEntities, state);
+            Physics.IgnoreLayerCollision(player, clickableEntities, state);
+            Physics.IgnoreLayerCollision(player, clickableCollidableEntities, state);
+            Physics.IgnoreLayerCollision(player, npcs, state);
         }
 
     }

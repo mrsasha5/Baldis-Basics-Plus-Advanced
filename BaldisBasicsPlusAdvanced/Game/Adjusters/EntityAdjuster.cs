@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using BaldisBasicsPlusAdvanced.Helpers;
+using HarmonyLib;
 using MTM101BaldAPI;
 using MTM101BaldAPI.ObjectCreation;
 using System;
@@ -29,7 +30,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Adjusters
 
         private float triggerRadius;
 
-        private string layer = "StandardEntities";
+        private LayerMask layer;
 
         private bool addRb;
 
@@ -48,7 +49,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Adjusters
         {
             obj.ConvertToPrefab(setActive: false);
             obj.name = entityName;
-            obj.layer = LayerMask.NameToLayer(layer);
+            obj.layer = layer;
             Entity entity = obj.AddComponent<Entity>();
             CapsuleCollider capsuleCollider = obj.AddComponent<CapsuleCollider>();
             capsuleCollider.radius = baseRadius;
@@ -104,7 +105,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Adjusters
                 transform.gameObject.layer = ent.gameObject.layer;
                 GameObject gameObject = new GameObject();
                 gameObject.transform.parent = transform.transform;
-                gameObject.layer = LayerMask.NameToLayer("Billboard");
+                gameObject.layer = LayersHelper.billboard;
                 SpriteRenderer spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
                 spriteRenderer.material = new Material(ObjectCreators.SpriteMaterial);
                 spriteRenderer.name = "Sprite";
@@ -134,7 +135,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Adjusters
 
         public EntityAdjuster SetLayer(string layer)
         {
-            this.layer = layer;
+            this.layer = LayersHelper.LayerFromName(layer);
             return this;
         }
 

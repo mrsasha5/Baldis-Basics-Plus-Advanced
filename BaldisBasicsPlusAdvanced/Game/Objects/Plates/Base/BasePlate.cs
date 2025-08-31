@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 {
@@ -53,7 +52,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
         [SerializeField]
         protected float colorValue;
 
-        //[SerializeField]
         [SerializeReference]
         protected PlateData plateData;
 
@@ -305,9 +303,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
             if (VisualActiveStateOverridden || visualActiveState == setState) return;
 
-            //if (colorAnimator != null) StopCoroutine(colorAnimator);
             colorAnimator = ColorAnimator((bool)setState);
-            //StartCoroutine(colorAnimator);
 
             visualActiveState = (bool)setState;
         }
@@ -464,15 +460,5 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
                 meshRenderers[i].material.SetColor(color);
             }
         }
-
-        /*bool IClickable<int>.ClickableHidden()
-        {
-            return true;
-        }
-
-        protected override void Pressed(int playerNumber)
-        {
-
-        }*/
     }
 }

@@ -1,6 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
-using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using BaldisBasicsPlusAdvanced.SaveSystem.Data;
 using Newtonsoft.Json;
 using System;
@@ -44,14 +42,10 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem
                         (RijndaelEncryption.Decrypt(File.ReadAllText(SaveSystemCore.Path + extraSettingsFile), keyAccess));
                     extraSettings.CheckValues();
                     if (extraSettings.saveVersion != extraSettingsVersion) extraSettings.showNotif = true;
-                } catch (Exception e)
+                }
+                catch
                 {
-                    AdvancedCore.Logging.LogError(e.ToString());
-                    AdvancedCore.Logging.LogWarning("Due of this exception, creating new save file for the Extra Settings options!");
-                    Singleton<NotificationManager>.Instance.Queue("Something went wrong! Options menu data can't load! Creating new one...",
-                        sound: AssetsStorage.sounds["buzz_elv"]);
-
-                    File.Delete(SaveSystemCore.Path + extraSettingsFile);
+                    AdvancedCore.Logging.LogError("OptionsDataManager cannot load options data! Creating new one...");
 
                     extraSettings = new ExtraSettingsData();
                     extraSettings.CheckValues();

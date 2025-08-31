@@ -85,16 +85,11 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             text.transform.localPosition = Vector3.zero;
 
             StandardMenuButton standardButton = parent.gameObject.AddComponent<StandardMenuButton>();
-            standardButton.OnPress = new UnityEvent();
+            standardButton.InitializeAllEvents();
+            standardButton.text = text;
             text.tag = "Button";
 
-            if (underlineOnHighlight)
-            {
-                standardButton.OnHighlight = new UnityEvent();
-                standardButton.underlineOnHigh = true;
-                standardButton.text = text;
-            }
-            
+            if (underlineOnHighlight) standardButton.underlineOnHigh = true;
 
             return standardButton;
         }
@@ -114,15 +109,11 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             text.transform.localPosition = Vector3.zero;
 
             StandardMenuButton standardButton = parent.gameObject.AddComponent<StandardMenuButton>();
+            standardButton.text = text;
             standardButton.InitializeAllEvents();
             text.tag = "Button";
 
-            if (underlineOnHighlight)
-            {
-                standardButton.underlineOnHigh = true;
-                standardButton.text = text;
-            }
-
+            if (underlineOnHighlight) standardButton.underlineOnHigh = true;
 
             return standardButton;
         }
@@ -147,7 +138,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         {
             SpriteRenderer spriteRenderer = new GameObject("Sprite").AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = sprite;
-            spriteRenderer.gameObject.layer = LayersHelper.billboard; //always needed I guess?
+            spriteRenderer.gameObject.layer = LayersHelper.billboard;
 
             if (isBillboard)
             {
@@ -329,44 +320,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             }
             
             MTM101BaldiDevAPI.CauseCrash(AdvancedCore.Instance.Info, e);
-        }
-
-        public static TextMeshProUGUI CauseCrash(string text, AudioClip sound = null)
-        {
-            Canvas canvas = AssetsHelper.LoadAsset<Canvas>("EndingError");
-            if (canvas == null)
-            {
-                AdvancedCore.Logging.LogError("Attempted to cause a crash before the EndingError was found!");
-                return null;
-            }
-
-            GameObject obj = UnityEngine.Object.Instantiate(canvas).gameObject;
-            obj.GetComponent<Canvas>().sortingOrder = 99;
-            TextMeshProUGUI componentInChildren = obj.GetComponentInChildren<TextMeshProUGUI>();
-            componentInChildren.text = text;
-            componentInChildren.color = Color.white;
-            //componentInChildren.transform.localPosition += Vector3.up * 32f;
-            if (Singleton<BaseGameManager>.Instance != null)
-            {
-                Singleton<BaseGameManager>.Instance.Ec.PauseEnvironment(true);
-            }
-
-            if (CursorController.Instance != null)
-            {
-                CursorController.Instance.enabled = false;
-            }
-
-            Time.timeScale = 0f;
-            obj.gameObject.SetActive(value: true);
-
-            if (sound != null)
-            {
-                GameObject gm = new GameObject("99");
-                AudioSource audDevice = gm.AddComponent<AudioSource>();
-                audDevice.PlayOneShot(sound);
-            }
-
-            return componentInChildren;
         }
     }
 }

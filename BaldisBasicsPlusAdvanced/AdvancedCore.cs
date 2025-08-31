@@ -30,9 +30,9 @@ namespace BaldisBasicsPlusAdvanced
     {
         public const string modId = "mrsasha5.baldi.basics.plus.advanced";
 
-        public const string modName = "Baldi's Basics Plus Advanced Edition";
+        public const string modName = "BB+ Advanced Edition";
 
-        public const string version = "0.2.7.3";
+        public const string version = "0.2.8";
 
         internal static string tempPath;
 
@@ -61,8 +61,8 @@ namespace BaldisBasicsPlusAdvanced
             PrepareSettingsMenu();
             ModdedSaveGame.AddSaveHandler(LevelDataManager.Instance);
             GeneratorManagement.Register(this, GenerationModType.Addend, GenerationPatchingManager.RegisterMainLevelData);
-            LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), false);
-            LoadingEvents.RegisterOnAssetsLoaded(Info, ModPostLoader(), true);
+            LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), LoadingEventOrder.Pre);
+            LoadingEvents.RegisterOnAssetsLoaded(Info, ModPostLoader(), LoadingEventOrder.Post);
             AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English", Language.English);
             //It would be great if API was providing ability to set SearchOption.
             AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English/Compats", Language.English);

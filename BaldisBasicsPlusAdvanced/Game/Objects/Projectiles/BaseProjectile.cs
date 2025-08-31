@@ -68,7 +68,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             this._name = name;
         }
 
-
         protected void SetEntityTrigger(float radius)
         {
             this._triggerRadius = radius;
@@ -144,17 +143,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
 
         }
 
-        public virtual void EntityTriggerEnter(Collider other)
+        public virtual void EntityTriggerEnter(Collider other, bool validCollision)
         {
             
         }
 
-        public virtual void EntityTriggerExit(Collider other)
+        public virtual void EntityTriggerExit(Collider other, bool validCollision)
         {
             
         }
 
-        public virtual void EntityTriggerStay(Collider other)
+        public virtual void EntityTriggerStay(Collider other, bool validCollision)
         {
             
         }

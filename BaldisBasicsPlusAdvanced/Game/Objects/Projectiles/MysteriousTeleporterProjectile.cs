@@ -17,9 +17,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             SetEntityTrigger(1.5f);
         }
 
-        public override void EntityTriggerEnter(Collider other)
+        public override void EntityTriggerEnter(Collider other, bool validCollision)
         {
-            if (flying && other.isTrigger && other.CompareTag("NPC") && other.TryGetComponent(out NPC npc)
+            if (validCollision && flying && other.isTrigger && other.CompareTag("NPC") && other.TryGetComponent(out NPC npc)
                 && PlayerIsLauncher && ReflEvent_OnMysteriousTeleporterPreHit(npc, (PlayerManager)launcher))
             {
                 SetCorruptionEffect(npc);
@@ -35,14 +35,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             Destroy(gameObject);
             AudioManager audMan = ObjectsCreator.CreatePropagatedAudMan(transform.position, destroyWhenAudioEnds: true);
             audMan.PlaySingle(AssetsStorage.sounds["teleport"]);
-        }
-
-        public override void EntityTriggerStay(Collider other)
-        {
-        }
-
-        public override void EntityTriggerExit(Collider other)
-        {
         }
 
         private void OnCorruptionEffectPreEnd(NPC npc)

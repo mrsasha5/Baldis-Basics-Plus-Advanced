@@ -1,6 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
-using BaldisBasicsPlusAdvanced.Game.Objects;
+using BaldisBasicsPlusAdvanced.Game.Activities;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Rooms.Functions;
 using BaldisBasicsPlusAdvanced.Helpers;

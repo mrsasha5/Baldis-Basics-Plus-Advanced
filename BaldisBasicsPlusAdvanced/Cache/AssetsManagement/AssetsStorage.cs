@@ -65,10 +65,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         private static bool overridden = false;
 
-        public static bool Debugging => false;
-
-        public static bool Cached => cached;
-
         public static bool Overridden => overridden;
 
         public static AssetDictionary<SoundObject> sounds = new AssetDictionary<SoundObject>();
@@ -134,13 +130,10 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         public static void Initialize()
         {
-            Stopwatch sw = null;
-
-            if (Debugging)
-            {
-                sw = new Stopwatch();
-                sw.Start();
-            }
+#if DEBUG
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+#endif 
 
             graphsStandardShader = Shader.Find("Shader Graphs/Standard");
             genericBaldi = AssetsHelper.LoadAsset<Baldi>("Baldi_Main1");
@@ -269,13 +262,13 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadMaterial("class_standard_closed", "ClassStandard_Closed");
             LoadMaterial("black_behind", "BlackBehind");
 
+            LoadGameObject("math_num_0", "MathNum_0");
             //LoadGameObject("line_renderer_hook", "LineRenderer");
             //LoadGameObject("cracks_hook", "Cracks");
 
             //mod assets
 
             if (IntegrationManager.IsActive<LevelEditorIntegration>()) LevelEditorIntegration.LoadEditorAssets();
-            else AdvancedCore.Logging.LogWarning("EDITOR ASSETS ARE NOT LOADED!");
                 
             LoadModTexture("adv_criss_the_crystal", "Npcs/CrissTheCrystal/adv_criss_the_crystal.png");
             LoadModTexture("adv_criss_the_crystal_crazy", "Npcs/CrissTheCrystal/adv_criss_the_crystal_crazy.png");
@@ -284,7 +277,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             //ROOMS AND POSTERS
             LoadModTexture("adv_poster_symbol_machine", "Posters/adv_poster_symbol_machine.png");
             LoadModTexture("adv_poster_extra_points", "Posters/adv_poster_extra_points.png");
-            // LoadModTexture("adv_poster_extra_ad", "Posters/adv_poster_extra_ad.png");
             LoadModTexture("adv_poster_recipe_example", "Posters/adv_poster_recipe_example.png");
 
             LoadModTexture("adv_english_ceiling", "Rooms/EnglishClass/adv_english_ceiling.png");
@@ -319,11 +311,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadModTexture("adv_rusty_rotohall_sign_left", "Objects/RustyRotoHall/adv_rusty_rotohall_sign_left.png");
             LoadModTexture("adv_rusty_rotohall_sign_right", "Objects/RustyRotoHall/adv_rusty_rotohall_sign_right.png");
             LoadModTexture("adv_rusty_rotohall_sign_straight", "Objects/RustyRotoHall/adv_rusty_rotohall_sign_straight.png");
-
-            LoadModTexture("adv_advanced_math_machine_face", "Objects/AdvancedMathMachine/adv_advanced_math_machine_front.png");
-            LoadModTexture("adv_advanced_math_machine_face_right", "Objects/AdvancedMathMachine/adv_advanced_math_machine_front_right.png");
-            LoadModTexture("adv_advanced_math_machine_face_wrong", "Objects/AdvancedMathMachine/adv_advanced_math_machine_front_wrong.png");
-            LoadModTexture("adv_advanced_math_machine_side", "Objects/AdvancedMathMachine/adv_advanced_math_machine_side.png");
 
             LoadModTexture("adv_symbol_machine_face", "Objects/SymbolMachine/adv_symbol_machine_front.png");
             LoadModTexture("adv_symbol_machine_face_right", "Objects/SymbolMachine/adv_symbol_machine_front_right.png");
@@ -633,14 +620,13 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
             cached = true;
 
-            if (Debugging)
-            {
-                sw.Stop();
-                AdvancedCore.Logging.LogInfo("Assets loaded in: " + sw.ElapsedMilliseconds + " ms");
-            }
+#if DEBUG
+            sw.Stop();
+            AdvancedCore.Logging.LogInfo("Assets loaded in: " + sw.ElapsedMilliseconds + " ms");
+#endif
         }
 
-        #endregion
+#endregion
 
         #region Assets' overriding
 
@@ -817,7 +803,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             }
 
         }
-        #endregion 
+        #endregion
 
         public static void Clear()
         {
@@ -839,7 +825,9 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         public static Material CreateMaterialByShader(string key, string shaderNameBase, Texture2D tex)
         {
-            if (Debugging) AdvancedCore.Logging.LogInfo("Creating material by texture: " + tex.name);
+#if DEBUG
+            AdvancedCore.Logging.LogInfo("\nAssetsStorage\nCreating material by texture: " + tex.name);
+#endif
             materials.Add(key, new Material(Shader.Find(shaderNameBase)));
             materials[key].mainTexture = tex;
             return materials[key];
@@ -847,7 +835,9 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         public static Material CreateMaterial(string key, string matNameBase, Texture2D tex)
         {
-            if (Debugging) AdvancedCore.Logging.LogInfo("Creating material by texture: " + tex.name);
+#if DEBUG
+            AdvancedCore.Logging.LogInfo("\nAssetsStorage\nCreating material by texture: " + tex.name);
+#endif
             materials.Add(key, new Material(materials[matNameBase]));
             materials[key].mainTexture = tex;
             return materials[key];
@@ -855,9 +845,11 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         public static SoundObject LoadModSound(string key, string path, SoundType soundType, string subKey, float subDuration = -1f)
         {
-            if (Debugging) AdvancedCore.Logging.LogInfo("Loading: " + path);
+#if DEBUG
+            AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading: " + path);
+#endif
             if (string.IsNullOrEmpty(subKey)) subDuration = 0f;
-            SoundObject sound = ObjectCreators.CreateSoundObject(AssetsHelper.GetAudioFromFile("Audio/" + path), subKey, soundType, Color.white, subDuration);
+            SoundObject sound = ObjectCreators.CreateSoundObject(AssetsHelper.AudioFromFile("Audio/" + path), subKey, soundType, Color.white, subDuration);
             sounds.Add(key, sound);
             return sound;
         }
@@ -872,8 +864,9 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         public static void LoadModSprite(string key, string path, float pixelsPerUnit = 1f, Vector2? center = null)
         {
-            if (Debugging) AdvancedCore.Logging.LogInfo("Loading: " + path);
-
+#if DEBUG
+            AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading: " + path);
+#endif
             Sprite sprite = null;
 
             if (center != null)
@@ -887,49 +880,63 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         public static void LoadModTexture(string key, string path, bool doNotUnload = false)
         {
-            if (Debugging) AdvancedCore.Logging.LogInfo("Loading: " + path);
+#if DEBUG
+            AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading: " + path);
+#endif
             Texture2D texture = AssetsHelper.TextureFromFile("Textures/" + path);
             textures.Add(key, texture);
         }
 
         public static void LoadGameObject(string key, string name, bool doNotUnload = false)
         {
-            if (Debugging) AdvancedCore.Logging.LogInfo("Loading from assets: " + name);
+#if DEBUG
+            AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
+#endif
             GameObject _object = AssetsHelper.LoadAsset<GameObject>(name);
             gameObjects.Add(key, _object);
         }
 
         public static void LoadSprite(string key, string name, bool doNotUnload = false)
         {
-            if (Debugging) AdvancedCore.Logging.LogInfo("Loading from assets: " + name);
+#if DEBUG
+            AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
+#endif
             Sprite sprite = AssetsHelper.LoadAsset<Sprite>(name);
             sprites.Add(key, sprite, doNotUnload);
         }
 
         public static void LoadTexture(string key, string name, bool doNotUnload = false)
         {
-            if (Debugging) AdvancedCore.Logging.LogInfo("Loading from assets: " + name);
+#if DEBUG
+            AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
+#endif
             Texture2D sprite = AssetsHelper.LoadAsset<Texture2D>(name);
             textures.Add(key, sprite, doNotUnload);
         }
 
         public static void LoadMaterial(string key, string name, bool doNotUnload = false)
         {
-            if (Debugging) AdvancedCore.Logging.LogInfo("Loading from assets: " + name);
+#if DEBUG
+            AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
+#endif
             Material material = AssetsHelper.LoadAsset<Material>(name);
             materials.Add(key, material, doNotUnload);
         }
 
         public static void LoadMesh(string key, string name, bool doNotUnload = false)
         {
-            if (Debugging) AdvancedCore.Logging.LogInfo("Loading from assets: " + name);
+#if DEBUG
+            AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
+#endif
             Mesh material = AssetsHelper.LoadAsset<Mesh>(name);
             meshes.Add(key, material, doNotUnload);
         }
 
         public static void LoadSound(string key, string name, bool doNotUnload = false)
         {
-            if (Debugging) AdvancedCore.Logging.LogInfo("Loading from assets: " + name);
+#if DEBUG
+            AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
+#endif
             SoundObject sound = AssetsHelper.LoadAsset<SoundObject>(name);
             sounds.Add(key, sound, doNotUnload);
         }

@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using BaldisBasicsPlusAdvanced.Game.Objects;
+using BaldisBasicsPlusAdvanced.Game.Activities;
 
 namespace BaldisBasicsPlusAdvanced.Patches.Selfpatches.Objects
 {

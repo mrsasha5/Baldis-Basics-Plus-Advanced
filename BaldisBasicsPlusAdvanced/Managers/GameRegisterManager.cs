@@ -42,19 +42,15 @@ using BaldisBasicsPlusAdvanced.Patches.GameManager;
 using BaldisBasicsPlusAdvanced.Patches.Player;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Portals;
-using MTM101BaldAPI.PlusExtensions;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
-using BaldisBasicsPlusAdvanced.AutoUpdate;
 using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
-using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
 using Newtonsoft.Json;
-using BaldisBasicsPlusAdvanced.Patches.UI;
-using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
+using BaldisBasicsPlusAdvanced.Game.Activities;
 #endregion
 
 namespace BaldisBasicsPlusAdvanced.Managers
@@ -676,7 +672,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateMultipleRequiredVendingMachine("GoodMachine",
                 ItemMetaStorage.Instance.FindByEnum(Items.Quarter).itemObjects[0], 2,
                 AssetsStorage.materials["adv_good_machine"], AssetsStorage.materials["adv_good_machine_out"], null,
-                weight: 50, 
+                weight: 75, 
                 new WeightedItemObject[] {
                 new WeightedItemObject()
                 {
@@ -1119,6 +1115,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateObjectPrefab<Reaper>("Farm Reaper", "farm_reaper");
             PrefabsCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_flag");
             PrefabsCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_points_flag", variant: 2);
+
+            //PrefabsCreator.CreateObjectPrefab<>("99", "99");
 
             GameObject cornSign = new GameObject("Corn Sign");
             ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_corn_sign1"])

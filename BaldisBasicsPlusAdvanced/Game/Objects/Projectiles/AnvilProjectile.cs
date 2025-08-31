@@ -16,10 +16,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             SetEntityTrigger(3f);
         }
 
-        public override void EntityTriggerEnter(Collider other)
+        public override void EntityTriggerEnter(Collider other, bool validCollision)
         {
-            base.EntityTriggerEnter(other);
-            if (flying)
+            base.EntityTriggerEnter(other, validCollision);
+            if (validCollision && flying)
             {
                 if (other.TryGetComponent(out Entity entity))
                 {

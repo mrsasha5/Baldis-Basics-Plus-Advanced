@@ -25,7 +25,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         public static Dictionary<string, Color> RoomColors => roomColors;
 
-        //extra datas
+        //Extra datas
 
         private static List<CellTextureSerializableData> cellTextureDatas = new List<CellTextureSerializableData>();
 
