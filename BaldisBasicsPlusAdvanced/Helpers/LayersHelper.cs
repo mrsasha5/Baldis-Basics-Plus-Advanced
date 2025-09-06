@@ -1,10 +1,13 @@
-﻿using System;
+﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
     public class LayersHelper
     {
+
+        private static bool warningNotifSpawned;
 
         public static LayerMask windows;
 
@@ -40,7 +43,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             AdvancedCore.Logging.LogInfo("[LayersHelper] All game layers:");
             for (int i = 0; i < 32; i++)
             {
-                
                 AdvancedCore.Logging.LogInfo($"{i} | {LayerMask.LayerToName(i)}");
             }
 #endif
@@ -58,7 +60,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             gumCollisionMask = 2113537;
             entityCollisionMask = 2113541;
             ignorableCollidableObjects =
-            //btw, doors uses entity buffers
+            //Btw, doors use entity buffers
             ~(LayerMask.GetMask("NPCs", "Player", "Ignore Raycast", "StandardEntities", "ClickableEntities"
                 , "EntityBuffer", "Block Raycast") | 1 << 18);
             takenBalloonLayer = 29;
@@ -67,14 +69,16 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         public static LayerMask LayerFromName(string name)
         {
             LayerMask layer = LayerMask.NameToLayer(name);
-            if (layer < 0)
+            if (layer < 0 && !warningNotifSpawned)
             {
-                throw new ArgumentException($"Layer {name} doesn't exist!");
+                warningNotifSpawned = true;
+                NotificationManager.Instance.Queue(
+                    "Adv_Notif_LayersError", AssetsStorage.sounds["elv_buzz"], isForced: true);
             }
             return layer;
         }
 
-#warning I should find another way in the future
+#warning I should find another way in the future (and I don't like idea of invoking Entity.IgnoreEntity each time)
         public static void SetIgnoreCollisionForPlayer(bool state)
         {
             Physics.IgnoreLayerCollision(player, standardEntities, state);

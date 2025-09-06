@@ -13,7 +13,7 @@ namespace BaldisBasicsPlusAdvanced.Compats
     {
         public static bool LevelLoaderInstalled => AssetsHelper.ModInstalled(levelLoaderId);
 
-        public const string levelLoaderId = "mtm101.rulerp.baldiplus.levelloader";
+        public const string levelLoaderId = "mtm101.rulerp.baldiplus.levelstudioloader";
 
         public const string recommendedCharactersId = "io.github.uncertainluei.baldiplus.recommendedchars";
 

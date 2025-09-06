@@ -1,6 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats;
-using BaldisBasicsPlusAdvanced.Compats.LevelEditor;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
 using System.Collections;
@@ -259,7 +259,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         internal void SetEditorSprite(string name)
         {
-            if (!IntegrationManager.IsActive<LevelEditorIntegration>()) return;
+            if (!IntegrationManager.IsActive<LevelStudioIntegration>()) return;
             editorToolSprite = AssetsStorage.sprites[name];
         }
 

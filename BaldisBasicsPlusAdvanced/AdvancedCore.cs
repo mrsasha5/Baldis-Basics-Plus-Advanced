@@ -64,11 +64,10 @@ namespace BaldisBasicsPlusAdvanced
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), LoadingEventOrder.Pre);
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModPostLoader(), LoadingEventOrder.Post);
             AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English", Language.English);
-            //It would be great if API was providing ability to set SearchOption.
             AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English/Compats", Language.English);
 
 #if BETA
-            MTM101BaldiDevAPI.AddWarningScreen(
+            /*MTM101BaldiDevAPI.AddWarningScreen(
                 "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
                 "Remember about main conditions for the beta testers. " +
                 "You must observe them until they are declared obsolete by me.\n" +
@@ -76,10 +75,10 @@ namespace BaldisBasicsPlusAdvanced
                 " * Do not leak build & assets\n" +
                 "<color=#00FF00> * You are allowed to show a new content</color></color>",
                 //" * Do not disclose information about new/planned content in any way to non-beta testers</color>", 
-                false);
+                false);*/
             MTM101BaldiDevAPI.AddWarningScreen(
                 "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
-                "If this build was leaked without permission and you have installed it... " +
+                "If you are not a beta tester..." +
                 "Please note that as a NON-BETA TESTER YOU WILL NOT RECEIVE FEEDBACK IN CASE OF A BROKEN GAME. " +
                 "You can close game until it will be launched fully.",
                 false);
@@ -171,7 +170,7 @@ namespace BaldisBasicsPlusAdvanced
 
             NotificationManager.Notification notif = CheckAssetsMarker();
 
-            int count = 24;
+            int count = 25;
 
             if (notif != null) count++;
 
@@ -209,8 +208,6 @@ namespace BaldisBasicsPlusAdvanced
             GameRegisterManager.InitializeNPCs();
             yield return "Initializing room basics...";
             GameRegisterManager.InitializeRoomBasics();
-            yield return "Loading extensions for the Level Loader...";
-            LevelLoaderIntegration.Initialize();
             yield return "Initializing events...";
             GameRegisterManager.InitializeRandomEvents();
             yield return "Initializing builders...";
@@ -221,6 +218,10 @@ namespace BaldisBasicsPlusAdvanced
             GameRegisterManager.InitializeApiThings();
             yield return "Adding some tags...";
             GameRegisterManager.SetTags();
+            yield return "Connecting to Level Loading System...";
+            LevelLoaderIntegration.Initialize();
+            yield return "Initiailizing room assets in prefabs...";
+            GameRegisterManager.InitializeRoomAssetsInPrefabs();
             yield return "Initializing room assets...";
             GameRegisterManager.InitializeRoomAssets();
             yield return "Overriding game prefabs...";

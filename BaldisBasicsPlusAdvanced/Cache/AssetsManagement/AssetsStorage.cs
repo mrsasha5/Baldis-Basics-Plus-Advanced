@@ -1,6 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Compats;
-using BaldisBasicsPlusAdvanced.Compats.LevelEditor;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.SerializableData;
@@ -223,7 +223,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadSprite("grappling_hook", "GrapplingHookSprite");
             LoadSprite("chalkboard_standard", "ChalkBoardStandard");
             LoadSprite("about_notif", "AboutNotif");
-            LoadSprite("balloon_orange", "Orange");
+            LoadSprite("balloon_orange", "BalloonBuster_Balloons_Sheet_4"); //Orange
             LoadSprite("plant", "Plant");
             LoadSprite("food_plate_cover", "Cover_Sprite");
             LoadSprite("food_plate", "Plate_Sprite");
@@ -268,7 +268,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
             //mod assets
 
-            if (IntegrationManager.IsActive<LevelEditorIntegration>()) LevelEditorIntegration.LoadEditorAssets();
+            if (IntegrationManager.IsActive<LevelStudioIntegration>()) LevelStudioIntegration.LoadEditorAssets();
                 
             LoadModTexture("adv_criss_the_crystal", "Npcs/CrissTheCrystal/adv_criss_the_crystal.png");
             LoadModTexture("adv_criss_the_crystal_crazy", "Npcs/CrissTheCrystal/adv_criss_the_crystal_crazy.png");

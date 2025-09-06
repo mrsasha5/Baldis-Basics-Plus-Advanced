@@ -3,14 +3,11 @@ using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.SaveSystem;
 using BaldisBasicsPlusAdvanced.SaveSystem.Managers;
 using MTM101BaldAPI.Components;
 using MTM101BaldAPI.PlusExtensions;
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 {
     public class InflatableBalloonController : BaseController
@@ -165,9 +162,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 //PlayerInteractionController.Instance.SetPlayerClick(false);
                 renderer.gameObject.layer = 0;
             }
-            
-            entityOverrider.SetHeight(8f);
+
             entityOverrider.SetGrounded(false);
+            entityOverrider.SetHeight(8f);
 
             active = true;
             updateAllowed = true;

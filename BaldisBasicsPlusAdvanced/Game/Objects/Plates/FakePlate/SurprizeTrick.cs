@@ -100,7 +100,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
             //entityOverrider.Set
             entityOverrider.SetFrozen(value: true);
             entityOverrider.SetInteractionState(value: false);
-            entityOverrider.SetGrounded(true);
+            entityOverrider.SetGrounded(false);
 
             float sinkPercent = 1f;
             entityOverrider.SetHeight(subject.InternalHeight * sinkPercent);

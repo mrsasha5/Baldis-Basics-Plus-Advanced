@@ -28,7 +28,14 @@
 !/Dependencies/MTM101BaldAPI.xml
 !/Dependencies/Newtonsoft.Json.dll
 
-# Level Editor & Level Loading System
+# Level Studio Dependencies
+!/Dependencies/PlusStudioLevelLoader.dll
+!/Dependencies/PlusStudioLevelFormat.dll
+!/Dependencies/PlusStudioLevelLoader.xml
+!/Dependencies/PlusLevelStudio.dll
+!/Dependencies/PlusLevelStudio.xml
+
+# LEGACY Level Editor & Level Loading System
 !/Dependencies/BaldiLevelEditor.dll
 !/Dependencies/PlusLevelFormat.dll
 !/Dependencies/PlusLevelLoader.dll

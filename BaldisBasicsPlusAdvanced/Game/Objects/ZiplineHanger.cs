@@ -340,8 +340,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
                 overrider.SetInteractionState(false);
                 overrider.SetFrozen(true);
-                overrider.SetHeight(height);
                 overrider.SetGrounded(false);
+                overrider.SetHeight(height);
                 return true;
             }
 

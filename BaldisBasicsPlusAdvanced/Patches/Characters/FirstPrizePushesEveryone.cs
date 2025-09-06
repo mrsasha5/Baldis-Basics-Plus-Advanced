@@ -18,7 +18,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.Characters
             if (other.CompareTag("NPC") &&
                 OptionsDataManager.ExtraSettings.GetValue<bool>("first_prize_extensions"))
             {
-                if (other.GetComponent<NPC>().GetMeta().tags.Contains(TagsStorage.firstPrizeImmunity))
+                NPCMetadata meta = other.GetComponent<NPC>().GetMeta();
+
+                if (meta == null || meta.tags.Contains(TagsStorage.firstPrizeImmunity))
                     return;
 
                 ___moveModsMan.AddMoveMod(other.transform);

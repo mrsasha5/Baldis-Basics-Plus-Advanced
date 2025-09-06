@@ -9,6 +9,8 @@ using BaldisBasicsPlusAdvanced.Patches;
 using HarmonyLib;
 using MTM101BaldAPI;
 using MTM101BaldAPI.UI;
+using PlusStudioLevelFormat;
+using PlusStudioLevelLoader;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +23,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 {
     public class VotingEvent : RandomEvent, IPrefab
     {
+
         public enum VotingState
         {
             NotStarted,
@@ -165,27 +168,38 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             minMaxScreens = new IntVector2(2, 5);
             screenFont = BaldiFonts.ComicSans12;
 
-            balloons = new Balloon[]
-            {
-                AssetsHelper.LoadAsset<Balloon>("Balloon_Orange"),
-                AssetsHelper.LoadAsset<Balloon>("Balloon_Purple"),
-                AssetsHelper.LoadAsset<Balloon>("Balloon_Green"),
-                AssetsHelper.LoadAsset<Balloon>("Balloon_Blue"),
-            };
+            balloons = new Balloon[8];
 
+            for (int i = 0; i < 8; i++)
+            {
+                balloons[i] = AssetsHelper.LoadAsset<Balloon>($"Balloon_{i}");
+            }
+        }
+
+        public static void LoadRoomAssetsForAllPrefabs()
+        {
+            foreach (VotingEvent votingEvent in AssetsHelper.LoadAssets<VotingEvent>())
+            {
+                votingEvent.LoadRoomAssets();
+            }
+        }
+
+        private void LoadRoomAssets()
+        {
             List<WeightedRoomAsset> assets = new List<WeightedRoomAsset>();
 
             foreach (string path in Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/Objects/Voting/",
-                "*.cbld", SearchOption.AllDirectories))
+                "*.rbpl", SearchOption.AllDirectories))
             {
+                BinaryReader reader = new BinaryReader(File.OpenRead(path));
+                BaldiRoomAsset formatAsset = BaldiRoomAsset.Read(reader);
+                reader.Close();
+
+                RoomAsset asset = LevelImporter.CreateVanillaRoomAsset(formatAsset);
 
                 WeightedRoomAsset weightedRoom = new WeightedRoomAsset()
                 {
-                    selection = RoomHelper.CreateAssetFromPath(
-                        path,
-                        isOffLimits: true,
-                        autoAssignFunctionContainer: true,
-                        keepTextures: true),
+                    selection = asset,
                     weight = 100
                 };
 
@@ -207,7 +221,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             ballot = room.GetComponentInChildren<VotingBallot>();
             if (ballot == null)
             {
-                AdvancedCore.Logging.LogFatal("The Voting Ballot is not found in the built room!");
                 throw new Exception("The Voting Ballot is not found in the built room!");
             }
             //lockedDoorsFunc = room.functions.GetComponent<LockedDoorsFunction>();

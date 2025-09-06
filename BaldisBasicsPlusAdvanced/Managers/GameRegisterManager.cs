@@ -28,14 +28,11 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate;
-using BaldisBasicsPlusAdvanced.Compats.LevelEditor;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Game.Objects.Food;
 using BaldisBasicsPlusAdvanced.Game.InventoryItems.Food;
 using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
-using PlusLevelFormat;
-using PlusLevelLoader;
 using BaldisBasicsPlusAdvanced.Compats;
 using MTM101BaldAPI.AssetTools;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
@@ -51,6 +48,9 @@ using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
 using Newtonsoft.Json;
 using BaldisBasicsPlusAdvanced.Game.Activities;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
+using PlusStudioLevelFormat;
+using PlusStudioLevelLoader;
 #endregion
 
 namespace BaldisBasicsPlusAdvanced.Managers
@@ -139,9 +139,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeSceneObjects()
         {
-            const string fieldTripsModeName = "Mode_SpecialFieldTrips";
+#warning Fix this soon
+            /*const string fieldTripsModeName = "Mode_SpecialFieldTrips";
 
-            BinaryReader binaryReader = new BinaryReader(File.OpenRead(AssetsHelper.modPath + "Premades/Levels/Farm.cbld"));
+            BinaryReader binaryReader = new BinaryReader(File.OpenRead(AssetsHelper.modPath + "Premades/Levels/Farm.ebpl"));
             Level farmLevel = binaryReader.ReadLevel();
 
             SceneObject farmScene = CustomLevelLoader.LoadLevel(farmLevel);
@@ -169,7 +170,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             farmScene.AddMeta(AdvancedCore.Instance, new string[] { "adv_special_field_trip" });
 
-            binaryReader.Close();
+            binaryReader.Close();*/
         }
 
         #endregion
@@ -972,10 +973,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeTrips()
         {
+#warning Fix it
             new FieldTripData()
             {
                 sceneName = "Farm",
-                sceneObject = ObjectsStorage.SceneObjects["Farm"]
+                //sceneObject = ObjectsStorage.SceneObjects["Farm"]
             }
             .SetDefaultSkybox()
             .Register();
@@ -1039,9 +1041,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Hanger", "zipline_hanger");
             PrefabsCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Black Hanger", "zipline_black_hanger", variant: 2);
 
-            //Hiding Plant
-            //PrefabsCreator.CreateObjectPrefab<SuspiciousPlant>("Suspicious Plant", "suspicious_plant");
-
             //Voting Ballot
             PrefabsCreator.CreateObjectPrefab<VotingBallot>("Voting Ballot", "voting_ballot");
 
@@ -1055,17 +1054,14 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateObjectPrefab<MysteriousPortal>("Mysterious Portal", "mysterious_portal");
             PrefabsCreator.CreateObjectPrefab<CrazyMysteriousPortal>("Crazy Mysterious Portal", "crazy_mysterious_portal");
 
-            //Infection Zone
-            //PrefabsCreator.CreateObjectPrefab<InfectionZone>("Infection Zone", "infection_zone");
-
-            //plates
+            //Plates
 
             PrefabsCreator.CreatePlate<PressurePlate>("plate");
             PrefabsCreator.CreatePlate<InvisibilityPlate>("invisibility_plate");
             PrefabsCreator.CreatePlate<AccelerationPlate>("acceleration_plate");
 
             PrefabsCreator.CreatePlate<NoisyPlate>("noisy_plate");
-            if (IntegrationManager.IsActive<LevelEditorIntegration>())
+            if (IntegrationManager.IsActive<LevelStudioIntegration>())
             {
                 PrefabsCreator.CreatePlate<NoisyPlate>("noisy_faculty_plate");
                 NoisyPlate facultyVersion = ObjectsStorage.Objects["noisy_faculty_plate"].GetComponent<NoisyPlate>();
@@ -1244,6 +1240,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         #region Rooms Initialization
 
+        public static void InitializeRoomAssetsInPrefabs()
+        {
+            VotingEvent.LoadRoomAssetsForAllPrefabs();
+        }
+
         public static void InitializeRoomBasics()
         {
             InitializeRoomGroups();
@@ -1275,7 +1276,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeRoomAssets()
         {
-            string[] filesPath = Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/Objects", "*.cbld", SearchOption.AllDirectories);
+            string[] filesPath = Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/Objects", "*.rbpl", SearchOption.AllDirectories);
 
             foreach (string path in filesPath)
             {
@@ -1297,11 +1298,19 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     funcContainer = AssetsHelper.LoadAsset<RoomFunctionContainer>(roomData.functionContainerName);
                 }
 
-                RoomAsset roomAsset = RoomHelper.CreateAssetFromPath(path, 
-                    roomData.offLimits == null ? false : (bool)roomData.offLimits,
-                    roomData.autoAssignRoomFunctionContainer == null ? false : (bool)roomData.autoAssignRoomFunctionContainer,
-                    funcContainer, isAHallway: roomData.isAHallway == null ? false : (bool)roomData.isAHallway,
-                    keepTextures: roomData.keepTextures == null ? false : (bool)roomData.keepTextures);
+                BinaryReader reader = new BinaryReader(File.OpenRead(path));
+                BaldiRoomAsset formatAsset = BaldiRoomAsset.Read(reader);
+                reader.Close();
+
+                using (Stream stream = File.Open(path, FileMode.Open))
+                {
+                    using (BinaryWriter writer = new BinaryWriter(stream))
+                    {
+                        formatAsset.Write(writer);
+                    }
+                }
+
+                RoomAsset roomAsset = LevelImporter.CreateVanillaRoomAsset(formatAsset);
 
                 if (roomData.minItemValue != null) roomAsset.minItemValue = (int)roomData.minItemValue;
                 if (roomData.maxItemValue != null) roomAsset.maxItemValue = (int)roomData.maxItemValue;

@@ -43,9 +43,6 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="BaldiLevelEditor">
-      <HintPath>..\Dependencies\BaldiLevelEditor.dll</HintPath>
-    </Reference>
     <Reference Include="BBPlusCustomMusics">
       <HintPath>..\Dependencies\BBPlusCustomMusics.dll</HintPath>
     </Reference>
@@ -97,11 +94,14 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="PlusLevelFormat">
-      <HintPath>..\Dependencies\PlusLevelFormat.dll</HintPath>
+    <Reference Include="PlusLevelStudio">
+      <HintPath>..\Dependencies\PlusLevelStudio.dll</HintPath>
     </Reference>
-    <Reference Include="PlusLevelLoader">
-      <HintPath>..\Dependencies\PlusLevelLoader.dll</HintPath>
+    <Reference Include="PlusStudioLevelFormat">
+      <HintPath>..\Dependencies\PlusStudioLevelFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="PlusStudioLevelLoader">
+      <HintPath>..\Dependencies\PlusStudioLevelLoader.dll</HintPath>
     </Reference>
     <Reference Include="Rewired_Core">
       <HintPath>..\Dependencies\Rewired_Core.dll</HintPath>

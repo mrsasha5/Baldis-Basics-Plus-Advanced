@@ -12,8 +12,8 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Overlay;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
-using BaldisBasicsPlusAdvanced.Compats.LevelEditor;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
     public class PrefabsCreator
@@ -96,15 +96,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             {
                 ObjectsStorage.ItemObjects.Add(enumName, itemObject);
                 ObjectsStorage.SpawningData.Add("item_" + enumName, spawnData);
-
-                if (IntegrationManager.IsActive<LevelEditorIntegration>())
-                {
-                    ObjectsStorage.EditorSprites.Add("item_" + enumName, AssetsHelper.SpriteFromFile(editorPath + "Items/adv_editor_" + enumName + ".png"));
-                }
             }
-            
-            //Singleton<PlayerFileManager>.Instance.itemObjects.Add(itemObject); //needed for serialization without api saves
-            //But with API it isn't needed 
 
             return spawnData;
         }
@@ -154,7 +146,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
             ObjectsStorage.SodaMachines.Add(name, sodaMachine);
 
-            if (IntegrationManager.IsActive<LevelEditorIntegration>())
+            if (IntegrationManager.IsActive<LevelStudioIntegration>())
             {
                 ObjectsStorage.EditorSprites.Add("vending_" + name, AssetsHelper.SpriteFromFile(editorPath + "Objects/adv_editor_" + name + ".png"));
             }
@@ -206,7 +198,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             
             ObjectsStorage.SodaMachines.Add(name, sodaMachine);
 
-            if (IntegrationManager.IsActive<LevelEditorIntegration>())
+            if (IntegrationManager.IsActive<LevelStudioIntegration>())
             {
                 ObjectsStorage.EditorSprites.Add("vending_" + name, AssetsHelper.SpriteFromFile(editorPath + "Objects/adv_editor_" + name + ".png"));
             }
