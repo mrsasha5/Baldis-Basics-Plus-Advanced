@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using BaldisBasicsPlusAdvanced.Helpers;
+using MTM101BaldAPI;
 using Newtonsoft.Json;
+using PlusStudioLevelFormat;
+using PlusStudioLevelLoader;
+using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
 {
@@ -26,8 +30,6 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
 
         public bool? offLimits;
 
-        public bool? autoAssignRoomFunctionContainer;
-
         public bool? keepTextures;
 
         public int[] bannedFloors;
@@ -47,6 +49,30 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
         [NonSerialized]
         public RoomAsset roomAsset;
 
+        public static CustomRoomData RoomFromFile(string path)
+        {
+            string folderPath = path.Replace(Path.GetFileName(path), "");
+
+            if (!File.Exists(folderPath + Path.GetFileNameWithoutExtension(path) + ".json"))
+                return null;
+
+            string jsonData = File.ReadAllText(folderPath + Path.GetFileNameWithoutExtension(path) + ".json");
+
+            CustomRoomData roomData = JsonConvert.DeserializeObject<CustomRoomData>(jsonData);
+
+            roomData.InheritProperties();
+
+            BinaryReader reader = new BinaryReader(File.OpenRead(path));
+            BaldiRoomAsset formatAsset = BaldiRoomAsset.Read(reader);
+            reader.Close();
+
+            RoomAsset roomAsset = LevelImporter.CreateVanillaRoomAsset(formatAsset);
+            roomData.roomAsset = roomAsset;
+            roomData.LoadRoomAssetProperties();
+
+            return roomData;
+        }
+
         public void InheritProperties()
         {
             if (inheritPaths != null)
@@ -60,6 +86,30 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
                     InheritFrom(data);
                 }
             }
+        }
+
+        public void LoadRoomAssetProperties()
+        {
+            if (!string.IsNullOrEmpty(functionContainerName))
+            {
+                roomAsset.roomFunctionContainer = AssetsHelper.LoadAsset<RoomFunctionContainer>(functionContainerName);
+            }
+
+            if (minItemValue != null) roomAsset.minItemValue = (int)minItemValue;
+            if (maxItemValue != null) roomAsset.maxItemValue = (int)maxItemValue;
+            if (keepTextures != null) roomAsset.keepTextures = (bool)keepTextures;
+            if (offLimits != null) roomAsset.offLimits = (bool)offLimits;
+
+            if (!string.IsNullOrEmpty(doorMatsName))
+                roomAsset.doorMats = Array.Find(ScriptableObject.FindObjectsOfType<StandardDoorMats>(),
+                x => x.name == doorMatsName);
+
+            if (!string.IsNullOrEmpty(lightPre))
+            {
+                roomAsset.lightPre = AssetsHelper.LoadAsset<Transform>(lightPre);
+            }
+
+            roomAsset.category = EnumExtensions.GetFromExtendedName<RoomCategory>(categoryName);
         }
 
         private void InheritFrom(CustomRoomData roomData)

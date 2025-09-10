@@ -38,6 +38,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
         private static void InitializeVisuals()
         {
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_corn_wall");
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_english_wall");
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_english_ceiling");
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_school_council_wall");
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_advanced_class_floor");
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_advanced_class_wall");
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_advanced_class_ceiling");
+
             foreach (string name in ObjectsStorage.SodaMachines.Keys)
             {
                 EditorInterface.AddObjectVisual("adv_" + name, ObjectsStorage.SodaMachines[name].gameObject, true);
@@ -61,9 +69,18 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 EditorInterface.AddActivityVisual("adv_advanced_math_machine", ObjectsStorage.Objects["advanced_math_machine"]);
             BoxCollider mmCollider = ObjectsStorage.Objects["advanced_math_machine"].transform.Find("Model").GetComponent<BoxCollider>();
 
+            GameObject advancedCornerMMVisual =
+                EditorInterface.AddActivityVisual("adv_advanced_math_machine_corner", ObjectsStorage.Objects["advanced_math_machine_corner"]);
+            BoxCollider cornerMmCollider = 
+                ObjectsStorage.Objects["advanced_math_machine_corner"].transform.Find("Model").GetComponent<BoxCollider>();
+
             BoxCollider ammCollider = advancedMMVisual.AddComponent<BoxCollider>();
             ammCollider.size = mmCollider.size;
             ammCollider.center = mmCollider.center;
+
+            BoxCollider cornerAmmCollider = advancedCornerMMVisual.AddComponent<BoxCollider>();
+            cornerAmmCollider.size = cornerMmCollider.size;
+            cornerAmmCollider.center = cornerMmCollider.center;
 
             EditorInterface.AddObjectVisual("adv_farm_finish_flag", ObjectsStorage.Objects["farm_flag"], true);
             EditorInterface.AddObjectVisual("adv_farm_finish_points_flag", ObjectsStorage.Objects["farm_points_flag"], true);
@@ -81,6 +98,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 ObjectsStorage.Triggers["low_plate_unpress_time"].gameObject, false),
                     Vector3.one * 0.5f,
                         Vector3.zero);
+
+            EditorInterface.AddRoomVisualManager<OutsideRoomVisualManager>("adv_corn_field");
         }
 
         private static void InitializeTools(EditorMode mode, bool vanillaCompliant)
@@ -120,8 +139,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             EditorInterfaceModes.AddToolToCategory(mode, "activities",
                 new ActivityTool("adv_advanced_math_machine", AssetsStorage.sprites["adv_editor_advanced_math_machine"], heightOffset: 0f));
 
-            //EditorInterfaceModes.AddToolToCategory(mode, "activities",
-            //new ObjectTool("adv_advanced_math_machine_corner", AssetsStorage.sprites["adv_editor_advanced_math_machine_corner"]));
+            EditorInterfaceModes.AddToolToCategory(mode, "activities",
+                new ActivityTool("adv_advanced_math_machine_corner", AssetsStorage.sprites["adv_editor_advanced_math_machine_corner"],
+                    heightOffset: 0f));
 
             EditorInterfaceModes.AddToolToCategory(mode, "objects",
                 new ObjectTool("adv_voting_ballot", AssetsStorage.sprites["adv_editor_voting_ballot"]));

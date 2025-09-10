@@ -78,7 +78,7 @@ namespace BaldisBasicsPlusAdvanced
                 false);*/
             MTM101BaldiDevAPI.AddWarningScreen(
                 "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
-                "If you are not a beta tester..." +
+                "If you are not a beta tester... " +
                 "Please note that as a NON-BETA TESTER YOU WILL NOT RECEIVE FEEDBACK IN CASE OF A BROKEN GAME. " +
                 "You can close game until it will be launched fully.",
                 false);

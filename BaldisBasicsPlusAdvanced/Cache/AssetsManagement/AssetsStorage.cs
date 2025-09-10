@@ -223,7 +223,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadSprite("grappling_hook", "GrapplingHookSprite");
             LoadSprite("chalkboard_standard", "ChalkBoardStandard");
             LoadSprite("about_notif", "AboutNotif");
-            LoadSprite("balloon_orange", "BalloonBuster_Balloons_Sheet_4"); //Orange
+            LoadSprite("balloon_orange", "BalloonBuster_Balloons_Sheet_3"); //Orange
             LoadSprite("plant", "Plant");
             LoadSprite("food_plate_cover", "Cover_Sprite");
             LoadSprite("food_plate", "Plate_Sprite");

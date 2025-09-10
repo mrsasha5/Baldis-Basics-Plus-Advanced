@@ -139,13 +139,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeSceneObjects()
         {
-#warning Fix this soon
-            /*const string fieldTripsModeName = "Mode_SpecialFieldTrips";
+            const string fieldTripsModeName = "Mode_SpecialFieldTrips";
 
-            BinaryReader binaryReader = new BinaryReader(File.OpenRead(AssetsHelper.modPath + "Premades/Levels/Farm.ebpl"));
-            Level farmLevel = binaryReader.ReadLevel();
+            BinaryReader binaryReader = new BinaryReader(File.OpenRead(AssetsHelper.modPath + "Premades/Levels/Farm.bpl"));
+            BaldiLevel level = BaldiLevel.Read(binaryReader);
 
-            SceneObject farmScene = CustomLevelLoader.LoadLevel(farmLevel);
+            SceneObject farmScene = LevelImporter.CreateSceneObject(level);
             farmScene.name = "Farm";
             farmScene.levelTitle = "FRM";
             farmScene.usesMap = false;
@@ -170,7 +169,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             farmScene.AddMeta(AdvancedCore.Instance, new string[] { "adv_special_field_trip" });
 
-            binaryReader.Close();*/
+            binaryReader.Close();
         }
 
         #endregion
@@ -673,7 +672,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateMultipleRequiredVendingMachine("GoodMachine",
                 ItemMetaStorage.Instance.FindByEnum(Items.Quarter).itemObjects[0], 2,
                 AssetsStorage.materials["adv_good_machine"], AssetsStorage.materials["adv_good_machine_out"], null,
-                weight: 75, 
+                weight: 100, 
                 new WeightedItemObject[] {
                 new WeightedItemObject()
                 {
@@ -973,11 +972,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeTrips()
         {
-#warning Fix it
             new FieldTripData()
             {
                 sceneName = "Farm",
-                //sceneObject = ObjectsStorage.SceneObjects["Farm"]
+                sceneObject = ObjectsStorage.SceneObjects["Farm"]
             }
             .SetDefaultSkybox()
             .Register();
@@ -1276,57 +1274,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeRoomAssets()
         {
-            string[] filesPath = Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/Objects", "*.rbpl", SearchOption.AllDirectories);
-
-            foreach (string path in filesPath)
+            foreach (string path in 
+                Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/Objects", "*.rbpl", SearchOption.AllDirectories))
             {
-                string folderPath = path.Replace(Path.GetFileName(path), "");
-
-                if (!File.Exists(folderPath + Path.GetFileNameWithoutExtension(path) + ".json")) 
-                        continue;
-
-                string jsonData = File.ReadAllText(folderPath + Path.GetFileNameWithoutExtension(path) + ".json");
-
-                CustomRoomData roomData = JsonConvert.DeserializeObject<CustomRoomData>(jsonData);
-
-                roomData.InheritProperties();
-
-                RoomFunctionContainer funcContainer = null;
-
-                if (!string.IsNullOrEmpty(roomData.functionContainerName))
-                {
-                    funcContainer = AssetsHelper.LoadAsset<RoomFunctionContainer>(roomData.functionContainerName);
-                }
-
-                BinaryReader reader = new BinaryReader(File.OpenRead(path));
-                BaldiRoomAsset formatAsset = BaldiRoomAsset.Read(reader);
-                reader.Close();
-
-                using (Stream stream = File.Open(path, FileMode.Open))
-                {
-                    using (BinaryWriter writer = new BinaryWriter(stream))
-                    {
-                        formatAsset.Write(writer);
-                    }
-                }
-
-                RoomAsset roomAsset = LevelImporter.CreateVanillaRoomAsset(formatAsset);
-
-                if (roomData.minItemValue != null) roomAsset.minItemValue = (int)roomData.minItemValue;
-                if (roomData.maxItemValue != null) roomAsset.maxItemValue = (int)roomData.maxItemValue;
-
-                if (!string.IsNullOrEmpty(roomData.doorMatsName))
-                    roomAsset.doorMats = Array.Find(ScriptableObject.FindObjectsOfType<StandardDoorMats>(),
-                    x => x.name == roomData.doorMatsName);
-
-                if (!string.IsNullOrEmpty(roomData.lightPre))
-                {
-                    roomAsset.lightPre = AssetsHelper.LoadAsset<Transform>(roomData.lightPre);
-                }
-
-                roomAsset.category = EnumExtensions.GetFromExtendedName<RoomCategory>(roomData.categoryName);
-
-                roomData.roomAsset = roomAsset;
+                CustomRoomData roomData = CustomRoomData.RoomFromFile(path);
+                if (roomData == null) continue;
 
                 ObjectsStorage.RoomDatas.Add(roomData);
             }

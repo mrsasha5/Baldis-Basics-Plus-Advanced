@@ -35,11 +35,6 @@
 !/Dependencies/PlusLevelStudio.dll
 !/Dependencies/PlusLevelStudio.xml
 
-# LEGACY Level Editor & Level Loading System
-!/Dependencies/BaldiLevelEditor.dll
-!/Dependencies/PlusLevelFormat.dll
-!/Dependencies/PlusLevelLoader.dll
-
 # Pixelguy's mods
 !/Dependencies/The3DElevator.dll
 !/Dependencies/BBPlusCustomMusics.dll

@@ -1,5 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Helpers;
+using MTM101BaldAPI.Reflection;
 using System.Collections;
 using UnityEngine;
 
@@ -60,6 +61,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             entity = GetComponent<Entity>();
             audMan = GetComponent<AudioManager>();
             sprite = GetComponentInChildren<SpriteRenderer>().transform;
+
+            audMan.ReflectionSetVariable("disableSubtitles", false);
 
             entity.SetGrounded(false);
         }

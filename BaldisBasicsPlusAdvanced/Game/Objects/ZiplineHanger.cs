@@ -342,6 +342,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 overrider.SetFrozen(true);
                 overrider.SetGrounded(false);
                 overrider.SetHeight(height);
+                overrider.entity?.UpdateHeightAndScale(); //MYSTMAN DID WRONG ORDER IN CODE, BRUH!!!
                 return true;
             }
 

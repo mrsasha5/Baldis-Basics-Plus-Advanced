@@ -165,6 +165,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 
             entityOverrider.SetGrounded(false);
             entityOverrider.SetHeight(8f);
+            entityOverrider.entity?.UpdateHeightAndScale(); //MYSTMAN DID WRONG ORDER IN CODE, BRUH!!!
 
             active = true;
             updateAllowed = true;
