@@ -128,7 +128,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             }
         }
 
-        public void Initialize(EnvironmentController ec, System.Random rng, KeyValuePair<Vector3, Vector3> vector3s)
+        public void Initialize(EnvironmentController ec, KeyValuePair<Vector3, Vector3> vector3s)
         {
             this.ec = ec;
             moveMod = new MovementModifier(Vector3.zero, 1f);
@@ -137,7 +137,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 new Vector3(vector3s.Value.x, 0f, vector3s.Value.z));
             transform.position = new Vector3(positions.Key.x, 5f, positions.Key.z);
             if (!hasInfinityUses)
-                uses = rng.Next(minMaxUses.x, minMaxUses.z + 1);
+                uses = new System.Random(CoreGameManager.Instance.Seed()).Next(minMaxUses.x, minMaxUses.z + 1);
         }
 
         private void Update()

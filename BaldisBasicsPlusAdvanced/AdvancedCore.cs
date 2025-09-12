@@ -113,7 +113,7 @@ namespace BaldisBasicsPlusAdvanced
                 ObjectsCreator.CauseCrash(new Exception("Mod assets folder is missing!"));
             }
 
-            AssetsManagerCore.InitializePre();
+            AssetsManagerCore.PreInitialize();
 
             IEnumerator assetsLoading = OnAssetsPreLoad();
             bool move = true;

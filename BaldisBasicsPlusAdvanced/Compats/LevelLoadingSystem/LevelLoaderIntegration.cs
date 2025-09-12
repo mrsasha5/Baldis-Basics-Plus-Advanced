@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Activities;
@@ -46,17 +47,43 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
             //Symbol Machine
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_symbol_machine", ObjectsStorage.Objects["symbol_machine"]);
 
-            //Advanced Math Machine
-            LevelLoaderPlugin.Instance.activityAliases.Add("adv_advanced_math_machine",
-                ObjectsStorage.Objects["advanced_math_machine"].GetComponent<AdvancedMathMachine>());
-            LevelLoaderPlugin.Instance.activityAliases.Add("adv_advanced_math_machine_corner",
-                ObjectsStorage.Objects["advanced_math_machine_corner"].GetComponent<AdvancedMathMachine>());
-
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_voting_ballot", ObjectsStorage.Objects["voting_ballot"]);
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_farm_finish_flag", ObjectsStorage.Objects["farm_flag"]);
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_farm_finish_points_flag", ObjectsStorage.Objects["farm_points_flag"]);
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_farm_sign1", ObjectsStorage.Objects["farm_sign1"]);
 
+            InitializeActivities();
+
+            InitializeStructures();
+
+            InitializeRoomSettings();
+
+            InitializeRoomTextureAliases();
+        }
+
+        private static void InitializeStructures()
+        {
+            LevelLoaderPlugin.Instance.structureAliases.Add("adv_zipline", 
+                new LoaderStructureData(ObjectsStorage.StructureBuilders["Structure_Zipline"], 
+                    new Dictionary<string, GameObject>()
+                    {
+                        { "adv_zipline_hanger_white", ObjectsStorage.Objects["zipline_hanger"] },
+                        { "adv_zipline_hanger_black", ObjectsStorage.Objects["zipline_black_hanger"] }
+                    }
+                )
+            );
+        }
+
+        private static void InitializeActivities()
+        {
+            LevelLoaderPlugin.Instance.activityAliases.Add("adv_advanced_math_machine",
+                ObjectsStorage.Objects["advanced_math_machine"].GetComponent<AdvancedMathMachine>());
+            LevelLoaderPlugin.Instance.activityAliases.Add("adv_advanced_math_machine_corner",
+                ObjectsStorage.Objects["advanced_math_machine_corner"].GetComponent<AdvancedMathMachine>());
+        }
+
+        private static void InitializeRoomSettings()
+        {
             LevelLoaderPlugin.Instance.roomSettings.Add("adv_english_class", new RoomSettings(
                 EnumExtensions.GetFromExtendedName<RoomCategory>("EnglishClass"),
                 RoomType.Room,
@@ -134,7 +161,10 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
             Vector3 _pos = renderers[4].transform.localPosition;
             _pos.y = 85f;
             renderers[4].transform.localPosition = _pos;
+        }
 
+        private static void InitializeRoomTextureAliases()
+        {
             LevelLoaderPlugin.Instance.roomTextureAliases.Add(
                 "adv_english_ceiling", AssetsStorage.textures["adv_english_ceiling"]);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add(
@@ -152,8 +182,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
             LevelLoaderPlugin.Instance.roomTextureAliases.Add(
                 "adv_school_council_wall", AssetsStorage.textures["adv_school_council_wall"]);
 
-            LevelLoaderPlugin.Instance.roomTextureAliases.Add(
-                "adv_basic_floor", AssetsHelper.LoadAsset<Texture2D>("BasicFloor"));
+            //LevelLoaderPlugin.Instance.roomTextureAliases.Add(
+                //"adv_basic_floor", AssetsHelper.LoadAsset<Texture2D>("BasicFloor")); //Was made for legacy one
 
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("adv_corn_wall",
                 AssetsHelper.TextureFromFile("Textures/Rooms/CornField/adv_thick_corn_wall.png"));

@@ -117,7 +117,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         #region Critical Assets for Systems (Notifications System, Invoking Crash Screen with Sound...)
 
-        public static void InitializePre()
+        public static void InitializeCriticalResources()
         {
             weirdErrorSound = AssetsHelper.LoadAsset<AudioClip>("WeirdError");
             LoadSound("buzz_elv", "Elv_Buzz");
@@ -133,7 +133,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 #if DEBUG
             Stopwatch sw = new Stopwatch();
             sw.Start();
-#endif 
+#endif
 
             graphsStandardShader = Shader.Find("Shader Graphs/Standard");
             genericBaldi = AssetsHelper.LoadAsset<Baldi>("Baldi_Main1");
@@ -368,7 +368,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                 LoadModTexture("adv_pulley_base" + (i + 1), $"Objects/Pulley/adv_pulley_base{i + 1}.png");
             }
 
-            LoadModSprite("adv_tip_screen_forward", "UI/SwingingTipsScreen/adv_tip_screen_forward.png");
+            LoadModSprite("adv_tip_screen_forward", "Textures/UI/SwingingTipsScreen/adv_tip_screen_forward.png");
 
             spriteSheets.Add("adv_tip_screen_forward_static_sheet",
                 AssetLoader.SpritesFromSpritesheet(2, 1, 1f, Vector2.one * 0.5f,
@@ -380,51 +380,51 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                 spriteSheets["adv_tips_screen"].Take(spriteSheets["adv_tips_screen"].Length - 1).ToArray();
             spriteSheets.Add("adv_tips_screen_reversed", spriteSheets["adv_tips_screen"].Reverse().ToArray());
 
-            LoadModSprite("adv_pulley", "Objects/Pulley/adv_pulley_handle.png", 25f);
+            LoadModSprite("adv_pulley", "Textures/Objects/Pulley/adv_pulley_handle.png", 25f);
 
             for (int i = 1; i <= 3; i++)
             {
-                LoadModSprite($"adv_elevator_tubes_glow_{i}", $"UI/Elevator/TubesGlow/Adv_Elevator_TubesGlow_{i}.png");
+                LoadModSprite($"adv_elevator_tubes_glow_{i}", $"Textures/UI/Elevator/TubesGlow/Adv_Elevator_TubesGlow_{i}.png");
             }
 
-            LoadModSprite("adv_gauge_protection", "Gauges/adv_gauge_protection.png");
+            LoadModSprite("adv_gauge_protection", "Textures/Gauges/adv_gauge_protection.png");
 
-            LoadModSprite("adv_obstacle_trick", "Objects/Plates/FakePlate/adv_obstacle_trick.png", 20f);
-            LoadModSprite("adv_boxing_glove_trick", "Objects/Plates/FakePlate/adv_boxing_glove_trick.png", 20f);
-            LoadModSprite("adv_exit", "UI/Buttons/adv_button_exit.png");
-            LoadModSprite("adv_exit_transparent", "UI/Buttons/adv_button_exit_transparent.png");
+            LoadModSprite("adv_obstacle_trick", "Textures/Objects/Plates/FakePlate/adv_obstacle_trick.png", 20f);
+            LoadModSprite("adv_boxing_glove_trick", "Textures/Objects/Plates/FakePlate/adv_boxing_glove_trick.png", 20f);
+            LoadModSprite("adv_exit", "Textures/UI/Buttons/adv_button_exit.png");
+            LoadModSprite("adv_exit_transparent", "Textures/UI/Buttons/adv_button_exit_transparent.png");
 
-            LoadModSprite("adv_mysterious_teleporter", "Items/LargeSprites/adv_mysterious_teleporter_large.png", 50f);
-            LoadModSprite("adv_teleportation_bomb", "Items/LargeSprites/adv_teleportation_bomb_large.png", 50f);
+            LoadModSprite("adv_mysterious_teleporter", "Textures/Items/LargeSprites/adv_mysterious_teleporter_large.png", 50f);
+            LoadModSprite("adv_teleportation_bomb", "Textures/Items/LargeSprites/adv_teleportation_bomb_large.png", 50f);
 
             //Projectiles!!1!
-            LoadModSprite("adv_anvil_projectile", "Objects/Projectiles/adv_anvil_projectile.png", 25f);
+            LoadModSprite("adv_anvil_projectile", "Textures/Objects/Projectiles/adv_anvil_projectile.png", 25f);
 
-            LoadModSprite("adv_frozen_overlay", "UI/adv_frozen_overlay.png");
-            LoadModSprite("adv_protected_overlay", "UI/adv_protected_overlay.png");
+            LoadModSprite("adv_frozen_overlay", "Textures/UI/adv_frozen_overlay.png");
+            LoadModSprite("adv_protected_overlay", "Textures/UI/adv_protected_overlay.png");
 
-            LoadModSprite("adv_frozen_enemy", "Npcs/adv_frozen_enemy.png", 20f);
-            LoadModSprite("adv_portal", "Objects/MysteriousPortal/adv_portal.png", 15f);
-            LoadModSprite("adv_portal_opened", "Objects/MysteriousPortal/adv_portal_opened.png", 15f);
-            LoadModSprite("adv_elephant_overlay", "UI/adv_elephant_overlay.png");
-            LoadModSprite("adv_expel_hammer", "Items/adv_the_hammer_of_force.png", 40f);
-            LoadModSprite("adv_arrows", "UI/adv_arrows.png", 70f);
+            LoadModSprite("adv_frozen_enemy", "Textures/Npcs/adv_frozen_enemy.png", 20f);
+            LoadModSprite("adv_portal", "Textures/Objects/MysteriousPortal/adv_portal.png", 15f);
+            LoadModSprite("adv_portal_opened", "Textures/Objects/MysteriousPortal/adv_portal_opened.png", 15f);
+            LoadModSprite("adv_elephant_overlay", "Textures/UI/adv_elephant_overlay.png");
+            LoadModSprite("adv_expel_hammer", "Textures/Items/adv_the_hammer_of_force.png", 40f);
+            LoadModSprite("adv_arrows", "Textures/UI/adv_arrows.png", 70f);
 
-            LoadModSprite("adv_dough", "Items/LargeSprites/adv_dough_large.png", 50f);
+            LoadModSprite("adv_dough", "Textures/Items/LargeSprites/adv_dough_large.png", 50f);
 
             //Lamps!!!
-            LoadModSprite("adv_advanced_class_lamp", "Rooms/AdvancedClass/adv_advanced_class_lamp.png", 50f);
+            LoadModSprite("adv_advanced_class_lamp", "Textures/Rooms/AdvancedClass/adv_advanced_class_lamp.png", 50f);
 
             string alphabet = "abcdefghijklmnopqrstuvwxyz";
             for (int i = 0; i < alphabet.Length; i++)
             {
                 string symbol = alphabet.ElementAt(i).ToString();
-                LoadModSprite("adv_balloon_" + symbol, "Objects/Spelloons/adv_balloon_" + symbol + ".png", 30f);
+                LoadModSprite("adv_balloon_" + symbol, "Textures/Objects/Spelloons/adv_balloon_" + symbol + ".png", 30f);
             }
 
-            LoadModSprite("adv_reaper", "Npcs/GottaReap/adv_reaper.png", 1.5f);
-            LoadModSprite("adv_farm_flag", "Objects/Flags/adv_farm_flag.png", 5f, new Vector2(0.08f, 0.88f));
-            LoadModSprite("adv_corn_sign1", "Objects/Signs/adv_corn_sign1.png", 25f);
+            LoadModSprite("adv_reaper", "Textures/Npcs/GottaReap/adv_reaper.png", 1.5f);
+            LoadModSprite("adv_farm_flag", "Textures/Objects/Flags/adv_farm_flag.png", 5f, new Vector2(0.08f, 0.88f));
+            LoadModSprite("adv_corn_sign1", "Textures/Objects/Signs/adv_corn_sign1.png", 25f);
 
             LoadModSound("adv_mysterious_machine", "Sounds/Adv_Mysterious_Machine.wav", SoundType.Effect, "Adv_Sub_Machine", 5f);
             LoadModSound("adv_pah", "Sounds/Adv_PAH.ogg", SoundType.Effect, "Adv_Sub_Pah", 1f);
@@ -871,9 +871,9 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
             if (center != null)
             {
-                sprite = AssetsHelper.SpriteFromFile("Textures/" + path, pixelsPerUnit, center);
+                sprite = AssetsHelper.SpriteFromFile(path, pixelsPerUnit, center);
             } else
-                sprite = AssetsHelper.SpriteFromFile("Textures/" + path, pixelsPerUnit);
+                sprite = AssetsHelper.SpriteFromFile(path, pixelsPerUnit, center);
 
             sprites.Add(key, sprite);
         }

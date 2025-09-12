@@ -1156,7 +1156,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             PrefabsCreator.CreateEntity<Fan>(new EntityBuilder()
                 .SetName("Fan")
-                .SetLayer("ClickableEntities")
                 .AddTrigger(1f)
                 .SetLayerCollisionMask(LayersHelper.entityCollisionMask)
                 .AddRenderbaseFunction(delegate (Entity entity)
@@ -1165,11 +1164,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     .transform.parent;
                     fanBaseRenderer.SetParent(entity.transform);
                     return fanBaseRenderer;
-                }));
+                })).gameObject.layer = LayersHelper.clickableEntities;
 
             PrefabsCreator.CreateEntity<PlateFoodTrap>(new EntityBuilder()
                 .SetName("RawChichenGroundTrap")
-                .SetLayer("ClickableEntities")
                 .AddTrigger(1f)
                 .SetLayerCollisionMask(LayersHelper.entityCollisionMask)
                 .AddRenderbaseFunction(delegate (Entity entity)
@@ -1178,11 +1176,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     .transform.parent;
                     fanBaseRenderer.SetParent(entity.transform);
                     return fanBaseRenderer;
-                }));
+                })).gameObject.layer = LayersHelper.clickableEntities;
 
             PrefabsCreator.CreateEntity<PlateFoodTrap>(new EntityBuilder()
                 .SetName("CookedChichenGroundTrap")
-                .SetLayer("ClickableEntities")
                 .AddTrigger(1f)
                 .SetLayerCollisionMask(LayersHelper.entityCollisionMask)
                 .AddRenderbaseFunction(delegate (Entity entity)
@@ -1192,7 +1189,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     fanBaseRenderer.SetParent(entity.transform);
                     return fanBaseRenderer;
                 }),
-                variant: 2);
+                variant: 2).gameObject.layer = LayersHelper.clickableEntities;
 
             PrefabsCreator.CreateEntity<GroundDough>(new EntityBuilder()
                 .SetName("Dough")

@@ -19,7 +19,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
     public class PrefabsCreator
     {
 
-        private const string editorPath = "Textures/Compats/LevelEditor/";
+        private const string editorPath = "Compats/LevelStudio/Textures/";
 
         public static T CreateEntity<T>(EntityBuilder builder, int variant = 1) where T : MonoBehaviour, IEntityPrefab
         {
@@ -200,7 +200,8 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
             if (IntegrationManager.IsActive<LevelStudioIntegration>())
             {
-                ObjectsStorage.EditorSprites.Add("vending_" + name, AssetsHelper.SpriteFromFile(editorPath + "Objects/adv_editor_" + name + ".png"));
+                ObjectsStorage.EditorSprites.Add("vending_" + name, 
+                    AssetsHelper.SpriteFromFile(editorPath + "Objects/adv_editor_" + name + ".png"));
             }
 
             StructureBuilderExtensionsSpawningData spawningData = new StructureBuilderExtensionsSpawningData("structure_patch_"

@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
+using BaldisBasicsPlusAdvanced.Game.Builders;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
@@ -32,19 +35,37 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
         {
             base.Initialize();
             InitializeVisuals();
+            InitializeStructureLocs();
             EditorInterfaceModes.AddModeCallback(InitializeTools);
             EditorLevelData.AddDefaultTextureAction(InitializeTextureContainers);
         }
 
+        private static void InitializeStructureLocs()
+        {
+            LevelStudioPlugin.Instance.structureTypes.Add("adv_zipline", typeof(ZiplineStructureLocation));
+        }
+
         private static void InitializeVisuals()
         {
-            LevelStudioPlugin.Instance.selectableTextures.Add("adv_corn_wall");
+            #region Selectable Textures
+            
             LevelStudioPlugin.Instance.selectableTextures.Add("adv_english_wall");
             LevelStudioPlugin.Instance.selectableTextures.Add("adv_english_ceiling");
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_english_floor");
             LevelStudioPlugin.Instance.selectableTextures.Add("adv_school_council_wall");
             LevelStudioPlugin.Instance.selectableTextures.Add("adv_advanced_class_floor");
             LevelStudioPlugin.Instance.selectableTextures.Add("adv_advanced_class_wall");
             LevelStudioPlugin.Instance.selectableTextures.Add("adv_advanced_class_ceiling");
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_corn_wall");
+
+            #endregion
+
+            BoxCollider pillarCollider =
+                EditorInterface.AddStructureGenericVisual("adv_zipline_pillar", Structure_Zipline.ceilingPillarPre)
+                    .AddComponent<BoxCollider>();
+            pillarCollider.size = new Vector3(3f, 5f, 3f);
+            pillarCollider.isTrigger = true;
+            pillarCollider.center = Vector3.up * 9.5f;
 
             foreach (string name in ObjectsStorage.SodaMachines.Keys)
             {
@@ -157,6 +178,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
                 new ObjectTool("adv_trigger_low_plate_unpress_time", AssetsStorage.sprites["adv_editor_low_unpress_time"]));
 
+            EditorInterfaceModes.AddToolToCategory(mode, "structures", 
+                new ZiplineTool("adv_zipline", "adv_zipline_hanger_white", AssetsStorage.sprites["adv_editor_zipline_white"]));
+            EditorInterfaceModes.AddToolToCategory(mode, "structures",
+                new ZiplineTool("adv_zipline", "adv_zipline_hanger_black", AssetsStorage.sprites["adv_editor_zipline_black"]));
+
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
                 new RoomTool("adv_english_class", AssetsStorage.sprites["adv_editor_english_floor"]));
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
@@ -176,7 +202,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             containers.Add("adv_english_class_timer",
                 new TextureContainer(containers["adv_english_class"]));
             containers.Add("adv_school_council_class", 
-                new TextureContainer("adv_basic_floor", "adv_school_council_wall", "Ceiling"));
+                new TextureContainer("BasicFloor", "adv_school_council_wall", "Ceiling"));
             containers.Add("adv_advanced_class", 
                 new TextureContainer("adv_advanced_class_floor", "adv_advanced_class_wall", "adv_advanced_class_ceiling"));
             containers.Add("adv_corn_field", 
@@ -196,66 +222,73 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
         public static void LoadEditorAssets()
         {
+            string texBase = "Compats/LevelStudio/Textures/";
+
+            AssetsStorage.LoadModSprite("adv_editor_zipline_white",
+                texBase + "Structures/adv_editor_zipline_white.png");
+            AssetsStorage.LoadModSprite("adv_editor_zipline_black",
+                texBase + "Structures/adv_editor_zipline_black.png");
+
             AssetsStorage.LoadModSprite("adv_editor_criss_the_crystal",
-                "Compats/LevelEditor/NPCs/adv_editor_criss_the_crystal.png");
+                texBase + "NPCs/adv_editor_criss_the_crystal.png");
 
             AssetsStorage.LoadModSprite("adv_editor_corn_sign1",
-                "Compats/LevelEditor/Objects/adv_editor_corn_sign1.png");
+                texBase + "Objects/adv_editor_corn_sign1.png");
             AssetsStorage.LoadModSprite("adv_editor_finish_flag",
-                "Compats/LevelEditor/Objects/adv_editor_finish_flag.png");
+                texBase + "Objects/adv_editor_finish_flag.png");
             AssetsStorage.LoadModSprite("adv_editor_finish_points_flag",
-                "Compats/LevelEditor/Objects/adv_editor_finish_points_flag.png");
+                texBase + "Objects/adv_editor_finish_points_flag.png");
 
             AssetsStorage.LoadModSprite("adv_editor_invisibility_plate",
-                "Compats/LevelEditor/Objects/adv_editor_invisibility_plate.png");
+                texBase + "Objects/adv_editor_invisibility_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_acceleration_plate",
-                "Compats/LevelEditor/Objects/adv_editor_acceleration_plate.png");
+                texBase + "Objects/adv_editor_acceleration_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_fake_plate",
-                "Compats/LevelEditor/Objects/adv_editor_fake_plate.png");
+                texBase + "Objects/adv_editor_fake_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_noisy_plate",
-                "Compats/LevelEditor/Objects/adv_editor_noisy_plate.png");
+                texBase + "Objects/adv_editor_noisy_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_noisy_faculty_plate",
-                "Compats/LevelEditor/Objects/adv_editor_noisy_faculty_plate.png");
+                texBase + "Objects/adv_editor_noisy_faculty_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_stealing_plate",
-                "Compats/LevelEditor/Objects/adv_editor_stealing_plate.png");
+                texBase + "Objects/adv_editor_stealing_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_bully_plate",
-                "Compats/LevelEditor/Objects/adv_editor_bully_plate.png");
+                texBase + "Objects/adv_editor_bully_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_present_plate",
-                "Compats/LevelEditor/Objects/adv_editor_present_plate.png");
+                texBase + "Objects/adv_editor_present_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_sugar_addiction_plate",
-                "Compats/LevelEditor/Objects/adv_editor_sugar_addiction_plate.png");
+                texBase + "Objects/adv_editor_sugar_addiction_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_slowdown_plate",
-                "Compats/LevelEditor/Objects/adv_editor_slowdown_plate.png");
+                texBase + "Objects/adv_editor_slowdown_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_protection_plate",
-                "Compats/LevelEditor/Objects/adv_editor_protection_plate.png");
+                texBase + "Objects/adv_editor_protection_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_teleportation_plate",
-                "Compats/LevelEditor/Objects/adv_editor_teleportation_plate.png");
+                texBase + "Objects/adv_editor_teleportation_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_safety_trapdoor",
-                "Compats/LevelEditor/Objects/adv_editor_safety_trapdoor.png");
+                texBase + "Objects/adv_editor_safety_trapdoor.png");
             AssetsStorage.LoadModSprite("adv_editor_voting_ballot",
-                "Compats/LevelEditor/Objects/adv_editor_voting_ballot.png");
+                texBase + "Objects/adv_editor_voting_ballot.png");
             AssetsStorage.LoadModSprite("adv_editor_advanced_math_machine",
-                "Compats/LevelEditor/Objects/adv_editor_activity_advanced_math_machine.png");
+                texBase + "Objects/adv_editor_activity_advanced_math_machine.png");
             AssetsStorage.LoadModSprite("adv_editor_advanced_math_machine_corner",
-                "Compats/LevelEditor/Objects/adv_editor_activity_advanced_math_machine_corner.png");
+                texBase + "Objects/adv_editor_activity_advanced_math_machine_corner.png");
 
             AssetsStorage.LoadModSprite("adv_editor_symbol_machine",
-                "Compats/LevelEditor/Objects/adv_editor_symbol_machine.png");
+                texBase + "Objects/adv_editor_symbol_machine.png");
             AssetsStorage.LoadModSprite("adv_editor_english_floor",
-                "Compats/LevelEditor/Rooms/adv_room_english.png");
+                texBase + "Rooms/adv_room_english.png");
             AssetsStorage.LoadModSprite("adv_editor_school_council_floor",
-                "Compats/LevelEditor/Rooms/adv_room_school_council.png");
+                texBase + "Rooms/adv_room_school_council.png");
             AssetsStorage.LoadModSprite("adv_editor_english_floor_timer",
-                "Compats/LevelEditor/Rooms/adv_room_english_timer.png");
+                texBase + "Rooms/adv_room_english_timer.png");
             AssetsStorage.LoadModSprite("adv_editor_advanced_class_floor",
-                "Compats/LevelEditor/Rooms/adv_room_advanced.png");
+                texBase + "Rooms/adv_room_advanced.png");
             AssetsStorage.LoadModSprite("adv_editor_corn_field",
-                "Compats/LevelEditor/Rooms/adv_room_corn_field.png");
+                texBase + "Rooms/adv_room_corn_field.png");
 
             AssetsStorage.LoadModSprite("adv_editor_no_cooldown_plate",
-                "Compats/LevelEditor/Objects/adv_editor_no_cooldown.png");
+                texBase + "Objects/adv_editor_no_cooldown.png");
             AssetsStorage.LoadModSprite("adv_editor_low_unpress_time",
-                "Compats/LevelEditor/Objects/adv_editor_low_unpress_time.png");
+                texBase + "Objects/adv_editor_low_unpress_time.png");
         }
     }
 }

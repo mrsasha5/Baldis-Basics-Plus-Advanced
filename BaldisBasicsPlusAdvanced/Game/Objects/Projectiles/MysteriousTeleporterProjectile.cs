@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using System;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
@@ -55,12 +56,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             };
         }
 
+        [Obsolete]
         private bool ReflEvent_OnMysteriousTeleporterPreHit(object @object, PlayerManager pm)
         {
             object result = ReflectionHelper.UseMethod(@object, "Adv_OnMysteriousTeleporterPreHit", pm);
             return result == null || (bool)result;
         }
 
+        [Obsolete]
         private void ReflEvent_OnMysteriousTeleporterHit(object @object, PlayerManager pm)
         {
             ReflectionHelper.UseMethod(@object, "Adv_OnMysteriousTeleporterHit", pm);
