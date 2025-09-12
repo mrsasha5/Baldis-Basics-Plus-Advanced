@@ -88,6 +88,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
         {
             foreach (LineRenderer renderer in lineRenderers)
             {
+                if (renderer == null) continue;
                 GameObject.Destroy(renderer.gameObject);
             }
         }
