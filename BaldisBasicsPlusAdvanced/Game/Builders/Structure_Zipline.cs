@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using MTM101BaldAPI;
-using PlusStudioLevelFormat;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
 {
@@ -86,12 +85,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
         public void UpdateRenderer(LineRenderer lineRenderer, Vector3 start, Vector3 end)
         {
-            start.y = 0f;
-            end.y = 0f;
+            start.y = 9f;
+            end.y = start.y;
             lineRenderer.SetPositions(new Vector3[]
             {
-                start + Vector3.up * 9f,
-                end + Vector3.up * 9f
+                start,
+                end
             });
         }
 

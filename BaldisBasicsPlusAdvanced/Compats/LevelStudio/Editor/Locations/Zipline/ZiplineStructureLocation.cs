@@ -14,25 +14,29 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
         public List<ZiplinePointLocation> locations = new List<ZiplinePointLocation>();
 
-        private List<LineRenderer> lineRenderers = new List<LineRenderer>();
-
-        public virtual ZiplinePointLocation CreateNewChild(string hangerPrefab, IntVector2 pos)
+        public virtual ZiplinePointLocation CreateNewChild(
+            EditorLevelData levelData, string hangerPrefab, IntVector2 pos, bool disableChecks = false)
         {
-            for (int i = 0; i < locations.Count; i++)
+            if (!disableChecks)
             {
-                if (locations[i].position == pos)
+                for (int i = 0; i < locations.Count; i++)
                 {
-                    return null;
+                    if (locations[i].position == pos)
+                    {
+                        return null;
+                    }
                 }
             }
 
-            ZiplinePointLocation loc = new ZiplinePointLocation
+            ZiplinePointLocation loc = new ZiplinePointLocation(this)
             {
-                hangerPrefab = hangerPrefab, //Serializable prefab
+                hangerPrefab = hangerPrefab, //Prefab for Structure Builder
                 prefab = "adv_zipline_pillar", //Prefab for editor only
                 position = pos,
                 deleteAction = OnDeleteLocation
             };
+
+            if (!disableChecks && !loc.ValidatePosition(levelData, ignoreSelf: false)) return null;
 
             locations.Add(loc);
 
@@ -46,51 +50,22 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
                     locations[locations.Count - 2].position.ToWorld(),
                     locations[locations.Count - 1].position.ToWorld());
 
-                lineRenderers.Add(renderer);
-
                 loc.renderer = renderer;
             }
 
             return loc;
         }
 
+
         private bool OnDeleteLocation(EditorLevelData level, PointLocation loc)
         {
-            int index = locations.IndexOf((ZiplinePointLocation)loc);
-
-            AttemptToDestroyRenderer(loc);
-
-            if ((index + 1) % 2 != 0)
-            {
-                AttemptToDestroyRenderer(locations[index + 1]);
-
-                EditorController.Instance.RemoveVisual(locations[index]);
-                EditorController.Instance.RemoveVisual(locations[index + 1]);
-
-                locations.RemoveAt(index);
-                locations.RemoveAt(index);
-            }
-            else
-            {
-                AttemptToDestroyRenderer(locations[index - 1]);
-
-                EditorController.Instance.RemoveVisual(locations[index]);
-                EditorController.Instance.RemoveVisual(locations[index - 1]);
-
-                locations.RemoveAt(index);
-                locations.RemoveAt(index - 1);
-            }
-
+            EditorController.Instance.RemoveVisual(loc);
             return true;
         }
 
         public override void CleanupVisual(GameObject visualObject)
         {
-            foreach (LineRenderer renderer in lineRenderers)
-            {
-                if (renderer == null) continue;
-                GameObject.Destroy(renderer.gameObject);
-            }
+            
         }
 
         public override StructureInfo Compile(EditorLevelData data, BaldiLevel level)
@@ -117,7 +92,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
         public override void InitializeVisual(GameObject visualObject)
         {
-            Debug.Log("InitializeVisual");
             for (int i = 0; i < locations.Count; i++)
             {
                 EditorController.Instance.AddVisual(locations[i]);
@@ -126,20 +100,43 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
         public override void UpdateVisual(GameObject visualObject)
         {
-            Debug.Log("UpdateVisual");
+            Structure_Zipline builderPre =
+                    (Structure_Zipline)PlusStudioLevelLoader.LevelLoaderPlugin.Instance.structureAliases[type].structure;
             for (int i = 0; i < locations.Count; i++)
             {
                 EditorController.Instance.UpdateVisual(locations[i]);
+
+                if ((i + 1) % 2 == 0)
+                {
+                    builderPre.UpdateRenderer(locations[i].renderer,
+                        locations[i - 1].position.ToWorld(),
+                            locations[i].position.ToWorld());
+                }
             }
         }
 
         public override void ShiftBy(Vector3 worldOffset, IntVector2 cellOffset, IntVector2 sizeDifference)
         {
-            
+            for (int i = 0; i < locations.Count; i++)
+            {
+                locations[i].position -= cellOffset;
+            }
         }
 
         public override bool ValidatePosition(EditorLevelData data)
         {
+            if (locations.Count == 0) return false;
+
+            for (int i = 0; i < locations.Count; i++)
+            {
+                if (!locations[i].ValidatePosition(data, ignoreSelf: false))
+                {
+                    EditorController.Instance.RemoveVisual(locations[i]);
+                    if ((i + 1) % 2 == 0) i -= 2;
+                    else i--;
+                }
+            }
+
             return true;
         }
 
@@ -152,7 +149,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
                 string hangerPrefab = compressor.ReadStoredString(reader);
                 IntVector2 position = reader.ReadByteVector2().ToInt();
 
-                ZiplinePointLocation loc = CreateNewChild(hangerPrefab, position);
+                ZiplinePointLocation loc = CreateNewChild(data, hangerPrefab, position, disableChecks: true);
+            }
+
+            for (int i = 0; i < locations.Count; i += 2)
+            {
+                locations[i].ConnectTo(locations[i + 1]);
             }
         }
 

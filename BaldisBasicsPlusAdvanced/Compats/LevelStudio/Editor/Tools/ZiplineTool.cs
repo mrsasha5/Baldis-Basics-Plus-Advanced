@@ -14,7 +14,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public override string id => "structure_" + type + "_" + hangerPre;
 
-        private ZiplineStructureLocation structLoc;
+        private ZiplinePointLocation notConnectedPoint;
 
 
         public ZiplineTool(string type, string hangerPre, Sprite sprite)
@@ -31,21 +31,22 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public override bool Cancelled()
         {
+            if (notConnectedPoint != null)
+            {
+                EditorController.Instance.RemoveVisual(notConnectedPoint);
+                notConnectedPoint = null;
+            }
             return true;
         }
 
         public override void Exit()
         {
-            
+            notConnectedPoint = null;
         }
 
         public override void Update()
         {
             EditorController.Instance.selector.SelectTile(EditorController.Instance.mouseGridPosition);
-            //for (int i = 0; i < structLoc.locations.Count; i += 2)
-            //{
-            //location.locations[]
-            //}
         }
 
         public override bool MousePressed()
@@ -55,16 +56,30 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
             if (cell == null) return false;
 
-            if (structLoc == null || structLoc.locations.Count % 2 == 0)
+            if (notConnectedPoint == null)
             {
                 EditorController.Instance.AddUndo();
             }
 
-            structLoc = (ZiplineStructureLocation)EditorController.Instance.AddOrGetStructureToData("adv_zipline", onlyOne: true);
+            ZiplineStructureLocation structLoc = 
+                (ZiplineStructureLocation)EditorController.Instance.AddOrGetStructureToData("adv_zipline", onlyOne: true);
 
-            ZiplinePointLocation pillarLoc = structLoc.CreateNewChild(hangerPre, cell.position.ToInt());
+            ZiplinePointLocation newPointLoc = 
+                structLoc.CreateNewChild(EditorController.Instance.levelData, hangerPre, cell.position.ToInt());
 
-            EditorController.Instance.AddVisual(pillarLoc);
+            if (newPointLoc == null) return false;
+
+            if (notConnectedPoint != null)
+            {
+                notConnectedPoint.ConnectTo(newPointLoc);
+                notConnectedPoint = null;
+            }
+            else
+            {
+                notConnectedPoint = newPointLoc;
+            }
+
+            EditorController.Instance.AddVisual(newPointLoc);
 
             return structLoc.locations.Count % 2 == 0;
         }

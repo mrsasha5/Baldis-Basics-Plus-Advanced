@@ -16,6 +16,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
     public class LevelStudioIntegration : CompatibilityModule
     {
 
+        //Key: prefab name for builder
+        public static Dictionary<string, GameObject> hangerVisuals = new Dictionary<string, GameObject>()
+        {
+            { "hanger_white", null },
+            { "hanger_black", null }
+        };
+
         public LevelStudioIntegration() : base()
         {
             guid = "mtm101.rulerp.baldiplus.levelstudio";
@@ -60,12 +67,23 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #endregion
 
+            #region Zipline visuals
+
             BoxCollider pillarCollider =
                 EditorInterface.AddStructureGenericVisual("adv_zipline_pillar", Structure_Zipline.ceilingPillarPre)
                     .AddComponent<BoxCollider>();
             pillarCollider.size = new Vector3(3f, 5f, 3f);
             pillarCollider.isTrigger = true;
             pillarCollider.center = Vector3.up * 9.5f;
+
+            hangerVisuals["hanger_white"] = 
+                EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectsStorage.Objects["zipline_hanger"]);
+            hangerVisuals["hanger_black"] = 
+                EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectsStorage.Objects["zipline_black_hanger"]);
+
+            #endregion
+
+            #region Generic Object Visuals
 
             foreach (string name in ObjectsStorage.SodaMachines.Keys)
             {
@@ -119,6 +137,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 ObjectsStorage.Triggers["low_plate_unpress_time"].gameObject, false),
                     Vector3.one * 0.5f,
                         Vector3.zero);
+
+            #endregion
 
             EditorInterface.AddRoomVisualManager<OutsideRoomVisualManager>("adv_corn_field");
         }
@@ -179,9 +199,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new ObjectTool("adv_trigger_low_plate_unpress_time", AssetsStorage.sprites["adv_editor_low_unpress_time"]));
 
             EditorInterfaceModes.AddToolToCategory(mode, "structures", 
-                new ZiplineTool("adv_zipline", "adv_zipline_hanger_white", AssetsStorage.sprites["adv_editor_zipline_white"]));
+                new ZiplineTool("adv_zipline", "hanger_white", 
+                    AssetsStorage.sprites["adv_editor_zipline_white"]));
             EditorInterfaceModes.AddToolToCategory(mode, "structures",
-                new ZiplineTool("adv_zipline", "adv_zipline_hanger_black", AssetsStorage.sprites["adv_editor_zipline_black"]));
+                new ZiplineTool("adv_zipline", "hanger_black", 
+                    AssetsStorage.sprites["adv_editor_zipline_black"]));
 
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
                 new RoomTool("adv_english_class", AssetsStorage.sprites["adv_editor_english_floor"]));

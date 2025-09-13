@@ -67,8 +67,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 new LoaderStructureData(ObjectsStorage.StructureBuilders["Structure_Zipline"], 
                     new Dictionary<string, GameObject>()
                     {
-                        { "adv_zipline_hanger_white", ObjectsStorage.Objects["zipline_hanger"] },
-                        { "adv_zipline_hanger_black", ObjectsStorage.Objects["zipline_black_hanger"] }
+                        { "hanger_white", ObjectsStorage.Objects["zipline_hanger"] },
+                        { "hanger_black", ObjectsStorage.Objects["zipline_black_hanger"] }
                     }
                 )
             );
@@ -181,9 +181,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 
             LevelLoaderPlugin.Instance.roomTextureAliases.Add(
                 "adv_school_council_wall", AssetsStorage.textures["adv_school_council_wall"]);
-
-            //LevelLoaderPlugin.Instance.roomTextureAliases.Add(
-                //"adv_basic_floor", AssetsHelper.LoadAsset<Texture2D>("BasicFloor")); //Was made for legacy one
 
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("adv_corn_wall",
                 AssetsHelper.TextureFromFile("Textures/Rooms/CornField/adv_thick_corn_wall.png"));

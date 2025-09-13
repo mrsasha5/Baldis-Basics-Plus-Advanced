@@ -10,7 +10,6 @@ using BaldisBasicsPlusAdvanced.Game.Components.Movement;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using MTM101BaldAPI.UI;
-using TMPro;
 using System.Linq;
 
 namespace BaldisBasicsPlusAdvanced.Patches
@@ -202,6 +201,14 @@ namespace BaldisBasicsPlusAdvanced.Patches
                     door.StartCoroutine(enumerator);
                 }
             }
+        }
+
+        public static Vector3 GetVector3FromCellPosition(this IntVector2 vec2)
+        {
+            Vector3 vector3 = new Vector3();
+            vector3.x = vec2.x * 10f + 5f;
+            vector3.z = vec2.z * 10f + 5f;
+            return vector3;
         }
 
         public static Vector3 CorrectForCell(this Vector3 position, float y = 5f)

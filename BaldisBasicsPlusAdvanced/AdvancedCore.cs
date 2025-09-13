@@ -67,15 +67,17 @@ namespace BaldisBasicsPlusAdvanced
             AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English/Compats", Language.English);
 
 #if BETA
-            /*MTM101BaldiDevAPI.AddWarningScreen(
+            MTM101BaldiDevAPI.AddWarningScreen(
                 "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
                 "Remember about main conditions for the beta testers. " +
                 "You must observe them until they are declared obsolete by me.\n" +
                 "<color=#FFFF00>The main points you should remember are:\n" +
                 " * Do not leak build & assets\n" +
+                //"<color=#FF0000> * You cannot show a new content</color></color>",
                 "<color=#00FF00> * You are allowed to show a new content</color></color>",
                 //" * Do not disclose information about new/planned content in any way to non-beta testers</color>", 
-                false);*/
+                false);
+
             MTM101BaldiDevAPI.AddWarningScreen(
                 "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
                 "If you are not a beta tester... " +
