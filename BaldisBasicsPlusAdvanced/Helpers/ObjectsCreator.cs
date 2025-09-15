@@ -144,6 +144,8 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             {
                 spriteRenderer.material = new Material(AssetsStorage.materials["sprite_standard_billboard"]);
             }
+            else
+                spriteRenderer.material = new Material(AssetsStorage.materials["sprite_standard_no_billboard"]);
 
             return spriteRenderer;
         }
@@ -234,7 +236,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static WindObject CreateWindObject(float windSize, float speed = 12f, bool dependsOnObstacles = true)
         {
-            GameObject parent = new GameObject("Wind Object");
+            GameObject parent = new GameObject("WindObject");
             WindObject wind = parent.AddComponent<WindObject>();
             wind.Initialize(windSize, speed, parent.transform, dependsOnObstacles);
             return wind;

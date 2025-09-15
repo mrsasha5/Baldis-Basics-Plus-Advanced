@@ -81,7 +81,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
                 {
                     CustomRoomData data =
                     JsonConvert.DeserializeObject<CustomRoomData>(
-                        File.ReadAllText(AssetsHelper.modPath + "Premades/Rooms/Patterns/" + inheritPaths[i]));
+                        File.ReadAllText(AssetsHelper.modPath + "Data/Rooms/Patterns/" + inheritPaths[i]));
                     data.InheritProperties();
                     InheritFrom(data);
                 }

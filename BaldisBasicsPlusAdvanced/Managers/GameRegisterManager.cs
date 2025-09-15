@@ -141,7 +141,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
         {
             const string fieldTripsModeName = "Mode_SpecialFieldTrips";
 
-            BinaryReader binaryReader = new BinaryReader(File.OpenRead(AssetsHelper.modPath + "Premades/Levels/Farm.bpl"));
+            BinaryReader binaryReader = new BinaryReader(File.OpenRead(AssetsHelper.modPath + "Data/Levels/Farm.bpl"));
             BaldiLevel level = BaldiLevel.Read(binaryReader);
 
             SceneObject farmScene = LevelImporter.CreateSceneObject(level);
@@ -1272,7 +1272,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
         public static void InitializeRoomAssets()
         {
             foreach (string path in 
-                Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/Objects", "*.rbpl", SearchOption.AllDirectories))
+                Directory.GetFiles(AssetsHelper.modPath + "Data/Rooms/Objects", "*.rbpl", SearchOption.AllDirectories))
             {
                 CustomRoomData roomData = CustomRoomData.RoomFromFile(path);
                 if (roomData == null) continue;

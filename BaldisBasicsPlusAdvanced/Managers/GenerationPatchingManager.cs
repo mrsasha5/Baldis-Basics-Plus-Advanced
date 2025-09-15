@@ -24,7 +24,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             if (!recipesLoaded)
             {
                 ApiManager.LoadKitchenStoveRecipesFromFolder(AdvancedCore.Instance.Info,
-                    AssetsHelper.modPath + "Premades/Recipes/KitchenStove/", true);
+                    AssetsHelper.modPath + "Data/Recipes/KitchenStove/", true);
                 recipesLoaded = true;
             }
 

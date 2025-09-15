@@ -407,11 +407,10 @@ namespace BaldisBasicsPlusAdvanced.Patches
             _audMan.PlaySingle(AssetsStorage.sounds["teleport"]);
         }
 
-        public static bool Exists(this LocalizationManager localizationManager, string checkName)
+        public static SpriteRenderer RemoveBillboard(this SpriteRenderer renderer)
         {
-            Dictionary<string, string> localizedText = ReflectionHelper.GetValue<Dictionary<string, string>>(localizationManager,
-                "localizedText");
-            return localizedText.ContainsKey(checkName);
+            renderer.material = new Material(AssetsStorage.materials["sprite_standard_no_billboard"]);
+            return renderer;
         }
 
         public static AudioManager GetAudMan(this EnvironmentController ec)

@@ -188,7 +188,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         {
             List<WeightedRoomAsset> assets = new List<WeightedRoomAsset>();
 
-            foreach (string path in Directory.GetFiles(AssetsHelper.modPath + "Premades/Rooms/Objects/Voting/",
+            foreach (string path in Directory.GetFiles(AssetsHelper.modPath + "Data/Rooms/Objects/Voting/",
                 "*.rbpl", SearchOption.AllDirectories))
             {
                 BinaryReader reader = new BinaryReader(File.OpenRead(path));

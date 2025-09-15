@@ -5,6 +5,7 @@ using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
 using BaldisBasicsPlusAdvanced.Game.Builders;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
+using BaldisBasicsPlusAdvanced.Patches;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
@@ -121,22 +122,19 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             cornerAmmCollider.size = cornerMmCollider.size;
             cornerAmmCollider.center = cornerMmCollider.center;
 
-            EditorInterface.AddObjectVisual("adv_farm_finish_flag", ObjectsStorage.Objects["farm_flag"], true);
-            EditorInterface.AddObjectVisual("adv_farm_finish_points_flag", ObjectsStorage.Objects["farm_points_flag"], true);
+            EditorInterface.AddObjectVisual("adv_farm_finish_flag", ObjectsStorage.Objects["farm_flag"], true)
+                .GetComponentInChildren<SpriteRenderer>().RemoveBillboard();
+            EditorInterface.AddObjectVisual("adv_farm_finish_points_flag", ObjectsStorage.Objects["farm_points_flag"], true)
+                .GetComponentInChildren<SpriteRenderer>().RemoveBillboard();
 
-            InitializeBoxCollider(EditorInterface.AddObjectVisual("adv_farm_sign1", ObjectsStorage.Objects["farm_sign1"], false),
-                Vector3.one * 0.75f,
-                    Vector3.zero);
+            EditorInterface.AddObjectVisualWithCustomBoxCollider("adv_farm_sign1", ObjectsStorage.Objects["farm_sign1"],
+                Vector3.one * 7.5f, Vector3.zero);
 
-            InitializeBoxCollider(EditorInterface.AddObjectVisual("adv_trigger_no_plate_cooldown", 
-                ObjectsStorage.Triggers["no_plate_cooldown"].gameObject, false),
-                    Vector3.one * 0.5f,
-                        Vector3.zero);
+            EditorInterface.AddObjectVisualWithCustomBoxCollider("adv_trigger_no_plate_cooldown",
+                ObjectsStorage.Triggers["no_plate_cooldown"].gameObject, Vector3.one * 5f, Vector3.zero);
 
-            InitializeBoxCollider(EditorInterface.AddObjectVisual("adv_trigger_low_plate_unpress_time", 
-                ObjectsStorage.Triggers["low_plate_unpress_time"].gameObject, false),
-                    Vector3.one * 0.5f,
-                        Vector3.zero);
+            EditorInterface.AddObjectVisualWithCustomBoxCollider("adv_trigger_low_plate_unpress_time", 
+                ObjectsStorage.Triggers["low_plate_unpress_time"].gameObject, Vector3.one * 5f, Vector3.zero);
 
             #endregion
 
@@ -178,25 +176,24 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new ObjectTool("adv_symbol_machine", AssetsStorage.sprites["adv_editor_symbol_machine"]));
 
             EditorInterfaceModes.AddToolToCategory(mode, "activities",
-                new ActivityTool("adv_advanced_math_machine", AssetsStorage.sprites["adv_editor_advanced_math_machine"], heightOffset: 0f));
+                new ActivityTool("adv_advanced_math_machine", AssetsStorage.sprites["adv_editor_advanced_math_machine"], 0f));
 
             EditorInterfaceModes.AddToolToCategory(mode, "activities",
-                new ActivityTool("adv_advanced_math_machine_corner", AssetsStorage.sprites["adv_editor_advanced_math_machine_corner"],
-                    heightOffset: 0f));
+                new ActivityTool("adv_advanced_math_machine_corner", AssetsStorage.sprites["adv_editor_advanced_math_machine_corner"], 0f));
 
             EditorInterfaceModes.AddToolToCategory(mode, "objects",
                 new ObjectTool("adv_voting_ballot", AssetsStorage.sprites["adv_editor_voting_ballot"]));
 
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                new ObjectTool("adv_farm_finish_flag", AssetsStorage.sprites["adv_editor_finish_flag"]));
+                new ObjectToolNoRotation("adv_farm_finish_flag", AssetsStorage.sprites["adv_editor_finish_flag"], 5f));
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                new ObjectTool("adv_farm_finish_points_flag", AssetsStorage.sprites["adv_editor_finish_points_flag"]));
+                new ObjectToolNoRotation("adv_farm_finish_points_flag", AssetsStorage.sprites["adv_editor_finish_points_flag"], 5f));
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                new ObjectTool("adv_farm_sign1", AssetsStorage.sprites["adv_editor_corn_sign1"]));
+                new ObjectToolNoRotation("adv_farm_sign1", AssetsStorage.sprites["adv_editor_corn_sign1"], 5f));
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                new ObjectTool("adv_trigger_no_plate_cooldown", AssetsStorage.sprites["adv_editor_no_cooldown_plate"]));
+                new ObjectToolNoRotation("adv_trigger_no_plate_cooldown", AssetsStorage.sprites["adv_editor_no_cooldown_plate"], 5f));
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                new ObjectTool("adv_trigger_low_plate_unpress_time", AssetsStorage.sprites["adv_editor_low_unpress_time"]));
+                new ObjectToolNoRotation("adv_trigger_low_plate_unpress_time", AssetsStorage.sprites["adv_editor_low_unpress_time"], 5f));
 
             EditorInterfaceModes.AddToolToCategory(mode, "structures", 
                 new ZiplineTool("adv_zipline", "hanger_white", 
@@ -229,17 +226,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new TextureContainer("adv_advanced_class_floor", "adv_advanced_class_wall", "adv_advanced_class_ceiling"));
             containers.Add("adv_corn_field", 
                 new TextureContainer("adv_corn_floor", "adv_corn_wall", "None"));
-        }
-
-        private static EditorBasicObject InitializeBoxCollider(EditorBasicObject obj, Vector3 size, Vector3 offset)
-        {
-            BoxCollider collider = obj.gameObject.AddComponent<BoxCollider>();
-            collider.isTrigger = true;
-            collider.size = size;
-            collider.center = offset;
-            obj.editorCollider = collider;
-
-            return obj;
         }
 
         public static void LoadEditorAssets()

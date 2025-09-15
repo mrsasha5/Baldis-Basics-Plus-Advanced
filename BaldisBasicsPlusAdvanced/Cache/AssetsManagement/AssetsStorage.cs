@@ -61,8 +61,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         }
 
-        private static bool cached = false;
-
         private static bool overridden = false;
 
         public static bool Overridden => overridden;
@@ -617,8 +615,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             advancedClassLamp.sprite = sprites["adv_advanced_class_lamp"];
             advancedClassLamp.transform.localPosition = Vector3.up * 8.95f;
             advancedClassLamp.transform.parent.gameObject.ConvertToPrefab(true);
-
-            cached = true;
 
 #if DEBUG
             sw.Stop();
