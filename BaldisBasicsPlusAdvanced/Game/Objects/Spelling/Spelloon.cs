@@ -7,8 +7,6 @@ using UnityEngine;
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 {
 
-#warning TODO: QuickPop prefab
-
     public class Spelloon : MonoBehaviour, IClickable<int>, IPrefab
     {
         public SymbolMachine symbolMachine;
@@ -24,6 +22,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         [SerializeField]
         private Entity entity;
+
+        [SerializeField]
+        private GameObject explosionPre;
 
         [SerializeField]
         private string value;
@@ -68,6 +69,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             audMan.ReflectionSetVariable("disableSubtitles", false);
 
             entity.SetGrounded(false);
+
+            explosionPre = AssetsHelper.LoadAsset<GameObject>("QuickPop");
         }
 
         public void InitializePrefabPost(string symbol, Sprite sprite)
@@ -164,14 +167,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 }
 
                 popping = true;
-                sprite.gameObject.SetActive(value: false);
-                floater.Stop();
-                entity.Enable(val: false);
-                audMan.PlaySingle(AssetsStorage.sounds["pop"]);
-            }
-            else if (!base.gameObject.activeInHierarchy)
-            {
-                Object.Destroy(base.gameObject);
+                Instantiate(explosionPre).transform.position = transform.position;
+                Destroy(gameObject);
             }
         }
 

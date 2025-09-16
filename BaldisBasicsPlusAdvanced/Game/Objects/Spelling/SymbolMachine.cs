@@ -19,7 +19,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
     public class SymbolMachine : MonoBehaviour, IClickable<int>, IPrefab
     {
         [SerializeField]
-        private SoundObject audBuzz;
+        private SoundObject audCorrect;
+
+        [SerializeField]
+        private SoundObject audIncorrect;
+
+        [SerializeField]
+        private SoundObject audBeep;
+
+        [SerializeField]
+        private SoundObject audReinit;
 
         [SerializeField]
         private AudioManager audMan;
@@ -55,11 +64,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         private List<string> symbolsSpawned = new List<string>();
 
-        private Queue<IEnumerator> switcherAnimations = new Queue<IEnumerator>();
-
-        private IEnumerator currentSwitcher;
-
-        private IEnumerator reinitializer;
+        private IEnumerator reinitializer; //The actual reason why it is not coroutine is
+                                           //that corounties will be stopped when object is disabled
+                                           //and that will happen on PIT Stop due of the 3D Trips which create a new scene and
+                                           //disable all environment objects
 
         private bool playerIsHolding;
 
@@ -95,8 +103,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         private bool timerMode;
 
-        //private Coroutine lightsSwitcher;
-
         public string AnswerField => answerField;
 
         public bool TimerActive => timerActive;
@@ -111,7 +117,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         public void InitializePrefab(int variant)
         {
-            audBuzz = AssetsStorage.sounds["buzz_elv"];
+            audCorrect = AssetsStorage.sounds["activity_correct"];
+            audIncorrect = AssetsStorage.sounds["activity_incorrect"];
+            audBeep = AssetsStorage.sounds["adv_beep"];
+            audReinit = AssetsStorage.sounds["adv_symbol_machine_reinit"];
 
             audMan = ObjectsCreator.CreateAudMan(Vector3.zero);
             audMan.transform.SetParent(transform, false);
@@ -225,16 +234,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 _faceName = __faceName;
             }
 
-            if (!room.Powered) return;
-
-            if (switcherAnimations.Count > 0 && currentSwitcher == null)
-            {
-                currentSwitcher = switcherAnimations.Dequeue();
-            }
-
-            if (currentSwitcher != null && !currentSwitcher.MoveNext()) currentSwitcher = null;
-
-            if (completed) return;
+            if (!room.Powered || completed) return;
 
             if (makeFailedOnUpdate)
             {
@@ -252,7 +252,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 else if (time1 != time2)
                 {
                     UpdateTextProgress();
-                    audMan.PlaySingle(AssetsStorage.sounds["adv_beep"]);
+                    audMan.PlaySingle(audBeep);
                 }
             }
         }
@@ -285,7 +285,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             if (ApiManager.GetAllSymbolMachineWords().Count == 0)
             {
                 SetScreenTextKey("Adv_Phrase_SM_No_Words");
-                audMan.PlaySingle(audBuzz);
+                audMan.PlaySingle(audIncorrect);
                 return false;
             }
             reinitializer = Reinitializer();
@@ -300,17 +300,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
             SetFaceTex("adv_symbol_machine_face");
 
-            SoundObject reinitSound = AssetsStorage.sounds["adv_symbol_machine_reinit"];
-
-            audMan.PlaySingle(reinitSound);
+            audMan.PlaySingle(audReinit);
 
             float time = 0f;
 
-            while (time < reinitSound.soundClip.length)
+            while (time < audReinit.soundClip.length)
             {
                 time += Time.deltaTime;
                 SetScreenText(string.Format("Adv_Phrase_SM_ReInit".Localize(),
-                    (int)(time / reinitSound.soundClip.length * 100f)));
+                    (int)(time / audReinit.soundClip.length * 100f)));
                 yield return null;
             }
 
@@ -319,7 +317,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             SetScreenText(string.Format(
                 Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Phrase_SM_ReInit"), 100));
             GenerateProblem();
-            audMan.PlaySingle(AssetsStorage.sounds["bell"]);
+            //audMan.PlaySingle(audBell);
             reInitializing = false;
             yield break;
         }
@@ -351,7 +349,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             else
             {
                 SetScreenTextKey("Adv_Phrase_SM_No_Words");
-                audMan.PlaySingle(audBuzz);
+                audMan.PlaySingle(audIncorrect);
             }
         }
 
@@ -369,8 +367,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                     rightSymbols++;
                     UpdateTextProgress();
                     if (answerField == answer.ToLower()) OnCompleted(solved: true);
-                    else audMan.PlaySingle(AssetsStorage.sounds["bell"]);
-                    time = symbolTime;
+                    else OnPutNextSymbol();
                 }
                 else
                 {
@@ -380,12 +377,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 if (spelloons.Count - 1 >= playerHolding)
                 {
                     spelloons[playerHolding].trackingPlayer = false;
-                    //spelloons[playerHolding].gameObject.SetActive(false);
                     spelloons[playerHolding].Use();
                 }
                 
                 NumberDropped();
             }
+        }
+
+        private void OnPutNextSymbol()
+        {
+            audMan.PlaySingle(audCorrect);
+            time = symbolTime;
         }
 
         public void OnCompleted(bool solved)
@@ -395,7 +397,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             completed = true;
             if (solved)
             {
-                audMan.PlaySingle(AssetsStorage.sounds["activity_correct"]);
+                audMan.PlaySingle(audCorrect);
                 SetScreenTextKey(GetPhrase(good: true));
                 SetFaceTex("adv_symbol_machine_face_right");
 
@@ -404,11 +406,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             else
             {
                 SetScreenTextKey(GetPhrase(good: false));
-                audMan.PlaySingle(AssetsStorage.sounds["activity_incorrect"]);
+                audMan.PlaySingle(audIncorrect);
                 SetFaceTex("adv_symbol_machine_face_wrong");
 
                 DropReward(RewardType.Points);
                 room.ec.MakeNoise(transform.position, wrongNoiseVal);
+
+                answerField = answer;
+                UpdateVisualAnswerField(clear: false);
             }
 
             timerActive = false;
@@ -497,12 +502,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
         {
             if (timerMode)
                 screenText.SetText(string.Format(
-                Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Phrase_SM_Timed"),
-                answer, (int)time + 1));
+                    LocalizationManager.Instance.GetLocalizedText("Adv_Phrase_SM_Timed"),
+                        answer, (int)time + 1));
             else
                 screenText.SetText(string.Format(
-                    Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Phrase_SM_Progress"),
-                    answer, (float)rightSymbols / (float)answer.Length * 100f));
+                    LocalizationManager.Instance.GetLocalizedText("Adv_Phrase_SM_Progress"),
+                        answer, (float)rightSymbols / answer.Length * 100f));
         }
 
         private void SetScreenText(string text)
@@ -512,7 +517,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         private void SetScreenTextKey(string key)
         {
-            screenText.text = Singleton<LocalizationManager>.Instance.GetLocalizedText(key);
+            screenText.text = LocalizationManager.Instance.GetLocalizedText(key);
         }
 
         private string GetPhrase(bool good)
@@ -575,10 +580,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
             rightSymbols = 0;
 
-            for (int i = 0; i < texts.Count; i++)
-            {
-                texts[i].text = "";
-            }
+            UpdateVisualAnswerField(clear: true);
         }
 
         private Spelloon SpawnSpelloon(string symbol)
