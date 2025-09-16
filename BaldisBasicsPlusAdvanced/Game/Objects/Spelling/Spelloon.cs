@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 {
+
+#warning TODO: QuickPop prefab
+
     public class Spelloon : MonoBehaviour, IClickable<int>, IPrefab
     {
         public SymbolMachine symbolMachine;

@@ -1,9 +1,9 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using MTM101BaldAPI.OptionsAPI;
 using MTM101BaldAPI.UI;

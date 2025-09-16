@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
@@ -11,6 +10,7 @@ using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
 using System.Collections;
 using UnityEngine.UI;
 using System.Linq;
+using BaldisBasicsPlusAdvanced.Extensions;
 
 namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 {

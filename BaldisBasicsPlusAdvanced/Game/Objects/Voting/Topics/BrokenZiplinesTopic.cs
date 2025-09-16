@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Patches;
+﻿using BaldisBasicsPlusAdvanced.Extensions;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics

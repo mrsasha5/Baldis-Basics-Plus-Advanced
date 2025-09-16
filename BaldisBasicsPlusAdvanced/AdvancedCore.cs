@@ -8,6 +8,7 @@ using BaldisBasicsPlusAdvanced.Managers;
 using BaldisBasicsPlusAdvanced.Menu;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using BepInEx;
+using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using HarmonyLib;
 using MTM101BaldAPI;
@@ -17,7 +18,9 @@ using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.SaveSystem;
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using UnityEngine;
 using static BepInEx.BepInDependency;
 
@@ -34,8 +37,6 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string version = "0.2.8";
 
-        internal static string tempPath;
-
         private static AdvancedCore instance;
 
         public static AdvancedCore Instance => instance;
@@ -51,10 +52,6 @@ namespace BaldisBasicsPlusAdvanced
             harmony = new Harmony(modId);
 
             instance = this;
-
-            //tempPath = Application.persistentDataPath + "/Modded/" + modId + "/TEMP/";
-            //if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
-            //Directory.CreateDirectory(tempPath);
 
             ConfigManager.Initialize();
 
@@ -112,7 +109,7 @@ namespace BaldisBasicsPlusAdvanced
         {
             if (!Directory.Exists(AssetsHelper.modPath))
             {
-                ObjectsCreator.CauseCrash(new Exception("Mod assets folder is missing!"));
+                ObjectsCreator.CauseCrash(new Exception("Assets folder is missing!"));
             }
 
             AssetsManagerCore.PreInitialize();

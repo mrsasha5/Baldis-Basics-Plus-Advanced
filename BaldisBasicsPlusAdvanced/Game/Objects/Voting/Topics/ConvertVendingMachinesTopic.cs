@@ -1,5 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
+﻿using BaldisBasicsPlusAdvanced.Extensions;
+using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI.Registers;
 using System.Collections.Generic;
 using UnityEngine;

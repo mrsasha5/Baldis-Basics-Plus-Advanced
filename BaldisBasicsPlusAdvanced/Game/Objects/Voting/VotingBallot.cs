@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using BaldisBasicsPlusAdvanced.Game.Events;
 using BaldisBasicsPlusAdvanced.Game.NPCs.Behavior.States.Navigation;
@@ -9,7 +10,6 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Texts;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using MTM101BaldAPI.UI;
 using TMPro;
 using UnityEngine;

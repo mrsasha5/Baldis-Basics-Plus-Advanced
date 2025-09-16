@@ -1,6 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
-using BaldisBasicsPlusAdvanced.Patches;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.InventoryItems

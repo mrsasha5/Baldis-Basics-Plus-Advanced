@@ -1,7 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using System;
 using UnityEngine;
 
@@ -103,7 +103,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
                     if (entity.CurrentRoom == null || (entity.CurrentRoom.category != RoomCategory.Office
                     && npcTarget.Character != Character.Principal))
                     {
-                        ReflectionHelper.UseRequiredMethod(npcTarget, "SetGuilt", 1f, "Bullying");
+                        ReflectionHelper.UseMethod(npcTarget, "SetGuilt", 1f, "Bullying");
                     } 
                     else if (entity.CurrentRoom.category == RoomCategory.Office) npcTarget?.ClearGuilt();
                 }

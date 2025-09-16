@@ -1,7 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.InventoryItems;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using System;
 using System.Collections.Generic;

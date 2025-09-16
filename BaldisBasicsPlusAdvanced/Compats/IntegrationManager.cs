@@ -1,4 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using HarmonyLib;
 using System;
@@ -42,22 +43,8 @@ namespace BaldisBasicsPlusAdvanced.Compats
 
         internal static void Prepare()
         {
-            List<Type> types;
-            try
-            {
-                types = Assembly.GetAssembly(typeof(AdvancedCore)).GetTypes().ToList();
-            } 
-            catch (ReflectionTypeLoadException e)
-            {
-                types = e.Types.ToList();
-                //Singleton<NotificationManager>.Instance.Queue(
-                //    "Some types are missing in the Integration Manager!", AssetsStorage.sounds["elv_buzz"]);
-                //AdvancedCore.Logging.LogError("Can't load some types! Exception:");
-                //AdvancedCore.Logging.LogError(e.ToString());
+            List<Type> types = Assembly.GetAssembly(typeof(AdvancedCore)).TryGetAllTypes().ToList();
 
-                //The most funny is that it happens not on all devices in same situation (even on same OS)
-            }
-            
             for (int i = 0; i < types.Count; i++)
             {
                 if (types[i] == null || !types[i].IsSubclassOf(typeof(CompatibilityModule)))

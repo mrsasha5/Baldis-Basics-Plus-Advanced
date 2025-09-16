@@ -1,21 +1,23 @@
-﻿using HarmonyLib;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using HarmonyLib;
 
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
-    public class ReflectionHelper
+    internal class ReflectionHelper
     {
-        public static object UseRequiredMethod(object instance, string methodName, params object[] parameters)
+
+        public static object UseMethod(object instance, string methodName, params object[] parameters)
         {
             return Traverse.Create(instance).Method(methodName, parameters).GetValue();
         }
 
-        public static object UseMethod(object instance, string methodName, params object[] parameters)
+        public static object NoCache_UseMethod(object instance, string methodName, params object[] parameters)
         {
-//Ops, this condition makes caching not really useful
-            if (instance.GetType().GetMethod(
-                methodName, AccessTools.all) != null)
+            MethodInfo method = instance.GetType().GetMethod(methodName, AccessTools.all);
+            if (method != null)
             {
-                return Traverse.Create(instance).Method(methodName, parameters).GetValue();
+                method.Invoke(instance, parameters);
             }
             return null;
         }

@@ -1,11 +1,11 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.NPCs.Behavior.States.Navigation;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Game.Rooms;
 using BaldisBasicsPlusAdvanced.Game.Rooms.Functions;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using HarmonyLib;
 using MTM101BaldAPI;
 using MTM101BaldAPI.UI;
@@ -491,7 +491,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             BaldiTV tvBase = canvas.GetComponentInChildren<BaldiTV>();
 
-            ReflectionHelper.UseRequiredMethod(tvBase, "ResetScreen");
+            ReflectionHelper.UseMethod(tvBase, "ResetScreen");
 
             if (texts[0] == null)
             {
@@ -529,7 +529,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             Destroy(texts[1].gameObject);
 
             ReflectionHelper.SetValue<bool>(tvBase, "busy", false);
-            ReflectionHelper.UseRequiredMethod(tvBase, "QueueCheck");
+            ReflectionHelper.UseMethod(tvBase, "QueueCheck");
         }
 
         private IEnumerator ShowBasicInfo()
@@ -538,7 +538,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             BaldiTV tvBase = canvas.GetComponentInChildren<BaldiTV>();
 
-            ReflectionHelper.UseRequiredMethod(tvBase, "ResetScreen");
+            ReflectionHelper.UseMethod(tvBase, "ResetScreen");
 
             //AudioManager audMan = ec.GetAudMan();
             //audMan.PlaySingle(AssetsStorage.sounds["adv_bal_super_wow"]);
@@ -562,18 +562,18 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             Destroy(texts[0].gameObject);
 
             ReflectionHelper.SetValue<bool>(tvBase, "busy", false);
-            ReflectionHelper.UseRequiredMethod(tvBase, "QueueCheck");
+            ReflectionHelper.UseMethod(tvBase, "QueueCheck");
         }
 
         private void InvokeTvEnumerator(string name, params object[] args)
         {
-            ReflectionHelper.UseRequiredMethod(Singleton<CoreGameManager>.Instance.GetHud(0).BaldiTv, "QueueEnumerator",
-                ReflectionHelper.UseRequiredMethod(Singleton<CoreGameManager>.Instance.GetHud(0).BaldiTv, name, args));
+            ReflectionHelper.UseMethod(Singleton<CoreGameManager>.Instance.GetHud(0).BaldiTv, "QueueEnumerator",
+                ReflectionHelper.UseMethod(Singleton<CoreGameManager>.Instance.GetHud(0).BaldiTv, name, args));
         }
 
         private void AddEnumeratorToTv(IEnumerator enumerator)
         {
-            ReflectionHelper.UseRequiredMethod(Singleton<CoreGameManager>.Instance.GetHud(0).BaldiTv, "QueueEnumerator",
+            ReflectionHelper.UseMethod(Singleton<CoreGameManager>.Instance.GetHud(0).BaldiTv, "QueueEnumerator",
                 enumerator);
         }
 

@@ -3,7 +3,6 @@ using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Events;
 using BaldisBasicsPlusAdvanced.Game.InventoryItems;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using MTM101BaldAPI.Registers;
 using System;
 using System.Collections.Generic;
@@ -51,6 +50,11 @@ using BaldisBasicsPlusAdvanced.Game.Activities;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 using PlusStudioLevelFormat;
 using PlusStudioLevelLoader;
+using System.Reflection;
+using BepInEx.Bootstrap;
+using BepInEx;
+using BaldisBasicsPlusAdvanced.Game;
+using BaldisBasicsPlusAdvanced.Extensions;
 #endregion
 
 namespace BaldisBasicsPlusAdvanced.Managers

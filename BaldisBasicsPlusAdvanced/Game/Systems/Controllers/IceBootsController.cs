@@ -1,7 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using MTM101BaldAPI.Components;
 using MTM101BaldAPI.PlusExtensions;
 using UnityEngine;
@@ -159,23 +159,21 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             BreakBoots();
         }
 
-        [System.Obsolete]
         private void ReflEvent_OnIceBootsHit(object @object, PlayerManager pm)
         {
-            ReflectionHelper.UseMethod(@object, "Adv_OnIceBootsHit", pm);
+            ReflectionHelper.NoCache_UseMethod(@object, "Adv_OnIceBootsHit", pm);
         }
 
-        [System.Obsolete]
         private bool ReflEvent_IsFreezable(object @object)
         {
-            object isFreezable = ReflectionHelper.UseMethod(@object, "Adv_IsFreezable");
+            object isFreezable = ReflectionHelper.NoCache_UseMethod(@object, "Adv_IsFreezable");
             return isFreezable == null || ((bool)isFreezable);
         }
 
-        [System.Obsolete]
+
         private bool ReflEvent_IsPushable(object @object)
         {
-            object isPushable = ReflectionHelper.UseMethod(@object, "Adv_IsPushable");
+            object isPushable = ReflectionHelper.NoCache_UseMethod(@object, "Adv_IsPushable");
             return isPushable == null || ((bool)isPushable);
         }
 

@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Patches;
+﻿using BaldisBasicsPlusAdvanced.Extensions;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {

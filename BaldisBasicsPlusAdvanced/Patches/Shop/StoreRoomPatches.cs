@@ -83,7 +83,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
                  {
                      pickup.OnStealing();
                      if (!ReflectionHelper.GetValue<bool>(storeFunc, "alarmStarted") && pickup.RaiseAlarmDuringRobbery)
-                         ReflectionHelper.UseRequiredMethod(storeFunc, "SetOffAlarm");
+                         ReflectionHelper.UseMethod(storeFunc, "SetOffAlarm");
                  }
              };
 

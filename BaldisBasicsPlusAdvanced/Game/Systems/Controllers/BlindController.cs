@@ -4,9 +4,9 @@ using MTM101BaldAPI.UI;
 using static UnityEngine.UI.CanvasScaler;
 using UnityEngine.UI;
 using UnityEngine;
-using BaldisBasicsPlusAdvanced.Patches;
 using System.Collections;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Extensions;
 
 namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 {

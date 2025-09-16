@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics

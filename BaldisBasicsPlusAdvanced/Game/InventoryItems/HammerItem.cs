@@ -1,20 +1,27 @@
 ﻿using UnityEngine;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
-using System;
+using BaldisBasicsPlusAdvanced.Extensions;
 
 namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 {
-    public class HammerItem : Item
+    public class HammerItem : Item, IPrefab
     {
+        [SerializeField]
+        private float squishTime;
+
+        [SerializeField]
+        private float distance;
+
         private RaycastHit hit;
 
-        private float squishTime = 30f;
-
-        private float distance = 17f; //default for portal poster - 10
+        public void InitializePrefab(int variant)
+        {
+            squishTime = 30f;
+            distance = 17f;
+        }
 
         public override bool Use(PlayerManager pm)
         {
@@ -34,7 +41,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
                     if (!ReflEvent_IsUsable(npc, pm)) return false;
 
-                    object result = ReflectionHelper.UseMethod(npc, "Adv_IsSquashable"); //only for NPC
+                    object result = ReflectionHelper.NoCache_UseMethod(npc, "Adv_IsSquashable"); //only for NPC
                     if (result == null || ((bool)result)) entity.Squish(squishTime);
 
                     OnUsed(pm);
@@ -96,24 +103,21 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             return false;
         }
 
-        [Obsolete]
         private void ReflEvent_OnHammerUse(object @object, PlayerManager pm)
         {
-            ReflectionHelper.UseMethod(@object, "Adv_OnHammerHit", pm);
+            ReflectionHelper.NoCache_UseMethod(@object, "Adv_OnHammerHit", pm);
         }
 
-        [Obsolete]
         private bool ReflEvent_IsBreakable(object @object)
         {
-            object isBreakable = ReflectionHelper.UseMethod(@object, "Adv_IsBreakable");
+            object isBreakable = ReflectionHelper.NoCache_UseMethod(@object, "Adv_IsBreakable");
 
             return isBreakable == null || ((bool)isBreakable);
         }
 
-        [Obsolete]
         private bool ReflEvent_IsUsable(object @object, PlayerManager pm)
         {
-            object isUsable = ReflectionHelper.UseMethod(@object, "Adv_OnHammerPreHit", pm);
+            object isUsable = ReflectionHelper.NoCache_UseMethod(@object, "Adv_OnHammerPreHit", pm);
 
             if (isUsable != null && !((bool)isUsable)) return false;
             return true;
@@ -125,5 +129,6 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             pm.RuleBreak("Bullying", 1f);
             Destroy(gameObject);
         }
+
     }
 }

@@ -175,28 +175,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
                 if (other.TryGetComponent(out Entity entity))
                 {
                     bool isNpc = entity.TryGetComponent(out NPC npc);
-                    if (isNpc && (!LegacyReflEvent_OnPreTeleportation(npc))) return;
                     Teleport(entity);
-                    if (isNpc)
-                    {
-                        LegacyReflEvent_Teleportation(npc);
-                    }
                     return;
                 }
             }
-        }
-
-        [Obsolete]
-        private bool LegacyReflEvent_OnPreTeleportation(object @object)
-        {
-            object result = ReflectionHelper.UseMethod(@object, "Adv_OnPreTeleportation");
-            return result == null || (bool)result;
-        }
-
-        [Obsolete]
-        private void LegacyReflEvent_Teleportation(object @object)
-        {
-            ReflectionHelper.UseMethod(@object, "Adv_OnTeleportation");
         }
 
         private void OnTriggerExit(Collider other)

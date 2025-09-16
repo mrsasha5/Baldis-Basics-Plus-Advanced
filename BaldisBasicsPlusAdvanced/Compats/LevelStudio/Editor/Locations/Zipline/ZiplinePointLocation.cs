@@ -1,5 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Game.Objects;
-using BaldisBasicsPlusAdvanced.Patches;
+﻿using BaldisBasicsPlusAdvanced.Extensions;
+using BaldisBasicsPlusAdvanced.Game.Objects;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelLoader;

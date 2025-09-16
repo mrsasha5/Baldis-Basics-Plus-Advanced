@@ -2,6 +2,7 @@
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.SpatialElevator;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.Movement;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
 using BaldisBasicsPlusAdvanced.Helpers;

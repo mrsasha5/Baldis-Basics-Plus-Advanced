@@ -1,7 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Projectiles;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -10,6 +10,9 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 {
     public class BoxingGloveItem : BaseMultipleUsableItem, IPrefab
     {
+        [SerializeField]
+        private SoundObject audBang;
+
         [SerializeField]
         private float pushSpeed;
 
@@ -24,6 +27,8 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
         public void InitializePrefab(int variant)
         {
+            audBang = AssetsStorage.sounds["bang"];
+
             pushSpeed = 125f;
             pushAcceleration = -62.5f;
             distance = 17f;
@@ -93,8 +98,11 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             entity.AddForceWithBehaviour(forward, pushSpeed, pushAcceleration, makesNoises: true);
 
             entity.StartCoroutine(LockMotion(entity, pushedStateTime));
-            /*npc.getControllerSystem().createController(out PushedNpcController controller);
-            controller.setTime(pushedStateTime);*/
+        }
+
+        private void PlaySound(PlayerManager pm)
+        {
+            pm.ec.GetAudMan().PlaySingle(audBang);
         }
 
         private IEnumerator LockMotion(Entity entity, float lockTime)
@@ -112,29 +120,22 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             yield break;
         }
 
-        [Obsolete]
         private void ReflEvent_OnBoxingGloveHit(object @object, PlayerManager pm)
         {
-            ReflectionHelper.UseMethod(@object, "Adv_OnBoxingGloveHit", pm);
+            ReflectionHelper.NoCache_UseMethod(@object, "Adv_OnBoxingGloveHit", pm);
         }
 
-        [Obsolete]
         private bool ReflEvent_IsPushable(object @object)
         {
-            object isPushable = ReflectionHelper.UseMethod(@object, "Adv_IsPushable");
+            object isPushable = ReflectionHelper.NoCache_UseMethod(@object, "Adv_IsPushable");
             return isPushable == null || ((bool)isPushable);
         }
 
-        [Obsolete]
         private bool ReflEvent_IsUsable(object @object, PlayerManager pm)
         {
-            object result = ReflectionHelper.UseMethod(@object, "Adv_OnBoxingGlovePreHit", pm);
+            object result = ReflectionHelper.NoCache_UseMethod(@object, "Adv_OnBoxingGlovePreHit", pm);
             return result == null || ((bool)result);
         }
 
-        private void PlaySound(PlayerManager pm)
-        {
-            pm.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["bang"]);
-        }
     }
 }

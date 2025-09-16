@@ -10,7 +10,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Texts;
 using BaldisBasicsPlusAdvanced.Game.Objects.Pickups;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using MTM101BaldAPI.UI;
-using BaldisBasicsPlusAdvanced.Patches;
+using BaldisBasicsPlusAdvanced.Extensions;
 
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
