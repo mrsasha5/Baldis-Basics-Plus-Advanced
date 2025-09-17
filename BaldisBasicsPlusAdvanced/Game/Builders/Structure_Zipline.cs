@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using MTM101BaldAPI;
+using System;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
 {
@@ -96,7 +97,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
         public void Build(KeyValuePair<Cell, Cell> cells, ZiplineHanger ziplinePre)
         {
-            AnalysePath(cells.Key, cells.Value, setCoverage: true);
+            CoverPath(cells.Key, cells.Value);
 
             GameObject gm = new GameObject("Zipline");
 
@@ -149,7 +150,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                             continue;
                         }
 
-                        int length = AnalysePath(cells[i], cells[j], setCoverage: false);
+                        int length = AnalysePath(cells[i], cells[j]);
 
                         if (length >= minLength)
                         {
@@ -181,12 +182,34 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             lengths.Clear();
         }
 
-#warning Develop method CoverPath
-        private int AnalysePath(Cell cell1, Cell cell2, bool setCoverage)
+        private void CoverPath(Cell cell1, Cell cell2)
         {
-            Vector3 direction = (cell1.TileTransform.position - cell2.TileTransform.position).normalized;
+            Vector3 direction = (cell2.FloorWorldPosition - cell1.FloorWorldPosition).normalized;
 
-            if (direction.x != 0f && direction.x != 1f) return -1; //do not spam with a lot of logs about null direction
+            Cell cell = cell1;
+            Vector3 pos = cell1.FloorWorldPosition;
+
+            cell1.HardCover(coverage);
+
+            while (true)
+            {
+                pos += direction * 10f;
+
+                if (ec.ContainsCoordinates(pos)) cell = ec.CellFromPosition(pos);
+                else throw new Exception("Cell is not existing!");
+
+                cell.HardCover(coverage);
+
+                if (cell == cell2) break;
+            }
+        }
+
+        //Invented only for 0, 90, 180, 270 angles
+        private int AnalysePath(Cell cell1, Cell cell2)
+        {
+            Vector3 direction = (cell1.FloorWorldPosition - cell2.FloorWorldPosition).normalized;
+
+            if (direction.x != 0f && direction.x != 1f) return -1; //Do not spam with a lot of logs about null direction
             if (direction.z != 0f && direction.z != 1f) return -1;
 
             Cell cell = cell2;
@@ -204,8 +227,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             if (cell2.Null || cell1.Null || cell2.HasWallInDirection(dir) || cell1.HasWallInDirection(dir.GetOpposite()) ||
                 !cell2.AllCoverageFits(startCover) || !cell1.AllCoverageFits(endCover)) return -1;
 
-            //start - cell2
-            //goal - cell1
+            //Start - cell2
+            //Goal - cell1
             while (true)
             {
                 if (ec.ContainsCoordinates(pos))
@@ -225,8 +248,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                         return -1;
                     }
                 }
-
-                if (setCoverage) cell.HardCover(coverage);
 
                 length++;
 

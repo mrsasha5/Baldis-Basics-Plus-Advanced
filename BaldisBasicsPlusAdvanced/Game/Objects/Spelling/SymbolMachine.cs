@@ -31,6 +31,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
         private SoundObject audReinit;
 
         [SerializeField]
+        private SoundObject audBell;
+
+        [SerializeField]
         private AudioManager audMan;
 
         [SerializeField]
@@ -119,6 +122,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
         {
             audCorrect = AssetsStorage.sounds["activity_correct"];
             audIncorrect = AssetsStorage.sounds["activity_incorrect"];
+            audBell = AssetsStorage.sounds["bell"];
             audBeep = AssetsStorage.sounds["adv_beep"];
             audReinit = AssetsStorage.sounds["adv_symbol_machine_reinit"];
 
@@ -317,7 +321,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             SetScreenText(string.Format(
                 Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Phrase_SM_ReInit"), 100));
             GenerateProblem();
-            //audMan.PlaySingle(audBell);
+            audMan.PlaySingle(audBell);
             reInitializing = false;
             yield break;
         }

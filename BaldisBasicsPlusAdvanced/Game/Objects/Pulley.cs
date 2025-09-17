@@ -314,7 +314,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             taken = false;
             lineRenderer.enabled = false;
             spriteRenderer.enabled = false;
-            renderers[1].enabled = true; //show pulley
+            renderers[1].enabled = true; //Show pulley on wall
             transform.position = position + offsetPosition;
             audMan.PlaySingle(audSnap);
             motorAudMan.FlushQueue(true);

@@ -102,6 +102,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
         }
 
+        public override void Load(List<StructureData> data)
+        {
+            base.Load(data);
+            //for (int i )
+            //{
+
+            //}
+        }
+
         public bool BuildDispenser(LevelGenerator lg, Cell cell, Direction dir)
         {
             GumDispenser dispenser = Instantiate(WeightedGameObject.ControlledRandomSelection(prefabs, lg.controlledRNG)

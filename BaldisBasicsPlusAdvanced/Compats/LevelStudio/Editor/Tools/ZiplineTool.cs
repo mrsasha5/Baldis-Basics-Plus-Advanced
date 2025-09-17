@@ -31,17 +31,22 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public override bool Cancelled()
         {
-            if (notConnectedPoint != null)
-            {
-                EditorController.Instance.RemoveVisual(notConnectedPoint);
-                notConnectedPoint = null;
-            }
+            OnResetTool();
             return true;
         }
 
         public override void Exit()
         {
-            notConnectedPoint = null;
+            OnResetTool();
+        }
+
+        private void OnResetTool()
+        {
+            if (notConnectedPoint != null)
+            {
+                EditorController.Instance.RemoveVisual(notConnectedPoint);
+                notConnectedPoint = null;
+            }
         }
 
         public override void Update()
