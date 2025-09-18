@@ -5,19 +5,14 @@ using UnityEngine;
 namespace BaldisBasicsPlusAdvanced.Game.Objects
 {
 
-    //EntityPull doesn't provide delegates, damn
-    //Own implementation will be more easy to control
-    //And if EntityPull was really good for actual using
-    //Then Mystman would change Whirlpool implementation
-    //But he uses that for black hole which is not worried about how close player is
-    //It just has another trigger collider and another class for checking if entity is triggered
+    //In general don't like how game implemented EntityPull
 
     public class AdvancedEntityPull : MonoBehaviour
     {
 
-        public delegate void OnEntityCatched(EntitySuckingData entityData);
+        public delegate void OnEntityCatched(EntityPullingData entityData);
 
-        public class EntitySuckingData
+        public class EntityPullingData
         {
 
             private AdvancedEntityPull pull;
@@ -28,7 +23,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             public bool catched;
 
-            public EntitySuckingData(AdvancedEntityPull pull)
+            public EntityPullingData(AdvancedEntityPull pull)
             {
                 this.pull = pull;
             }
@@ -55,7 +50,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         public OnEntityCatched onEntityCatched;
 
-        private List<EntitySuckingData> entities = new List<EntitySuckingData>();
+        private List<EntityPullingData> entities = new List<EntityPullingData>();
 
         private EnvironmentController ec;
 
@@ -154,7 +149,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 {   
                     MovementModifier movementModifier = new MovementModifier(Vector3.zero, 1f);
                     movementModifier.ignoreAirborne = ignoreAirborne;
-                    entities.Add(new EntitySuckingData(this)
+                    entities.Add(new EntityPullingData(this)
                     {
                         entity = component,
                         moveMod = movementModifier

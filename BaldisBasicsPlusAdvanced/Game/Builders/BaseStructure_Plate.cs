@@ -1,13 +1,11 @@
 ﻿using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
-using BaldisBasicsPlusAdvanced.Helpers;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
 {
-    // 0 min/max - for hall plates
-    // 1 min/max - for room plates (not forced value)
+    //0 min/max - for hall plates
+    //1 min/max - for room plates (not forced value)
     public class BaseStructure_Plate : StructureBuilder, IPrefab
     {
 
@@ -32,11 +30,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         [SerializeField]
         protected bool roomPlatesCoverageMustHaveWalls;
 
-        //[SerializeField]
-        //private bool avoidCloseTiles;
-
-        //protected int roomPlates;
-
         [SerializeField]
         protected WeightedGameObject[] hallPrefabs;
 
@@ -56,7 +49,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             includeHalls = true;
             roomPlatesCoverageMustHaveWalls = true;
             minPlatesDistance = 50f;
-            //avoidCloseTiles = true;
         }
 
         public override void Initialize(EnvironmentController ec, StructureParameters parameters)

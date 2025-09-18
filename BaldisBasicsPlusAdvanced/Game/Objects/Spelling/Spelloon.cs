@@ -17,9 +17,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
         private Transform sprite;
 
         [SerializeField]
-        private AudioManager audMan;
-
-        [SerializeField]
         private Entity entity;
 
         [SerializeField]
@@ -52,8 +49,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         public int Index => index;
 
-        public AudioManager AudMan => audMan;
-
         public string Value => value;
 
         public bool Popping => popping;
@@ -62,10 +57,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
         {
             floater = GetComponent<Balloon>();
             entity = GetComponent<Entity>();
-            audMan = GetComponent<AudioManager>();
             sprite = GetComponentInChildren<SpriteRenderer>().transform;
-
-            audMan.ReflectionSetVariable("disableSubtitles", false);
 
             entity.SetGrounded(false);
 
@@ -97,7 +89,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
                 sprite.localPosition = spriteInitPosition + Vector3.up * currentOffset;
             }
 
-            if (Popping && !AudMan.AnyAudioIsPlaying)
+            if (Popping)
             {
                 Destroy(gameObject);
             }

@@ -5,6 +5,7 @@ using UnityEngine;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using MTM101BaldAPI;
 using System;
+using UnityEngine.Rendering;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
 {
@@ -78,7 +79,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             lineRenderer.startWidth = 0.1977f;
             lineRenderer.endWidth = 0.1977f;
             lineRenderer.allowOcclusionWhenDynamic = false;
-            lineRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            lineRenderer.shadowCastingMode = ShadowCastingMode.Off;
             lineRenderer.receiveShadows = false;
             lineRenderer.material = new Material(AssetsStorage.materials["black_behind"]);
             return lineRenderer;
@@ -196,7 +197,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 pos += direction * 10f;
 
                 if (ec.ContainsCoordinates(pos)) cell = ec.CellFromPosition(pos);
-                else throw new Exception("Cell is not existing!");
+                else
+                {
+                    AdvancedCore.Logging.LogWarning($"Ziplines Builder: cell is not found at ({pos.x}; {pos.y}; {pos.z})!");
+                    break;
+                }
 
                 cell.HardCover(coverage);
 

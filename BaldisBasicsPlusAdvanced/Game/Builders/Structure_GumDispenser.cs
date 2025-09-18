@@ -1,8 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects;
-using BaldisBasicsPlusAdvanced.Helpers;
-using MTM101BaldAPI.Registers.Buttons;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -90,11 +88,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
                 if (cell2 != null && cell2.AllCoverageFits(coverage | startWallDir.ToCoverage()))
                 {
-                    if (BuildDispenser(lg, cell2, startWallDir.GetOpposite())) count--;
+                    if (BuildDispenserRandomly(lg, cell2, startWallDir.GetOpposite())) count--;
                     
                 } else if (cell1 != null && cell1.AllCoverageFits(coverage | endWallDir.ToCoverage()))
                 {
-                    if (BuildDispenser(lg, cell1, endWallDir.GetOpposite())) count--;
+                    if (BuildDispenserRandomly(lg, cell1, endWallDir.GetOpposite())) count--;
                 }
 
                 if (count <= 0) break;
@@ -105,18 +103,39 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         public override void Load(List<StructureData> data)
         {
             base.Load(data);
-            //for (int i )
-            //{
+            for (int i = 0; i < data.Count; i += 2)
+            {
+                GumDispenser dispenser = 
+                    BuildDispenser(data[i].prefab.GetComponent<GumDispenser>(), ec.CellFromPosition(data[i].position), data[i].direction);
 
-            //}
+                StructureData buttonData = data[i + 1];
+
+                GameButton.Build(buttonData.prefab.GetComponent<GameButtonBase>(), ec, buttonData.position, buttonData.direction);
+            }
         }
 
-        public bool BuildDispenser(LevelGenerator lg, Cell cell, Direction dir)
+        public GumDispenser BuildDispenser(GumDispenser dispenserPre, Cell cell, Direction dir)
+        {
+            GumDispenser dispenser = Instantiate(dispenserPre, cell.ObjectBase);
+
+            cell.HardCoverWall(dir.GetOpposite(), covered: true);
+
+            dispenser.transform.rotation = dir.ToRotation();
+            dispenser.ec = ec;
+            dispenser.position = cell.position;
+            dispenser.bOffset = dir.ToIntVector2();
+            dispenser.direction = dir;
+
+            return dispenser;
+        }
+
+        public bool BuildDispenserRandomly(LevelGenerator lg, Cell cell, Direction dir)
         {
             GumDispenser dispenser = Instantiate(WeightedGameObject.ControlledRandomSelection(prefabs, lg.controlledRNG)
                         .GetComponent<GumDispenser>(), cell.ObjectBase);
 
-            cell.HardCoverWall(dir.GetOpposite(), covered: true); //based on game logic (Rotohalls uses that logic lol)
+            cell.HardCoverWall(dir.GetOpposite(), covered: true); //Based on game logic (Rotohalls uses that logic lol)
+                                                                  //And I mean that it will cover cell even if button wasn't built
 
             GameButtonBase button = GameButton.BuildInArea(ec, cell.position, buttonRange, dispenser.gameObject,
                 WeightedGameObject.ControlledRandomSelection(buttonsPre, lg.controlledRNG).GetComponent<GameButton>(), lg.controlledRNG);
