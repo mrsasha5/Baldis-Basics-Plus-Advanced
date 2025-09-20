@@ -72,6 +72,16 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                     }
                 )
             );
+
+            LevelLoaderPlugin.Instance.structureAliases.Add("adv_gum_dispenser",
+                new LoaderStructureData(ObjectsStorage.StructureBuilders["Structure_GumDispenser"],
+                    new Dictionary<string, GameObject>()
+                    {
+                        { "gum_dispenser", ObjectsStorage.Objects["gum_dispenser"] },
+                        { "button", AssetsStorage.gameButton.gameObject }
+                    }
+                )
+            );
         }
 
         private static void InitializeActivities()

@@ -81,9 +81,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 uses--;
                 if (time <= 0f) time = cooldownTime;
                 GumProjectile gum = Object.Instantiate(ObjectsStorage.Objects["gum"].GetComponent<GumProjectile>());
-                gum.Initialize(ec, transform.position - transform.forward * 2f, this);
+                gum.Initialize(ec, transform.position + transform.forward * 2f, this);
                 gum.Reset();
-                gum.transform.forward = transform.forward;
+                gum.transform.forward = -transform.forward;
 
                 potentialGumsToDestroy.Add(gum);
 
@@ -137,10 +137,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             GameObject childObj = new GameObject("Renderer");
             childObj.transform.SetParent(gameObject.transform, false);
             childObj.transform.localScale = new Vector3(10f, 10f, 1f);
-            childObj.transform.localPosition = Vector3.up * 5f + Vector3.forward * -5f;
+            childObj.transform.localPosition = Vector3.up * 5f + Vector3.forward * 5f;
 
             Quaternion rotation = childObj.transform.rotation;
-            rotation.eulerAngles = new Vector3(0f, 180f, 0f);
+            rotation.eulerAngles = new Vector3(0f, 0f, 0f);
             childObj.transform.rotation = rotation;
 
             renderer = childObj.AddComponent<MeshRenderer>();

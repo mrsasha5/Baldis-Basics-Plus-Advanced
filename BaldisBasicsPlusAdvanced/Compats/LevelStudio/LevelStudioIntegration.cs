@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
 using BaldisBasicsPlusAdvanced.Extensions;
@@ -18,11 +19,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
     {
 
         //Key: prefab name for builder
-        public static Dictionary<string, GameObject> hangerVisuals = new Dictionary<string, GameObject>()
-        {
-            { "hanger_white", null },
-            { "hanger_black", null }
-        };
+        public static Dictionary<string, GameObject> hangerVisuals;
 
         public LevelStudioIntegration() : base()
         {
@@ -51,6 +48,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
         private static void InitializeStructureLocs()
         {
             LevelStudioPlugin.Instance.structureTypes.Add("adv_zipline", typeof(ZiplineStructureLocation));
+            LevelStudioPlugin.Instance.structureTypes.Add("adv_gum_dispenser", typeof(GumDispenserStructureLocation));
         }
 
         private static void InitializeVisuals()
@@ -68,7 +66,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #endregion
 
-            #region Zipline visuals
+            #region Zipline Visuals
 
             BoxCollider pillarCollider =
                 EditorInterface.AddStructureGenericVisual("adv_zipline_pillar", Structure_Zipline.ceilingPillarPre)
@@ -77,10 +75,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             pillarCollider.isTrigger = true;
             pillarCollider.center = Vector3.up * 9.5f;
 
-            hangerVisuals["hanger_white"] = 
-                EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectsStorage.Objects["zipline_hanger"]);
-            hangerVisuals["hanger_black"] = 
-                EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectsStorage.Objects["zipline_black_hanger"]);
+            hangerVisuals = new Dictionary<string, GameObject>()
+            {
+                { "hanger_white", EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectsStorage.Objects["zipline_hanger"]) },
+                { "hanger_black", EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectsStorage.Objects["zipline_black_hanger"]) }
+            };
+
+            #endregion
+
+            #region Gum Dispenser Visual
+
+            EditorInterface.AddStructureGenericVisual("adv_gum_dispenser", ObjectsStorage.Objects["gum_dispenser"]);
 
             #endregion
 
@@ -201,6 +206,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             EditorInterfaceModes.AddToolToCategory(mode, "structures",
                 new ZiplineTool("adv_zipline", "hanger_black", 
                     AssetsStorage.sprites["adv_editor_zipline_black"]));
+            EditorInterfaceModes.AddToolToCategory(mode, "structures", 
+                new GumDispenserTool("adv_gum_dispenser", "gum_dispenser", "button", 
+                    AssetsStorage.sprites["adv_editor_gum_dispenser"]));
 
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
                 new RoomTool("adv_english_class", AssetsStorage.sprites["adv_editor_english_floor"]));
@@ -236,6 +244,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 texBase + "Structures/adv_editor_zipline_white.png");
             AssetsStorage.LoadModSprite("adv_editor_zipline_black",
                 texBase + "Structures/adv_editor_zipline_black.png");
+            AssetsStorage.LoadModSprite("adv_editor_gum_dispenser",
+                texBase + "Structures/adv_editor_gum_dispenser.png");
 
             AssetsStorage.LoadModSprite("adv_editor_criss_the_crystal",
                 texBase + "NPCs/adv_editor_criss_the_crystal.png");

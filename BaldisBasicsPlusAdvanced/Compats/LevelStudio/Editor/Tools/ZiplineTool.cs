@@ -12,7 +12,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         private string hangerPre;
 
-        public override string id => "structure_" + type + "_" + hangerPre;
+        public override string id => $"structure_{type}_{hangerPre}";
 
         private ZiplinePointLocation notConnectedPoint;
 
