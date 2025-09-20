@@ -25,10 +25,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                 deleteAction = OnDeleteDispenser
             };
 
-            if (!disableChecks && !loc.ValidatePosition(level, ignoreSelf: false)) return null;
+            if (!disableChecks && (!loc.ValidatePosition(level, ignoreSelf: true) || !ValidatePositionInChildren(loc)))
+                return null;
 
             dispenserLocations.Add(loc);
-            
+
             return loc;
         }
 
@@ -42,17 +43,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                 deleteAction = OnDeleteButton
             };
 
-            if (!disableChecks && !loc.ValidatePosition(level, ignoreSelf: false)) return null;
+            if (!disableChecks && (!loc.ValidatePosition(level, ignoreSelf: true) || !ValidatePositionInChildren(loc)))
+                return null;
 
             buttonLocations.Add(loc);
 
             return loc;
         }
 
-        //I can't do this, otherwise the builder will consider its children are invalid
         public override bool OccupiesWall(IntVector2 pos, Direction dir)
         {
-            /*for (int i = 0; i < dispenserLocations.Count; i++)
+            for (int i = 0; i < dispenserLocations.Count; i++)
             {
                 if (dispenserLocations[i].position == pos && dispenserLocations[i].direction == dir) return true;
             }
@@ -60,7 +61,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
             for (int i = 0; i < buttonLocations.Count; i++)
             {
                 if (buttonLocations[i].position == pos && buttonLocations[i].direction == dir) return true;
-            }*/
+            }
 
             return base.OccupiesWall(pos, dir);
         }
@@ -158,8 +159,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
 
             for (int i = 0; i < dispenserLocations.Count; i++)
             {
-                if (!dispenserLocations[i].ValidatePosition(data, ignoreSelf: false) || 
-                    !buttonLocations[i].ValidatePosition(data, ignoreSelf: false))
+                if (!dispenserLocations[i].ValidatePosition(data, ignoreSelf: true) || 
+                    !buttonLocations[i].ValidatePosition(data, ignoreSelf: true) || 
+                    !ValidatePositionInChildren(dispenserLocations[i]) || !ValidatePositionInChildren(buttonLocations[i]))
                 {
                     EditorController.Instance.RemoveVisual(dispenserLocations[i]);
                     dispenserLocations.RemoveAt(i);
@@ -168,6 +170,23 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                     buttonLocations.RemoveAt(i);
                     i--;
                 }
+            }
+
+            return true;
+        }
+
+        private bool ValidatePositionInChildren(SimpleLocation child)
+        {
+            for (int i = 0; i < dispenserLocations.Count; i++)
+            {
+                if (dispenserLocations[i] != child && dispenserLocations[i].position == child.position &&
+                    dispenserLocations[i].direction == child.direction) return false;
+            }
+
+            for (int i = 0; i < buttonLocations.Count; i++)
+            {
+                if (buttonLocations[i] != child && buttonLocations[i].position == child.position &&
+                    buttonLocations[i].direction == child.direction) return false;
             }
 
             return true;
