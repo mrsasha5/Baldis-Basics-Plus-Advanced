@@ -295,22 +295,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             return bobTimer;
         }
 
-        public static T CreateCustomPickup<T>(PriceTag tag, int price, Vector3 pos) where T : BasePickup
-        {
-            Pickup pickupComp = GameObject.Instantiate(AssetsStorage.pickup);
-
-            T pickup = pickupComp.gameObject.AddComponent<T>();
-            pickup.name = "Pickup";
-            pickup.Initialize(pickup.GetComponentInChildren<SpriteRenderer>(), tag, price);
-            pickup.transform.position = pos;
-
-            pickup.SetSaleState(false);
-
-            GameObject.Destroy(pickupComp);
-
-            return pickup;
-        }
-
         public static void CauseCrash(Exception e)
         {
             if (AssetsStorage.weirdErrorSound != null)

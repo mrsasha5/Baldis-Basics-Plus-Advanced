@@ -22,9 +22,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         private int maxUses;
 
         [SerializeField]
-        private int maxCrashedGums;
-
-        [SerializeField]
         private Renderer renderer;
 
         private float time;
@@ -33,25 +30,25 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         private IEnumerator animator;
 
-        private List<GumProjectile> potentialGumsToDestroy = new List<GumProjectile>();
+        private List<GumProjectile> createdGums = new List<GumProjectile>();
 
         public void InitializePrefab(int variant)
         {
             InitializeRenderer();
 
-            BoxCollider collider = gameObject.AddComponent<BoxCollider>(); //for the editor
-            collider.isTrigger = true;
-            collider.size = Vector3.one * 5f;
-            collider.center = Vector3.up * 5f;
-
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
 
             cooldownTime = 30f;
             maxUses = 5;
-            maxCrashedGums = 5;
         }
 
-        private void Awake()
+        public void OverrideParameters(int uses, float time)
+        {
+            this.maxUses = uses;
+            this.time = time;
+        }
+
+        private void Start()
         {
             uses = maxUses;
         }
@@ -85,7 +82,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 gum.Reset();
                 gum.transform.forward = -transform.forward;
 
-                potentialGumsToDestroy.Add(gum);
+                createdGums.Add(gum);
 
                 audMan.PlaySingle(AssetsStorage.sounds["spit"]);
 
@@ -95,20 +92,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 }
                 animator = ColorAnimator();
                 StartCoroutine(animator);
-
-                if (potentialGumsToDestroy.Count > maxCrashedGums)
-                {
-                    for (int i = 0; i < potentialGumsToDestroy.Count; i++)
-                    {
-                        if (!potentialGumsToDestroy[i].Flying && !potentialGumsToDestroy[i].AttachedToSomebody)
-                        {
-                            Destroy(potentialGumsToDestroy[i].gameObject);
-                            potentialGumsToDestroy.RemoveAt(i);
-                            i--;
-                            if (potentialGumsToDestroy.Count <= potentialGumsToDestroy.Count) break;
-                        }
-                    }
-                }
             }
         }
 

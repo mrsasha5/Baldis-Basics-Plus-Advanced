@@ -146,11 +146,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
             ObjectsStorage.SodaMachines.Add(name, sodaMachine);
 
-            if (IntegrationManager.IsActive<LevelStudioIntegration>())
-            {
-                ObjectsStorage.EditorSprites.Add("vending_" + name, AssetsHelper.SpriteFromFile(editorPath + "Objects/adv_editor_" + name + ".png"));
-            }
-
             StructureBuilderExtensionsSpawningData spawningData = new StructureBuilderExtensionsSpawningData("structure_patch_"
                 + AssetsStorage.weightedPlacer.name + sodaMachine.name, AssetsStorage.weightedPlacer);
 
@@ -194,15 +189,8 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             ReflectionHelper.SetValue<Material>(sodaMachine, "outOfStockMat", faceOut);
 
             if (potentialItems != null) ReflectionHelper.SetValue<WeightedItemObject[]>(sodaMachine, "potentialItems", potentialItems);
-
             
             ObjectsStorage.SodaMachines.Add(name, sodaMachine);
-
-            if (IntegrationManager.IsActive<LevelStudioIntegration>())
-            {
-                ObjectsStorage.EditorSprites.Add("vending_" + name, 
-                    AssetsHelper.SpriteFromFile(editorPath + "Objects/adv_editor_" + name + ".png"));
-            }
 
             StructureBuilderExtensionsSpawningData spawningData = new StructureBuilderExtensionsSpawningData("structure_patch_"
                 + AssetsStorage.weightedPlacer.name + sodaMachine.name, AssetsStorage.weightedPlacer);
@@ -298,7 +286,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static void CreateFunctionContainerWithRoomFunction<T>(string name, int variant = 1) where T : RoomFunction, new()
         {
-            //RoomFunctionContainer container = GameObject.Instantiate(AssetsHelper.loadAsset<RoomFunctionContainer>("NoFunction"));
             RoomFunctionContainer container = new GameObject(name).AddComponent<RoomFunctionContainer>();
             T func = RoomHelper.SetupRoomFunction<T>(container);
 

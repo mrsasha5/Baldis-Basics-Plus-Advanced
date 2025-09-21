@@ -107,7 +107,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                 {
                     prefab = dispenserLocations[i].prefab,
                     position = new MystIntVector2(dispenserLocations[i].position.x, dispenserLocations[i].position.z),
-                    direction = (PlusDirection)dispenserLocations[i].direction
+                    direction = (PlusDirection)dispenserLocations[i].direction,
+                    data = dispenserLocations[i].EncodeData()
                 });
 
                 structInfo.data.Add(new StructureDataInfo()
@@ -201,12 +202,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                 string prefab = compressor.ReadStoredString(reader);
                 IntVector2 pos = reader.ReadByteVector2().ToInt();
                 Direction dir = (Direction)reader.ReadByte();
+                int propertiesData = reader.ReadInt32();
 
                 string prefab2 = compressor.ReadStoredString(reader);
                 IntVector2 pos2 = reader.ReadByteVector2().ToInt();
                 Direction dir2 = (Direction)reader.ReadByte();
 
-                CreateNewDispenser(data, prefab, pos, dir, disableChecks: true);
+                CreateNewDispenser(data, prefab, pos, dir, disableChecks: true)
+                    .LoadEncodedData(propertiesData);
                 CreateNewButton(data, prefab2, pos2, dir2, disableChecks: true);
             }
         }
@@ -220,6 +223,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                 compressor.WriteStoredString(writer, dispenserLocations[i].prefab);
                 writer.Write(dispenserLocations[i].position.ToByte());
                 writer.Write((byte)dispenserLocations[i].direction);
+                writer.Write(dispenserLocations[i].EncodeData());
 
                 compressor.WriteStoredString(writer, buttonLocations[i].prefab);
                 writer.Write(buttonLocations[i].position.ToByte());

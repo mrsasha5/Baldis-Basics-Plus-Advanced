@@ -38,9 +38,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
 
         private HudGauge gauge;
 
-        private bool done;
+        private float aliveTime;
 
-        private bool hidden;
+        private bool done;
 
         private bool cut;
 
@@ -73,22 +73,26 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
 
         protected override void VirtualUpdate()
         {
-            if (!hidden)
+            if (aliveTime > 0f)
             {
-                if (flying)
-                {
-                    entity.UpdateInternalMovement(base.transform.forward * speed * ec.EnvironmentTimeScale);
-                }
-                else if (actMod != null)
-                {
-                    entity.UpdateInternalMovement(Vector3.zero);
-                    base.transform.position = actMod.transform.position;
-                }
+                aliveTime -= Time.deltaTime * ec.EnvironmentTimeScale;
 
-                if (done && (!hitCollider.enabled || hitCollider.transform.position != hitColliderPosition || hitCollider.transform.rotation != hitColliderRotation))
-                {
-                    Hide();
-                }
+                if (aliveTime <= 0f) Destroy();
+            }
+
+            if (flying)
+            {
+                entity.UpdateInternalMovement(base.transform.forward * speed * ec.EnvironmentTimeScale);
+            }
+            else if (actMod != null)
+            {
+                entity.UpdateInternalMovement(Vector3.zero);
+                base.transform.position = actMod.transform.position;
+            }
+
+            if (done && (!hitCollider.enabled || hitCollider.transform.position != hitColliderPosition || hitCollider.transform.rotation != hitColliderRotation))
+            {
+                Destroy();
             }
         }
 
@@ -100,7 +104,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
                 return;
             }
 
-            if (other.isTrigger && (other.CompareTag("Player") || other.CompareTag("NPC"))) //&& (other.transform != beans.transform || leftBeans))
+            if (other.isTrigger && (other.CompareTag("Player") || other.CompareTag("NPC")))
             {
                 actMod = other.GetComponent<ActivityModifier>();
                 flying = false;
@@ -112,19 +116,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
                 {
                     actMod.moveMods.Add(playerMod);
                     canvas.gameObject.SetActive(value: true);
-                    canvas.worldCamera = Singleton<CoreGameManager>.Instance.GetCamera(other.GetComponent<PlayerManager>().playerNumber).canvasCam;
+                    canvas.worldCamera = CoreGameManager.Instance.GetCamera(other.GetComponent<PlayerManager>().playerNumber).canvasCam;
                     attachedToPlayer = true;
-                    gauge = CoreGameManager.Instance.GetHud(0).gaugeManager.ActivateNewGauge(gaugeIcon, setTime);
-                    //playerGum.Add(this);
-                    //beans.HitPlayer();
-                    //beans.GumHit(this, hitSelf: false);
-                    Singleton<CoreGameManager>.Instance.audMan.PlaySingle(AssetsStorage.sounds["splat"]);
+                    gauge = CoreGameManager.Instance.GetHud(0).gaugeManager.ActivateNewGauge(gaugeIcon, setTime);;
+                    CoreGameManager.Instance.audMan.PlaySingle(AssetsStorage.sounds["splat"]);
                 }
                 else
                 {
                     actMod.moveMods.Add(moveMod);
-                    //beans.HitNPC();
-                    //beans.GumHit(this, other.transform == beans.transform);
                     audMan.PlaySingle(AssetsStorage.sounds["splat"]);
                 }
             }
@@ -146,6 +145,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             audMan.FlushQueue(endCurrent: true);
             audMan.PlaySingle(AssetsStorage.sounds["splat"]);
 
+            aliveTime = 10f;
+
             done = true;
             hitCollider = hit.collider;
             hitColliderPosition = hitCollider.transform.position;
@@ -165,59 +166,40 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             cut = false;
             actMod.moveMods.Remove(moveMod);
             actMod.moveMods.Remove(playerMod);
-            //playerGum.Remove(this);
-            Hide();
+
+            Destroy();
         }
 
         public void Reset()
         {
-            hidden = false;
             done = false;
             attachedToPlayer = false;
             StopAllCoroutines();
             flyingSprite.SetActive(value: true);
             groundedSprite.SetActive(value: false);
-            SetFlying(true);//flying = true;
+            SetFlying(true);
             canvas.gameObject.SetActive(value: false);
-            //leftBeans = false;
+
             if (actMod != null)
             {
                 actMod.moveMods.Remove(moveMod);
                 actMod.moveMods.Remove(playerMod);
             }
 
-            //playerGum.Remove(this);
             entity.SetFrozen(value: false);
             entity.SetActive(value: true);
             entity.SetHeight(5f);
-            //audMan.QueueAudio(AssetsStorage.sounds["whoosh"]);
-            //audMan.SetLoop(val: true);
         }
 
-        public void Hide()
+        public void Destroy()
         {
-            hidden = true;
-            done = false;
-            attachedToPlayer = false;
-            entity.SetActive(value: false);
-            entity.UpdateInternalMovement(Vector3.zero);
-            flyingSprite.SetActive(value: false);
-            groundedSprite.SetActive(value: false);
-            SetFlying(false);//flying = false;
-            canvas.gameObject.SetActive(value: false);
+            Destroy(gameObject);
         }
 
         public void Cut()
         {
             cut = true;
         }
-
-        private void OnDisable()
-        {
-            attachedToPlayer = false;
-            //playerGum.Remove(this);
-        }
-
 
     }
 }

@@ -1052,7 +1052,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             //Gum Dispenser
             PrefabsCreator.CreateObjectPrefab<GumDispenser>("Gum Dispenser", "gum_dispenser");
 
-            //Mysterious portal
+            //Mysterious portals
             PrefabsCreator.CreateObjectPrefab<MysteriousPortal>("Mysterious Portal", "mysterious_portal");
             PrefabsCreator.CreateObjectPrefab<CrazyMysteriousPortal>("Crazy Mysterious Portal", "crazy_mysterious_portal");
 

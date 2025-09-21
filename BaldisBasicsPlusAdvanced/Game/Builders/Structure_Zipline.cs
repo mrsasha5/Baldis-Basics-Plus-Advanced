@@ -69,7 +69,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 Cell start = ec.CellFromPosition(data[i].position);
                 Cell end = ec.CellFromPosition(data[i + 1].position);
 
-                Build(new KeyValuePair<Cell, Cell>(start, end), data[i].prefab.GetComponent<ZiplineHanger>());
+                ZiplineHanger hanger =
+                    Build(new KeyValuePair<Cell, Cell>(start, end), data[i].prefab.GetComponent<ZiplineHanger>());
+
+                ushort uses = (ushort)(data[i].data >> 16);
+                ushort percentageDistanceToBreak = (ushort)data[i].data;
+
+                hanger.OverrideParameters(uses, percentageDistanceToBreak / 100f);
             }
         }
 
@@ -96,7 +102,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             });
         }
 
-        public void Build(KeyValuePair<Cell, Cell> cells, ZiplineHanger ziplinePre)
+        public ZiplineHanger Build(KeyValuePair<Cell, Cell> cells, ZiplineHanger ziplinePre)
         {
             CoverPath(cells.Key, cells.Value);
 
@@ -118,6 +124,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
             CreatePillarDecoration(cells.Key.TileTransform.position, gm.transform);
             CreatePillarDecoration(cells.Value.TileTransform.position, gm.transform);
+            return hanger;
         }
 
         private void CreatePillarDecoration(Vector3 pos, Transform parent)

@@ -22,6 +22,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 string key = "adv_" + objectName;
                 LevelLoaderPlugin.Instance.itemObjects.Add(key, ObjectsStorage.ItemObjects[objectName]);
             }
+
             foreach (string vendingMachineName in ObjectsStorage.SodaMachines.Keys)
             {
                 string key = "adv_" + vendingMachineName;

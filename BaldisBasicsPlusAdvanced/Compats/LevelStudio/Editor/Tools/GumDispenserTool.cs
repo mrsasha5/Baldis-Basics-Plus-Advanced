@@ -1,14 +1,11 @@
-﻿using System;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
+﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
 using PlusLevelStudio.Editor;
-using PlusLevelStudio.Editor.Tools;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 {
 
-#warning Fix all issues with dispensers and tool
-    public class GumDispenserTool : PlaceAndRotateTool
+    public class GumDispenserTool : EditorTool
     {
 
         private string type;
@@ -16,6 +13,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
         private string dispenserPre;
 
         private string buttonPre;
+
+        private IntVector2? selectPos;
 
         private GumDispenserLocation notConnectedDispenser;
 
@@ -29,20 +28,27 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
             this.sprite = sprite;
         }
 
+        public override void Begin()
+        {
+            
+        }
+
+        public override void Update()
+        {
+            if (!selectPos.HasValue)
+            {
+                EditorController.Instance.selector.SelectTile(EditorController.Instance.mouseGridPosition);
+            }
+        }
+
         public override bool Cancelled()
         {
-            if (base.Cancelled())
-            {
-                ResetTool();
-                return true;
-            }
-            
-            return false;
+            ResetTool();
+            return true;
         }
 
         public override void Exit()
         {
-            base.Exit();
             ResetTool();
         }
 
@@ -58,14 +64,19 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
                 notConnectedDispenser = null;
             }
+            selectPos = null;
         }
 
-        public override bool ValidLocation(IntVector2 position)
+        public override bool MousePressed()
         {
-            return base.ValidLocation(position);
+            selectPos = EditorController.Instance.mouseGridPosition;
+
+            EditorController.Instance.selector.SelectRotation(selectPos.Value, (Direction dir) => Place(selectPos.Value, dir));
+
+            return false;
         }
 
-        protected override bool TryPlace(IntVector2 position, Direction dir)
+        private void Place(IntVector2 position, Direction dir)
         {
             GumDispenserStructureLocation structLoc =
                 (GumDispenserStructureLocation)EditorController.Instance.AddOrGetStructureToData(type, onlyOne: true);
@@ -76,27 +87,32 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
                     structLoc.CreateNewDispenser(
                         EditorController.Instance.levelData, dispenserPre, position, dir, false);
 
-                if (notConnectedDispenser == null) return false;
+                if (notConnectedDispenser == null) return;
 
                 EditorController.Instance.AddVisual(notConnectedDispenser);
 
-                return false;
+                selectPos = null;
+
+                return;
             }
             else
             {
                 SimpleButtonLocation buttonLoc = structLoc.CreateNewButton(
                     EditorController.Instance.levelData, buttonPre, position, dir, false);
 
-                if (buttonLoc == null) return false;
+                if (buttonLoc == null) return;
 
                 EditorController.Instance.AddVisual(buttonLoc);
 
                 notConnectedDispenser = null;
             }
 
-            return true;
+            EditorController.Instance.SwitchToTool(null);
         }
 
-
+        public override bool MouseReleased()
+        {
+            return false;
+        }
     }
 }

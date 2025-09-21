@@ -47,6 +47,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
                 EditorController.Instance.RemoveVisual(notConnectedPoint);
                 notConnectedPoint = null;
             }
+            EditorController.Instance.CancelHeldUndo();
         }
 
         public override void Update()
@@ -56,21 +57,16 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public override bool MousePressed()
         {
-            IntVector2 mousePos = EditorController.Instance.mouseGridPosition;
-            PlusStudioLevelFormat.Cell cell = EditorController.Instance.levelData.GetCellSafe(mousePos);
-
-            if (cell == null) return false;
-
-            if (notConnectedPoint == null)
-            {
-                EditorController.Instance.AddUndo();
-            }
-
             ZiplineStructureLocation structLoc = 
                 (ZiplineStructureLocation)EditorController.Instance.AddOrGetStructureToData("adv_zipline", onlyOne: true);
 
+            if (notConnectedPoint == null)
+            {
+                EditorController.Instance.HoldUndo();
+            }
+
             ZiplinePointLocation newPointLoc = 
-                structLoc.CreateNewChild(EditorController.Instance.levelData, hangerPre, cell.position.ToInt());
+                structLoc.CreateNewChild(EditorController.Instance.levelData, hangerPre, EditorController.Instance.mouseGridPosition);
 
             if (newPointLoc == null) return false;
 
@@ -78,6 +74,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
             {
                 notConnectedPoint.ConnectTo(newPointLoc);
                 notConnectedPoint = null;
+
+                EditorController.Instance.AddHeldUndo();
+
             }
             else
             {

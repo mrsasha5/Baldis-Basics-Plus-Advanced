@@ -112,6 +112,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
                 GameButton.Build(buttonData.prefab.GetComponent<GameButtonBase>(), ec, buttonData.position, buttonData.direction)
                     .SetUp(dispenser);
+
+                ushort uses = (ushort)(data[i].data >> 16);
+                ushort cooldown = (ushort)data[i].data;
+
+                dispenser.OverrideParameters(uses, cooldown);
             }
         }
 

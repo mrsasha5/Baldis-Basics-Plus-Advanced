@@ -74,6 +74,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         private float distanceToBreak;
 
+        private float percentageDistanceToBreak = -1f;
+
         private float speed;
 
         private int uses;
@@ -83,6 +85,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         private Vector3 direction;
 
         public float Offset => offset;
+
+        public IntVector2 MinMaxUses => minMaxUses;
 
         public void InitializePrefab(int variant)
         {
@@ -128,6 +132,19 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             }
         }
 
+        public void OverrideParameters(int maxUses, float percentageDistanceToBreak)
+        {
+            if (maxUses <= 0)
+            {
+                hasInfinityUses = true;
+                return;
+            }
+
+            hasInfinityUses = false;
+            minMaxUses.x = minMaxUses.z = maxUses;
+            this.percentageDistanceToBreak = percentageDistanceToBreak;
+        }
+
         public void Initialize(EnvironmentController ec, KeyValuePair<Vector3, Vector3> vector3s)
         {
             this.ec = ec;
@@ -164,6 +181,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
                 if (distance <= 0f)
                 {
+                    if (!broken && uses <= 1 && !hasInfinityUses) Break();
+
                     OnZiplineEnds();
                 }
             }
@@ -287,7 +306,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 motorAudMan.QueueAudio(AssetsStorage.sounds["grapple_loop"]);
                 motorAudMan.SetLoop(true);
 
-                if (!hasInfinityUses) distanceToBreak = distance * Random.value;
+                if (!hasInfinityUses)
+                {
+                    distanceToBreak = distance;
+                    if (percentageDistanceToBreak == -1f) distanceToBreak *= Random.value;
+                    else distanceToBreak *= (1f - percentageDistanceToBreak);
+                }
                 return true;
             }
             return false;
@@ -335,6 +359,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 overrider.SetGrounded(false);
                 overrider.SetHeight(height);
                 overrider.entity?.UpdateHeightAndScale(); //MYSTMAN DID WRONG ORDER IN CODE, BRUH!!!
+                                                          //He said it was fixed in 0.12.1, but I am not going to remove this implementation
+                                                          //To have same results on both versions
                 return true;
             }
 

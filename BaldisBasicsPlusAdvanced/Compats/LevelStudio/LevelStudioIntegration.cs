@@ -4,14 +4,17 @@ using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Builders;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
+using BaldisBasicsPlusAdvanced.Helpers;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelFormat;
 using UnityEngine;
+using static Mono.Security.X509.X520;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 {
@@ -71,7 +74,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             BoxCollider pillarCollider =
                 EditorInterface.AddStructureGenericVisual("adv_zipline_pillar", Structure_Zipline.ceilingPillarPre)
                     .AddComponent<BoxCollider>();
-            pillarCollider.size = new Vector3(3f, 5f, 3f);
+            pillarCollider.size = new Vector3(3f, 4f, 3f);
             pillarCollider.isTrigger = true;
             pillarCollider.center = Vector3.up * 9.5f;
 
@@ -81,11 +84,26 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 { "hanger_black", EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectsStorage.Objects["zipline_black_hanger"]) }
             };
 
+            foreach (GameObject zipline in hangerVisuals.Values)
+            {
+                zipline.layer = LevelStudioPlugin.editorInteractableLayer;
+
+                SettingsComponent comp = zipline.AddComponent<SettingsComponent>();
+                comp.offset = Vector3.up * 7f;
+
+                zipline.AddComponent<EditorSettingsableComponent>();
+            }
+
             #endregion
 
             #region Gum Dispenser Visual
 
-            EditorInterface.AddStructureGenericVisual("adv_gum_dispenser", ObjectsStorage.Objects["gum_dispenser"]);
+            BoxCollider gumDispCollider = 
+                EditorInterface.AddStructureGenericVisual("adv_gum_dispenser", ObjectsStorage.Objects["gum_dispenser"])
+                    .AddComponent<BoxCollider>();
+            gumDispCollider.size = new Vector3(8f, 8f, 1f);
+            gumDispCollider.center = (Vector3.forward + Vector3.up) * 5f;
+            gumDispCollider.gameObject.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
 
             #endregion
 
@@ -158,12 +176,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                     new ItemTool(key));
             }
 
-            foreach (string name in ObjectsStorage.SodaMachines.Keys)
-            {
-                string key = "adv_" + name;
-                EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                    new ObjectTool(key, ObjectsStorage.EditorSprites["vending_" + name]));
-            }
+            EditorInterfaceModes.AddToolToCategory(mode, "objects", 
+                new ObjectTool("adv_GoodMachine", 
+                    AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Objects/adv_editor_GoodMachine.png")));
 
             foreach (string name in ObjectsStorage.Objects.Keys)
             {

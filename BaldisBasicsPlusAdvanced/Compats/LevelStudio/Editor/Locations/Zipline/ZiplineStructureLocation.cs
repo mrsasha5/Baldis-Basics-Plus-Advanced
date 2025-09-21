@@ -78,7 +78,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
                 {
                     prefab = locations[i].hangerPrefab,
                     position = new MystIntVector2(locations[i].position.x, locations[i].position.z),
-                    direction = PlusDirection.North
+                    direction = PlusDirection.North,
+                    data = locations[i].EncodeData()
                 });
             }
 
@@ -148,8 +149,10 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             {
                 string hangerPrefab = compressor.ReadStoredString(reader);
                 IntVector2 position = reader.ReadByteVector2().ToInt();
+                int parametersData = reader.ReadInt32();
 
                 ZiplinePointLocation loc = CreateNewChild(data, hangerPrefab, position, disableChecks: true);
+                loc.LoadEncodedData(parametersData);
             }
 
             for (int i = 0; i < locations.Count; i += 2)
@@ -166,6 +169,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             {
                 compressor.WriteStoredString(writer, locations[i].hangerPrefab);
                 writer.Write(locations[i].position.ToByte());
+                writer.Write(locations[i].EncodeData());
             }
         }
 
