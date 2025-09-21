@@ -65,6 +65,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
                 notConnectedDispenser = null;
             }
             selectPos = null;
+            EditorController.Instance.CancelHeldUndo();
         }
 
         public override bool MousePressed()
@@ -83,6 +84,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
             if (notConnectedDispenser == null)
             {
+                EditorController.Instance.HoldUndo();
+
                 notConnectedDispenser =
                     structLoc.CreateNewDispenser(
                         EditorController.Instance.levelData, dispenserPre, position, dir, false);
@@ -107,6 +110,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
                 notConnectedDispenser = null;
             }
 
+            EditorController.Instance.AddHeldUndo();
             EditorController.Instance.SwitchToTool(null);
         }
 
