@@ -95,18 +95,18 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
         private PosterText[] texts;
 
         [JsonIgnore]
-        private PosterTextData[] posterTextDatas;
+        private PosterTextData[] posterTextData;
 
         [JsonIgnore]
-        public PosterTextData[] Texts => posterTextDatas;
+        public PosterTextData[] Texts => posterTextData;
 
         public void ConvertTextsToGameStandard()
         {
             if (texts == null) return;
-            posterTextDatas = new PosterTextData[texts.Length];
+            posterTextData = new PosterTextData[texts.Length];
             for (int i = 0; i < texts.Length; i++)
             {
-                posterTextDatas[i] = texts[i].Convert();
+                posterTextData[i] = texts[i].Convert();
             }
             texts = null;
         }

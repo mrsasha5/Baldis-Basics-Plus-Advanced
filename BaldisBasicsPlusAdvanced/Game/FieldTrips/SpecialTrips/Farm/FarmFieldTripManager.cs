@@ -512,7 +512,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
 
                 z--;
 
-                while (x <= endX) //copies the row's set datas
+                while (x <= endX) //copies the row's set data
                 {
                     int set = cellSets[ec.CellFromPosition(x, z + 1)];
 

@@ -23,7 +23,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         protected override void VirtualOnPress()
         {
             base.VirtualOnPress();
-            entities[0]?.RandomTeleport();
+            entities[0]?.DangerousTeleportation();
             SetCooldown(60f);
         }
 

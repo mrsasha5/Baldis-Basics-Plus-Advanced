@@ -37,7 +37,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// </summary>
         public static ExtraSettingsData ExtraSettings => OptionsDataManager.ExtraSettings;
 
-        #region Kitchen Stove recipes
+        #region Kitchen Stove Recipes
 
         /// <summary>
         /// Loads recipes from JSON files which should contain structure like <see cref="FoodRecipeSerializableData"/>.
@@ -92,11 +92,11 @@ namespace BaldisBasicsPlusAdvanced.API
         public static List<FoodRecipeData> FindKitchenStoveRecipes(Predicate<FoodRecipeData> predicate)
         {
             List<FoodRecipeData> recipes = new List<FoodRecipeData>();
-            for (int i = 0; i < KitchenStove.Datas.Count; i++)
+            for (int i = 0; i < KitchenStove.RecipeData.Count; i++)
             {
-                if (predicate.Invoke(KitchenStove.Datas[i]))
+                if (predicate.Invoke(KitchenStove.RecipeData[i]))
                 {
-                    recipes.Add(KitchenStove.Datas[i]);
+                    recipes.Add(KitchenStove.RecipeData[i]);
                 }
             }
             return recipes;
@@ -110,37 +110,37 @@ namespace BaldisBasicsPlusAdvanced.API
         public static List<FoodRecipeData> GetAllKitchenStoveRecipesExcept(params PluginInfo[] pluginInfos)
         {
             List<FoodRecipeData> datas = new List<FoodRecipeData>();
-            for (int i = 0; i < KitchenStove.Datas.Count; i++)
+            for (int i = 0; i < KitchenStove.RecipeData.Count; i++)
             {
                 bool getRecipe = true;
                 for (int j = 0; j < pluginInfos.Length; j++)
                 {
-                    if (KitchenStove.Datas[i].pluginInfos.Contains(pluginInfos[j]))
+                    if (KitchenStove.RecipeData[i].pluginInfos.Contains(pluginInfos[j]))
                     {
                         getRecipe = false;
                         break;
                     }
                 }
-                if (getRecipe) datas.Add(KitchenStove.Datas[i]);
+                if (getRecipe) datas.Add(KitchenStove.RecipeData[i]);
             }
             return datas;
         }
 
         /// <summary>
-        /// Returns a list of food recipe datas from provided mods.
+        /// Returns a list of food recipe data from provided mods.
         /// </summary>
         /// <param name="pluginInfos"></param>
         /// <returns>List (new instance).</returns>
         public static List<FoodRecipeData> GetAllKitchenStoveRecipesFrom(params PluginInfo[] pluginInfos)
         {
             List<FoodRecipeData> datas = new List<FoodRecipeData>();
-            for (int i = 0; i < KitchenStove.Datas.Count; i++)
+            for (int i = 0; i < KitchenStove.RecipeData.Count; i++)
             {
                 for (int j = 0; j < pluginInfos.Length; j++)
                 {
-                    if (KitchenStove.Datas[i].pluginInfos.Contains(pluginInfos[j]))
+                    if (KitchenStove.RecipeData[i].pluginInfos.Contains(pluginInfos[j]))
                     {
-                        datas.Add(KitchenStove.Datas[i]);
+                        datas.Add(KitchenStove.RecipeData[i]);
                         break;
                     }
                 }
@@ -154,7 +154,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <returns>List (new instance).</returns>
         public static List<FoodRecipeData> GetAllKitchenStoveRecipes()
         {
-            return new List<FoodRecipeData>(KitchenStove.Datas);
+            return new List<FoodRecipeData>(KitchenStove.RecipeData);
         }
 
         /// <summary>
@@ -167,19 +167,19 @@ namespace BaldisBasicsPlusAdvanced.API
         {
             data.CreateRecipePoster();
 
-            for (int i = 0; i < KitchenStove.Datas.Count; i++)
+            for (int i = 0; i < KitchenStove.RecipeData.Count; i++)
             {
-                if (KitchenStove.Datas[i].IsEqual(data))
+                if (KitchenStove.RecipeData[i].IsEqual(data))
                 {
-                    if (!KitchenStove.Datas[i].pluginInfos.Contains(data.pluginInfos[0]))
-                        KitchenStove.Datas[i].pluginInfos.Add(data.pluginInfos[0]);
+                    if (!KitchenStove.RecipeData[i].pluginInfos.Contains(data.pluginInfos[0]))
+                        KitchenStove.RecipeData[i].pluginInfos.Add(data.pluginInfos[0]);
                     return true;
-                } else if (KitchenStove.Datas[i].IsIdentical(data))
+                } else if (KitchenStove.RecipeData[i].IsIdentical(data))
                 {
                     return false;
                 }
             }
-            KitchenStove.Datas.Add(data);
+            KitchenStove.RecipeData.Add(data);
             return true;
         }
 
@@ -190,7 +190,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <returns>True, if the action was successful.</returns>
         public static bool RemoveKitchenStoveRecipe(FoodRecipeData data)
         {
-            return KitchenStove.Datas.Remove(data);
+            return KitchenStove.RecipeData.Remove(data);
         }
 
         /// <summary>
@@ -199,9 +199,9 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <param name="predicate"></param>
         public static void RemoveKitchenStoveRecipesBy(Predicate<FoodRecipeData> predicate)
         {
-            for (int i = 0; i < KitchenStove.Datas.Count; i++)
+            for (int i = 0; i < KitchenStove.RecipeData.Count; i++)
             {
-                if (predicate.Invoke(KitchenStove.Datas[i]) && RemoveKitchenStoveRecipe(KitchenStove.Datas[i])) i--;
+                if (predicate.Invoke(KitchenStove.RecipeData[i]) && RemoveKitchenStoveRecipe(KitchenStove.RecipeData[i])) i--;
             }
         }
 
@@ -211,13 +211,13 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <param name="pluginInfos"></param>
         public static void RemoveAllKitchenStoveRecipesFrom(params PluginInfo[] pluginInfos)
         {
-            for (int i = 0; i < KitchenStove.Datas.Count; i++)
+            for (int i = 0; i < KitchenStove.RecipeData.Count; i++)
             {
                 for (int j = 0; j < pluginInfos.Length; j++)
                 {
-                    if (KitchenStove.Datas[i].pluginInfos.Contains(pluginInfos[j]))
+                    if (KitchenStove.RecipeData[i].pluginInfos.Contains(pluginInfos[j]))
                     {
-                        RemoveKitchenStoveRecipe(KitchenStove.Datas[i]);
+                        RemoveKitchenStoveRecipe(KitchenStove.RecipeData[i]);
                         i--;
                     }
                 }
@@ -230,12 +230,12 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <param name="pluginInfos"></param>
         public static void RemoveAllKitchenStoveRecipesExcept(params PluginInfo[] pluginInfos)
         {
-            for (int i = 0; i < KitchenStove.Datas.Count; i++)
+            for (int i = 0; i < KitchenStove.RecipeData.Count; i++)
             {
                 bool removeRecipe = true;
                 for (int j = 0; j < pluginInfos.Length; j++)
                 {
-                    if (KitchenStove.Datas[i].pluginInfos.Contains(pluginInfos[j]))
+                    if (KitchenStove.RecipeData[i].pluginInfos.Contains(pluginInfos[j]))
                     {
                         removeRecipe = false;
                         break;
@@ -243,7 +243,7 @@ namespace BaldisBasicsPlusAdvanced.API
                 }
                 if (removeRecipe)
                 {
-                    RemoveKitchenStoveRecipe(KitchenStove.Datas[i]);
+                    RemoveKitchenStoveRecipe(KitchenStove.RecipeData[i]);
                     i--;
                 }
             }

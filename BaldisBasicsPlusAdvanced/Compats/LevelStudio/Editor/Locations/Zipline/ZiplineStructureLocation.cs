@@ -178,14 +178,5 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             compressor.AddStrings(locations.Select((x) => x.hangerPrefab));
         }
 
-        private void AttemptToDestroyRenderer(PointLocation loc)
-        {
-            ZiplinePointLocation zipLoc = (ZiplinePointLocation)loc;
-            if (zipLoc.renderer != null)
-            {
-                GameObject.Destroy(zipLoc.renderer.gameObject);
-            }
-        }
-
     }
 }

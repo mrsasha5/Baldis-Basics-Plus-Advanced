@@ -1,5 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,10 +9,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
     public class NoisyPlate : BaseCooldownPlate
     {
         [SerializeField]
+        private SoundObject audAlarm;
+
+        [SerializeField]
         private int generosityCount;
 
         [SerializeField]
         private float cooldown;
+
+        [SerializeField]
+        private float resetFacultyColorTime;
 
         [SerializeField]
         private int points;
@@ -19,16 +26,19 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         [SerializeField]
         private bool callsPrincipal;
 
-        [SerializeField]
-        private bool levelEditorMode;
-
-        private Cell cell;
-
-        private static List<NoisyPlate> editorPlates;
+        private RoomController room;
 
         private List<NoisyPlate> connectedPlates = new List<NoisyPlate>();
 
         public bool CallsPrincipal => callsPrincipal;
+
+        public override void InitializePrefab(int variant)
+        {
+            base.InitializePrefab(variant);
+            audAlarm = AssetsStorage.sounds["buzz_elv"]; //adv_emergency
+
+            audMan.gameObject.AddComponent<AudioEchoFilter>();
+        }
 
         protected override void SetValues(PlateData plateData)
         {
@@ -39,43 +49,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 
             points = 0;
             generosityCount = 0;
-            cooldown = 120f;
+            cooldown = 60f;
+            resetFacultyColorTime = 10f;
         }
 
-        protected override void VirtualAwake()
+        protected override void VirtualStart()
         {
-            base.VirtualAwake();
-            if (levelEditorMode)
-            {
-                cell = ec.CellFromPosition(transform.position);
-
-                if (editorPlates == null) editorPlates = new List<NoisyPlate>();
-
-                foreach (NoisyPlate plate in editorPlates)
-                {
-                    if (plate.cell != null && plate.cell.room != null && plate.cell.room == cell.room)
-                    {
-                        plate.ConnectTo(this);
-                        ConnectTo(plate);
-                    }
-                }
-
-                editorPlates.Add(this);
-            }
-        }
-
-        private void OnDestroy()
-        {
-            if (levelEditorMode)
-            {
-                editorPlates.Remove(this);
-                if (editorPlates.Count == 0) editorPlates = null;
-            }
-        }
-
-        public void SetLevelEditorMode(bool state)
-        {
-            levelEditorMode = state;
+            base.VirtualStart();
+            room = ec.CellFromPosition(transform.position).room;
         }
 
         public void OverrideCooldown(float cooldown) { 
@@ -112,7 +93,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             points = count;
         }
 
-        public void SetGenerosityCount(int count)
+        public void SetGenerosity(int count)
         {
             generosityCount = count;
         }
@@ -120,15 +101,24 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         protected override void SetTextures()
         {
             SetTexturesByBaseName("adv_noisy_plate");
-            SetEditorSprite("adv_editor_noisy_plate");
         }
 
         protected override void VirtualOnPress()
         {
             base.VirtualOnPress();
-            audMan.PlaySingle(AssetsStorage.sounds["adv_emergency"]);
-            EnvironmentController ec = Singleton<BaseGameManager>.Instance.Ec;
+            audMan.PlaySingle(audAlarm, 2f);
             ec.MakeNoise(transform.position, 127);
+
+            if (room.Powered)
+            {
+                for (int i = 0; i < room.lights.Count; i++)
+                {
+                    room.lights[i].lightColor = Color.red;
+                    room.lights[i].SetLight(true);
+                }
+                StartCoroutine(ResetRoomColor(resetFacultyColorTime));
+            }
+
             if (callsPrincipal)
             {
                 for (int i = 0; i < ec.Npcs.Count; i++)
@@ -139,15 +129,31 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
                     }
                 }
             }
+
             if (generosityCount > 0)
             {
-                Singleton<CoreGameManager>.Instance.AddPoints(points, 0, true);
+                CoreGameManager.Instance.AddPoints(points, 0, true);
                 generosityCount--;
             }
+
             SetCooldown(cooldown);
             for (int i = 0; i < connectedPlates.Count; i++) {
                 connectedPlates[i].SetCooldown(cooldown);
                 if (generosityCount > 0) connectedPlates[i].generosityCount--;
+            }
+        }
+
+        private IEnumerator ResetRoomColor(float timer)
+        {
+            while (timer > 0f)
+            {
+                timer -= Time.deltaTime * ec.EnvironmentTimeScale;
+                yield return null;
+            }
+            for (int i = 0; i < room.lights.Count; i++)
+            {
+                room.lights[i].lightColor = Color.white;
+                if (room.Powered) room.lights[i].SetLight(true);
             }
         }
 

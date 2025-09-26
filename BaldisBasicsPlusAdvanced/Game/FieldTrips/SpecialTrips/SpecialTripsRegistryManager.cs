@@ -7,7 +7,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips
 
         private static System.Random rng;
 
-        private static List<FieldTripData> datas = new List<FieldTripData>();
+        private static List<FieldTripData> data = new List<FieldTripData>();
 
         public static void InitializeRng()
         {
@@ -18,12 +18,12 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips
 
         public static void Add(params FieldTripData[] data)
         {
-            datas.AddRange(data);
+            SpecialTripsRegistryManager.data.AddRange(data);
         }
 
         public static FieldTripData GetRandomTripData()
         {
-            return datas[rng.Next(0, datas.Count)];
+            return data[rng.Next(0, data.Count)];
         }
 
     }

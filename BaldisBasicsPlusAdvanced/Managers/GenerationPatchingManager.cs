@@ -28,7 +28,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 recipesLoaded = true;
             }
 
-            foreach (CellTextureSerializableData cellTexData in ObjectsStorage.CellTextureDatas)
+            foreach (CellTextureSerializableData cellTexData in ObjectsStorage.CellTextureData)
             {
                 if (name == "END" && !cellTexData.endlessMode) continue;
 
@@ -197,7 +197,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 levelObject.roomGroup = levelObject.roomGroup.AddToArray(roomGroup);
             }
 
-            foreach (CustomRoomData roomData in ObjectsStorage.RoomDatas)
+            foreach (CustomRoomData roomData in ObjectsStorage.CustomRoomData)
             {
                 if (roomData.isAHallway != null && (bool)roomData.isAHallway) continue;
 
@@ -234,7 +234,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             }
 
             //For halls
-            foreach (CustomRoomData roomData in ObjectsStorage.RoomDatas)
+            foreach (CustomRoomData roomData in ObjectsStorage.CustomRoomData)
             {
                 if (roomData.isAHallway != null && !(bool)roomData.isAHallway) continue;
 
@@ -326,15 +326,15 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         private static void InitializeKitchenStovePosters(LevelObject obj)
         {
-            List<FoodRecipeData> datas = ApiManager.GetAllKitchenStoveRecipes();
+            List<FoodRecipeData> data = ApiManager.GetAllKitchenStoveRecipes();
             List<PosterObject> posters = new List<PosterObject>();
 
-            for (int i = 0; i < datas.Count; i++)
+            for (int i = 0; i < data.Count; i++)
             {
-                posters.Add(datas[i].Poster);
+                posters.Add(data[i].Poster);
             }
 
-            datas.Clear();
+            data.Clear();
 
             int weight = 100 / posters.Count;
 

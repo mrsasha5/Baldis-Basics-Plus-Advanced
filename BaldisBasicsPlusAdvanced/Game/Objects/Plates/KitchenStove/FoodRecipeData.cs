@@ -283,7 +283,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         internal FoodRecipeData CreateRecipePoster()
         {
             posterObj = ScriptableObject.CreateInstance<ExtendedPosterObject>();
-            Poster.name = $"RecipePoster_{KitchenStove.Datas.Count + 1}";
+            Poster.name = $"RecipePoster_{KitchenStove.RecipeData.Count + 1}";
             Poster.baseTexture = posterTex;
             Poster.textData = new PosterTextData[]
             {

@@ -7,6 +7,7 @@ using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 using BepInEx;
+using MTM101BaldAPI.AssetTools;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Cache
@@ -15,6 +16,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
     //And generation too
     internal class ObjectsStorage
     {
+
         private static Dictionary<string, Color> roomColors = new Dictionary<string, Color>()
         {
             { "English", Color.magenta },
@@ -25,19 +27,19 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         public static Dictionary<string, Color> RoomColors => roomColors;
 
-        //Extra datas
+        //Extra data
 
-        private static List<CellTextureSerializableData> cellTextureDatas = new List<CellTextureSerializableData>();
+        private static List<CellTextureSerializableData> cellTextureData = new List<CellTextureSerializableData>();
 
         private static Dictionary<string, BaseSpawningData> spawningData = new Dictionary<string, BaseSpawningData>();
 
-        public static List<CellTextureSerializableData> CellTextureDatas => cellTextureDatas;
+        public static List<CellTextureSerializableData> CellTextureData => cellTextureData;
 
         public static Dictionary<string, BaseSpawningData> SpawningData => spawningData;
 
-        private static List<CustomRoomData> roomDatas = new List<CustomRoomData>();
+        private static List<CustomRoomData> customRoomData = new List<CustomRoomData>();
 
-        //datas that was used by API
+        //Data that was used by API
 
         private static Dictionary<PluginInfo, List<WeightedCouncilTopic>> topics = new Dictionary<PluginInfo, List<WeightedCouncilTopic>>();
 
@@ -51,7 +53,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         public static Dictionary<PluginInfo, List<string>> SymbolMachineWords => words;
 
-        //end of extra datas
+        //End of extra data
 
         private static Dictionary<string, SceneObject> sceneObjects = new Dictionary<string, SceneObject>();
 
@@ -62,8 +64,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
         private static List<WeightedPosterObject> weightedPosterObjects = new List<WeightedPosterObject>();
 
         private static Dictionary<string, ItemObject> itemObjects = new Dictionary<string, ItemObject>();
-
-        private static Dictionary<string, Sprite> editorSprites = new Dictionary<string, Sprite>();
 
         private static Dictionary<string, NPC> npcs = new Dictionary<string, NPC>();
 
@@ -79,8 +79,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         private static Dictionary<string, Entity> entities = new Dictionary<string, Entity>();
 
-        private static Dictionary<string, GameButton> gameButtons = new Dictionary<string, GameButton>();
-
         private static Dictionary<string, RoomGroup> roomGroups = new Dictionary<string, RoomGroup>();
 
         private static Dictionary<string, RoomFunctionContainer> roomFunctionsContainers = new Dictionary<string, RoomFunctionContainer>();
@@ -89,13 +87,11 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         public static Dictionary<string, NPC> Npcs => npcs;
 
-        public static List<CustomRoomData> RoomDatas => roomDatas;
+        public static List<CustomRoomData> CustomRoomData => customRoomData;
 
         public static List<WeightedPosterObject> WeightedPosterObjects => weightedPosterObjects;
 
         public static Dictionary<string, ItemObject> ItemObjects => itemObjects;
-
-        public static Dictionary<string, Sprite> EditorSprites => editorSprites;
 
         public static Dictionary<string, RandomEvent> Events => events;
 
@@ -108,8 +104,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
         public static Dictionary<string, GameObject> Objects => objects;
 
         public static Dictionary<string, Entity> Entities => entities;
-
-        public static Dictionary<string, GameButton> GameButtons => gameButtons;
 
         public static Dictionary<string, Spelloon> Spelloons => spelloons;
 

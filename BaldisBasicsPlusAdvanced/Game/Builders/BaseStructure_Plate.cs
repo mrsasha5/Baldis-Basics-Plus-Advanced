@@ -1,4 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
+using PlusStudioLevelFormat;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -124,7 +125,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
                 if (!ignored)
                 {
-                    BuildPrefab(cells[index], rng, roomCells);
+                    RandomlyBuildPrefab(cells[index], rng, roomCells);
 
                     cellsToAvoid.Add(cells[index]);
 
@@ -145,7 +146,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
                 int index = rng.Next(0, ignoredCells.Count);
 
-                BuildPrefab(ignoredCells[index], rng, roomCells);
+                RandomlyBuildPrefab(ignoredCells[index], rng, roomCells);
 
                 ignoredCells.RemoveAt(index);
             }
@@ -162,29 +163,32 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
         }
 
-        public virtual BasePlate BuildPrefab(Cell cell, System.Random rng, bool inRoom)
+        public virtual BasePlate BuildPrefab(BasePlate platePre, Cell cell, Direction dir)
         {
-            BasePlate plate = UnityEngine.Object.Instantiate(
-                WeightedGameObject.ControlledRandomSelection(inRoom ? roomPrefabs : hallPrefabs, rng).GetComponent<BasePlate>(),
-                cell.room.objectObject.transform);
+            BasePlate plate = Instantiate(platePre, cell.room.objectObject.transform);
+
             plate.transform.position = cell.FloorWorldPosition;
-
-            Direction dir = RandomBuildDirection(cell, plateCoverage, useWallDirection: true, rng);
-
-            if (dir != Direction.Null) plate.transform.rotation = dir.ToRotation();
+            plate.transform.rotation = dir.ToRotation();
 
             cell.HardCover(plateCoverage);
             generatedPlates.Add(plate);
+
             return plate;
+        }
+
+        public virtual BasePlate RandomlyBuildPrefab(Cell cell, System.Random rng, bool inRoom)
+        {
+            BasePlate prefab = 
+                WeightedGameObject.ControlledRandomSelection(inRoom ? roomPrefabs : hallPrefabs, rng).GetComponent<BasePlate>();
+
+            Direction dir = RandomBuildDirection(cell, plateCoverage, useWallDirection: true, rng);
+
+            return BuildPrefab(prefab, cell, dir);
         }
 
         protected bool IsEnoughDistance(Cell cell1, Cell cell2)
         {
-            if (Vector3.Distance(cell1.CenterWorldPosition, cell2.CenterWorldPosition) > minPlatesDistance)
-            {
-                return true;
-            }
-            return false;
+            return Vector3.Distance(cell1.CenterWorldPosition, cell2.CenterWorldPosition) > minPlatesDistance;
         }
     }
 }

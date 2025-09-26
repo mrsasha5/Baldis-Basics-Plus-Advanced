@@ -374,7 +374,7 @@ namespace BaldisBasicsPlusAdvanced.Extensions
                 currentTime -= Time.deltaTime;
                 if (currentTime <= 0f)
                 {
-                    entity.SpectacularTeleport
+                    entity.SoundTeleport
                         (ec.RandomCell(includeOffLimits: false, includeWithObjects: false, useEntitySafeCell: true)
                         .FloorWorldPosition + Vector3.up * 5f);
                     teleportCount++;
@@ -389,20 +389,20 @@ namespace BaldisBasicsPlusAdvanced.Extensions
 
         public static void RandomTeleport(this Entity entity)
         {
-            entity.SpectacularTeleport(Singleton<BaseGameManager>.Instance.Ec.
+            entity.SoundTeleport(BaseGameManager.Instance.Ec.
                 RandomCell(includeOffLimits: false, includeWithObjects: false, useEntitySafeCell: true)
                         .FloorWorldPosition + Vector3.up * 5f);
         }
 
-        public static void SpectacularTeleport(this Entity entity, Vector3 pos)
+        public static void SoundTeleport(this Entity entity, Vector3 pos)
         {
-            //old pos
+            //Old pos
             AudioManager audMan = ObjectsCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
             audMan.PlaySingle(AssetsStorage.sounds["teleport"]);
 
             entity.Teleport(pos);
 
-            //actually pos
+            //Actual pos
             AudioManager _audMan = ObjectsCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
             _audMan.PlaySingle(AssetsStorage.sounds["teleport"]);
         }

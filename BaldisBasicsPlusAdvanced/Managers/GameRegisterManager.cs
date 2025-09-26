@@ -189,7 +189,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
                 if (data != null)
                 {
-                    ObjectsStorage.CellTextureDatas.Add(data);
+                    ObjectsStorage.CellTextureData.Add(data);
                 }
 
             }
@@ -826,12 +826,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateStructureBuilder<Structure_NoisyPlate>("Structure_NoisyPlate")
                 .SetStructureParameters(floor: 2, new StructureParameters()
                 {
-                    minMax = new IntVector2[] { new IntVector2(1, 2), new IntVector2(0, 0) },
+                    minMax = new IntVector2[] { new IntVector2(2, 5) },
                 })
                 .SetBannedFloors(1)
-                .SetWeight(floor: 2, 30)
+                .SetWeight(floor: 2, 50)
                 .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Maintenance);
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
 
             PrefabsCreator.CreateStructureBuilder<Structure_GumDispenser>("Structure_GumDispenser")
                 .SetStructureParameters(floor: 2, new StructureParameters()
@@ -1063,15 +1063,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreatePlate<AccelerationPlate>("acceleration_plate");
 
             PrefabsCreator.CreatePlate<NoisyPlate>("noisy_plate");
-            if (IntegrationManager.IsActive<LevelStudioIntegration>())
-            {
-                PrefabsCreator.CreatePlate<NoisyPlate>("noisy_faculty_plate");
-                NoisyPlate facultyVersion = ObjectsStorage.Objects["noisy_faculty_plate"].GetComponent<NoisyPlate>();
-                facultyVersion.SetEditorSprite("adv_editor_noisy_faculty_plate");
-                facultyVersion.OverrideCooldown(60f);
-                facultyVersion.SetCallsPrincipal(true);
-                facultyVersion.SetLevelEditorMode(true);
-            }
 
             PrefabsCreator.CreatePlate<StealingPlate>("stealing_plate");
             PrefabsCreator.CreatePlate<BullyPlate>("bully_plate");
@@ -1281,7 +1272,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 CustomRoomData roomData = CustomRoomData.RoomFromFile(path);
                 if (roomData == null) continue;
 
-                ObjectsStorage.RoomDatas.Add(roomData);
+                ObjectsStorage.CustomRoomData.Add(roomData);
             }
         }
 
@@ -1325,9 +1316,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             SetTagsTo(new string[] { TagsStorage.coldSchoolEventImmunity },
                 Character.Pomp, Character.Sweep, Character.Prize, Character.Chalkles);
-
-            SetTagsTo(new string[] { TagsStorage.disappearingCharactersEventImmunity },
-                Character.Baldi, Character.Principal);
 
             SetTagsTo(new string[] { TagsStorage.narrowlyFunctional },
                 Items.BusPass, Items.lostItem0, Items.lostItem1, Items.lostItem2, Items.lostItem3,

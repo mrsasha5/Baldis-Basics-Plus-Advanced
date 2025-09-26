@@ -2,7 +2,6 @@
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
-using MTM101BaldAPI.Registers.Buttons;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
@@ -36,9 +35,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             };
         }
 
-        public override BasePlate BuildPrefab(Cell cell, System.Random rng, bool inRoom)
+        public override BasePlate RandomlyBuildPrefab(Cell cell, System.Random rng, bool inRoom)
         {
-            KitchenStove stove = (KitchenStove)base.BuildPrefab(cell, rng, inRoom);
+            KitchenStove stove = (KitchenStove)base.RandomlyBuildPrefab(cell, rng, inRoom);
 
             GameButtonBase button = GameButton.BuildInArea(ec, cell.position, buttonRange, stove.gameObject,
                 WeightedGameObject.ControlledRandomSelection(buttonsPre, rng).GetComponent<GameButton>(), rng);

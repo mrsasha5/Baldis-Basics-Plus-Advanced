@@ -1,6 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
-using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,22 +13,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         [SerializeField]
         private float facultyCooldown;
 
-        [SerializeField]
-        private int minTrollingFaculties;
-
-        [SerializeField]
-        private int maxTrollingFaculties;
-
         public override void InitializePrefab(int variant)
         {
             base.InitializePrefab(1);
 
-            minTrollingFaculties = 1;
-            maxTrollingFaculties = 2;
             pointsPerFaculty = 30;
             facultyCooldown = 60f;
 
-            hallPrefabs = new WeightedGameObject[]
+            includeHalls = false;
+            roomPrefabs = new WeightedGameObject[]
             {
                 new WeightedGameObject()
                 {
@@ -37,54 +29,81 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                     weight = 100
                 }
             };
-            roomPrefabs = hallPrefabs;
+        }
+
+        public override void Load(List<StructureData> data)
+        {
+            base.Load(data);
+
+            List<int> extraData = new List<int>();
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                BuildInRoom(ec.rooms[data[i].data], data[i].prefab.GetComponent<NoisyPlate>());
+
+                for (int i2 = i + 1; i2 < data.Count; i2++)
+                {
+                    if (data[i2].prefab == null)
+                    {
+                        extraData.Add(data[i2].data);
+                    }
+                    else
+                    {
+                        i = i2 - 1;
+                        break;
+                    }
+                }
+
+                extraData.Clear();
+            }
         }
 
         public override void OnGenerationFinished(LevelBuilder lb)
         {
             System.Random rng = lb.controlledRNG;
 
-            int faculties = rng.Next(minTrollingFaculties, maxTrollingFaculties + 1);
+            int faculties = rng.Next(parameters.minMax[0].x, parameters.minMax[0].z + 1);
+
+            NoisyPlate platePre = WeightedGameObject.ControlledRandomSelection(roomPrefabs, rng)
+                .GetComponent<NoisyPlate>();
 
             foreach (RoomController room in ec.rooms)
             {
-                List<NoisyPlate> facultyPlates = new List<NoisyPlate>();
+                if (room.category != RoomCategory.Faculty) continue;
 
-                if (room.category == RoomCategory.Faculty)
-                {
-                    List<IntVector2> positions = room.builtDoorPositions;
-                    List<Cell> cells = room.GetNewTileList();
-                    for (int i = 0; i < positions.Count; i++)
-                    {
-                        Cell cell = ec.CellFromPosition(positions[i]);
+                if (faculties > 0) faculties--;
+                else break;
 
-                        if (cell != null && cell.HardCoverageFits(CellCoverage.Center | CellCoverage.Down))
-                        {
-                            facultyPlates.Add((NoisyPlate)BuildPrefab(cell, rng, inRoom: true));
-
-                            Direction dir = cell.doorDirs[0].GetOpposite();
-
-                            facultyPlates[facultyPlates.Count - 1].transform.rotation = dir.ToRotation();
-                        }
-                    }
-                }
-
-                if (facultyPlates.Count > 0) faculties--;
-
-                for (int i = 0; i < facultyPlates.Count; i++)
-                {
-                    facultyPlates[i].ConnectRange(facultyPlates);
-                    facultyPlates[i].SetCallsPrincipal(true);
-                    facultyPlates[i].OverrideCooldown(facultyCooldown);
-                    facultyPlates[i].SetPointsReward(pointsPerFaculty);
-                    facultyPlates[i].SetGenerosityCount(1);
-                }
-
-                //AW I FORGOT ABOUT THIS CODE LINE, WHEN I WAS REWRITING ALL BUILDERS TO THE NEW ONES AFTER 0.8 
-                if (faculties <= 0) break;
+                BuildInRoom(room, platePre);
             }
 
             generatedPlates.Clear();
+        }
+
+        public void BuildInRoom(RoomController room, NoisyPlate prefab)
+        {
+            List<NoisyPlate> facultyPlates = new List<NoisyPlate>();
+
+            List<IntVector2> positions = room.builtDoorPositions;
+            List<Cell> cells = room.GetNewTileList();
+            for (int i = 0; i < positions.Count; i++)
+            {
+                Cell cell = ec.CellFromPosition(positions[i]);
+
+                if (cell != null && cell.HardCoverageFits(CellCoverage.Center | CellCoverage.Down))
+                {
+                    facultyPlates.Add((NoisyPlate)BuildPrefab(prefab, cell, cell.doorDirs[0].GetOpposite()));
+                }
+            }
+
+            for (int i = 0; i < facultyPlates.Count; i++)
+            {
+                facultyPlates[i].ConnectRange(facultyPlates);
+                facultyPlates[i].SetCallsPrincipal(true);
+                facultyPlates[i].OverrideCooldown(facultyCooldown);
+                facultyPlates[i].SetPointsReward(pointsPerFaculty);
+                facultyPlates[i].SetGenerosity(1);
+            }
         }
 
     }

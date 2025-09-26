@@ -10,8 +10,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         public bool targetsPlayer;
 
-        //public PlateTargets[] targets;
-
         public bool showsUses;
 
         public bool showsCooldown;
@@ -27,11 +25,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
         public int uses;
 
         public bool hasInfinityUses;
-
-        /*public void SetTargets(params PlateTargets[] targets)
-        {
-            this.targets = targets;
-        }*/
 
         public void SetUses(int uses)
         {

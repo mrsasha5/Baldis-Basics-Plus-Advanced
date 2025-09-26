@@ -61,11 +61,11 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Managers
 
         public static void RewriteBindings()
         {
-            List<KeyBindingData> datas = keyBindings.Values.ToList();
+            List<KeyBindingData> data = keyBindings.Values.ToList();
             string text = "";
-            for (int i = 0; i < datas.Count; i++)
+            for (int i = 0; i < data.Count; i++)
             {
-                text += $"{datas[i].Id} {datas[i].Button}\n";
+                text += $"{data[i].Id} {data[i].Button}\n";
             }
             File.WriteAllText(SaveSystemCore.Path + keyBindingsFile, text);
         }

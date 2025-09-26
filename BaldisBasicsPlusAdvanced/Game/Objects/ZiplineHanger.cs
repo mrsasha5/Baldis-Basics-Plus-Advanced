@@ -18,6 +18,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         private SoundObject audBreak;
 
         [SerializeField]
+        private SoundObject[] audOnEnd;
+
+        [SerializeField]
         private float height;
 
         [SerializeField]
@@ -94,6 +97,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             audRestore = AssetsStorage.sounds["adv_appearing"];
             audBreak = AssetsStorage.sounds["bal_break"];
+            audOnEnd = new SoundObject[]
+            {
+                AssetsStorage.sounds["adv_wood_3"],
+                AssetsStorage.sounds["lock_door_stop"]
+            };
 
             height = 7f;
             requiredDistance = 5f;
@@ -126,8 +134,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 brokenSprite = AssetsHelper.SpriteFromFile("Textures/Objects/Hangers/adv_broken_black_hanger.png", pixelsPerUnit);
                 renderer.sprite = genericSprite;
                 hasInfinityUses = false;
-                minMaxUses.x = 4;
-                minMaxUses.z = 9;
+                minMaxUses.x = 2;
+                minMaxUses.z = 3;
                 canAcceptNPCs = false;
             }
         }
@@ -153,6 +161,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 new Vector3(vector3s.Key.x, 0f, vector3s.Key.z),
                 new Vector3(vector3s.Value.x, 0f, vector3s.Value.z));
             transform.position = new Vector3(positions.Key.x, 5f, positions.Key.z);
+        }
+
+        public void PostInitialization()
+        {
             if (!hasInfinityUses)
                 uses = new System.Random(CoreGameManager.Instance.Seed()).Next(minMaxUses.x, minMaxUses.z + 1);
         }
@@ -181,9 +193,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
                 if (distance <= 0f)
                 {
-                    if (!broken && uses <= 1 && !hasInfinityUses) Break();
-
                     OnZiplineEnds();
+
+                    if (!broken && uses <= 1 && !hasInfinityUses) Break();
                 }
             }
         }
@@ -263,8 +275,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             }
 
             motorAudMan.FlushQueue(true);
-            audMan.PlaySingle(AssetsStorage.sounds["adv_wood_3"]);
-            audMan.PlaySingle(AssetsStorage.sounds["lock_door_stop"]);
+
+            for (int i = 0; i < audOnEnd.Length; i++)
+            {
+                audMan.PlaySingle(audOnEnd[i]);
+            }
         }
 
         public void Clicked(int player)

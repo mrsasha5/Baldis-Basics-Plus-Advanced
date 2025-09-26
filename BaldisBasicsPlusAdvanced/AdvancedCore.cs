@@ -8,7 +8,6 @@ using BaldisBasicsPlusAdvanced.Managers;
 using BaldisBasicsPlusAdvanced.Menu;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using BepInEx;
-using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using HarmonyLib;
 using MTM101BaldAPI;
@@ -18,9 +17,7 @@ using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.SaveSystem;
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using UnityEngine;
 using static BepInEx.BepInDependency;
 
@@ -41,7 +38,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public static AdvancedCore Instance => instance;
 
-        public static string GameVersion => Application.version;
+        //public static string GameVersion => Application.version;
 
         internal static ManualLogSource Logging => Instance.Logger;
 
@@ -102,6 +99,8 @@ namespace BaldisBasicsPlusAdvanced
                     ObjectsCreator.CauseCrash(e);
                 }
                 yield return assetsLoading.Current;
+
+
             }
         }
 

@@ -56,7 +56,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             }
             else
             {
-                AdvancedCore.Logging.LogWarning("Ziplines Builder: unknown Level Bulder type.");
+                AdvancedCore.Logging.LogWarning("Ziplines Builder OnGenerationFinished: unknown Level Bulder type.");
             }
         }
 
@@ -76,6 +76,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 ushort percentageDistanceToBreak = (ushort)data[i].data;
 
                 hanger.OverrideParameters(uses, percentageDistanceToBreak / 100f);
+
+                hanger.PostInitialization();
             }
         }
 
@@ -179,7 +181,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                     int index = lengths.IndexOf(max);
 
                     Build(straightPaths[index],
-                        WeightedGameObject.ControlledRandomSelection(parameters.prefab, lb.controlledRNG).GetComponent<ZiplineHanger>());
+                        WeightedGameObject.ControlledRandomSelection(parameters.prefab, lb.controlledRNG).GetComponent<ZiplineHanger>())
+                            .PostInitialization();
                 }
                 else break;
 

@@ -40,7 +40,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         private static int maxFoodCount = 4;
 
-        private static List<FoodRecipeData> datas = new List<FoodRecipeData>();
+        private static List<FoodRecipeData> data = new List<FoodRecipeData>();
 
         [SerializeField]
         protected float coolingTime;
@@ -69,7 +69,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         public static int MaxFoodCount => maxFoodCount;
 
-        internal static List<FoodRecipeData> Datas => datas;
+        internal static List<FoodRecipeData> RecipeData => data;
 
         protected override bool UpdatesPressedState => false;
 
@@ -277,7 +277,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             if (pickups.Count + 1 - expelledItems.Length < maxFoodCount)
             {
                 recipeData =
-                    datas.Find(x => x.ContainsListOfPickups(pickups) && x.RawFood.Contains(item) && pickups.Count < x.RawFood.Length);
+                    data.Find(x => x.ContainsListOfPickups(pickups) && x.RawFood.Contains(item) && pickups.Count < x.RawFood.Length);
                 return recipeData != null;
             }
             recipeData = null;
@@ -289,7 +289,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             if (pickups.Count + 1 < maxFoodCount)
             {
                 recipeData = 
-                    datas.Find(x => x.ContainsListOfPickups(pickups) && x.RawFood.Contains(item) && pickups.Count < x.RawFood.Length);
+                    data.Find(x => x.ContainsListOfPickups(pickups) && x.RawFood.Contains(item) && pickups.Count < x.RawFood.Length);
                 return recipeData != null;
             }
             recipeData = null;
@@ -323,7 +323,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         public void Activate()
         {
-            currentRecipe = datas.Find(x => x.ContainsListOfPickups(pickups) && pickups.Count == x.RawFood.Length);
+            currentRecipe = data.Find(x => x.ContainsListOfPickups(pickups) && pickups.Count == x.RawFood.Length);
 
             if (!IsCookingAvailable()) return;
 

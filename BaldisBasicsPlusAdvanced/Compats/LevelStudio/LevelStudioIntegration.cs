@@ -2,6 +2,7 @@
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPlate;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
@@ -14,15 +15,17 @@ using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelFormat;
 using UnityEngine;
-using static Mono.Security.X509.X520;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 {
     public class LevelStudioIntegration : CompatibilityModule
     {
 
-        //Key: prefab name for builder
+        //Key: prefab name from StructureData
         public static Dictionary<string, GameObject> hangerVisuals;
+
+        //Key: prefab name from StructureData, value: key from LevelStudioPlugin.Instance.structureTypes
+        public static Dictionary<string, string> noisyPlateVisuals;
 
         public LevelStudioIntegration() : base()
         {
@@ -52,6 +55,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
         {
             LevelStudioPlugin.Instance.structureTypes.Add("adv_zipline", typeof(ZiplineStructureLocation));
             LevelStudioPlugin.Instance.structureTypes.Add("adv_gum_dispenser", typeof(GumDispenserStructureLocation));
+            LevelStudioPlugin.Instance.structureTypes.Add("adv_noisy_plate", typeof(NoisyPlateStructureLocation));
         }
 
         private static void InitializeVisuals()
@@ -89,7 +93,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 zipline.layer = LevelStudioPlugin.editorInteractableLayer;
 
                 SettingsComponent comp = zipline.AddComponent<SettingsComponent>();
-                comp.offset = Vector3.up * 7f;
+                comp.offset = Vector3.up * 10f;
 
                 zipline.AddComponent<EditorSettingsableComponent>();
             }
@@ -104,6 +108,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             gumDispCollider.size = new Vector3(8f, 8f, 1f);
             gumDispCollider.center = (Vector3.forward + Vector3.up) * 5f;
             gumDispCollider.gameObject.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
+
+            #endregion
+
+            #region Noisy Plate Visual
+
+            EditorInterface.AddStructureGenericVisual("adv_noisy_plate", ObjectsStorage.Objects["noisy_plate"]);
 
             #endregion
 

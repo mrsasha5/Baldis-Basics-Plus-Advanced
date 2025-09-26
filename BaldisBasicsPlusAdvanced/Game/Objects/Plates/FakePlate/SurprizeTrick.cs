@@ -65,7 +65,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
                         npc.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_bal_surprize"]);
                         npc.behaviorStateMachine.ChangeState(new Baldi_Praise(npc, (Baldi)npc,
                             npc.behaviorStateMachine.CurrentState, 2f)); //I didn't use native method cus I don't want audio
-                        npc.GetComponent<Entity>().SpectacularTeleport(Plate.transform.position);
+                        npc.GetComponent<Entity>().SoundTeleport(Plate.transform.position);
                         StartCoroutine(Teleport(npc.GetComponent<Entity>(), entityOverrider));
 
                         Plate.AudMan.FlushQueue(true);

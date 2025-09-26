@@ -73,7 +73,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                     for (int j = 0; j < tiles.Count; j++)
                     {
                         if (count == 0) break;
-                        AccelerationPlate plate = (AccelerationPlate)BuildPrefab(tiles[j].Key, rng, inRoom: false);
+                        AccelerationPlate plate = (AccelerationPlate)RandomlyBuildPrefab(tiles[j].Key, rng, inRoom: false);
                         plate.transform.rotation = tiles[j].Value.ToRotation();
                         if (plate.IsRotatable)
                             plate.SetAngleIndexByAngle((float)tiles[j].Value * 90f);
@@ -133,9 +133,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             return tiles;
         }
 
-        public override BasePlate BuildPrefab(Cell cell, System.Random rng, bool inRoom)
+        public override BasePlate RandomlyBuildPrefab(Cell cell, System.Random rng, bool inRoom)
         {
-            AccelerationPlate plate = (AccelerationPlate)base.BuildPrefab(cell, rng, inRoom);
+            AccelerationPlate plate = (AccelerationPlate)base.RandomlyBuildPrefab(cell, rng, inRoom);
             plate.InitializePotentialDirections();
             if (rng.Next(0, 101) <= 50 && plate.IsRotatable)
             {

@@ -21,6 +21,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
         public ushort percentageDistanceToBreak = 50;
 
         //Not serializable fields
+        private bool overridingData;
+
         private bool destroyed;
 
         private GameObject hangerVisual;
@@ -49,6 +51,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
         public void LoadEncodedData(int num)
         {
+            overridingData = true;
             uses = (ushort)(num >> 16);
             percentageDistanceToBreak = (ushort)num;
         }
@@ -61,7 +64,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             ZiplineHanger hangerPrefabObject = 
                 LevelLoaderPlugin.Instance.structureAliases[structLoc.type].prefabAliases[hangerPrefab].GetComponent<ZiplineHanger>();
 
-            uses = (ushort)hangerPrefabObject.MinMaxUses.z;
+            if (!overridingData)
+                uses = (ushort)hangerPrefabObject.MinMaxUses.z;
 
             Vector3 pos = position.GetVector3FromCellPosition();
             Vector3 endPos = loc.position.GetVector3FromCellPosition();
