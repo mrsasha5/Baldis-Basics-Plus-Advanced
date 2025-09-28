@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
 using UnityEngine;
@@ -8,47 +10,32 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
 {
     public class NoisyPlateStructureLocation : StructureLocation
     {
-        public class RoomDataContainer
+
+        public List<NoisyPlateRoomLocation> infectedRooms = new List<NoisyPlateRoomLocation>();
+
+        public NoisyPlateRoomLocation CreateAndAddRoom(string prefab, EditorRoom targetRoom)
         {
-
-            public int index = 0;
-
-            public string prefab = ""; //StructureData prefab
-
-            public List<SimpleLocation> locations = new List<SimpleLocation>();
-
-            public void RefreshLocations()
+            for (int i = 0; i < infectedRooms.Count; i++)
             {
-
+                if (infectedRooms[i].room == targetRoom) return null;
             }
 
+            NoisyPlateRoomLocation noisyPlateRoomLocation = new NoisyPlateRoomLocation();
+            noisyPlateRoomLocation.builderPrefab = prefab;
+            noisyPlateRoomLocation.owner = this;
+            noisyPlateRoomLocation.room = targetRoom;
+            infectedRooms.Add(noisyPlateRoomLocation);
+            return noisyPlateRoomLocation;
         }
 
-        public List<RoomDataContainer> rooms = new List<RoomDataContainer>();
-
-        public void AddRoom(EditorLevelData level, EditorRoom room, string prefab)
+        public void OnRoomDelete(NoisyPlateRoomLocation room, bool performCheck)
         {
-            int i = level.rooms.IndexOf(room);
-
-            RoomDataContainer roomData = new RoomDataContainer
+            infectedRooms.Remove(room);
+            ClearAllAllocatedLocksForRoom(room);
+            if (performCheck)
             {
-                index = i,
-                prefab = prefab
-            };
-
-            rooms.Add(roomData);
-        }
-
-        public override void CleanupVisual(GameObject visualObject)
-        {
-            
-        }
-
-        public override StructureInfo Compile(EditorLevelData data, BaldiLevel level)
-        {
-            StructureInfo structInfo = new StructureInfo(type);
-
-            return structInfo;
+                DeleteIfInvalid();
+            }
         }
 
         public override GameObject GetVisualPrefab()
@@ -58,42 +45,171 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
 
         public override void InitializeVisual(GameObject visualObject)
         {
-            throw new System.NotImplementedException();
+            for (int i = 0; i < infectedRooms.Count; i++)
+            {
+                UpdateVisualForRoom(infectedRooms[i]);
+            }
         }
 
         public override void UpdateVisual(GameObject visualObject)
         {
-            throw new System.NotImplementedException();
+            for (int i = 0; i < infectedRooms.Count; i++)
+            {
+                UpdateVisualForRoom(infectedRooms[i]);
+            }
+        }
+
+        public override void CleanupVisual(GameObject visualObject)
+        {
+            for (int i = 0; i < infectedRooms.Count; i++)
+            {
+                ClearAllAllocatedLocksForRoom(infectedRooms[i]);
+            }
+        }
+
+        public override StructureInfo Compile(EditorLevelData data, BaldiLevel level)
+        {
+            StructureInfo structInfo = new StructureInfo(type);
+
+            for (int i = 0; i < infectedRooms.Count; i++)
+            {
+                structInfo.data.Add(new StructureDataInfo()
+                {
+                    prefab = infectedRooms[i].builderPrefab,
+                    data = data.rooms.IndexOf(infectedRooms[i].room)
+                });
+
+                structInfo.data.Add(new StructureDataInfo()
+                {
+                    data = infectedRooms[i].cooldown
+                });
+
+                structInfo.data.Add(new StructureDataInfo()
+                {
+                    data = infectedRooms[i].generosity
+                });
+            }
+
+            return structInfo;
+        }
+
+        private void ClearAllAllocatedLocksForRoom(NoisyPlateRoomLocation room)
+        {
+            for (int num = room.allocatedPlates.Count - 1; num >= 0; num--)
+            {
+                Object.Destroy(room.allocatedPlates[num]);
+                room.allocatedPlates.Remove(room.allocatedPlates[num]);
+            }
+        }
+
+        private void UpdateVisualForRoom(NoisyPlateRoomLocation room)
+        {
+            List<DoorLocation> list = EditorController.Instance.levelData
+                .doors.Where(x => x.DoorConnectedToRoom(EditorController.Instance.levelData, room.room, forEditor: true)).ToList();
+
+            List<GameObject> list2 = new List<GameObject>(room.allocatedPlates);
+            while (list.Count > 0)
+            {
+                DoorLocation doorLocation = list[0];
+                list.RemoveAt(0);
+                if (LevelStudioPlugin.Instance.doorIngameStatus[doorLocation.type] != DoorIngameStatus.AlwaysObject)
+                {
+                    GameObject gameObject;
+                    if (list2.Count > 0)
+                    {
+                        gameObject = list2[0];
+                        list2.RemoveAt(0);
+                    }
+                    else
+                    {
+                        gameObject = Object.Instantiate(
+                            LevelStudioPlugin.Instance.genericStructureDisplays[
+                                LevelStudioIntegration.noisyPlateVisuals[room.builderPrefab]]);
+                        gameObject.GetComponent<EditorDeletableObject>().toDelete = room;
+                        room.allocatedPlates.Add(gameObject);
+                    }
+
+                    IntVector2 vector = doorLocation.position;
+                    Direction direction = doorLocation.direction.GetOpposite();
+                    if (EditorController.Instance.levelData.RoomFromPos(vector, forEditor: true) != room.room)
+                    {
+                        vector = doorLocation.position + doorLocation.direction.ToIntVector2();
+                        direction = doorLocation.direction;
+                    }
+
+                    gameObject.transform.position = vector.ToWorld();
+                    gameObject.transform.rotation = direction.ToRotation();
+                }
+            }
         }
 
         public override bool ValidatePosition(EditorLevelData data)
         {
-            throw new System.NotImplementedException();
+            for (int num = infectedRooms.Count - 1; num >= 0; num--)
+            {
+                if (!data.rooms.Contains(infectedRooms[num].room))
+                {
+                    OnRoomDelete(infectedRooms[num], performCheck: false);
+                }
+            }
+
+            return infectedRooms.Count > 0;
         }
 
         public override void ShiftBy(Vector3 worldOffset, IntVector2 cellOffset, IntVector2 sizeDifference)
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override void ReadInto(EditorLevelData data, BinaryReader reader, StringCompressor compressor)
         {
-            throw new System.NotImplementedException();
+            reader.ReadByte(); //Version
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                string prefabName = compressor.ReadStoredString(reader);
+                ushort roomId = reader.ReadUInt16();
+
+                byte paramsCount = reader.ReadByte(); //Parameters count
+
+                int cooldown = 0, generosity = 0;
+
+                if (paramsCount > 0)
+                    cooldown = reader.ReadInt32();
+
+                if (paramsCount > 1)
+                    generosity = reader.ReadInt32();
+
+                NoisyPlateRoomLocation loc = CreateAndAddRoom(prefabName, data.RoomFromId(roomId));
+                loc.cooldown = cooldown;
+                loc.generosity = generosity;
+            }
         }
 
         public override void Write(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
         {
-            writer.Write((byte)1); //Version
-            writer.Write(rooms.Count);
-            foreach (RoomDataContainer room in rooms)
+            writer.Write((byte)0); //Version
+            writer.Write(infectedRooms.Count);
+            for (int i = 0; i < infectedRooms.Count; i++)
             {
+                compressor.WriteStoredString(writer, infectedRooms[i].builderPrefab);
+                writer.Write(data.IdFromRoom(infectedRooms[i].room));
 
+                writer.Write((byte)2); //Parameters count
+                writer.Write(infectedRooms[i].cooldown);
+                writer.Write(infectedRooms[i].generosity);
             }
         }
 
         public override void AddStringsToCompressor(StringCompressor compressor)
         {
-            throw new System.NotImplementedException();
+            compressor.AddStrings(infectedRooms.Select(x => x.builderPrefab));
+        }
+
+        public override bool ShouldUpdateVisual(PotentialStructureUpdateReason reason)
+        {
+            return reason == PotentialStructureUpdateReason.CellChange;
         }
     }
+
 }

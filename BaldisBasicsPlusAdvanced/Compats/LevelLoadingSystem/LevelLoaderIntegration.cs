@@ -83,6 +83,15 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                     }
                 )
             );
+
+            LevelLoaderPlugin.Instance.structureAliases.Add("adv_noisy_plate",
+                new LoaderStructureData(ObjectsStorage.StructureBuilders["Structure_NoisyPlate"],
+                    new Dictionary<string, GameObject>()
+                    {
+                        { "noisy_plate", ObjectsStorage.Objects["noisy_plate"] }
+                    }
+                )
+            );
         }
 
         private static void InitializeActivities()

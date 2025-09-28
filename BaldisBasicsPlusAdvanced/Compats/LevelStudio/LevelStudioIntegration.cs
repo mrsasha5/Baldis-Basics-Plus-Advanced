@@ -24,7 +24,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
         //Key: prefab name from StructureData
         public static Dictionary<string, GameObject> hangerVisuals;
 
-        //Key: prefab name from StructureData, value: key from LevelStudioPlugin.Instance.structureTypes
+        //Key: prefab name from StructureData, value: key from LevelStudioPlugin.Instance.genericStructureDisplays
         public static Dictionary<string, string> noisyPlateVisuals;
 
         public LevelStudioIntegration() : base()
@@ -114,6 +114,10 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             #region Noisy Plate Visual
 
             EditorInterface.AddStructureGenericVisual("adv_noisy_plate", ObjectsStorage.Objects["noisy_plate"]);
+            noisyPlateVisuals = new Dictionary<string, string>()
+            {
+                { "noisy_plate", "adv_noisy_plate" }
+            };
 
             #endregion
 
@@ -234,6 +238,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             EditorInterfaceModes.AddToolToCategory(mode, "structures", 
                 new GumDispenserTool("adv_gum_dispenser", "gum_dispenser", "button", 
                     AssetsStorage.sprites["adv_editor_gum_dispenser"]));
+            EditorInterfaceModes.AddToolToCategory(mode, "structures",
+                new NoisyPlateTool("adv_noisy_plate", "noisy_plate",
+                    AssetsStorage.sprites["adv_editor_noisy_plate"]));
 
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
                 new RoomTool("adv_english_class", AssetsStorage.sprites["adv_editor_english_floor"]));

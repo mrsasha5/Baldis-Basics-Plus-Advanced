@@ -163,7 +163,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
         public override void Write(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
         {
-            writer.Write((byte)1); //Version
+            writer.Write((byte)0); //Version
             writer.Write(locations.Count);
             for (int i = 0; i < locations.Count; i++)
             {

@@ -39,13 +39,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
             for (int i = 0; i < data.Count; i++)
             {
-                BuildInRoom(ec.rooms[data[i].data], data[i].prefab.GetComponent<NoisyPlate>());
+                Debug.Log($"{data[i].prefab} {data[i].data}");
+
+                BuildInRoom(ec.rooms[data[i].data], data[i].prefab.GetComponent<NoisyPlate>(), ignoreCoverage: true);
 
                 for (int i2 = i + 1; i2 < data.Count; i2++)
                 {
                     if (data[i2].prefab == null)
                     {
                         extraData.Add(data[i2].data);
+                        i = i2;
                     }
                     else
                     {
@@ -54,12 +57,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                     }
                 }
 
+                Debug.Log($"Extra data length: {extraData.Count}");
+
                 extraData.Clear();
             }
         }
 
         public override void OnGenerationFinished(LevelBuilder lb)
         {
+            if (!(lb is LevelGenerator)) return;
+
             System.Random rng = lb.controlledRNG;
 
             int faculties = rng.Next(parameters.minMax[0].x, parameters.minMax[0].z + 1);
@@ -74,25 +81,21 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 if (faculties > 0) faculties--;
                 else break;
 
-                BuildInRoom(room, platePre);
+                BuildInRoom(room, platePre, ignoreCoverage: false);
             }
 
             generatedPlates.Clear();
         }
 
-        public void BuildInRoom(RoomController room, NoisyPlate prefab)
+        public void BuildInRoom(RoomController room, NoisyPlate prefab, bool ignoreCoverage)
         {
             List<NoisyPlate> facultyPlates = new List<NoisyPlate>();
 
-            List<IntVector2> positions = room.builtDoorPositions;
-            List<Cell> cells = room.GetNewTileList();
-            for (int i = 0; i < positions.Count; i++)
+            for (int i = 0; i < room.doors.Count; i++)
             {
-                Cell cell = ec.CellFromPosition(positions[i]);
-
-                if (cell != null && cell.HardCoverageFits(CellCoverage.Center | CellCoverage.Down))
+                if (ignoreCoverage || room.doors[i].aTile.HardCoverageFits(CellCoverage.Down))
                 {
-                    facultyPlates.Add((NoisyPlate)BuildPrefab(prefab, cell, cell.doorDirs[0].GetOpposite()));
+                    facultyPlates.Add((NoisyPlate)BuildPrefab(prefab, room.doors[i].aTile, room.doors[i].aTile.doorDirs[0].GetOpposite()));
                 }
             }
 

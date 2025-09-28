@@ -36,8 +36,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         {
             base.InitializePrefab(variant);
             audAlarm = AssetsStorage.sounds["buzz_elv"]; //adv_emergency
-
-            audMan.gameObject.AddComponent<AudioEchoFilter>();
         }
 
         protected override void SetValues(PlateData plateData)
