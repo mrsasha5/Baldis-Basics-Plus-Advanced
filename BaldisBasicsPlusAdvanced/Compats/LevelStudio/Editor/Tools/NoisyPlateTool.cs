@@ -45,14 +45,26 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
             EditorRoom room = 
                 EditorController.Instance.levelData.RoomFromPos(EditorController.Instance.mouseGridPosition, forEditor: true);
 
+            EditorController.Instance.HoldUndo();
+
             NoisyPlateStructureLocation structLoc = 
                 (NoisyPlateStructureLocation)EditorController.Instance.AddOrGetStructureToData(type, onlyOne: true);
 
-            if (room == null) return false;
+            if (room == null)
+            {
+                EditorController.Instance.CancelHeldUndo();
+                return false;
+            }
 
             NoisyPlateRoomLocation loc = structLoc.CreateAndAddRoom(platePre, room);
 
-            if (loc == null) return false;
+            if (loc == null)
+            {
+                EditorController.Instance.CancelHeldUndo();
+                return false;
+            }
+
+            EditorController.Instance.AddHeldUndo();
 
             EditorController.Instance.UpdateVisual(structLoc);
 

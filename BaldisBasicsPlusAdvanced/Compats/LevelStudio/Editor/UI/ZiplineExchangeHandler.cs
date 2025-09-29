@@ -1,5 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
+﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.UI;
 using TMPro;
@@ -69,7 +68,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
         {
             if (message == "setUses")
             {
-                if (ushort.TryParse((string)data, out var result))
+                if (ushort.TryParse((string)data, out ushort result))
                 {
                     loc.uses = result;
                     somethingChanged = true;
@@ -79,7 +78,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setDistanceToBreak")
             {
-                if (ushort.TryParse((string)data, out var result))
+                if (ushort.TryParse((string)data, out ushort result))
                 {
                     loc.percentageDistanceToBreak = (ushort)Mathf.Clamp((int)result, 0, 100);
                     somethingChanged = true;

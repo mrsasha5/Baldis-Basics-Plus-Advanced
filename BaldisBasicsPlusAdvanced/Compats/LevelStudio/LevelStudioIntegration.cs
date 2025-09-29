@@ -21,6 +21,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
     public class LevelStudioIntegration : CompatibilityModule
     {
 
+        internal const string standardMsg_StructureVersionException = 
+            "Incompatible structure format: saved maps on new format version can't be loaded on previous ones.";
+
         //Key: prefab name from StructureData
         public static Dictionary<string, GameObject> hangerVisuals;
 
@@ -113,7 +116,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #region Noisy Plate Visual
 
-            EditorInterface.AddStructureGenericVisual("adv_noisy_plate", ObjectsStorage.Objects["noisy_plate"]);
+            EditorInterface.AddStructureGenericVisual("adv_noisy_plate", ObjectsStorage.Objects["noisy_plate"])
+                .gameObject.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
+
             noisyPlateVisuals = new Dictionary<string, string>()
             {
                 { "noisy_plate", "adv_noisy_plate" }

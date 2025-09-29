@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
@@ -10,6 +11,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
 {
     public class NoisyPlateStructureLocation : StructureLocation
     {
+
+        public const byte formatVersion = 0;
 
         public List<NoisyPlateRoomLocation> infectedRooms = new List<NoisyPlateRoomLocation>();
 
@@ -31,7 +34,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
         public void OnRoomDelete(NoisyPlateRoomLocation room, bool performCheck)
         {
             infectedRooms.Remove(room);
-            ClearAllAllocatedLocksForRoom(room);
+            ClearAllAllocatedPlatesForRoom(room);
             if (performCheck)
             {
                 DeleteIfInvalid();
@@ -63,7 +66,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
         {
             for (int i = 0; i < infectedRooms.Count; i++)
             {
-                ClearAllAllocatedLocksForRoom(infectedRooms[i]);
+                ClearAllAllocatedPlatesForRoom(infectedRooms[i]);
             }
         }
 
@@ -93,7 +96,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
             return structInfo;
         }
 
-        private void ClearAllAllocatedLocksForRoom(NoisyPlateRoomLocation room)
+        private void ClearAllAllocatedPlatesForRoom(NoisyPlateRoomLocation room)
         {
             for (int num = room.allocatedPlates.Count - 1; num >= 0; num--)
             {
@@ -126,6 +129,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
                             LevelStudioPlugin.Instance.genericStructureDisplays[
                                 LevelStudioIntegration.noisyPlateVisuals[room.builderPrefab]]);
                         gameObject.GetComponent<EditorDeletableObject>().toDelete = room;
+                        gameObject.GetComponent<SettingsComponent>().activateSettingsOn = room;
                         room.allocatedPlates.Add(gameObject);
                     }
 
@@ -163,26 +167,19 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
 
         public override void ReadInto(EditorLevelData data, BinaryReader reader, StringCompressor compressor)
         {
-            reader.ReadByte(); //Version
+            byte ver = reader.ReadByte();
+
+            if (ver > formatVersion)
+                throw new System.Exception(LevelStudioIntegration.standardMsg_StructureVersionException);
+
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
                 string prefabName = compressor.ReadStoredString(reader);
                 ushort roomId = reader.ReadUInt16();
 
-                byte paramsCount = reader.ReadByte(); //Parameters count
-
-                int cooldown = 0, generosity = 0;
-
-                if (paramsCount > 0)
-                    cooldown = reader.ReadInt32();
-
-                if (paramsCount > 1)
-                    generosity = reader.ReadInt32();
-
                 NoisyPlateRoomLocation loc = CreateAndAddRoom(prefabName, data.RoomFromId(roomId));
-                loc.cooldown = cooldown;
-                loc.generosity = generosity;
+                loc.ReadParameters(ver, reader);
             }
         }
 

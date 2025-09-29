@@ -39,9 +39,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
             for (int i = 0; i < data.Count; i++)
             {
-                Debug.Log($"{data[i].prefab} {data[i].data}");
-
-                BuildInRoom(ec.rooms[data[i].data], data[i].prefab.GetComponent<NoisyPlate>(), ignoreCoverage: true);
+                List<NoisyPlate> currentPlates =
+                    BuildInRoom(ec.rooms[data[i].data], data[i].prefab.GetComponent<NoisyPlate>(), ignoreCoverage: true);
 
                 for (int i2 = i + 1; i2 < data.Count; i2++)
                 {
@@ -57,7 +56,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                     }
                 }
 
-                Debug.Log($"Extra data length: {extraData.Count}");
+                foreach (NoisyPlate plate in currentPlates)
+                {
+                    if (extraData.Count > 0)
+                        plate.SetCooldown(extraData[0]);
+
+                    if (extraData.Count > 1)
+                        plate.SetGenerosity(extraData[1]);
+                }
 
                 extraData.Clear();
             }
@@ -87,7 +93,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             generatedPlates.Clear();
         }
 
-        public void BuildInRoom(RoomController room, NoisyPlate prefab, bool ignoreCoverage)
+        public List<NoisyPlate> BuildInRoom(RoomController room, NoisyPlate prefab, bool ignoreCoverage)
         {
             List<NoisyPlate> facultyPlates = new List<NoisyPlate>();
 
@@ -107,6 +113,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 facultyPlates[i].SetPointsReward(pointsPerFaculty);
                 facultyPlates[i].SetGenerosity(1);
             }
+
+            return facultyPlates;
         }
 
     }

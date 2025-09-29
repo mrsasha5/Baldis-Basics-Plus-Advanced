@@ -69,7 +69,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
         {
             if (message == "setUses")
             {
-                if (ushort.TryParse((string)data, out var result))
+                if (ushort.TryParse((string)data, out ushort result))
                 {
                     loc.uses = result;
                     somethingChanged = true;
@@ -79,7 +79,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setCooldown")
             {
-                if (ushort.TryParse((string)data, out var result))
+                if (ushort.TryParse((string)data, out ushort result))
                 {
                     loc.cooldown = result;
                     somethingChanged = true;

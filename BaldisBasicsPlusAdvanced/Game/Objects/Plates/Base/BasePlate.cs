@@ -11,6 +11,10 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 {
+
+#warning Destroy all related editor fields and switch them in LevelStudioIntegration
+//Also I probably should merge BaseCooldownPlate with base class...
+
     public class BasePlate : MonoBehaviour, IPrefab
     {
         [SerializeField]
