@@ -253,12 +253,7 @@ namespace BaldisBasicsPlusAdvanced.API
 
         #region Objects (plates, Spelloons)
 
-        /// <summary>
-        /// Just creates a plate prefab.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="name">Prefab name.</param>
-        /// <returns></returns>
+        [Obsolete]
         public static T CreatePlate<T>(string name) where T : BasePlate
         {
             return PrefabsCreator.CreatePlate<T>(name, putInMemory: false);

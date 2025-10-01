@@ -5,15 +5,16 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 {
-    public class InvisibilityPlate : BaseCooldownPlate
+    public class InvisibilityPlate : BasePlate
     {
         private float effectTime = 15f;
 
         private float cooldown = 40f;
 
-        protected override void SetValues(PlateData plateData)
+        protected override void SetValues(PlateData data)
         {
-            base.SetValues(plateData);
+            base.SetValues(data);
+            data.MarkAsCooldownPlate();
             //plateData.hasLight = true;
             //plateData.lightColor = new Color(0f, 0.5f, 1f); //light blue
         }

@@ -2,13 +2,11 @@
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 {
-    public class SlowdownPlate : BaseCooldownPlate
+    public class SlowdownPlate : BasePlate
     {
         /*protected override void SetValues(PlateData plateData)
         {
@@ -18,12 +16,22 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         }*/
 
         [SerializeField]
+        private SoundObject audHit;
+
+        [SerializeField]
         private Sprite gaugeIcon;
 
         public override void InitializePrefab(int variant)
         {
             base.InitializePrefab(variant);
+            audHit = AssetsStorage.sounds["adv_metal_blow"];
             gaugeIcon = AssetsHelper.SpriteFromFile("Textures/Gauges/adv_gauge_slowness.png");
+        }
+
+        protected override void SetValues(PlateData data)
+        {
+            base.SetValues(data);
+            data.MarkAsCooldownPlate();
         }
 
         protected override void SetTextures()
@@ -42,7 +50,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
                 else
                     entity?.SetSpeedEffect(0.25f, 10f);
             }
-            audMan.PlaySingle(AssetsStorage.sounds["adv_metal_blow"]);
+            audMan.PlaySingle(audHit);
             SetCooldown(60f);
         }
 

@@ -19,7 +19,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Triggers
         protected override void OnEnvBeginPlay()
         {
             base.OnEnvBeginPlay();
-            BaseCooldownPlate[] plates = FindObjectsOfType<BaseCooldownPlate>();
+            BasePlate[] plates = FindObjectsOfType<BasePlate>();
 
             for (int i = 0; i < plates.Length; i++)
             {

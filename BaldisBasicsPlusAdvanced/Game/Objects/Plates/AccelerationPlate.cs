@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 {
-    public class AccelerationPlate : BaseCooldownPlate, IButtonReceiver
+    public class AccelerationPlate : BasePlate, IButtonReceiver
     {
         [SerializeField]
         internal float initialSpeed;
@@ -50,11 +50,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 
         }
 
-        protected override void SetValues(PlateData plateData)
+        protected override void SetValues(PlateData data)
         {
-            base.SetValues(plateData);
-            plateData.showsCooldown = true;
-            plateData.allowsToCopyTextures = false;
+            base.SetValues(data);
+            data.MarkAsCooldownPlate();
+            data.allowsToCopyTextures = false;
             //plateData.hasLight = true;
             //plateData.lightColor = new Color(1f, 0.5f, 0f); //orange
 
@@ -134,43 +134,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 
         }
 
-        public void ChooseBestRotation()
-        {
-            /*Cell mainCell = ec.CellFromPosition(transform.position);
-            int[] lengths = new int[4];
-            for (int i = 0; i < 4; i++)
-            {
-                IntVector2 pos = mainCell.position + ((Direction)i).ToIntVector2();
-                if (!ec.ContainsCoordinates(pos)) continue;
-
-                Cell nextCell = ec.CellFromPosition(pos);
-
-                while (nextCell != null && !nextCell.Null && !nextCell.HasWallInDirection(((Direction)i).GetOpposite())
-                    && ((nextCell.HardCoverageBin & Directions.ToBinary(((Direction)i).GetOpposite())) == 0))
-                {
-                    pos += ((Direction)i).ToIntVector2();
-                    lengths[i] += 1;
-                    nextCell = ec.CellFromPosition(pos);
-                }
-            }
-            int index = Array.IndexOf(lengths, MathHelper.FindMaxValue(lengths));
-            SetForwardByAngle(lengths[index] * 90f);*/
-            Vector3[] forwards = new Vector3[] { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
-            float[] angles = new float[] { 0f, 180f, 270f, 90f };
-            float lastDistance = float.NegativeInfinity;
-            int chosen = 0;
-            for (int i = 0; i < forwards.Length; i++)
-            {
-                Physics.Raycast(transform.position, forwards[i], out RaycastHit hit, float.PositiveInfinity, LayersHelper.ignorableCollidableObjects, QueryTriggerInteraction.Ignore);
-                if (hit.distance > lastDistance)
-                {
-                    chosen = i;
-                    lastDistance = hit.distance;
-                }
-            }
-            SetForwardByAngle(angles[chosen]);
-        }
-
         protected override void SetTextures()
         {
             SetTexturesByBaseName("adv_acceleration_plate");
@@ -229,15 +192,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
                 Vector3 forward = rot * Vector3.forward;
 
                 entity.AddForceWithBehaviour(forward, initialSpeed, acceleration, makesNoises: entity.CompareTag("Player"), 0.75f);
-
-                /*Force force = new Force(forward, initialSpeed, acceleration);
-                entity.AddForce(force);
-
-                ForcedEntityBehaviour behaviour = entity.gameObject.AddComponent<ForcedEntityBehaviour>();
-                behaviour.Initialize(Singleton<BaseGameManager>.Instance.Ec, time);
-                behaviour.PostInit(entity, force, forward, 0.75f, behaviour.DefaultSlamDistance, makesNoises: entity is PlayerEntity, time: time);*/
-        }
-        SetCooldown(cooldown);
+            }
+            SetCooldown(cooldown);
             ignoringTime = 1f;
         }
 

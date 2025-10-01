@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
 using BaldisBasicsPlusAdvanced.Helpers;
+using PlusLevelStudio;
 using PlusLevelStudio.Editor;
+using PlusStudioLevelLoader;
 using UnityEngine;
 
-namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPlate
+namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate
 {
     public class NoisyPlateRoomLocation : IEditorSettingsable, IEditorDeletable
     {
@@ -27,6 +30,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
         public List<GameObject> allocatedPlates = new List<GameObject>();
 
         public NoisyPlateStructureLocation owner;
+
+        public void LoadDefaultParameters()
+        {
+            NoisyPlate prefab = LevelLoaderPlugin.Instance.structureAliases[owner.type].prefabAliases[builderPrefab]
+                .GetComponent<NoisyPlate>();
+
+            cooldown = (int)prefab.Cooldown;
+            uses = prefab.Data.maxUses;
+            generosity = prefab.Generosity;
+            pointsPerAlarm = prefab.PointsReward;
+        }
 
         public void ReadParameters(byte version, BinaryReader reader)
         {

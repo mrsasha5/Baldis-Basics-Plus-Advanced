@@ -2,13 +2,15 @@
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
-using BaldisBasicsPlusAdvanced.Helpers;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 {
-    public class ProtectionPlate : BaseCooldownPlate
+    public class ProtectionPlate : BasePlate
     {
+
+        [SerializeField]
+        private SoundObject audProtection;
 
         /*protected override void SetValues(PlateData plateData)
         {
@@ -16,6 +18,18 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             plateData.hasLight = true;
             plateData.lightColor = Color.white;
         }*/
+
+        public override void InitializePrefab(int variant)
+        {
+            base.InitializePrefab(variant);
+            audProtection = AssetsStorage.sounds["adv_protection"];
+        }
+
+        protected override void SetValues(PlateData data)
+        {
+            base.SetValues(data);
+            data.MarkAsCooldownPlate();
+        }
 
         protected override void SetTextures()
         {
@@ -35,7 +49,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 
                 controller.SetTime(20f);
 
-                ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_protection"]);
+                ec.GetAudMan().PlaySingle(audProtection);
                 SetCooldown(80f);
             }
         }

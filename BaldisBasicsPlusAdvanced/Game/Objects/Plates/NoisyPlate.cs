@@ -6,13 +6,13 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 {
-    public class NoisyPlate : BaseCooldownPlate
+    public class NoisyPlate : BasePlate
     {
         [SerializeField]
         private SoundObject audAlarm;
 
         [SerializeField]
-        private int generosityCount;
+        private int generosity;
 
         [SerializeField]
         private float cooldown;
@@ -32,23 +32,31 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 
         public bool CallsPrincipal => callsPrincipal;
 
+        public float Cooldown => cooldown;
+
+        public int Generosity => generosity;
+
+        public int PointsReward => points;
+
         public override void InitializePrefab(int variant)
         {
             base.InitializePrefab(variant);
             audAlarm = AssetsStorage.sounds["buzz_elv"]; //adv_emergency
+
+            cooldown = 60f;
+            generosity = 1;
+            points = 30;
+            
+            resetFacultyColorTime = 10f;
         }
 
-        protected override void SetValues(PlateData plateData)
+        protected override void SetValues(PlateData data)
         {
-            base.SetValues(plateData);
-            plateData.targetsPlayer = true;
+            base.SetValues(data);
             //plateData.hasLight = true;
             //plateData.lightColor = Color.red;
-
-            points = 0;
-            generosityCount = 0;
-            cooldown = 60f;
-            resetFacultyColorTime = 10f;
+            data.MarkAsCooldownPlate();
+            data.timeToUnpress = 0.2f;
         }
 
         protected override void VirtualStart()
@@ -93,7 +101,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 
         public void SetGenerosity(int count)
         {
-            generosityCount = count;
+            generosity = count;
         }
 
         protected override void SetTextures()
@@ -128,16 +136,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
                 }
             }
 
-            if (generosityCount > 0)
+            if (generosity > 0)
             {
                 CoreGameManager.Instance.AddPoints(points, 0, true);
-                generosityCount--;
+                generosity--;
             }
 
             SetCooldown(cooldown);
             for (int i = 0; i < connectedPlates.Count; i++) {
                 connectedPlates[i].SetCooldown(cooldown);
-                if (generosityCount > 0) connectedPlates[i].generosityCount--;
+                if (generosity > 0) connectedPlates[i].generosity--;
             }
         }
 

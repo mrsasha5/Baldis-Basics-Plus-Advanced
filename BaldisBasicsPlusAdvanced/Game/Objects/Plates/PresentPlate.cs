@@ -17,7 +17,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         protected override void SetValues(PlateData plateData)
         {
             base.SetValues(plateData);
-            plateData.targetsPlayer = true;
             //plateData.hasLight = true;
             //plateData.lightColor = Color.blue;
             plateData.SetUses(1);
@@ -59,6 +58,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
                 spawnedPickups.Add(pickup);
             }
             
+        }
+
+        protected override bool IsPressable(Entity target)
+        {
+            return base.IsPressable(target) && target.CompareTag("Player");
         }
 
     }

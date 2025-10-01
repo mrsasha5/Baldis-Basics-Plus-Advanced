@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPlate;
+﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.UI;
 using TMPro;

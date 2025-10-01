@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Runtime.ConstrainedExecution;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
@@ -9,6 +10,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
 {
     public class GumDispenserStructureLocation : StructureLocation
     {
+
+        public const byte formatVersion = 0;
 
         public List<SimpleButtonLocation> buttonLocations = new List<SimpleButtonLocation>();
 
@@ -195,7 +198,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
 
         public override void ReadInto(EditorLevelData data, BinaryReader reader, StringCompressor compressor)
         {
-            reader.ReadByte(); //Version
+            byte ver = reader.ReadByte();
+
+            //if (ver > formatVersion)
+                //throw new System.Exception(LevelStudioIntegration.standardMsg_StructureVersionException);
+
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
@@ -216,7 +223,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
 
         public override void Write(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
         {
-            writer.Write((byte)0); //Version
+            writer.Write(formatVersion); //Version
             writer.Write(dispenserLocations.Count);
             for (int i = 0; i < dispenserLocations.Count; i++)
             {

@@ -9,16 +9,25 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 {
-    public class StealingPlate : BaseCooldownPlate
+    public class StealingPlate : BasePlate
     {
 
-        protected override void SetValues(PlateData plateData)
+        [SerializeField]
+        private float timePerItem;
+
+        public override void InitializePrefab(int variant)
         {
-            base.SetValues(plateData);
+            base.InitializePrefab(variant);
+            timePerItem = 40f;
+        }
+
+        protected override void SetValues(PlateData data)
+        {
+            base.SetValues(data);
+            data.MarkAsCooldownPlate();
             //plateData.hasLight = true;
             //plateData.lightColor = Color.gray;
-            plateData.allowsToCopyTextures = false;
-            plateData.targetsPlayer = true;
+            data.allowsToCopyTextures = false;
         }
 
         protected override void SetTextures()
@@ -31,19 +40,22 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         {
             base.VirtualOnPress();
 
-            ItemManager itm = Singleton<CoreGameManager>.Instance.GetPlayer(0).itm;
+            ItemManager itm = entities[0]?.GetComponent<ItemManager>();
 
             int itemsCount = itm.CountItems();
-
-            float itemTimePrice = 40f;
 
             if (itemsCount > 0)
             {
                 itm.ClearItems();
-                SetCooldown(itemsCount * itemTimePrice);
+                SetCooldown(itemsCount * timePerItem);
                 StartCoroutine(Effect());
             }
             
+        }
+
+        protected override bool IsPressable(Entity target)
+        {
+            return base.IsPressable(target) && target.CompareTag("Player");
         }
 
         private IEnumerator Effect()

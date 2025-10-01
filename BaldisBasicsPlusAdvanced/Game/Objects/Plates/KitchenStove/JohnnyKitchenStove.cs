@@ -40,8 +40,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             if (result)
             {
-                usedCount++;
-                SetVisualUses(usedCount, plateData.uses);
+                uses++;
+                SetVisualUses(uses, data.maxUses);
                 StoreRoomPatches.PlayJohnnyBuy(func);
                 CoreGameManager.Instance.AddPoints(-cookingPrice, 0, true);
 

@@ -1,14 +1,14 @@
 ﻿using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
-using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 {
-    public class TeleportationPlate : BaseCooldownPlate
+    public class TeleportationPlate : BasePlate
     {
-        protected override void SetValues(PlateData plateData)
+        protected override void SetValues(PlateData data)
         {
-            base.SetValues(plateData);
+            base.SetValues(data);
+            data.MarkAsCooldownPlate();
             //plateData.hasLight = true;
             //plateData.lightColor = new Color(0.6f, 0.2f, 1f); //violet
         }

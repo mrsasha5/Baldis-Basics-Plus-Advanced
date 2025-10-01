@@ -365,18 +365,23 @@ namespace BaldisBasicsPlusAdvanced.Extensions
         {
             int teleports = UnityEngine.Random.Range(12, 16);
             int teleportCount = 0;
+
             float baseTime = 0.2f;
-            float currentTime = 0;//baseTime;
+            float currentTime = 0;
             float increaseFactor = 1.1f;
+
             EnvironmentController ec = ReflectionHelper.GetValue<EnvironmentController>(entity, "environmentController");
+
+            entity.SetInteractionState(false);
+            entity.SetFrozen(true);
+
             while (teleportCount < teleports)
             {
                 currentTime -= Time.deltaTime;
                 if (currentTime <= 0f)
                 {
-                    entity.SoundTeleport
-                        (ec.RandomCell(includeOffLimits: false, includeWithObjects: false, useEntitySafeCell: true)
-                        .FloorWorldPosition + Vector3.up * 5f);
+                    entity.SoundTeleport(ec.RandomCell(includeOffLimits: false, includeWithObjects: false, useEntitySafeCell: true)
+                        .CenterWorldPosition);
                     teleportCount++;
                     baseTime *= increaseFactor;
                     currentTime = baseTime;
@@ -384,7 +389,9 @@ namespace BaldisBasicsPlusAdvanced.Extensions
 
                 yield return null;
             }
-            yield break;
+
+            entity.SetInteractionState(true);
+            entity.SetFrozen(false);
         }
 
         public static void RandomTeleport(this Entity entity)

@@ -22,7 +22,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
         public override bool IsAvailable()
         {
             return base.IsAvailable() && GameObject.FindObjectOfType<BaseStructure_Plate>() != null
-                && GameObject.FindObjectOfType<BaseCooldownPlate>() != null;
+                && Array.Find(GameObject.FindObjectsOfType<BasePlate>(), x => x.Data.initiallyHasCooldown) != null;
         }
 
         public override void OnVotingEndedPre(bool isWin)
@@ -33,7 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 
         private void OverrideCooldownPlates()
         {
-            foreach (BaseCooldownPlate plate in GameObject.FindObjectsOfType<BaseCooldownPlate>())
+            foreach (BasePlate plate in Array.FindAll(GameObject.FindObjectsOfType<BasePlate>(), x => x.Data.initiallyHasCooldown))
             {
                 plate.SetIgnoreCooldown(true);
                 plate.OnCooldownEnded();

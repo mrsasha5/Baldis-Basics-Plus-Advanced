@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPlate;
+﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate;
 using PlusLevelStudio.Editor;
 using UnityEngine;
 
@@ -63,6 +63,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
                 EditorController.Instance.CancelHeldUndo();
                 return false;
             }
+
+            loc.LoadDefaultParameters();
 
             EditorController.Instance.AddHeldUndo();
 

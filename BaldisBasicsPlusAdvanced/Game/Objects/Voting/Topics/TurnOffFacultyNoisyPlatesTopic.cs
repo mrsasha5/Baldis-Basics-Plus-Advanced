@@ -24,7 +24,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
             {
                 foreach (NoisyPlate plate in GameObject.FindObjectsOfType<NoisyPlate>())
                 {
-                    if (plate.CallsPrincipal) plate.SetTurnOff(true);
+                    if (plate.CallsPrincipal) plate.TurnOff(true);
                 }
             }
         }

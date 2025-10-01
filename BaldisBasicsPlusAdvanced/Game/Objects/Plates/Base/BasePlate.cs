@@ -13,12 +13,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 {
 
 #warning Destroy all related editor fields and switch them in LevelStudioIntegration
-//Also I probably should merge BaseCooldownPlate with base class...
 
     public class BasePlate : MonoBehaviour, IPrefab
     {
         [SerializeField]
         protected AudioManager audMan;
+
+        [SerializeField]
+        protected SoundObject audCooldownEnds;
 
         [SerializeField]
         protected Material activatedMaterial;
@@ -36,7 +38,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
         protected Transform textBase;
 
         [SerializeField]
-        protected TextMeshPro text;
+        protected TextMeshPro indicator;
 
         [SerializeField]
         protected SoundObject audPress;
@@ -57,7 +59,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
         protected float colorValue;
 
         [SerializeReference]
-        protected PlateData plateData;
+        protected PlateData data;
+
+        [SerializeField]
+        protected int cooldownIgnores;
+
+        protected float cooldownTime;
+
+        protected bool lockedByCooldown;
 
         //protected Cell cell;
 
@@ -69,7 +78,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         protected IEnumerator colorAnimator;
 
-        protected int usedCount;
+        protected int uses;
 
         protected bool toPress;
 
@@ -78,20 +87,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
         protected float time;
 
         protected bool visualActiveState;
-
-        public Sprite EditorToolSprite => editorToolSprite;
-
-        public Texture UnpressedTex => deactivatedMaterial.mainTexture;
-
-        public Texture PressedTex => activatedMaterial.mainTexture;
-
-        public PlateData Data => plateData;
-
-        public AudioManager AudMan => audMan;
-
-        public EnvironmentController Ec => ec;
-
-        public List<Entity> Entities => entities;
 
         protected virtual bool VisualPressedStateOverridden => false;
 
@@ -103,9 +98,23 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         protected virtual bool UpdatesPressedState => true;
 
-        public virtual bool IsUsable => turnOffs <= 0 && (plateData.hasInfinityUses || usedCount < plateData.uses);
+        public virtual bool IsUsable => turnOffs <= 0 && (data.hasInfinityUses || uses < data.maxUses) && !lockedByCooldown;
 
         public virtual float Timescale => ec.EnvironmentTimeScale;
+
+        public Sprite EditorToolSprite => editorToolSprite;
+
+        public Texture UnpressedTex => deactivatedMaterial.mainTexture;
+
+        public Texture PressedTex => activatedMaterial.mainTexture;
+
+        public PlateData Data => data;
+
+        public AudioManager AudMan => audMan;
+
+        public EnvironmentController Ec => ec;
+
+        public List<Entity> Entities => entities;
 
         /*protected virtual void SetupLight()
         {
@@ -128,29 +137,40 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
             }
         }*/
 
-        public virtual void SetTurnOff(bool state)
+        public virtual void InitializePrefab(int variant)
         {
-            if (state && turnOffs == 0) OnTurnOff();
-            else if (!state && turnOffs == 1) OnTurnOn();
+            audCooldownEnds = AssetsStorage.sounds["bell"];
+            audPress = AssetsStorage.sounds["button_unpress"];
+            audUnpress = AssetsStorage.sounds["button_press"];
 
-            if (state)
-                turnOffs++;
-            else
-                turnOffs--;
+            BoxCollider collider = gameObject.AddComponent<BoxCollider>();
+            collider.size = new Vector3(10f, 10f, 10f);
+            collider.isTrigger = true;
+            collider.center = Vector3.up * 5f;
 
-            if (turnOffs < 0) turnOffs = 0;
+            gameObject.layer = LayersHelper.ignoreRaycastB;
 
-            UpdateVisualActiveState();
-        }
+            audMan = gameObject.AddComponent<PropagatedAudioManager>();
 
-        protected virtual void OnTurnOff()
-        {
-            
-        }
+            activatedMaterial = new Material(AssetsStorage.materials["belt"]);
+            deactivatedMaterial = new Material(AssetsStorage.materials["belt"]);
 
-        protected virtual void OnTurnOn()
-        {
-            
+            disabledColorVal = 0.5f;
+            activeColorVal = 1f;
+            colorTransitionSpeed = 0.5f;
+            colorValue = activeColorVal;
+
+            data = new PlateData();
+            SetValues(data);
+
+            InitializeRenderer();
+            meshRenderers.Last().material = deactivatedMaterial;
+
+            SetTextures();
+
+            InitializeText();
+
+            SetVisualUses(uses, data.maxUses);
         }
 
         private void Awake()
@@ -162,7 +182,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         private void Start()
         {
-            VirtualStart();
+            VirtualStart();   
         }
 
         protected virtual void VirtualStart()
@@ -175,52 +195,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
             
         }
 
-        public virtual void InitializePrefab(int variant)
+        protected virtual void SetValues(PlateData data)
         {
-            BoxCollider plateCollider = gameObject.AddComponent<BoxCollider>();
-            plateCollider.size = new Vector3(10f, 10f, 10f);
-            plateCollider.isTrigger = true;
-            plateCollider.center = Vector3.up * 5f;
-
-            gameObject.layer = LayersHelper.ignoreRaycastB;
-
-            audMan = gameObject.AddComponent<PropagatedAudioManager>();
-
-            audPress = AssetsStorage.sounds["button_unpress"];
-            audUnpress = AssetsStorage.sounds["button_press"];
-
-            activatedMaterial = new Material(AssetsStorage.materials["belt"]);
-            deactivatedMaterial = new Material(AssetsStorage.materials["belt"]);
-
-            disabledColorVal = 0.5f;
-            activeColorVal = 1f;
-            colorTransitionSpeed = 0.5f;
-            colorValue = activeColorVal;
-
-            plateData = new PlateData();
-            SetValues(plateData);
-
-            InitializeRenderer();
-            meshRenderers.Last().material = deactivatedMaterial;
-
-            SetTextures();
-
-            InitializeText();
-
-            SetVisualUses(usedCount, plateData.uses);            
-        }
-
-        protected virtual void SetValues(PlateData plateData)
-        {
-            plateData.timeToUnpress = 2f;
-            plateData.targetsPlayer = false;
-            plateData.showsUses = false;
-            plateData.showsCooldown = false;
-            plateData.uses = 0;
-            plateData.hasInfinityUses = true;
-            plateData.allowsToCopyTextures = true;
+            data.timeToUnpress = 2f;
+            data.showsUses = false;
+            data.showsCooldown = false;
+            data.maxUses = 0;
+            data.hasInfinityUses = true;
+            data.allowsToCopyTextures = true;
             //plateData.lightStrength = 16;
-            //plateData.SetTargets(PlateTargets.AnyGroundedEntity);
         }
 
         protected virtual void InitializeRenderer()
@@ -237,16 +220,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         private void InitializeText()
         {
-            if (plateData.showsUses || plateData.showsCooldown)
-            {
-                textBase = new GameObject("TextBase").transform;
-                textBase.SetParent(gameObject.transform, true);
-                textBase.localPosition = Vector3.up * 5f;
+            textBase = new GameObject("TextBase").transform;
+            textBase.SetParent(gameObject.transform, true);
+            textBase.localPosition = Vector3.up * 5f;
 
-                text = Instantiate((TextMeshPro)AssetsStorage.texts["total_display"], textBase);
-                text.text = "";
-                text.gameObject.SetActive(true);
-            }
+            indicator = Instantiate((TextMeshPro)AssetsStorage.texts["total_display"], textBase);
+            indicator.text = "";
+            indicator.gameObject.SetActive(true);
+            indicator.rectTransform.sizeDelta = new Vector2(10f, 4f);
         }
 
         protected virtual void SetTextures()
@@ -284,16 +265,30 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
                 {
                     OnPress();
                     pressed = true;
-                    time = plateData.timeToUnpress;
+                    time = data.timeToUnpress;
                 }
                 else if (pressed && (!toPress || UnpressesWithNoReason))
                 {
-                    time -= Time.deltaTime * Timescale;
+                    if (time > 0f) 
+                        time -= Time.deltaTime * Timescale;
+
                     if (time <= 0f && UnpressesItself)
                     {
                         OnUnpress();
                         pressed = false;
                     }
+                }
+            }
+
+            if (lockedByCooldown && turnOffs <= 0 && cooldownTime > 0f)
+            {
+                cooldownTime -= Time.deltaTime * Timescale;
+
+                SetVisualCooldown((int)cooldownTime + 1);
+
+                if (cooldownTime <= 0f)
+                {
+                    OnCooldownEnded();
                 }
             }
 
@@ -392,8 +387,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
             UpdateVisualPressedState(true);
             if (IsUsable)
             {
-                if (!plateData.hasInfinityUses) usedCount++;
-                SetVisualUses(usedCount, plateData.uses);
+                if (!data.hasInfinityUses) uses++;
+                SetVisualUses(uses, data.maxUses);
                 VirtualOnPress();
             }
             UpdateVisualActiveState();
@@ -423,24 +418,86 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         protected virtual void VirtualTriggerStay(Collider other)
         {
-            if (plateData.targetsPlayer && !(other.CompareTag("Player"))) return;
-
             if (other.TryGetComponent(out Entity entity) && IsPressable(entity))
             {
                 if (!entities.Contains(entity))
                 {
                     toPress = true;
                     entities.Add(entity);
-                    if (!pressed)
-                    {
-                        OnFirstTouch(entity);
-                    }
                 }
             }
             
         }
 
-        protected virtual void OnFirstTouch(Entity entity)
+        public void SetIgnoreCooldown(bool state)
+        {
+            if (state)
+            {
+                cooldownIgnores++;
+            }
+            else
+            {
+                cooldownIgnores--;
+            }
+
+            if (cooldownIgnores < 0) cooldownIgnores = 0;
+        }
+
+        public virtual void OnCooldownEnded()
+        {
+            lockedByCooldown = false;
+            cooldownTime = 0f;
+            if (indicator != null) indicator.text = "";
+            if (audCooldownEnds != null) audMan.PlaySingle(audCooldownEnds);
+            SetVisualUses(uses, data.maxUses);
+            UpdateVisualActiveState();
+        }
+
+        public void SetCooldown(float cooldown)
+        {
+            if (cooldownIgnores > 0 || cooldown <= 0f) return;
+
+            cooldownTime = cooldown;
+            lockedByCooldown = true;
+
+            SetVisualCooldown((int)cooldown + 1);
+            UpdateVisualActiveState();
+        }
+
+        public void SetMaxUses(int uses)
+        {
+            data.SetUses(uses);
+            SetVisualUses(this.uses, data.maxUses);
+        }
+
+        protected bool SetVisualCooldown(int cooldown)
+        {
+            if (!Data.showsCooldown) return false;
+            indicator.text = string.Join("", cooldown.ToString().Select(num => "<sprite=" + num + ">"));
+            return true;
+        }
+
+        public virtual void TurnOff(bool state)
+        {
+            if (state && turnOffs == 0) OnTurnOff();
+            else if (!state && turnOffs == 1) OnTurnOn();
+
+            if (state)
+                turnOffs++;
+            else
+                turnOffs--;
+
+            if (turnOffs < 0) turnOffs = 0;
+
+            UpdateVisualActiveState();
+        }
+
+        protected virtual void OnTurnOff()
+        {
+            if (indicator != null) indicator.text = "";
+        }
+
+        protected virtual void OnTurnOn()
         {
 
         }
@@ -452,8 +509,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         protected virtual bool SetVisualUses(int uses, int maxUses)
         {
-            if (!Data.showsUses) return false;
-            text.text = string.Join("", uses.ToString().Select(num => "<sprite=" + num + ">")) + "<sprite=10>" + string.Join("", maxUses.ToString().Select(num => "<sprite=" + num + ">"));
+            if (!Data.showsUses || lockedByCooldown) return false;
+            indicator.text = string.Join("", 
+                uses.ToString().Select(num => "<sprite=" + num + ">")) + "<sprite=10>" + 
+                    string.Join("", maxUses.ToString().Select(num => "<sprite=" + num + ">"));
             return true;
         }
 
@@ -464,5 +523,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
                 meshRenderers[i].material.SetColor(color);
             }
         }
+
+
+
     }
 }

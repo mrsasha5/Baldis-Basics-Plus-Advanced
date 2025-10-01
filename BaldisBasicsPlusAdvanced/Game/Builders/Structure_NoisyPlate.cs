@@ -59,10 +59,19 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 foreach (NoisyPlate plate in currentPlates)
                 {
                     if (extraData.Count > 0)
-                        plate.SetCooldown(extraData[0]);
+                        plate.OverrideCooldown(extraData[0]);
 
-                    if (extraData.Count > 1)
-                        plate.SetGenerosity(extraData[1]);
+                    if (extraData.Count > 1 && extraData[1] > 0)
+                    {
+                        plate.Data.showsUses = true;
+                        plate.SetMaxUses(extraData[1]);
+                    }
+
+                    if (extraData.Count > 2)
+                        plate.SetGenerosity(extraData[2]);
+
+                    if (extraData.Count > 3)
+                        plate.SetPointsReward(extraData[3]);
                 }
 
                 extraData.Clear();

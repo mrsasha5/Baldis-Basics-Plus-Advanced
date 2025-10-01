@@ -15,7 +15,7 @@ using static UnityEngine.UI.CanvasScaler;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 {
-    public class SafetyTrapdoor : BaseCooldownPlate
+    public class SafetyTrapdoor : BasePlate
     {
         [SerializeField]
         private float sinkSpeed;
@@ -108,12 +108,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             }
         }
 
-        protected override void SetValues(PlateData plateData)
+        protected override void SetValues(PlateData data)
         {
-            base.SetValues(plateData);
+            base.SetValues(data);
 
-            plateData.showsCooldown = true;
-            plateData.allowsToCopyTextures = false;
+            data.MarkAsCooldownPlate();
+            data.allowsToCopyTextures = false;
         }
 
         protected override void SetTextures()

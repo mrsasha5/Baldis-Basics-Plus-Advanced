@@ -1,15 +1,13 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
 {
-    public class MysteriousPlate : BaseCooldownPlate
+    public class MysteriousPlate : BasePlate
     {
         [SerializeField]
         private MysteriousPlateEntityChecker checker;
@@ -35,7 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
         protected override void SetValues(PlateData plateData)
         {
             base.SetValues(plateData);
-            plateData.showsCooldown = false; //no cooldown, players, haha.
+            plateData.MarkAsCooldownPlate(hideCounter: true); //This plate is too mysterious to show you its randomized cooldown
             plateData.allowsToCopyTextures = false;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using BaldisBasicsPlusAdvanced.Game.Builders;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
@@ -11,6 +12,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 {
     public class ZiplineStructureLocation : StructureLocation
     {
+
+        public const byte formatVersion = 0;
 
         public List<ZiplinePointLocation> locations = new List<ZiplinePointLocation>();
 
@@ -143,7 +146,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
         public override void ReadInto(EditorLevelData data, BinaryReader reader, StringCompressor compressor)
         {
-            reader.ReadByte(); //Version
+            byte ver = reader.ReadByte(); //Version
+
+#warning Postponed change for testers. Also related to other structure locations.
+            //if (ver > formatVersion)
+                //throw new System.Exception(LevelStudioIntegration.standardMsg_StructureVersionException);
+
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
@@ -163,7 +171,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
         public override void Write(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
         {
-            writer.Write((byte)0); //Version
+            writer.Write(formatVersion); //Version
             writer.Write(locations.Count);
             for (int i = 0; i < locations.Count; i++)
             {

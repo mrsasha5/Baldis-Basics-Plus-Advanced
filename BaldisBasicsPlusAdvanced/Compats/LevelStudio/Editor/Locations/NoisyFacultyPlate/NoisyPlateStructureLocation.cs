@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
 using UnityEngine;
 
-namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPlate
+namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate
 {
     public class NoisyPlateStructureLocation : StructureLocation
     {
@@ -27,6 +26,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
             noisyPlateRoomLocation.builderPrefab = prefab;
             noisyPlateRoomLocation.owner = this;
             noisyPlateRoomLocation.room = targetRoom;
+
             infectedRooms.Add(noisyPlateRoomLocation);
             return noisyPlateRoomLocation;
         }
@@ -89,7 +89,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
 
                 structInfo.data.Add(new StructureDataInfo()
                 {
+                    data = infectedRooms[i].uses
+                });
+
+                structInfo.data.Add(new StructureDataInfo()
+                {
                     data = infectedRooms[i].generosity
+                });
+
+                structInfo.data.Add(new StructureDataInfo()
+                {
+                    data = infectedRooms[i].pointsPerAlarm
                 });
             }
 
@@ -145,6 +155,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
                     gameObject.transform.rotation = direction.ToRotation();
                 }
             }
+
+            while (list2.Count > 0)
+            {
+                GameObject gameObject2 = list2[0];
+                list2.RemoveAt(0);
+                Object.Destroy(gameObject2);
+                room.allocatedPlates.Remove(gameObject2);
+            }
         }
 
         public override bool ValidatePosition(EditorLevelData data)
@@ -185,16 +203,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPla
 
         public override void Write(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
         {
-            writer.Write((byte)0); //Version
+            writer.Write(formatVersion);
             writer.Write(infectedRooms.Count);
             for (int i = 0; i < infectedRooms.Count; i++)
             {
                 compressor.WriteStoredString(writer, infectedRooms[i].builderPrefab);
                 writer.Write(data.IdFromRoom(infectedRooms[i].room));
 
-                writer.Write((byte)2); //Parameters count
-                writer.Write(infectedRooms[i].cooldown);
-                writer.Write(infectedRooms[i].generosity);
+                infectedRooms[i].WriteParameters(writer);
             }
         }
 

@@ -8,7 +8,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Triggers
         protected override void OnEnvBeginPlay()
         {
             base.OnEnvBeginPlay();
-            foreach (BaseCooldownPlate plate in FindObjectsOfType<BaseCooldownPlate>())
+            foreach (BasePlate plate in FindObjectsOfType<BasePlate>())
             {
                 plate.SetIgnoreCooldown(true);
             }

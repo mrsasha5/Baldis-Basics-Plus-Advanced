@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 {
@@ -8,13 +7,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
     {
         public float timeToUnpress;
 
-        public bool targetsPlayer;
-
         public bool showsUses;
 
         public bool showsCooldown;
 
         public bool allowsToCopyTextures;
+
+        //It means if is plate supposed to use cooldown usually
+        public bool initiallyHasCooldown;
 
         //public bool hasLight;
 
@@ -22,20 +22,26 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         //public int lightStrength;
 
-        public int uses;
+        public int maxUses;
 
         public bool hasInfinityUses;
 
         public void SetUses(int uses)
         {
-            if (uses >= 0)
+            if (uses > 0)
             {
                 hasInfinityUses = false;
-                this.uses = uses;
+                this.maxUses = uses;
             } else
             {
                 hasInfinityUses = true;
             }
+        }
+
+        public void MarkAsCooldownPlate(bool hideCounter = false)
+        {
+            if (!hideCounter) showsCooldown = true;
+            initiallyHasCooldown = true;
         }
 
     }

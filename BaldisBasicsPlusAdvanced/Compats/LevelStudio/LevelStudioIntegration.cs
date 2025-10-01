@@ -2,7 +2,7 @@
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyPlate;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
