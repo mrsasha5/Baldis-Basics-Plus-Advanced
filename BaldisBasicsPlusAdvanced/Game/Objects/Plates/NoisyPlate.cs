@@ -145,6 +145,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             SetCooldown(cooldown);
             for (int i = 0; i < connectedPlates.Count; i++) {
                 connectedPlates[i].SetCooldown(cooldown);
+                connectedPlates[i].SetUses(uses);
                 if (generosity > 0) connectedPlates[i].generosity--;
             }
         }

@@ -468,6 +468,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
         {
             data.SetUses(uses);
             SetVisualUses(this.uses, data.maxUses);
+            UpdateVisualActiveState();
+        }
+
+        public void SetUses(int uses)
+        {
+            if (uses <= data.maxUses)
+            {
+                this.uses = uses;
+                SetVisualUses(uses, data.maxUses);
+                UpdateVisualActiveState();
+            }
         }
 
         protected bool SetVisualCooldown(int cooldown)

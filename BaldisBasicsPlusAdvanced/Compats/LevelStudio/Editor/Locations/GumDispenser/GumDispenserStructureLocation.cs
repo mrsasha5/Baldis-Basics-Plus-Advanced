@@ -223,7 +223,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
 
         public override void Write(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
         {
-            writer.Write(formatVersion); //Version
+            writer.Write(formatVersion);
             writer.Write(dispenserLocations.Count);
             for (int i = 0; i < dispenserLocations.Count; i++)
             {

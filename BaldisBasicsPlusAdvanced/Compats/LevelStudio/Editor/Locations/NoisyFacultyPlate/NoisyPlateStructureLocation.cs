@@ -17,6 +17,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
 
         public NoisyPlateRoomLocation CreateAndAddRoom(string prefab, EditorRoom targetRoom)
         {
+            if (targetRoom == EditorController.Instance.levelData.hall) return null;
+
             for (int i = 0; i < infectedRooms.Count; i++)
             {
                 if (infectedRooms[i].room == targetRoom) return null;

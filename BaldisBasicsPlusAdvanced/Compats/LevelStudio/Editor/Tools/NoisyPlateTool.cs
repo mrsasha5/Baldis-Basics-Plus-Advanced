@@ -11,6 +11,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public string platePre;
 
+        private EditorRoom foundRoom;
+
         public override string id => $"structure_{type}_{platePre}";
 
         public NoisyPlateTool(string type, string platePre, Sprite sprite)
@@ -27,22 +29,42 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public override void Update()
         {
+            EditorRoom editorRoom = foundRoom;
+            foundRoom = EditorController.Instance.levelData.RoomFromPos(EditorController.Instance.mouseGridPosition, forEditor: true);
+            StructureLocation structureData = EditorController.Instance.GetStructureData(type);
+            bool flag = true;
+            if (structureData != null)
+            {
+                flag = ((NoisyPlateStructureLocation)structureData).infectedRooms
+                    .Find((NoisyPlateRoomLocation x) => x.room == foundRoom) == null;
+            }
 
+            if (editorRoom != foundRoom)
+            {
+                if (editorRoom != null)
+                {
+                    EditorController.Instance.HighlightCells(EditorController.Instance.levelData.GetCellsOwnedByRoom(editorRoom), "none");
+                }
+
+                EditorController.Instance.HighlightCells(EditorController.Instance.levelData.GetCellsOwnedByRoom(foundRoom), 
+                    flag ? "yellow" : "red");
+            }
         }
 
         public override bool Cancelled()
         {
+            foundRoom = null;
             return true;
         }
 
         public override void Exit()
         {
-            
+            foundRoom = null;
         }
 
         public override bool MousePressed()
         {
-            EditorRoom room = 
+            foundRoom = 
                 EditorController.Instance.levelData.RoomFromPos(EditorController.Instance.mouseGridPosition, forEditor: true);
 
             EditorController.Instance.HoldUndo();
@@ -50,13 +72,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
             NoisyPlateStructureLocation structLoc = 
                 (NoisyPlateStructureLocation)EditorController.Instance.AddOrGetStructureToData(type, onlyOne: true);
 
-            if (room == null)
+            if (foundRoom == null)
             {
                 EditorController.Instance.CancelHeldUndo();
                 return false;
             }
 
-            NoisyPlateRoomLocation loc = structLoc.CreateAndAddRoom(platePre, room);
+            NoisyPlateRoomLocation loc = structLoc.CreateAndAddRoom(platePre, foundRoom);
 
             if (loc == null)
             {
@@ -75,7 +97,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public override bool MouseReleased()
         {
-            return true;
+            return false;
         }
 
     }

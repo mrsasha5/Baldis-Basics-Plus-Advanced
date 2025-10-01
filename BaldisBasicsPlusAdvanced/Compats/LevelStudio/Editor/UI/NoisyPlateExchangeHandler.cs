@@ -39,10 +39,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
         {
             if (cooldown != null)
             {
-                if (loc.cooldown <= 0)
-                    cooldown.text = "NO";
-                else
-                    cooldown.text = loc.cooldown.ToString();
+                cooldown.text = loc.cooldown.ToString();
             }
 
             if (uses != null)

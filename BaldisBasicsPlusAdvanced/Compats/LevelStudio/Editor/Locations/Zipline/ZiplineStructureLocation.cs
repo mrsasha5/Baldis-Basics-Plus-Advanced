@@ -146,7 +146,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
         public override void ReadInto(EditorLevelData data, BinaryReader reader, StringCompressor compressor)
         {
-            byte ver = reader.ReadByte(); //Version
+            byte ver = reader.ReadByte();
 
 #warning Postponed change for testers. Also related to other structure locations.
             //if (ver > formatVersion)
@@ -171,7 +171,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
         public override void Write(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
         {
-            writer.Write(formatVersion); //Version
+            writer.Write(formatVersion);
             writer.Write(locations.Count);
             for (int i = 0; i < locations.Count; i++)
             {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
-    public class LayersHelper
+    internal class LayersHelper
     {
 
         private static bool warningNotifSpawned;
@@ -24,6 +24,8 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         public static LayerMask clickableEntities;
 
         public static LayerMask clickableCollidableEntities;
+
+        public static LayerMask noInterCollisionEntities;
 
         public static LayerMask billboard;
 
@@ -51,6 +53,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             standardEntities = LayerFromName("StandardEntities");
             clickableEntities = LayerFromName("ClickableEntities");
             clickableCollidableEntities = LayerFromName("ClickableCollidableEntities");
+            noInterCollisionEntities = LayerFromName("NoInterCollisionEntities"); //Used by students from event
             ignoreRaycast = LayerFromName("Ignore Raycast");
             ignoreRaycastB = LayerFromName("Ignore Raycast B");
             billboard = LayerFromName("Billboard");
@@ -73,7 +76,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             {
                 warningNotifSpawned = true;
                 NotificationManager.Instance.Queue(
-                    "Adv_Notif_LayersError", AssetsStorage.sounds["elv_buzz"], isForced: true);
+                    "Adv_Notif_LayersError", AssetsStorage.sounds["buzz_elv"], isForced: true);
             }
             return layer;
         }
@@ -85,6 +88,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             Physics.IgnoreLayerCollision(player, clickableEntities, state);
             Physics.IgnoreLayerCollision(player, clickableCollidableEntities, state);
             Physics.IgnoreLayerCollision(player, npcs, state);
+            Physics.IgnoreLayerCollision(player, noInterCollisionEntities, state);
         }
 
     }
