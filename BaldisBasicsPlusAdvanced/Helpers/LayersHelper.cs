@@ -23,6 +23,8 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static LayerMask clickableEntities;
 
+        public static LayerMask collidableEntities;
+
         public static LayerMask clickableCollidableEntities;
 
         public static LayerMask noInterCollisionEntities;
@@ -52,6 +54,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             windows = LayerFromName("Windows");
             standardEntities = LayerFromName("StandardEntities");
             clickableEntities = LayerFromName("ClickableEntities");
+            collidableEntities = LayerFromName("CollidableEntities");
             clickableCollidableEntities = LayerFromName("ClickableCollidableEntities");
             noInterCollisionEntities = LayerFromName("NoInterCollisionEntities"); //Used by students from event
             ignoreRaycast = LayerFromName("Ignore Raycast");

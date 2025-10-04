@@ -28,6 +28,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 recipesLoaded = true;
             }
 
+            if (!levelObject.IsModifiedByMod(AdvancedCore.Instance.Info))
+            {
+                levelObject.MarkAsModifiedByMod(AdvancedCore.Instance.Info);
+            }
+            else return;
+
             foreach (CellTextureSerializableData cellTexData in ObjectsStorage.CellTextureData)
             {
                 if (name == "END" && !cellTexData.endlessMode) continue;

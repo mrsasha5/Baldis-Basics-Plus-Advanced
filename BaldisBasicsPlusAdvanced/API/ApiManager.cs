@@ -587,16 +587,28 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <returns>List (reference). Do not modify.</returns>
         public static List<string> AddNewSymbolMachineWords(PluginInfo pluginInfo, params string[] words)
         {
-            if (!ObjectsStorage.SymbolMachineWords.ContainsKey(pluginInfo)) ObjectsStorage.SymbolMachineWords.Add(pluginInfo, new List<string>());
+            if (!ObjectsStorage.SymbolMachineWords.ContainsKey(pluginInfo)) 
+                ObjectsStorage.SymbolMachineWords.Add(pluginInfo, new List<string>());
 
             for (int i = 0; i < words.Length; i++)
             {
                 if (words[i].Length > 5)
                 {
-                    logger.LogWarning("Word " + words[i] + " skipped, because max length is 5 symbols!");
+                    logger.LogWarning("Word " + words[i] + " is skipped, because max length is 5 symbols!");
                     continue;
                 }
+
+                foreach (char symbol in words[i])
+                {
+                    if (!ObjectsStorage.Spelloons.ContainsKey("spelloon_" + symbol.ToString().ToLower()))
+                    {
+                        logger.LogWarning("Word " + words[i] + " is skipped, because it contains not existing symbol(s).");
+                        goto EndAndDontAdd;
+                    }
+                }
+                
                 ObjectsStorage.SymbolMachineWords[pluginInfo].Add(words[i]);
+            EndAndDontAdd:;
             }
 
             return ObjectsStorage.SymbolMachineWords[pluginInfo];

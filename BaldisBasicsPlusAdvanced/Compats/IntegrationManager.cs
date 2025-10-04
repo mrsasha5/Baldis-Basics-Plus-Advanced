@@ -105,19 +105,5 @@ namespace BaldisBasicsPlusAdvanced.Compats
             }
         }
 
-        private class IntegrationModuleException : Exception
-        {
-
-            public string stackTrace;
-
-            public override string StackTrace => string.IsNullOrEmpty(base.StackTrace) ? base.StackTrace : stackTrace;
-
-            public IntegrationModuleException(string message) : base(message)
-            {
-
-            }
-
-        }
-
     }
 }

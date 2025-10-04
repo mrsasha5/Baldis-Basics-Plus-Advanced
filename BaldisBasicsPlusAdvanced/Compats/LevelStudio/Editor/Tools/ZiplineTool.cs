@@ -1,9 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
-using BaldisBasicsPlusAdvanced.Game.Builders;
-using PlusLevelStudio;
 using PlusLevelStudio.Editor;
-using PlusStudioLevelLoader;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 {
@@ -14,7 +12,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         private string hangerPre;
 
-        private static Vector3[] _vectors = new Vector3[2];
+        private static Vector3[] _vectors;
 
         public override string id => $"structure_{type}_{hangerPre}";
 
@@ -30,7 +28,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public override void Begin()
         {
-            
+            _vectors = new Vector3[2];
         }
 
         public override bool Cancelled()
@@ -56,6 +54,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
                 notConnectedPoint = null;
             }
             EditorController.Instance.CancelHeldUndo();
+            _vectors = null;
         }
 
         public override void Update()
@@ -63,8 +62,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
             if (notConnectedPoint != null && notConnectedPoint.renderer != null)
             {
                 _vectors[0] = new Vector3(notConnectedPoint.position.x * 10 + 5, 9f, notConnectedPoint.position.z * 10 + 5);
-                _vectors[1] = new Vector3(EditorController.Instance.mouseGridPosition.x * 10 + 5, 9f, 
-                    EditorController.Instance.mouseGridPosition.z * 10 + 5);
+                _vectors[1] = new Vector3(EditorController.Instance.mousePlanePosition.x, 9f, 
+                    EditorController.Instance.mousePlanePosition.z);
                 notConnectedPoint.renderer.SetPositions(_vectors);
             }
             EditorController.Instance.selector.SelectTile(EditorController.Instance.mouseGridPosition);
@@ -72,8 +71,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public override bool MousePressed()
         {
+            if (EditorController.Instance.levelData
+                .RoomIdFromPos(EditorController.Instance.mouseGridPosition, forEditor: true) == 0) 
+                    return false;
+
             ZiplineStructureLocation structLoc = 
-                (ZiplineStructureLocation)EditorController.Instance.AddOrGetStructureToData("adv_zipline", onlyOne: true);
+                (ZiplineStructureLocation)EditorController.Instance.AddOrGetStructureToData(type, onlyOne: true);
 
             if (notConnectedPoint == null)
             {

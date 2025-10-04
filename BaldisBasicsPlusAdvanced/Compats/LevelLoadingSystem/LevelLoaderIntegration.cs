@@ -185,6 +185,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 
         private static void InitializeRoomTextureAliases()
         {
+            //What the heck, why texture keys are named through PascalCase in Level Loader, while other stuff use snake_case
             LevelLoaderPlugin.Instance.roomTextureAliases.Add(
                 "adv_english_ceiling", AssetsStorage.textures["adv_english_ceiling"]);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add(

@@ -251,10 +251,14 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
         public void TryDestroyCollider(Collider collider)
         {
-
+            Debug.Log($"Collider: {collider.name}");
             if (collider != null)
             {
-                if (collider.transform.CompareTag("Wall"))
+                if (collider.transform.CompareTag("Window"))
+                    collider.transform.GetComponent<Window>()
+                        .Break(true); //Why it makes noise? Then ask First Prize why he makes, when
+                                      //he tries to push player to a wall
+                else if (collider.transform.CompareTag("Wall"))
                 {
                     Direction direction = Directions.DirFromVector3(collider.transform.forward, 5f);
                     Cell cell = ec.CellFromPosition(IntVector2.GetGridPosition(
@@ -275,75 +279,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                         ec.BuildWindow(cell2, direction, windowObjectPre);
                     }
                 }
-                else if (collider.transform.parent != null)
-                {
-                    if (collider.transform.parent.CompareTag("Window"))
-                        collider.transform.parent.GetComponent<Window>()
-                            .Break(true); //Why it makes noise? Then ask First Prize why he makes, when
-                                        //he tries to push player to a wall
-
-                    //Decided to cancel doors burning since it's really bad idea from the technical point
-                    /*else if (collider.transform.parent.TryGetComponent(out StandardDoor door))
-                    {
-                        door.Unlock();
-                        door.Open(true, false);
-                        door.doors = new MeshRenderer[0];
-                        door.colliders = new MeshCollider[0];
-                        door.audMan.volumeModifier = 0f; //Haha, no.
-                        door.tag = "Untagged";
-                        //GameObject.Destroy(door); //Still can't do that because it registered not only by some room
-                        //but it may be registered by some mod too
-                        Renderer[] renderers = collider.transform.parent.GetComponentsInChildren<MeshRenderer>();
-                        for (int i = 0; i < renderers.Length; i++)
-                        {
-                            Material[] materials = renderers[i].materials;
-                            materials[0] = windowObjectPre.mask;
-                            materials[1] = windowObjectPre.open[0];
-                            renderers[i].materials = materials;
-                        }
-
-                        Collider trigger = collider.transform.parent.GetComponent<Collider>();
-
-                        if (trigger != null) Destroy(trigger);
-
-                        Collider[] colliders = collider.transform.parent.GetComponentsInChildren<MeshCollider>();
-                        for (int i = 0; i < colliders.Length; i++)
-                        {
-                            GameObject.Destroy(colliders[i]);
-                        }
-                    }
-                    else if (collider.transform.parent.TryGetComponent(out SwingDoor swingDoor))
-                    {
-                        swingDoor.Unlock();
-                        swingDoor.Open(true, false);
-                        swingDoor.doors = new MeshRenderer[0];
-                        swingDoor.colliders = new MeshCollider[0];
-                        swingDoor.audMan.volumeModifier = 0f; //Haha, no.
-                        swingDoor.tag = "Untagged";
-                        //GameObject.Destroy(door); //Still can't do that because it registered not only by some room
-                        //but it may be registered by some mod too
-
-                        MeshRenderer[] renderers = collider.transform.parent.GetComponentsInChildren<MeshRenderer>();
-                        for (int i = 0; i < renderers.Length; i++)
-                        {
-                            Material[] materials = renderers[i].materials;
-                            materials[0] = windowObjectPre.mask;
-                            materials[1] = windowObjectPre.open[0];
-                            renderers[i].materials = materials;
-                        }
-
-                        Collider trigger = collider.transform.parent.GetComponent<Collider>();
-
-                        if (trigger != null) Destroy(trigger);
-
-                        Collider[] colliders = collider.transform.parent.GetComponentsInChildren<MeshCollider>();
-                        for (int i = 0; i < colliders.Length; i++)
-                        {
-                            GameObject.Destroy(colliders[i]);
-                        }
-                    }*/
-
-                }
+                
             }
         }
 
@@ -376,13 +312,14 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                 laserRenderer.allowOcclusionWhenDynamic = false;
                 laserRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 laserRenderer.receiveShadows = false;
-                laserRenderer.material = new Material(AssetsStorage.materials["black_behind"]); //black_behind
+                laserRenderer.material = new Material(AssetsStorage.materials["black_behind"]);
                 laserRenderer.material.SetColor(Color.white);
 
                 collider = gameObject.AddComponent<BoxCollider>();
                 collider.isTrigger = true;
 
                 gameObject.SetRigidbody();
+                gameObject.layer = LayersHelper.collidableEntities;
             }
 
             private void Update()

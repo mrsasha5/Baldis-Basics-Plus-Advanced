@@ -164,11 +164,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
         {
             if (activated && !used && Connected)
             {
-                if (other.TryGetComponent(out MathMachineNumber _))
+                //Probably I need to do some system to check objects which shouldn't be teleported
+                if (other.TryGetComponent(out MathMachineNumber _) || other.TryGetComponent(out MatchActivityBalloon _))
                 {
-                    //balloon.trackPlayer = true; //to fix when balloons didn't respawn
-                    //balloon.Pop();
-                    //not good fix. Just ignore these balloons
                     return;
                 }
 

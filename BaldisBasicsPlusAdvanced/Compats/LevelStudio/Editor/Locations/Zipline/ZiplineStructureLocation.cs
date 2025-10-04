@@ -150,9 +150,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
         {
             byte ver = reader.ReadByte();
 
-#warning Postponed change for testers. Also related to other structure locations.
-            //if (ver > formatVersion)
-                //throw new System.Exception(LevelStudioIntegration.standardMsg_StructureVersionException);
+            if (ver > formatVersion)
+                throw new System.Exception(LevelStudioIntegration.standardMsg_StructureVersionException);
 
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)

@@ -79,6 +79,10 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public override bool MousePressed()
         {
+            if (EditorController.Instance.levelData
+                .RoomIdFromPos(EditorController.Instance.mouseGridPosition, forEditor: true) == 0)
+                    return false;
+
             selectPos = EditorController.Instance.mouseGridPosition;
 
             EditorController.Instance.selector.SelectRotation(selectPos.Value, (Direction dir) => Place(selectPos.Value, dir));

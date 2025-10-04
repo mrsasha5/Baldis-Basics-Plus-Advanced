@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Runtime.ConstrainedExecution;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
@@ -200,8 +199,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
         {
             byte ver = reader.ReadByte();
 
-            //if (ver > formatVersion)
-                //throw new System.Exception(LevelStudioIntegration.standardMsg_StructureVersionException);
+            if (ver > formatVersion)
+                throw new System.Exception(LevelStudioIntegration.standardMsg_StructureVersionException);
 
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
