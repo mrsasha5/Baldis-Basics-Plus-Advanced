@@ -78,22 +78,19 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #region Zipline Visuals
 
-            BoxCollider pillarCollider =
-                EditorInterface.AddStructureGenericVisual("adv_zipline_pillar", Structure_Zipline.ceilingPillarPre)
-                    .AddComponent<BoxCollider>();
-            pillarCollider.size = new Vector3(3f, 4f, 3f);
-            pillarCollider.isTrigger = true;
-            pillarCollider.center = Vector3.up * 9.5f;
+            EditorInterface.AddStructureGenericVisual("adv_zipline_pillar", Structure_Zipline.ceilingPillarPre);
 
             hangerVisuals = new Dictionary<string, GameObject>()
             {
-                { "hanger_white", EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectsStorage.Objects["zipline_hanger"]) },
-                { "hanger_black", EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectsStorage.Objects["zipline_black_hanger"]) }
+                { "hanger_white", EditorInterface.AddStructureGenericVisual("adv_zipline_hanger", 
+                    ObjectsStorage.Objects["zipline_hanger"])},
+                { "hanger_black", EditorInterface.AddStructureGenericVisual("adv_zipline_black_hanger", 
+                    ObjectsStorage.Objects["zipline_black_hanger"]) }
             };
 
             foreach (GameObject zipline in hangerVisuals.Values)
             {
-                zipline.layer = LevelStudioPlugin.editorInteractableLayer;
+                zipline.GetComponent<SphereCollider>().center = Vector3.up * 2.5f;
 
                 SettingsComponent comp = zipline.AddComponent<SettingsComponent>();
                 comp.offset = Vector3.up * 10f;

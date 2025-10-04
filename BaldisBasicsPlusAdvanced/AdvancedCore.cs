@@ -38,8 +38,6 @@ namespace BaldisBasicsPlusAdvanced
 
         public static AdvancedCore Instance => instance;
 
-        //public static string GameVersion => Application.version;
-
         internal static ManualLogSource Logging => Instance.Logger;
 
         private static Harmony harmony;
@@ -57,8 +55,13 @@ namespace BaldisBasicsPlusAdvanced
             GeneratorManagement.Register(this, GenerationModType.Addend, GenerationPatchingManager.RegisterMainLevelData);
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), LoadingEventOrder.Pre);
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModPostLoader(), LoadingEventOrder.Post);
-            AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English", Language.English);
-            AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English/Compats", Language.English);
+
+            if (Application.version == "0.12" || Application.version == "0.12.1")
+            {
+                MTM101BaldiDevAPI.AddWarningScreen(
+                    "Modification is not compatible with versions lower than 0.12.2 due of the updated Unity Engine.",
+                        fatal: true);
+            }
 
 #if BETA
             MTM101BaldiDevAPI.AddWarningScreen(
@@ -81,6 +84,9 @@ namespace BaldisBasicsPlusAdvanced
 #endif
 
             GameRegisterManager.InitializeDoNotDestroyOnLoadObjects();
+
+            AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English", Language.English);
+            AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English/Compats", Language.English);
         }
 
         private static IEnumerator ModPostLoader()
@@ -104,7 +110,7 @@ namespace BaldisBasicsPlusAdvanced
             }
         }
 
-        private static IEnumerator ModLoader()
+        private IEnumerator ModLoader()
         {
             if (!Directory.Exists(AssetsHelper.modPath))
             {
@@ -158,7 +164,7 @@ namespace BaldisBasicsPlusAdvanced
             GC.Collect();
         }
 
-        private static IEnumerator OnAssetsPreLoad()
+        private IEnumerator OnAssetsPreLoad()
         {
             if (ApiManager.onAssetsPreLoading != null)
             {

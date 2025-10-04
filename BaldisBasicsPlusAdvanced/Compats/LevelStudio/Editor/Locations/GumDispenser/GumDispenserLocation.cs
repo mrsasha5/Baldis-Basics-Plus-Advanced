@@ -63,6 +63,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                 return false;
             }
 
+            if (data.RoomIdFromPos(position, forEditor: true) == 0)
+            {
+                return false;
+            }
+
             return true;
         }
 

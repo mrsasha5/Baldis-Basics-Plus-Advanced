@@ -105,7 +105,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             base.Load(data);
             for (int i = 0; i < data.Count; i += 2)
             {
-                GumDispenser dispenser = 
+                GumDispenser dispenser =
                     BuildDispenser(data[i].prefab.GetComponent<GumDispenser>(), ec.CellFromPosition(data[i].position), data[i].direction);
 
                 StructureData buttonData = data[i + 1];

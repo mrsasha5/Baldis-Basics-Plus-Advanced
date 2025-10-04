@@ -43,19 +43,21 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
             locations.Add(loc);
 
+            Structure_Zipline builderPre = 
+                (Structure_Zipline)PlusStudioLevelLoader.LevelLoaderPlugin.Instance.structureAliases[type].structure;
+
             if (locations.Count % 2 == 0)
             {
-                Structure_Zipline builderPre = 
-                    (Structure_Zipline)PlusStudioLevelLoader.LevelLoaderPlugin.Instance.structureAliases[type].structure;
-
-                LineRenderer renderer = builderPre.GetLineRenderer();
-                builderPre.UpdateRenderer(renderer, 
+                loc.renderer = locations[locations.Count - 2].renderer;
+                builderPre.UpdateRenderer(loc.renderer, 
                     locations[locations.Count - 2].position.ToWorld(),
                     locations[locations.Count - 1].position.ToWorld());
-
-                loc.renderer = renderer;
             }
-
+            else
+            {
+                loc.renderer = builderPre.GetLineRenderer();
+            }
+            
             return loc;
         }
 
@@ -110,7 +112,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             {
                 EditorController.Instance.UpdateVisual(locations[i]);
 
-                if ((i + 1) % 2 == 0)
+                if (i % 2 != 0)
                 {
                     builderPre.UpdateRenderer(locations[i].renderer,
                         locations[i - 1].position.ToWorld(),

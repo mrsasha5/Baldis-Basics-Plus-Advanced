@@ -1,6 +1,8 @@
 ﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
+using BaldisBasicsPlusAdvanced.Game.Builders;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
+using PlusStudioLevelLoader;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
@@ -11,6 +13,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
         private string type;
 
         private string hangerPre;
+
+        private static Vector3[] _vectors = new Vector3[2];
 
         public override string id => $"structure_{type}_{hangerPre}";
 
@@ -31,7 +35,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public override bool Cancelled()
         {
-            OnResetTool();
+            if (notConnectedPoint != null)
+            {
+                OnResetTool();
+                return false;
+            }
             return true;
         }
 
@@ -52,6 +60,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public override void Update()
         {
+            if (notConnectedPoint != null && notConnectedPoint.renderer != null)
+            {
+                _vectors[0] = new Vector3(notConnectedPoint.position.x * 10 + 5, 9f, notConnectedPoint.position.z * 10 + 5);
+                _vectors[1] = new Vector3(EditorController.Instance.mouseGridPosition.x * 10 + 5, 9f, 
+                    EditorController.Instance.mouseGridPosition.z * 10 + 5);
+                notConnectedPoint.renderer.SetPositions(_vectors);
+            }
             EditorController.Instance.selector.SelectTile(EditorController.Instance.mouseGridPosition);
         }
 

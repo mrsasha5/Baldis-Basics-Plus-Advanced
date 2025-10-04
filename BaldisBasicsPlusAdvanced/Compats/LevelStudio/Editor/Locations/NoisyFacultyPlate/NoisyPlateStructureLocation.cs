@@ -5,6 +5,7 @@ using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate
 {
@@ -122,6 +123,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
             List<DoorLocation> list = EditorController.Instance.levelData
                 .doors.Where(x => x.DoorConnectedToRoom(EditorController.Instance.levelData, room.room, forEditor: true)).ToList();
 
+            List<IntVector2> coveredPositions = new List<IntVector2>();
+
             List<GameObject> list2 = new List<GameObject>(room.allocatedPlates);
             while (list.Count > 0)
             {
@@ -129,6 +132,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
                 list.RemoveAt(0);
                 if (LevelStudioPlugin.Instance.doorIngameStatus[doorLocation.type] != DoorIngameStatus.AlwaysObject)
                 {
+                    IntVector2 vector = doorLocation.position;
+                    Direction direction = doorLocation.direction.GetOpposite();
+                    if (EditorController.Instance.levelData.RoomFromPos(vector, forEditor: true) != room.room)
+                    {
+                        vector = doorLocation.position + doorLocation.direction.ToIntVector2();
+                        direction = doorLocation.direction;
+                    }
+
+                    if (coveredPositions.Contains(vector)) continue;
+                    else coveredPositions.Add(vector);
+
                     GameObject gameObject;
                     if (list2.Count > 0)
                     {
@@ -143,14 +157,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
                         gameObject.GetComponent<EditorDeletableObject>().toDelete = room;
                         gameObject.GetComponent<SettingsComponent>().activateSettingsOn = room;
                         room.allocatedPlates.Add(gameObject);
-                    }
-
-                    IntVector2 vector = doorLocation.position;
-                    Direction direction = doorLocation.direction.GetOpposite();
-                    if (EditorController.Instance.levelData.RoomFromPos(vector, forEditor: true) != room.room)
-                    {
-                        vector = doorLocation.position + doorLocation.direction.ToIntVector2();
-                        direction = doorLocation.direction;
                     }
 
                     gameObject.transform.position = vector.ToWorld();

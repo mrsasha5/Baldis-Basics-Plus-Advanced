@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace BaldisBasicsPlusAdvanced.Extensions
@@ -11,7 +10,10 @@ namespace BaldisBasicsPlusAdvanced.Extensions
         {
             Type[] types;
             try { types = ass.GetTypes(); }
-            catch (ReflectionTypeLoadException e) { types = e.Types; } //This exception seems platform depend
+            catch (ReflectionTypeLoadException e) //This exception seems platform depend
+            {
+                types = Array.FindAll(e.Types, x => x != null);
+            }
 
             return types;
         }

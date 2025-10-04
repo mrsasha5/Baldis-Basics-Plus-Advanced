@@ -43,8 +43,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         public override bool Cancelled()
         {
-            ResetTool();
-            return true;
+            if (selectPos == null)
+            {
+                bool cancelTool = notConnectedDispenser == null;
+                ResetTool();
+                return cancelTool;
+            }
+            else
+            {
+                selectPos = null;
+                return false;
+            }
         }
 
         public override void Exit()
@@ -103,11 +112,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
                 SimpleButtonLocation buttonLoc = structLoc.CreateNewButton(
                     EditorController.Instance.levelData, buttonPre, position, dir, false);
 
-                if (buttonLoc == null) return;
+                if (buttonLoc == null) 
+                    return;
 
                 EditorController.Instance.AddVisual(buttonLoc);
 
                 notConnectedDispenser = null;
+
+                selectPos = null;
             }
 
             EditorController.Instance.AddHeldUndo();

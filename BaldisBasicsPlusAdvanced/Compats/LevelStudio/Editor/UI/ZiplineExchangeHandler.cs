@@ -41,7 +41,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
         {
             if (uses != null)
             {
-                uses.text = loc.uses.ToString();
+                if (loc.uses == 0) uses.text = "INF";
+                else uses.text = loc.uses.ToString();
             }
 
             if (distanceToBreak != null)

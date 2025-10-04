@@ -73,6 +73,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             hangerVisual = GameObject.Instantiate(LevelStudioIntegration.hangerVisuals[hangerPrefab]);
             hangerVisual.transform.position = pos + hangerPrefabObject.Offset * (endPos - pos).normalized + Vector3.up * 5f;
             hangerVisual.GetComponent<EditorSettingsableComponent>().OnSettingsClicked = OnSettingsClicked;
+            hangerVisual.GetComponent<EditorDeletableObject>().toDelete = this;
         }
 
         private void OnSettingsClicked()
@@ -80,7 +81,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             Singleton<EditorController>.Instance.HoldUndo();
 
             ZiplineExchangeHandler handler = EditorController.Instance.CreateUI<ZiplineExchangeHandler>(
-                "GumDispenserConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/ZiplineHangerConfig.json");
+                "ZiplineConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/ZiplineHangerConfig.json");
             handler.OnInitialized(this);
             handler.Refresh();
         }

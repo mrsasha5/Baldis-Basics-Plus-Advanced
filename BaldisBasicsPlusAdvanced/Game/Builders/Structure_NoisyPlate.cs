@@ -106,11 +106,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         {
             List<NoisyPlate> facultyPlates = new List<NoisyPlate>();
 
+            List<Cell> usedCells = new List<Cell>();
+
             for (int i = 0; i < room.doors.Count; i++)
             {
-                if (ignoreCoverage || room.doors[i].aTile.HardCoverageFits(CellCoverage.Down))
+                if (!usedCells.Contains(room.doors[i].aTile) && 
+                    (ignoreCoverage || room.doors[i].aTile.HardCoverageFits(CellCoverage.Down)))
                 {
                     facultyPlates.Add((NoisyPlate)BuildPrefab(prefab, room.doors[i].aTile, room.doors[i].aTile.doorDirs[0].GetOpposite()));
+                    usedCells.Add(room.doors[i].aTile);
                 }
             }
 
