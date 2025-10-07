@@ -5,6 +5,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
     [Serializable]
     public class PlateData
     {
+
         public float timeToUnpress;
 
         public bool showsUses;

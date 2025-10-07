@@ -7,7 +7,6 @@ using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 using BepInEx;
-using MTM101BaldAPI.AssetTools;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Cache

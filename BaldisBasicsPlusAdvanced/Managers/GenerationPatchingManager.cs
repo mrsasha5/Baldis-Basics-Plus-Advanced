@@ -21,6 +21,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         private static void RegisterLevelData(string name, int floor, CustomLevelObject levelObject)
         {
+            //Cannot remind why I did put it here, lol
             if (!recipesLoaded)
             {
                 ApiManager.LoadKitchenStoveRecipesFromFolder(AdvancedCore.Instance.Info,

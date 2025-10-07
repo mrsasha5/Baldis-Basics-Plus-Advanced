@@ -64,6 +64,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
         [SerializeField]
         protected int cooldownIgnores;
 
+        protected float? overriddenCooldown;
+
         protected float cooldownTime;
 
         protected bool lockedByCooldown;
@@ -453,9 +455,22 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
             UpdateVisualActiveState();
         }
 
+        public void ForcefullyPatchCooldown(float newCooldown)
+        {
+            overriddenCooldown = newCooldown;
+        }
+
+        public void CancelCooldownPatch()
+        {
+            overriddenCooldown = null;
+        }
+
         public void SetCooldown(float cooldown)
         {
             if (cooldownIgnores > 0 || cooldown <= 0f) return;
+
+            if (overriddenCooldown != null)
+                cooldown = overriddenCooldown.Value;
 
             cooldownTime = cooldown;
             lockedByCooldown = true;

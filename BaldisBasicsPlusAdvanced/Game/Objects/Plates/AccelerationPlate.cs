@@ -17,8 +17,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         [SerializeField]
         internal float acceleration;
 
-        //[SerializeField]
-        //internal float timeToUnpress;
+        [SerializeField]
+        private SoundObject audRotate;
+
+        [SerializeField]
+        private SoundObject audBoing;
 
         [SerializeField]
         private Material arrowDeactivatedMat;
@@ -50,6 +53,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 
         }
 
+        public override void InitializePrefab(int variant)
+        {
+            base.InitializePrefab(variant);
+            audBoing = AssetsStorage.sounds["adv_boing"];
+            audRotate = AssetsHelper.LoadAsset<SoundObject>("ShrinkMachine_Door");
+        }
+
         protected override void SetValues(PlateData data)
         {
             base.SetValues(data);
@@ -61,7 +71,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             initialSpeed = 120f;
             acceleration = -40f;
 
-            rotationSpeed = 50f;
+            rotationSpeed = 180f;
         }
 
         public void ButtonPressed(bool val)
@@ -75,7 +85,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 
             angleIndex++;
 
-            if (angleIndex > potentialAngles.Count - 1) angleIndex = 0;
+            if (angleIndex > potentialAngles.Count - 1)
+            {
+                angleIndex = 0;
+            }
 
             rotating = true;
                 
@@ -84,17 +97,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             anglesToStop = Math.Abs(potentialAngles[angleIndex] - meshRenderers[1].transform.eulerAngles.y);
 
             float plannedAngle = meshRenderers[1].transform.eulerAngles.y + anglesToStop;
-            if (plannedAngle >= 360f) plannedAngle = plannedAngle % 360f; //conversion to 360 angle system
+            if (plannedAngle >= 360f) plannedAngle = plannedAngle % 360f;
 
             if (potentialAngles[angleIndex] != plannedAngle)
             {
                 anglesToStop += Math.Abs(potentialAngles[angleIndex] - plannedAngle);
             }
 
-            audMan.FlushQueue(true);
-            audMan.QueueAudio(AssetsStorage.sounds["adv_turning_start"]);
-            audMan.QueueAudio(AssetsStorage.sounds["adv_turning_loop"]);
-            audMan.SetLoop(true);
+            if (anglesToStop >= 360f) anglesToStop = anglesToStop % 360f;
+
+            audMan.PlaySingle(audRotate);
         }
 
         public void SetAngleIndexByAngle(float angle)
@@ -168,9 +180,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
                     rotating = false;
 
                     UpdateVisualPressedState(false);
-
-                    audMan.FlushQueue(true);
-                    audMan.QueueAudio(AssetsStorage.sounds["adv_turning_end"]);
                 }
             }
             base.VirtualUpdate();
@@ -180,7 +189,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         {
             base.VirtualOnUnpress();
             if (entities.Count <= 0) return;
-            audMan.PlaySingle(AssetsStorage.sounds["adv_boing"]);
+            audMan.PlaySingle(audBoing);
             float time = Math.Abs(initialSpeed / acceleration);
 
             foreach (Entity entity in entities)

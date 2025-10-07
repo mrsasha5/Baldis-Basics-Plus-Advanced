@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
-using PlusStudioLevelFormat;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -80,7 +79,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 potentialDoorTiles.AddRange(room.GetPotentialDoorCells());
             }
 
-            potentialDoorTiles.FilterOutCellsThatDontFitCoverage(plateCoverage, CellCoverageType.All, coverageMustHaveWalls: roomPlatesCoverageMustHaveWalls);
+            potentialDoorTiles.FilterOutCellsThatDontFitCoverage(
+                plateCoverage, CellCoverageType.All, coverageMustHaveWalls: roomPlatesCoverageMustHaveWalls);
 
             return potentialDoorTiles;
         }

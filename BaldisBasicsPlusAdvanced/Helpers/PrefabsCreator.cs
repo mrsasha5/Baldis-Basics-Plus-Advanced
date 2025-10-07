@@ -255,7 +255,10 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             T plate = plateObj.AddComponent<T>();
             plate.InitializePrefab(variant);
 
-            if (putInMemory) ObjectsStorage.Objects.Add(name, plate.gameObject);
+            if (putInMemory)
+            {
+                ObjectsStorage.Objects.Add(name, plate.gameObject);
+            }
 
             return plate;
         }

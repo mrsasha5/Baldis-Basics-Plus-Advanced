@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
@@ -8,7 +9,10 @@ using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Builders;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Helpers;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
@@ -195,6 +199,28 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
                 new ObjectTool("adv_GoodMachine", 
                     AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Objects/adv_editor_GoodMachine.png")));
+
+            Dictionary<string, string> plates = new Dictionary<string, string>()
+            {
+                //{ "adv_plate", typeof(PressurePlate) },
+                { "adv_invisibility_plate", "adv_editor_invisibility_plate.png" },
+                { "adv_acceleration_plate", "adv_editor_acceleration_plate.png" },
+                { "adv_noisy_plate", "adv_editor_noisy_plate.png" },
+                { "adv_stealing_plate", "adv_editor_stealing_plate.png" },
+                { "adv_bully_plate", "adv_editor_bully_plate.png" },
+                { "adv_present_plate", "adv_editor_present_plate.png" },
+                { "adv_slowdown_plate", "adv_editor_slowdown_plate.png" },
+                { "adv_sugar_addiction_plate", "adv_editor_sugar_addiction_plate.png" },
+                { "adv_protection_plate", "adv_editor_protection_plate.png" },
+                { "adv_teleportation_plate", "adv_editor_teleportation_plate.png" },
+                { "adv_fake_plate", "adv_editor_fake_plate.png" },
+                { "adv_safety_trapdoor", "adv_editor_safety_plate.png" }
+            };
+
+            foreach (KeyValuePair<string, string> pair in plates)
+            {
+
+            }
 
             foreach (string name in ObjectsStorage.Objects.Keys)
             {

@@ -82,7 +82,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
                 structInfo.data.Add(new StructureDataInfo()
                 {
                     prefab = locations[i].hangerPrefab,
-                    position = new MystIntVector2(locations[i].position.x, locations[i].position.z),
+                    position = PlusStudioLevelLoader.Extensions.ToData(locations[i].position), //I am writing this way because
+                                                                                               //extension methods from Loader
+                                                                                               //and Studio are conflicting and when
+                                                                                               //I am using PlusStudioLevelLoader namespace
+                                                                                               //I cannot use .ToInt() for ByteVector2
+                                                                                               //anymore.
                     direction = PlusDirection.North,
                     data = locations[i].EncodeData()
                 });

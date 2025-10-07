@@ -59,7 +59,9 @@ namespace BaldisBasicsPlusAdvanced
             if (Application.version == "0.12" || Application.version == "0.12.1")
             {
                 MTM101BaldiDevAPI.AddWarningScreen(
-                    "Modification is not compatible with versions lower than 0.12.2 due of the updated Unity Engine.",
+                    "Modification is not compatible with versions lower than 0.12.2 due of the updated Unity Engine. " +
+                    "Also it's highly recommended to use 0.12.2 because old versions" +
+                    " contain critical security issue.",
                         fatal: true);
             }
 

@@ -108,7 +108,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                 structInfo.data.Add(new StructureDataInfo()
                 {
                     prefab = dispenserLocations[i].prefab,
-                    position = new MystIntVector2(dispenserLocations[i].position.x, dispenserLocations[i].position.z),
+                    position = PlusStudioLevelLoader.Extensions.ToData(dispenserLocations[i].position),
                     direction = (PlusDirection)dispenserLocations[i].direction,
                     data = dispenserLocations[i].EncodeData()
                 });
@@ -116,7 +116,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                 structInfo.data.Add(new StructureDataInfo()
                 {
                     prefab = buttonLocations[i].prefab,
-                    position = new MystIntVector2(buttonLocations[i].position.x, buttonLocations[i].position.z),
+                    position = PlusStudioLevelLoader.Extensions.ToData(buttonLocations[i].position),
                     direction = (PlusDirection)buttonLocations[i].direction
                 });
             }
