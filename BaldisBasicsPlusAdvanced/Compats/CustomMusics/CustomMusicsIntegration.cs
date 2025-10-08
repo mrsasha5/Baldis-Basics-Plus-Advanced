@@ -18,9 +18,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics
                 "All required music will be synchronized with the internal system of this modification to provide better compatibility.");
         }
 
-        protected override void InitializeOnAssetsLoadPost()
+        protected override void OnAssetsPostLoad()
         {
-            base.InitializeOnAssetsLoadPost();
+            base.OnAssetsPostLoad();
 
             MIDIHolder[] holders = 
                 MusicRegister.AddMIDIsFromDirectory(MidiDestiny.Schoolhouse, AssetsHelper.modPath + "Audio/Music/Floors");

@@ -22,7 +22,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         protected override void SetTextures()
         {
             SetTexturesByBaseName("adv_invisibility_plate");
-            SetEditorSprite("adv_editor_invisibility_plate");
         }
 
         protected override void VirtualOnPress()

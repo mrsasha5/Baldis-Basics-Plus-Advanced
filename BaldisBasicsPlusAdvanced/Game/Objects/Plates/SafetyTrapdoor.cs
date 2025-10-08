@@ -119,7 +119,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         protected override void SetTextures()
         {
             SetTexturesByBaseName("adv_safety_trapdoor");
-            SetEditorSprite("adv_editor_safety_trapdoor");
         }
 
         private void ReleaseEntity()

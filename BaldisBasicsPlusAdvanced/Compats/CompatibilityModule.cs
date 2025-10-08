@@ -43,7 +43,7 @@ namespace BaldisBasicsPlusAdvanced.Compats
             configValue = AdvancedCore.Instance.Config.Bind("Integration", name, defaultValue: defValue, desc);
         }
 
-        protected virtual void InitializePre()
+        protected virtual void PreInitialize()
         {
             if (!Chainloader.PluginInfos.ContainsKey(guid)) return;
             plugin = Chainloader.PluginInfos[guid].Instance;
@@ -54,7 +54,7 @@ namespace BaldisBasicsPlusAdvanced.Compats
 
         }
 
-        protected virtual void InitializeOnAssetsLoadPost()
+        protected virtual void OnAssetsPostLoad()
         {
 
         }

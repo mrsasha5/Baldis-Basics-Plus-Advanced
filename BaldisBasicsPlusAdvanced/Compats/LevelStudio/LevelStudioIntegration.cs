@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
@@ -34,6 +35,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
         //Key: prefab name from StructureData, value: key from LevelStudioPlugin.Instance.genericStructureDisplays
         public static Dictionary<string, string> noisyPlateVisuals;
 
+        public static Dictionary<string, string> genericPlateVisuals;
+
         public LevelStudioIntegration() : base()
         {
             guid = "mtm101.rulerp.baldiplus.levelstudio";
@@ -63,6 +66,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             LevelStudioPlugin.Instance.structureTypes.Add("adv_zipline", typeof(ZiplineStructureLocation));
             LevelStudioPlugin.Instance.structureTypes.Add("adv_gum_dispenser", typeof(GumDispenserStructureLocation));
             LevelStudioPlugin.Instance.structureTypes.Add("adv_noisy_plate", typeof(NoisyPlateStructureLocation));
+            LevelStudioPlugin.Instance.structureTypes.Add("adv_generic_plate", typeof(GenericPlateStructureLocation));
         }
 
         private static void InitializeVisuals()
@@ -134,11 +138,18 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 EditorInterface.AddObjectVisual("adv_" + name, ObjectsStorage.SodaMachines[name].gameObject, true);
             }
 
+            genericPlateVisuals = new Dictionary<string, string>();
+
             foreach (string name in ObjectsStorage.Objects.Keys)
             {
                 if (ObjectsStorage.Objects[name].TryGetComponent(out BasePlate plate))
                 {
                     EditorInterface.AddObjectVisual("adv_" + name, ObjectsStorage.Objects[name], true);
+                    if (!LevelStudioPlugin.Instance.genericStructureDisplays.ContainsKey("adv_" + name))
+                    {
+                        EditorInterface.AddStructureGenericVisual("adv_" + name, ObjectsStorage.Objects[name]);
+                        genericPlateVisuals.Add(name, "adv_" + name);
+                    }
                 }
             }
 
@@ -186,6 +197,23 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
         private static void InitializeTools(EditorMode mode, bool vanillaCompliant)
         {
+            #region Tools Info
+
+            Dictionary<string, string> platesInfo = new Dictionary<string, string>()
+            {
+                { "invisibility_plate", "adv_editor_invisibility_plate.png" },
+                { "stealing_plate", "adv_editor_stealing_plate.png" },
+                { "bully_plate", "adv_editor_bully_plate.png" },
+                { "present_plate", "adv_editor_present_plate.png" },
+                { "slowdown_plate", "adv_editor_slowdown_plate.png" },
+                { "sugar_addiction_plate", "adv_editor_sugar_addiction_plate.png" },
+                { "protection_plate", "adv_editor_protection_plate.png" },
+                { "teleportation_plate", "adv_editor_teleportation_plate.png" },
+                { "fake_plate", "adv_editor_fake_plate.png" },
+            };
+
+            #endregion
+
             EditorInterfaceModes.AddToolToCategory(mode, "npcs",
                     new NPCTool("adv_criss_the_crystal", AssetsStorage.sprites["adv_editor_criss_the_crystal"]));
 
@@ -196,44 +224,29 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                     new ItemTool(key));
             }
 
+#warning Rename this one in dictionary and include in filter fix
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
                 new ObjectTool("adv_GoodMachine", 
                     AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Objects/adv_editor_GoodMachine.png")));
 
-            Dictionary<string, string> plates = new Dictionary<string, string>()
+            //Plates are supposed to be used in some premades, so they still exist as objects in Level Studio as well
+            if (mode.id == "rooms")
             {
-                //{ "adv_plate", typeof(PressurePlate) },
-                { "adv_invisibility_plate", "adv_editor_invisibility_plate.png" },
-                { "adv_acceleration_plate", "adv_editor_acceleration_plate.png" },
-                { "adv_noisy_plate", "adv_editor_noisy_plate.png" },
-                { "adv_stealing_plate", "adv_editor_stealing_plate.png" },
-                { "adv_bully_plate", "adv_editor_bully_plate.png" },
-                { "adv_present_plate", "adv_editor_present_plate.png" },
-                { "adv_slowdown_plate", "adv_editor_slowdown_plate.png" },
-                { "adv_sugar_addiction_plate", "adv_editor_sugar_addiction_plate.png" },
-                { "adv_protection_plate", "adv_editor_protection_plate.png" },
-                { "adv_teleportation_plate", "adv_editor_teleportation_plate.png" },
-                { "adv_fake_plate", "adv_editor_fake_plate.png" },
-                { "adv_safety_trapdoor", "adv_editor_safety_plate.png" }
-            };
-
-            foreach (KeyValuePair<string, string> pair in plates)
-            {
-
-            }
-
-            foreach (string name in ObjectsStorage.Objects.Keys)
-            {
-                if (ObjectsStorage.Objects[name].TryGetComponent(out BasePlate plate))
+                foreach (string name in ObjectsStorage.Objects.Keys)
                 {
-                    string key = "adv_" + name;
+                    if (ObjectsStorage.Objects[name].TryGetComponent(out BasePlate plate))
+                    {
+                        string key = "adv_" + name;
 
-                    if (plate.EditorToolSprite == null) continue;
+                        if (!platesInfo.ContainsKey(name)) continue;
 
-                    EditorInterfaceModes.AddToolToCategory(mode, "objects",
-                        new ObjectTool(key, plate.EditorToolSprite));
+                        EditorInterfaceModes.AddToolToCategory(mode, "objects",
+                            new ObjectTool(key, 
+                                AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/" + platesInfo[name])));
+                    }
                 }
             }
+            
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
                 new ObjectTool("adv_symbol_machine", AssetsStorage.sprites["adv_editor_symbol_machine"]));
 
@@ -269,6 +282,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             EditorInterfaceModes.AddToolToCategory(mode, "structures",
                 new NoisyPlateTool("adv_noisy_plate", "noisy_plate",
                     AssetsStorage.sprites["adv_editor_noisy_plate"]));
+
+            foreach (KeyValuePair<string, string> pair in platesInfo)
+            {
+                EditorInterfaceModes.AddToolToCategory(
+                    mode, "structures", new GenericPlateTool("adv_generic_plate", pair.Key,
+                        AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/" + pair.Value)));
+            }
 
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
                 new RoomTool("adv_english_class", AssetsStorage.sprites["adv_editor_english_floor"]));
@@ -317,32 +337,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             AssetsStorage.LoadModSprite("adv_editor_finish_points_flag",
                 texBase + "Objects/adv_editor_finish_points_flag.png");
 
-            AssetsStorage.LoadModSprite("adv_editor_invisibility_plate",
-                texBase + "Objects/adv_editor_invisibility_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_acceleration_plate",
-                texBase + "Objects/adv_editor_acceleration_plate.png");
-            AssetsStorage.LoadModSprite("adv_editor_fake_plate",
-                texBase + "Objects/adv_editor_fake_plate.png");
+                texBase + "Structures/adv_editor_acceleration_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_noisy_plate",
-                texBase + "Objects/adv_editor_noisy_plate.png");
-            AssetsStorage.LoadModSprite("adv_editor_noisy_faculty_plate",
-                texBase + "Objects/adv_editor_noisy_faculty_plate.png");
-            AssetsStorage.LoadModSprite("adv_editor_stealing_plate",
-                texBase + "Objects/adv_editor_stealing_plate.png");
-            AssetsStorage.LoadModSprite("adv_editor_bully_plate",
-                texBase + "Objects/adv_editor_bully_plate.png");
-            AssetsStorage.LoadModSprite("adv_editor_present_plate",
-                texBase + "Objects/adv_editor_present_plate.png");
-            AssetsStorage.LoadModSprite("adv_editor_sugar_addiction_plate",
-                texBase + "Objects/adv_editor_sugar_addiction_plate.png");
-            AssetsStorage.LoadModSprite("adv_editor_slowdown_plate",
-                texBase + "Objects/adv_editor_slowdown_plate.png");
-            AssetsStorage.LoadModSprite("adv_editor_protection_plate",
-                texBase + "Objects/adv_editor_protection_plate.png");
-            AssetsStorage.LoadModSprite("adv_editor_teleportation_plate",
-                texBase + "Objects/adv_editor_teleportation_plate.png");
+                texBase + "Structures/adv_editor_noisy_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_safety_trapdoor",
-                texBase + "Objects/adv_editor_safety_trapdoor.png");
+                texBase + "Structures/adv_editor_safety_trapdoor.png");
             AssetsStorage.LoadModSprite("adv_editor_voting_ballot",
                 texBase + "Objects/adv_editor_voting_ballot.png");
             AssetsStorage.LoadModSprite("adv_editor_advanced_math_machine",

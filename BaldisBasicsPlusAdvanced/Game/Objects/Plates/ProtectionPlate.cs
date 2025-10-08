@@ -35,7 +35,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         {
             base.SetTextures();
             SetTexturesByBaseName("adv_protection_plate");
-            SetEditorSprite("adv_editor_protection_plate");
         }
 
         protected override void VirtualOnPress()

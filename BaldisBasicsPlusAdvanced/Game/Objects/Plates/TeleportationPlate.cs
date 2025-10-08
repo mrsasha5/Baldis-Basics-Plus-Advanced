@@ -17,7 +17,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         {
             base.SetTextures();
             SetTexturesByBaseName("adv_teleportation_plate");
-            SetEditorSprite("adv_editor_teleportation_plate");
         }
 
         protected override void VirtualOnPress()

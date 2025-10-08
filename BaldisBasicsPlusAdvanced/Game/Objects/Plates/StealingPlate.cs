@@ -33,7 +33,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         protected override void SetTextures()
         {
             SetTexturesByBaseName("adv_stealing_plate");
-            SetEditorSprite("adv_editor_stealing_plate");
         }
 
         protected override void VirtualOnPress()

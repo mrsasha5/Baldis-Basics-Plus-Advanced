@@ -19,7 +19,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         protected override void SetTextures()
         {
             SetTexturesByBaseName("adv_bully_plate");
-            SetEditorSprite("adv_editor_bully_plate");
         }
 
         protected override void VirtualOnPress()

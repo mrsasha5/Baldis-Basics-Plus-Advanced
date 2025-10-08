@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BaldisBasicsPlusAdvanced.Game;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
 using UnityEngine;
@@ -25,14 +26,22 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
                 deleteAction = OnDeleteLocation
             };
 
+            if (prefabName != null)
+                loc.prefab = LevelStudioIntegration.genericPlateVisuals[prefabName];
+
             if (!disableChecks && !loc.ValidatePosition(EditorController.Instance.levelData, ignoreSelf: true))
                 return null;
+
+            locations.Add(loc);
 
             return loc;
         }
 
         private bool OnDeleteLocation(EditorLevelData level, SimpleLocation loc)
         {
+            locations.Remove((GenericPlateLocation)loc);
+            EditorController.Instance.RemoveVisual(loc);
+
             return true;
         }
 
@@ -104,7 +113,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
         public override bool ValidatePosition(EditorLevelData data)
         {
-            //TODO: cleaning operations surely
+            for (int i = 0; i < locations.Count; i++)
+            {
+                if (!locations[i].ValidatePosition(data, ignoreSelf: true))
+                {
+                    locations.RemoveAt(i);
+                    i--;
+                }
+            }
 
             return locations.Count > 0;
         }

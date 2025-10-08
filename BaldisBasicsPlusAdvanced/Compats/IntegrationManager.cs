@@ -63,7 +63,7 @@ namespace BaldisBasicsPlusAdvanced.Compats
             modules.Sort((m1, m2) => m2.Priority.CompareTo(m1.Priority));
 
             MethodInfo method = typeof(CompatibilityModule)
-                .GetMethod("InitializePre", AccessTools.all);
+                .GetMethod("PreInitialize", AccessTools.all);
 
             for (int i = 0; i < modules.Count; i++)
             {
@@ -98,7 +98,7 @@ namespace BaldisBasicsPlusAdvanced.Compats
 
         internal static void InvokeOnAssetsLoadPost()
         {
-            MethodInfo method = typeof(CompatibilityModule).GetMethod("InitializeOnAssetsLoadPost", AccessTools.all);
+            MethodInfo method = typeof(CompatibilityModule).GetMethod("OnAssetsPostLoad", AccessTools.all);
             for (int i = 0; i < modules.Count; i++)
             {
                 method.Invoke(modules[i], null);

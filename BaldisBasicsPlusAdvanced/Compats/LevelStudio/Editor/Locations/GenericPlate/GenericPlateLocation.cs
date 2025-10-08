@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
+using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate
 {
@@ -20,6 +22,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
         {
             compressor.WriteStoredString(writer, prefabName);
 
+            writer.Write(position.ToByte());
+            writer.Write((byte)direction);
+
             writer.Write((byte)3);
             writer.Write(cooldown);
             writer.Write(uses);
@@ -29,6 +34,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
         public void ReadData(byte version, BinaryReader reader, StringCompressor compressor)
         {
             prefabName = compressor.ReadStoredString(reader);
+
+            prefab = LevelStudioIntegration.genericPlateVisuals[prefabName];
+
+            position = reader.ReadByteVector2().ToInt();
+            direction = (Direction)reader.ReadByte();
 
             byte parameters = reader.ReadByte();
 

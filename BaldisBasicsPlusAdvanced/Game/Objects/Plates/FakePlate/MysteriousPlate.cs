@@ -189,7 +189,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
         protected override void SetTextures()
         {
             SetTexturesByBaseName("adv_fake_plate");
-            SetEditorSprite("adv_editor_fake_plate");
         }
 
         private void OnEntityCatched(Entity entity)

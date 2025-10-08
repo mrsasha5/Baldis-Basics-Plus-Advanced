@@ -12,8 +12,6 @@ using UnityEngine;
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 {
 
-#warning Destroy all related editor fields and switch them in LevelStudioIntegration
-
     public class BasePlate : MonoBehaviour, IPrefab
     {
         [SerializeField]
@@ -103,8 +101,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
         public virtual bool IsUsable => turnOffs <= 0 && (data.hasInfinityUses || uses < data.maxUses) && !lockedByCooldown;
 
         public virtual float Timescale => ec.EnvironmentTimeScale;
-
-        public Sprite EditorToolSprite => editorToolSprite;
 
         public Texture UnpressedTex => deactivatedMaterial.mainTexture;
 
@@ -235,19 +231,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
         protected virtual void SetTextures()
         {
             SetTexturesByBaseName("adv_pressure_plate");
-            SetEditorSprite("adv_editor_acceleration_plate");
         }
 
         internal protected void SetTexturesByBaseName(string name)
         {
             activatedMaterial.mainTexture = AssetsStorage.textures[name + "_activated"];
             deactivatedMaterial.mainTexture = AssetsStorage.textures[name + "_deactivated"];
-        }
-
-        internal void SetEditorSprite(string name)
-        {
-            if (!IntegrationManager.IsActive<LevelStudioIntegration>()) return;
-            editorToolSprite = AssetsStorage.sprites[name];
         }
 
         private void Update()

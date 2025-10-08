@@ -37,7 +37,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         protected override void SetTextures()
         {
             SetTexturesByBaseName("adv_slowdown_plate");
-            SetEditorSprite("adv_editor_slowdown_plate");
         }
 
         protected override void VirtualOnPress()

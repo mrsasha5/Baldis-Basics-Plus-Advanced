@@ -23,9 +23,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator
                 "Not recommended to disable since you'll lose access to the content like: tips & Hammer of Force.");
         }
 
-        protected override void InitializeOnAssetsLoadPost()
+        protected override void OnAssetsPostLoad()
         {
-            base.InitializeOnAssetsLoadPost();
+            base.OnAssetsPostLoad();
 
             LobbyElevator elv = AssetsHelper.LoadAsset<LobbyElevator>();
 

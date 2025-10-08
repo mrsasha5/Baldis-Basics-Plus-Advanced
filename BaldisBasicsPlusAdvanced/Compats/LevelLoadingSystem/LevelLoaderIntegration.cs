@@ -92,6 +92,23 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                     }
                 )
             );
+
+            LevelLoaderPlugin.Instance.structureAliases.Add("adv_generic_plate",
+                new LoaderStructureData(ObjectsStorage.StructureBuilders["Structure_GenericPlate"],
+                    new Dictionary<string, GameObject>()
+                    {
+                        { "invisibility_plate", ObjectsStorage.Objects["invisibility_plate"] },
+                        { "stealing_plate", ObjectsStorage.Objects["stealing_plate"] },
+                        { "bully_plate", ObjectsStorage.Objects["bully_plate"] },
+                        { "present_plate", ObjectsStorage.Objects["present_plate"] },
+                        { "slowdown_plate", ObjectsStorage.Objects["slowdown_plate"] },
+                        { "sugar_addiction_plate", ObjectsStorage.Objects["sugar_addiction_plate"] },
+                        { "protection_plate", ObjectsStorage.Objects["protection_plate"] },
+                        { "teleportation_plate", ObjectsStorage.Objects["teleportation_plate"] },
+                        { "fake_plate", ObjectsStorage.Objects["fake_plate"] }
+                    }
+                )
+            );
         }
 
         private static void InitializeActivities()

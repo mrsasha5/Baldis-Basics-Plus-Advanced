@@ -149,7 +149,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         protected override void SetTextures()
         {
             SetTexturesByBaseName("adv_acceleration_plate");
-            SetEditorSprite("adv_editor_acceleration_plate");
 
             InitializeRenderer();
 

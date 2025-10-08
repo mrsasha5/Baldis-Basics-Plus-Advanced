@@ -24,7 +24,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         protected override void SetTextures()
         {
             SetTexturesByBaseName("adv_sugar_addiction_plate");
-            SetEditorSprite("adv_editor_sugar_addiction_plate");
         }
 
         protected override void SetValues(PlateData data)
