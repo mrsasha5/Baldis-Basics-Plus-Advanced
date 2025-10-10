@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BaldisBasicsPlusAdvanced.Game;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate
 {
-    public class GenericPlateStructureLocation : StructureLocation
+    internal class GenericPlateStructureLocation : StructureLocation
     {
 
         public const byte formatVersion = 0;
@@ -26,11 +25,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
                 deleteAction = OnDeleteLocation
             };
 
-            if (prefabName != null)
-                loc.prefab = LevelStudioIntegration.genericPlateVisuals[prefabName];
-
             if (!disableChecks && !loc.ValidatePosition(EditorController.Instance.levelData, ignoreSelf: true))
                 return null;
+
+            if (prefabName != null)
+            {
+                loc.prefab = LevelStudioIntegration.genericPlateVisuals[prefabName];
+            }
 
             locations.Add(loc);
 
@@ -130,7 +131,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
             byte ver = reader.ReadByte();
 
             if (ver > formatVersion)
-                throw new System.Exception(LevelStudioIntegration.standardMsg_StructureVersionException);
+                throw new Exception(LevelStudioIntegration.standardMsg_StructureVersionException);
 
             int count = reader.ReadInt32();
             while (count > 0)

@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator
 {
-    public class SpatialElevatorIntegration : CompatibilityModule
+    internal class SpatialElevatorIntegration : CompatibilityModule
     {
 
         public SpatialElevatorIntegration() : base()

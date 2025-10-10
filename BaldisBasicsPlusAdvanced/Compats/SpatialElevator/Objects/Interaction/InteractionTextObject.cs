@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
 {
-    public class InteractionTextObject : BaseInteractionObject<InteractionTextObject>
+    internal class InteractionTextObject : BaseInteractionObject<InteractionTextObject>
     {
 
         public bool ignoreSightedEvents = true;

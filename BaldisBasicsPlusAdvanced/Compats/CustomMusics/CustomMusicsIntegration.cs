@@ -5,7 +5,7 @@ using HarmonyLib;
 
 namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics
 {
-    public class CustomMusicsIntegration : CompatibilityModule
+    internal class CustomMusicsIntegration : CompatibilityModule
     {
 
         public CustomMusicsIntegration() : base()

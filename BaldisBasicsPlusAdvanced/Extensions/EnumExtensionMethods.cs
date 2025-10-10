@@ -3,7 +3,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
 
 namespace BaldisBasicsPlusAdvanced.Extensions
 {
-    public static class EnumExtensionsMethods
+    public static class EnumExtensionMethods
     {
         public static string ConvertToTag(this RewardType rewardType)
         {

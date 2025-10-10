@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
 {
-    public class NoisyPlateExchangeHandler : EditorOverlayUIExchangeHandler
+    internal class NoisyPlateExchangeHandler : BaseEditorOverlayUIExchangeHandler
     {
         private TextMeshProUGUI cooldown;
 

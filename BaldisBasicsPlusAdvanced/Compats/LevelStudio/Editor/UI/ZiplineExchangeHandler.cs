@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
 {
-    public class ZiplineExchangeHandler : EditorOverlayUIExchangeHandler
+    internal class ZiplineExchangeHandler : BaseEditorOverlayUIExchangeHandler
     {
         private TextMeshProUGUI uses;
 

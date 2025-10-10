@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals
 {
-    public class EditorSettingsableComponent : MonoBehaviour, IEditorSettingsable
+    internal class EditorSettingsableComponent : MonoBehaviour, IEditorSettingsable
     {
 
         private Action onSettingsClicked;

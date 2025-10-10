@@ -23,7 +23,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 {
-    public class LevelStudioIntegration : CompatibilityModule
+    internal class LevelStudioIntegration : CompatibilityModule
     {
 
         internal const string standardMsg_StructureVersionException = 
@@ -44,7 +44,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             versionInfo = new VersionInfo(this);
 
             CreateConfigValue("Level Studio",
-                "Adds support for Level Studio like new objects, activities and other content which can be used on your levels!");
+                "Adds support for Level Studio like new objects, structures and other content which can be used on your levels!");
         }
 
         public override bool IsIntegrable()
@@ -147,7 +147,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                     EditorInterface.AddObjectVisual("adv_" + name, ObjectsStorage.Objects[name], true);
                     if (!LevelStudioPlugin.Instance.genericStructureDisplays.ContainsKey("adv_" + name))
                     {
-                        EditorInterface.AddStructureGenericVisual("adv_" + name, ObjectsStorage.Objects[name]);
+                        GameObject plateVisual = EditorInterface.AddStructureGenericVisual("adv_" + name, ObjectsStorage.Objects[name]);
+
+                        BoxCollider boxColl = plateVisual.GetComponent<BoxCollider>();
+                        boxColl.size = new Vector3(10f, 1f, 10f);
+                        boxColl.center = Vector3.zero;
+
+                        plateVisual.AddComponent<SettingsComponent>().offset = Vector3.up * 10f;
+
                         genericPlateVisuals.Add(name, "adv_" + name);
                     }
                 }

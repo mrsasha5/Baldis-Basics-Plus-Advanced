@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace BaldisBasicsPlusAdvanced.Compats
 {
-    public class CompatibilityModule
+    internal class CompatibilityModule
     {
         protected bool isForced;
 

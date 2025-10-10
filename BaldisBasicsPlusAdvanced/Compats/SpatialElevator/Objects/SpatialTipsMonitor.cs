@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
 {
-    public class SpatialTipsMonitor : MonoBehaviour, IPrefab
+    internal class SpatialTipsMonitor : MonoBehaviour, IPrefab
     {
         [SerializeField]
         private SoundObject audMove;

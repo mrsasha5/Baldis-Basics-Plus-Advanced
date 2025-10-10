@@ -1,5 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
+using BaldisBasicsPlusAdvanced.Helpers;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
@@ -7,7 +9,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate
 {
-    public class GenericPlateLocation : SimpleLocation
+    internal class GenericPlateLocation : SimpleLocation, IEditorSettingsable
     {
 
         public string prefabName;
@@ -17,6 +19,22 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
         public int uses;
 
         public float unpressTime;
+
+        public override void InitializeVisual(GameObject visualObject)
+        {
+            base.InitializeVisual(visualObject);
+            visualObject.GetComponent<SettingsComponent>().activateSettingsOn = this;
+        }
+
+        public void LoadDefaultParameters(string type)
+        {
+            BasePlate prefab = 
+                PlusStudioLevelLoader.
+                    LevelLoaderPlugin.Instance.structureAliases[type].prefabAliases[prefabName].GetComponent<BasePlate>();
+
+            uses = prefab.Data.maxUses;
+            unpressTime = prefab.Data.timeToUnpress;
+        }
 
         public void WriteData(BinaryWriter writer, StringCompressor compressor)
         {
@@ -50,5 +68,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
                 unpressTime = reader.ReadSingle();
         }
 
+        public void SettingsClicked()
+        {
+            GenericPlateExchangeHandler handler = EditorController.Instance.CreateUI<GenericPlateExchangeHandler>(
+                "GenericPlateConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/GenericPlateConfig.json");
+            handler.OnInitialized(this);
+            handler.Refresh();
+        }
     }
 }

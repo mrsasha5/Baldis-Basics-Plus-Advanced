@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
+﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.UI;
 using TMPro;
@@ -6,18 +7,20 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
 {
-
-    internal class GumDispenserExchangeHandler : BaseEditorOverlayUIExchangeHandler
+    internal class GenericPlateExchangeHandler : BaseEditorOverlayUIExchangeHandler
     {
+
         private TextMeshProUGUI uses;
 
         private TextMeshProUGUI cooldown;
 
+        private TextMeshProUGUI unpressTime;
+
         private bool somethingChanged;
 
-        private GumDispenserLocation loc;
+        private GenericPlateLocation loc;
 
-        public void OnInitialized(GumDispenserLocation loc)
+        public void OnInitialized(GenericPlateLocation loc)
         {
             this.loc = loc;
         }
@@ -36,18 +39,33 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             {
                 cooldown = transform2.GetComponent<TextMeshProUGUI>();
             }
+
+            Transform transform3 = base.transform.Find("UnpressTimeBox");
+            if (transform3 != null)
+            {
+                unpressTime = transform3.GetComponent<TextMeshProUGUI>();
+            }
         }
 
         public void Refresh()
         {
             if (uses != null)
             {
-                uses.text = loc.uses.ToString();
+                if (loc.uses == 0) uses.text = "INF";
+                else
+                    uses.text = loc.uses.ToString();
             }
 
             if (cooldown != null)
             {
-                cooldown.text = loc.cooldown.ToString();
+                if (loc.cooldown == 0) cooldown.text = "NO";
+                else cooldown.text = loc.cooldown.ToString();
+            }
+
+            if (unpressTime != null)
+            {
+                unpressTime.text = loc.unpressTime.ToString();
+                CheckIfFloatIsVisualized(unpressTime);
             }
         }
 
@@ -69,7 +87,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
         {
             if (message == "setUses")
             {
-                if (ushort.TryParse((string)data, out ushort result))
+                if (int.TryParse((string)data, out int result))
                 {
                     loc.uses = result;
                     somethingChanged = true;
@@ -79,7 +97,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setCooldown")
             {
-                if (ushort.TryParse((string)data, out ushort result))
+                if (int.TryParse((string)data, out int result))
                 {
                     loc.cooldown = result;
                     somethingChanged = true;
@@ -87,8 +105,20 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
 
                 Refresh();
             }
+            else if (message == "setUnpressTime")
+            {
+                if (float.TryParse((string)data, out float result))
+                {
+                    loc.unpressTime = result;
+                    somethingChanged = true;
+                }
+
+                Refresh();
+            }
 
             base.SendInteractionMessage(message, data);
+
         }
+
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
 {
-    public class BaseInteractionObject<T> : MonoBehaviour, IInteractionObject, IClickable<int> where T : BaseInteractionObject<T>
+    internal class BaseInteractionObject<T> : MonoBehaviour, IInteractionObject, IClickable<int> where T : BaseInteractionObject<T>
     {
 
         public Action onClick;

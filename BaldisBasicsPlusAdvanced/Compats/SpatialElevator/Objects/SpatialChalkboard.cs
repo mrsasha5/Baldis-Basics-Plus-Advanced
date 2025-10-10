@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
 {
-    public class SpatialChalkboard : MonoBehaviour, IPrefab
+    internal class SpatialChalkboard : MonoBehaviour, IPrefab
     {
 
         [SerializeField]

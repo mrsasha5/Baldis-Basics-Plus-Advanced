@@ -120,8 +120,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 if (extraData.Count > 0)
                     plate.SetMaxUses(extraData[0]);
 
-                if (extraData.Count > 1)
+                if (extraData.Count > 1 && plate.Data.initiallyHasCooldown)
+                {
+                    plate.Data.showsCooldown = true;
                     plate.ForcefullyPatchCooldown(extraData[1]);
+                }
 
                 if (extraData.Count > 2)
                     plate.Data.timeToUnpress = BitConverter.ToSingle(BitConverter.GetBytes(extraData[2]), 0);

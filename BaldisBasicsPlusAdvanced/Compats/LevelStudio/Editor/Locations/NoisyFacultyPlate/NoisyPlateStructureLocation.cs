@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate
 {
-    public class NoisyPlateStructureLocation : StructureLocation
+    internal class NoisyPlateStructureLocation : StructureLocation
     {
 
         public const byte formatVersion = 0;

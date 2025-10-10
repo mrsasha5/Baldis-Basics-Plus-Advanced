@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser
 {
-    public class GumDispenserStructureLocation : StructureLocation
+    internal class GumDispenserStructureLocation : StructureLocation
     {
 
         public const byte formatVersion = 0;

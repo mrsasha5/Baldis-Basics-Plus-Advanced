@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser
 {
-    public class GumDispenserLocation : SimpleLocation, IEditorSettingsable
+    internal class GumDispenserLocation : SimpleLocation, IEditorSettingsable
     {
 
         public ushort uses = 5;

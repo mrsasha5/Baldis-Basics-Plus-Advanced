@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
 {
-    public class InteractionSpriteRendererObject : BaseInteractionObject<InteractionSpriteRendererObject>
+    internal class InteractionSpriteRendererObject : BaseInteractionObject<InteractionSpriteRendererObject>
     {
 
         public bool ignoreSightedEvents = true;

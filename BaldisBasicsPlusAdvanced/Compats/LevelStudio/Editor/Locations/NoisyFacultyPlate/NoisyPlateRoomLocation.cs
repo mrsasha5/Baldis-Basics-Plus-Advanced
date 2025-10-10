@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate
 {
-    public class NoisyPlateRoomLocation : IEditorSettingsable, IEditorDeletable
+    internal class NoisyPlateRoomLocation : IEditorSettingsable, IEditorDeletable
     {
 
         //Serializable

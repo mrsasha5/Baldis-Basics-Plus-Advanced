@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 {
-    public class ZiplineStructureLocation : StructureLocation
+    internal class ZiplineStructureLocation : StructureLocation
     {
 
         public const byte formatVersion = 0;

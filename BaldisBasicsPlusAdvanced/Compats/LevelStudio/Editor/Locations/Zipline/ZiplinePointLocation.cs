@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 {
-    public class ZiplinePointLocation : PointLocation
+    internal class ZiplinePointLocation : PointLocation
     {
 
         public string hangerPrefab;
