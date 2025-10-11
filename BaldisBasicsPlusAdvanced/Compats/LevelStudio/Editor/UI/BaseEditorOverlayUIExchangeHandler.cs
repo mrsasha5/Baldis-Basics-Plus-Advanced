@@ -7,6 +7,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
     internal class BaseEditorOverlayUIExchangeHandler : EditorOverlayUIExchangeHandler
     {
 
+        //Does EditorTextBox ignore delegate OnPress on purpose???
         /*public override void OnElementsCreated()
         {
             base.OnElementsCreated();

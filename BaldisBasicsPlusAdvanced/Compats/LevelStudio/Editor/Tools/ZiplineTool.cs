@@ -99,6 +99,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
             else
             {
                 notConnectedPoint = newPointLoc;
+                notConnectedPoint.LoadDefaultParameters();
             }
 
             EditorController.Instance.AddVisual(newPointLoc);

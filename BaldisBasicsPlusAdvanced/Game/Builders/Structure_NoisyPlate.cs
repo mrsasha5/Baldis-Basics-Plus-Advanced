@@ -35,46 +35,26 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         {
             base.Load(data);
 
-            List<int> extraData = new List<int>();
-
             for (int i = 0; i < data.Count; i++)
             {
                 List<NoisyPlate> currentPlates =
                     BuildInRoom(ec.rooms[data[i].data], data[i].prefab.GetComponent<NoisyPlate>(), ignoreCoverage: true);
 
-                for (int i2 = i + 1; i2 < data.Count; i2++)
-                {
-                    if (data[i2].prefab == null)
-                    {
-                        extraData.Add(data[i2].data);
-                        i = i2;
-                    }
-                    else
-                    {
-                        i = i2 - 1;
-                        break;
-                    }
-                }
-
                 foreach (NoisyPlate plate in currentPlates)
                 {
-                    if (extraData.Count > 0)
-                        plate.OverrideCooldown(extraData[0]);
+                    plate.OverrideCooldown(data[i + 1].data);
 
-                    if (extraData.Count > 1 && extraData[1] > 0)
+                    if (data[i + 2].data > 0)
                     {
                         plate.Data.showsUses = true;
-                        plate.SetMaxUses(extraData[1]);
+                        plate.SetMaxUses(data[i + 2].data);
                     }
 
-                    if (extraData.Count > 2)
-                        plate.SetGenerosity(extraData[2]);
-
-                    if (extraData.Count > 3)
-                        plate.SetPointsReward(extraData[3]);
+                    plate.SetGenerosity(data[i + 3].data);
+                    plate.SetPointsReward(data[i + 4].data);
                 }
 
-                extraData.Clear();
+                i += 4;
             }
         }
 

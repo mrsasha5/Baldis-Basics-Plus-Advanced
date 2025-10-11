@@ -17,7 +17,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
         public List<ZiplinePointLocation> locations = new List<ZiplinePointLocation>();
 
-        public virtual ZiplinePointLocation CreateNewChild(
+        public ZiplinePointLocation CreateNewChild(
             EditorLevelData levelData, string hangerPrefab, IntVector2 pos, bool disableChecks = false)
         {
             if (!disableChecks)
@@ -33,7 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
             ZiplinePointLocation loc = new ZiplinePointLocation(this)
             {
-                hangerPrefab = hangerPrefab, //Prefab for Structure Builder
+                prefabForBuilder = hangerPrefab, //Prefab for Structure Builder
                 prefab = "adv_zipline_pillar", //Prefab for editor only
                 position = pos,
                 deleteAction = OnDeleteLocation
@@ -79,18 +79,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
             for (int i = 0; i < locations.Count; i++)
             {
-                structInfo.data.Add(new StructureDataInfo()
-                {
-                    prefab = locations[i].hangerPrefab,
-                    position = PlusStudioLevelLoader.Extensions.ToData(locations[i].position), //I am writing this way because
-                                                                                               //extension methods from Loader
-                                                                                               //and Studio are conflicting and when
-                                                                                               //I am using PlusStudioLevelLoader namespace
-                                                                                               //I cannot use .ToInt() for ByteVector2
-                                                                                               //anymore.
-                    direction = PlusDirection.North,
-                    data = locations[i].EncodeData()
-                });
+                locations[i].Compile(structInfo);
             }
 
             return structInfo;
@@ -107,6 +96,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             {
                 EditorController.Instance.AddVisual(locations[i]);
             }
+
+            UpdateVisual(visualObject);
         }
 
         public override void UpdateVisual(GameObject visualObject)
@@ -161,12 +152,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
-                string hangerPrefab = compressor.ReadStoredString(reader);
-                IntVector2 position = reader.ReadByteVector2().ToInt();
-                int parametersData = reader.ReadInt32();
-
-                ZiplinePointLocation loc = CreateNewChild(data, hangerPrefab, position, disableChecks: true);
-                loc.LoadEncodedData(parametersData);
+                CreateNewChild(data, "", default, disableChecks: true)
+                    .ReadData(reader, compressor);
             }
 
             for (int i = 0; i < locations.Count; i += 2)
@@ -181,15 +168,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             writer.Write(locations.Count);
             for (int i = 0; i < locations.Count; i++)
             {
-                compressor.WriteStoredString(writer, locations[i].hangerPrefab);
-                writer.Write(locations[i].position.ToByte());
-                writer.Write(locations[i].EncodeData());
+                locations[i].WriteData(writer, compressor);
             }
         }
 
         public override void AddStringsToCompressor(StringCompressor compressor)
         {
-            compressor.AddStrings(locations.Select((x) => x.hangerPrefab));
+            compressor.AddStrings(locations.Select((x) => x.prefabForBuilder));
         }
 
     }

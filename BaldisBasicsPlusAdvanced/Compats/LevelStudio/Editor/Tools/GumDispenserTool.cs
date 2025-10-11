@@ -12,19 +12,16 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         private string dispenserPre;
 
-        private string buttonPre;
-
         private IntVector2? selectPos;
 
         private GumDispenserLocation notConnectedDispenser;
 
-        public override string id => $"structure_{type}_{dispenserPre}_{buttonPre}";
+        public override string id => $"structure_{type}_{dispenserPre}";
 
-        public GumDispenserTool(string type, string dispenserPre, string buttonPre, Sprite sprite)
+        public GumDispenserTool(string type, string dispenserPre, Sprite sprite)
         {
             this.type = type;
             this.dispenserPre = dispenserPre;
-            this.buttonPre = buttonPre;
             this.sprite = sprite;
         }
 
@@ -114,7 +111,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
             else
             {
                 SimpleButtonLocation buttonLoc = structLoc.CreateNewButton(
-                    EditorController.Instance.levelData, buttonPre, position, dir, false);
+                    EditorController.Instance.levelData, position, dir, false);
 
                 if (buttonLoc == null) 
                     return;

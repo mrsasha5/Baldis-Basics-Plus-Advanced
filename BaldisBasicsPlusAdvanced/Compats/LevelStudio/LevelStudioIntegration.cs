@@ -153,7 +153,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                         boxColl.size = new Vector3(10f, 1f, 10f);
                         boxColl.center = Vector3.zero;
 
-                        plateVisual.AddComponent<SettingsComponent>().offset = Vector3.up * 10f;
+                        plateVisual.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
 
                         genericPlateVisuals.Add(name, "adv_" + name);
                     }
@@ -284,7 +284,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new ZiplineTool("adv_zipline", "hanger_black", 
                     AssetsStorage.sprites["adv_editor_zipline_black"]));
             EditorInterfaceModes.AddToolToCategory(mode, "structures", 
-                new GumDispenserTool("adv_gum_dispenser", "gum_dispenser", "button", 
+                new GumDispenserTool("adv_gum_dispenser", "gum_dispenser", 
                     AssetsStorage.sprites["adv_editor_gum_dispenser"]));
             EditorInterfaceModes.AddToolToCategory(mode, "structures",
                 new NoisyPlateTool("adv_noisy_plate", "noisy_plate",

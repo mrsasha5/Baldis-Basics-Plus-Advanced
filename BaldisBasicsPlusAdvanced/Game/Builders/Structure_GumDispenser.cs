@@ -12,7 +12,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         private WeightedGameObject[] prefabs;
 
         [SerializeField]
-        private WeightedGameObject[] buttonsPre;
+        private GameButtonBase buttonPre;
 
         [SerializeField]
         private CellCoverage coverage;
@@ -31,14 +31,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                     weight = 100
                 }
             };
-            buttonsPre = new WeightedGameObject[]
-            {
-                new WeightedGameObject()
-                {
-                    selection = AssetsStorage.gameButton.gameObject,
-                    weight = 100
-                }
-            };
+            buttonPre = AssetsStorage.gameButton;
             buttonRange = 6;
         }
 
@@ -110,8 +103,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
                 StructureData buttonData = data[i + 1];
 
-                GameButton.Build(buttonData.prefab.GetComponent<GameButtonBase>(), ec, buttonData.position, buttonData.direction)
-                    .SetUp(dispenser);
+                GameButton.Build(buttonPre, ec, buttonData.position, buttonData.direction).SetUp(dispenser);
 
                 ushort uses = (ushort)(data[i].data >> 16);
                 ushort cooldown = (ushort)data[i].data;
@@ -143,8 +135,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             cell.HardCoverWall(dir, covered: true); //Based on game logic (Rotohalls uses that logic lol)
                                                                   //And I mean that it will cover cell even if button wasn't built
 
-            GameButtonBase button = GameButton.BuildInArea(ec, cell.position, buttonRange, dispenser.gameObject,
-                WeightedGameObject.ControlledRandomSelection(buttonsPre, lg.controlledRNG).GetComponent<GameButton>(), lg.controlledRNG);
+            GameButtonBase button = GameButton.BuildInArea(ec, cell.position, buttonRange, dispenser.gameObject, buttonPre, lg.controlledRNG);
 
             if (button != null)
             {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
@@ -21,7 +22,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
         {
             GumDispenserLocation loc = new GumDispenserLocation()
             {
-                prefab = pre,
+                prefab = "adv_" + pre,
+                prefabForBuilder = pre,
                 position = pos,
                 direction = dir,
                 deleteAction = OnDeleteDispenser
@@ -35,17 +37,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
             return loc;
         }
 
-        public SimpleButtonLocation CreateNewButton(EditorLevelData level, string pre, IntVector2 pos, Direction dir, bool disableChecks)
+        public SimpleButtonLocation CreateNewButton(EditorLevelData level, IntVector2 pos, Direction dir, bool loadingMode)
         {
             SimpleButtonLocation loc = new SimpleButtonLocation()
             {
-                prefab = pre,
+                prefab = "button",
                 position = pos,
                 direction = dir,
                 deleteAction = OnDeleteButton
             };
 
-            if (!disableChecks && (!loc.ValidatePosition(level, ignoreSelf: true) || !ValidatePositionInChildren(loc)))
+            if (!loadingMode && (!loc.ValidatePosition(level, ignoreSelf: true) || !ValidatePositionInChildren(loc)))
                 return null;
 
             buttonLocations.Add(loc);
@@ -105,13 +107,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
 
             for (int i = 0; i < dispenserLocations.Count; i++)
             {
-                structInfo.data.Add(new StructureDataInfo()
-                {
-                    prefab = dispenserLocations[i].prefab,
-                    position = PlusStudioLevelLoader.Extensions.ToData(dispenserLocations[i].position),
-                    direction = (PlusDirection)dispenserLocations[i].direction,
-                    data = dispenserLocations[i].EncodeData()
-                });
+                dispenserLocations[i].CompileData(data, level, structInfo);
 
                 structInfo.data.Add(new StructureDataInfo()
                 {
@@ -205,18 +201,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
-                string prefab = compressor.ReadStoredString(reader);
+                CreateNewDispenser(data, null, default, default, disableChecks: true)
+                    .ReadData(ver, data, reader, compressor);
+
                 IntVector2 pos = reader.ReadByteVector2().ToInt();
                 Direction dir = (Direction)reader.ReadByte();
-                int propertiesData = reader.ReadInt32();
-
-                string prefab2 = compressor.ReadStoredString(reader);
-                IntVector2 pos2 = reader.ReadByteVector2().ToInt();
-                Direction dir2 = (Direction)reader.ReadByte();
-
-                CreateNewDispenser(data, prefab, pos, dir, disableChecks: true)
-                    .LoadEncodedData(propertiesData);
-                CreateNewButton(data, prefab2, pos2, dir2, disableChecks: true);
+                
+                CreateNewButton(data, pos, dir, loadingMode: true);
             }
         }
 
@@ -226,12 +217,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
             writer.Write(dispenserLocations.Count);
             for (int i = 0; i < dispenserLocations.Count; i++)
             {
-                compressor.WriteStoredString(writer, dispenserLocations[i].prefab);
-                writer.Write(dispenserLocations[i].position.ToByte());
-                writer.Write((byte)dispenserLocations[i].direction);
-                writer.Write(dispenserLocations[i].EncodeData());
+                dispenserLocations[i].WriteData(data, writer, compressor);
 
-                compressor.WriteStoredString(writer, buttonLocations[i].prefab);
                 writer.Write(buttonLocations[i].position.ToByte());
                 writer.Write((byte)buttonLocations[i].direction);
             }
@@ -239,11 +226,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
 
         public override void AddStringsToCompressor(StringCompressor compressor)
         {
-            for (int i = 0; i < dispenserLocations.Count; i++)
-            {
-                compressor.AddString(dispenserLocations[i].prefab);
-                compressor.AddString(buttonLocations[i].prefab);
-            }
+            compressor.AddStrings(dispenserLocations.Select(x => x.prefabForBuilder));
         }
 
     }

@@ -19,7 +19,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
         {
             GenericPlateLocation loc = new GenericPlateLocation()
             {
-                prefabName = prefabName,
+                prefabForBuilder = prefabName,
                 position = pos,
                 direction = dir,
                 deleteAction = OnDeleteLocation
@@ -57,27 +57,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
             foreach (GenericPlateLocation loc in locations)
             {
-                structInfo.data.Add(new StructureDataInfo()
-                {
-                    prefab = loc.prefabName,
-                    position = PlusStudioLevelLoader.Extensions.ToData(loc.position),
-                    direction = (PlusDirection)loc.direction
-                });
-
-                structInfo.data.Add(new StructureDataInfo()
-                {
-                    data = loc.uses
-                });
-
-                structInfo.data.Add(new StructureDataInfo()
-                {
-                    data = loc.cooldown
-                });
-
-                structInfo.data.Add(new StructureDataInfo()
-                {
-                    data = BitConverter.ToInt32(BitConverter.GetBytes(loc.unpressTime), 0)
-                });
+                loc.CompileData(structInfo);
             }
 
             return structInfo;
@@ -145,7 +125,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
         public override void Write(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
         {
             writer.Write(formatVersion);
-
             writer.Write(locations.Count);
             foreach (GenericPlateLocation location in locations)
             {
@@ -155,7 +134,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
         public override void AddStringsToCompressor(StringCompressor compressor)
         {
-            compressor.AddStrings(locations.Select(x => x.prefabName));
+            compressor.AddStrings(locations.Select(x => x.prefabForBuilder));
         }
 
     }

@@ -10,7 +10,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
     public class Structure_AccelerationPlate : BaseStructure_Plate
     {
         [SerializeField]
-        private WeightedGameObject[] buttonsPre;
+        private GameButtonBase buttonPre;
 
         [SerializeField]
         private int buttonRange;
@@ -22,14 +22,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         {
             base.InitializePrefab(1);
             buttonRange = 6;
-            buttonsPre = new WeightedGameObject[]
-            {
-                new WeightedGameObject()
-                {
-                    selection = AssetsStorage.gameButton.gameObject,
-                    weight = 100
-                }
-            };
+            buttonPre = AssetsStorage.gameButton;
 
             hallPrefabs = new WeightedGameObject[]
             {
@@ -139,8 +132,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             plate.InitializePotentialDirections();
             if (rng.Next(0, 101) <= 50 && plate.IsRotatable)
             {
-                GameButton.BuildInArea(ec, cell.position, buttonRange, plate.gameObject,
-                    WeightedGameObject.ControlledRandomSelection(buttonsPre, rng).GetComponent<GameButton>(), rng);
+                GameButton.BuildInArea(ec, cell.position, buttonRange, plate.gameObject, buttonPre, rng);
             }
             return plate;
         }

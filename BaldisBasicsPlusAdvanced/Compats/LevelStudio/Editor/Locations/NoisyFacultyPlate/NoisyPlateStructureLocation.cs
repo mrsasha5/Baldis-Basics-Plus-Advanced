@@ -5,7 +5,6 @@ using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate
 {
@@ -26,7 +25,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
             }
 
             NoisyPlateRoomLocation noisyPlateRoomLocation = new NoisyPlateRoomLocation();
-            noisyPlateRoomLocation.builderPrefab = prefab;
+            noisyPlateRoomLocation.prefabForBuilder = prefab;
             noisyPlateRoomLocation.owner = this;
             noisyPlateRoomLocation.room = targetRoom;
 
@@ -79,31 +78,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
 
             for (int i = 0; i < infectedRooms.Count; i++)
             {
-                structInfo.data.Add(new StructureDataInfo()
-                {
-                    prefab = infectedRooms[i].builderPrefab,
-                    data = data.rooms.IndexOf(infectedRooms[i].room)
-                });
-
-                structInfo.data.Add(new StructureDataInfo()
-                {
-                    data = infectedRooms[i].cooldown
-                });
-
-                structInfo.data.Add(new StructureDataInfo()
-                {
-                    data = infectedRooms[i].uses
-                });
-
-                structInfo.data.Add(new StructureDataInfo()
-                {
-                    data = infectedRooms[i].generosity
-                });
-
-                structInfo.data.Add(new StructureDataInfo()
-                {
-                    data = infectedRooms[i].pointsPerAlarm
-                });
+                infectedRooms[i].CompileData(data, level, structInfo);
             }
 
             return structInfo;
@@ -153,7 +128,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
                     {
                         gameObject = Object.Instantiate(
                             LevelStudioPlugin.Instance.genericStructureDisplays[
-                                LevelStudioIntegration.noisyPlateVisuals[room.builderPrefab]]);
+                                LevelStudioIntegration.noisyPlateVisuals[room.prefabForBuilder]]);
                         gameObject.GetComponent<EditorDeletableObject>().toDelete = room;
                         gameObject.GetComponent<SettingsComponent>().activateSettingsOn = room;
                         room.allocatedPlates.Add(gameObject);
@@ -201,11 +176,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
-                string prefabName = compressor.ReadStoredString(reader);
-                ushort roomId = reader.ReadUInt16();
-
-                NoisyPlateRoomLocation loc = CreateAndAddRoom(prefabName, data.RoomFromId(roomId));
-                loc.ReadParameters(ver, reader);
+                NoisyPlateRoomLocation loc = CreateAndAddRoom(null, null);
+                loc.ReadData(ver, data, reader, compressor);
             }
         }
 
@@ -215,16 +187,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
             writer.Write(infectedRooms.Count);
             for (int i = 0; i < infectedRooms.Count; i++)
             {
-                compressor.WriteStoredString(writer, infectedRooms[i].builderPrefab);
-                writer.Write(data.IdFromRoom(infectedRooms[i].room));
-
-                infectedRooms[i].WriteParameters(writer);
+                infectedRooms[i].WriteData(data, writer, compressor);
             }
         }
 
         public override void AddStringsToCompressor(StringCompressor compressor)
         {
-            compressor.AddStrings(infectedRooms.Select(x => x.builderPrefab));
+            compressor.AddStrings(infectedRooms.Select(x => x.prefabForBuilder));
         }
 
         public override bool ShouldUpdateVisual(PotentialStructureUpdateReason reason)

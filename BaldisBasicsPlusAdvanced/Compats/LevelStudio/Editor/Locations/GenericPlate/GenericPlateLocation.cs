@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
 using PlusLevelStudio;
@@ -12,60 +14,108 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
     internal class GenericPlateLocation : SimpleLocation, IEditorSettingsable
     {
 
-        public string prefabName;
+        public string prefabForBuilder;
 
-        public int cooldown;
+        public ushort cooldown;
 
-        public int uses;
+        public ushort uses;
 
         public float unpressTime;
 
-        public override void InitializeVisual(GameObject visualObject)
-        {
-            base.InitializeVisual(visualObject);
-            visualObject.GetComponent<SettingsComponent>().activateSettingsOn = this;
-        }
+        public bool cooldownOverridingAllowed;
+
+        public bool showsUses;
+
+        public bool showsCooldown;
 
         public void LoadDefaultParameters(string type)
         {
             BasePlate prefab = 
                 PlusStudioLevelLoader.
-                    LevelLoaderPlugin.Instance.structureAliases[type].prefabAliases[prefabName].GetComponent<BasePlate>();
+                    LevelLoaderPlugin.Instance.structureAliases[type].prefabAliases[prefabForBuilder].GetComponent<BasePlate>();
 
-            uses = prefab.Data.maxUses;
+            uses = (ushort)prefab.Data.maxUses;
             unpressTime = prefab.Data.timeToUnpress;
+            showsUses = prefab.Data.showsUses;
+            showsCooldown = prefab.Data.showsCooldown;
+        }
+
+        public void CompileData(StructureInfo info)
+        {
+            info.data.Add(new StructureDataInfo()
+            {
+                prefab = prefabForBuilder,
+                position = PlusStudioLevelLoader.Extensions.ToData(position),
+                direction = (PlusDirection)direction
+            });
+
+            info.data.Add(new StructureDataInfo()
+            {
+                data = uses
+            });
+
+            info.data.Add(new StructureDataInfo()
+            {
+                data = cooldownOverridingAllowed.ToInt()
+            });
+
+            info.data.Add(new StructureDataInfo()
+            {
+                data = cooldown
+            });
+
+            info.data.Add(new StructureDataInfo()
+            {
+                data = BitConverter.ToInt32(BitConverter.GetBytes(unpressTime), 0)
+            });
+
+            info.data.Add(new StructureDataInfo()
+            {
+                data = showsUses.ToInt()
+            });
+
+            info.data.Add(new StructureDataInfo()
+            {
+                data = showsCooldown.ToInt()
+            });
         }
 
         public void WriteData(BinaryWriter writer, StringCompressor compressor)
         {
-            compressor.WriteStoredString(writer, prefabName);
+            compressor.WriteStoredString(writer, prefabForBuilder);
 
             writer.Write(position.ToByte());
             writer.Write((byte)direction);
 
-            writer.Write((byte)3);
-            writer.Write(cooldown);
             writer.Write(uses);
+            writer.Write(cooldownOverridingAllowed);
+            writer.Write(cooldown);
             writer.Write(unpressTime);
+            writer.Write(showsUses);
+            writer.Write(showsCooldown);
         }
 
         public void ReadData(byte version, BinaryReader reader, StringCompressor compressor)
         {
-            prefabName = compressor.ReadStoredString(reader);
+            prefabForBuilder = compressor.ReadStoredString(reader);
 
-            prefab = LevelStudioIntegration.genericPlateVisuals[prefabName];
+            prefab = LevelStudioIntegration.genericPlateVisuals[prefabForBuilder];
 
             position = reader.ReadByteVector2().ToInt();
             direction = (Direction)reader.ReadByte();
 
-            byte parameters = reader.ReadByte();
+            uses = reader.ReadUInt16();
+            cooldownOverridingAllowed = reader.ReadBoolean();
+            cooldown = reader.ReadUInt16();
+            unpressTime = reader.ReadSingle();
+            showsUses = reader.ReadBoolean();
+            showsCooldown = reader.ReadBoolean();
+        }
 
-            if (parameters > 0)
-                cooldown = reader.ReadInt32();
-            if (parameters > 1)
-                uses = reader.ReadInt32();
-            if (parameters > 2)
-                unpressTime = reader.ReadSingle();
+        public override void InitializeVisual(GameObject visualObject)
+        {
+            base.InitializeVisual(visualObject);
+            visualObject.GetComponent<SettingsComponent>().activateSettingsOn = this;
         }
 
         public void SettingsClicked()

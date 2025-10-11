@@ -1,7 +1,9 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI;
+﻿using System.IO;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI;
 using BaldisBasicsPlusAdvanced.Helpers;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
+using PlusStudioLevelFormat;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser
@@ -9,30 +11,54 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
     internal class GumDispenserLocation : SimpleLocation, IEditorSettingsable
     {
 
+        public string prefabForBuilder;
+
         public ushort uses = 5;
 
         public ushort cooldown = 30;
 
-        public int EncodeData()
+        public void CompileData(EditorLevelData data, BaldiLevel level, StructureInfo info)
+        {
+            info.data.Add(new StructureDataInfo()
+            {
+                prefab = prefabForBuilder,
+                position = PlusStudioLevelLoader.Extensions.ToData(position),
+                direction = (PlusDirection)direction,
+                data = EncodeData()
+            });
+        }
+
+        public void ReadData(byte version, EditorLevelData data, BinaryReader reader, StringCompressor compressor)
+        {
+            prefabForBuilder = compressor.ReadStoredString(reader);
+            position = reader.ReadByteVector2().ToInt();
+            direction = (Direction)reader.ReadByte();
+
+            uses = reader.ReadUInt16();
+            cooldown = reader.ReadUInt16();
+
+            prefab = "adv_" + prefabForBuilder;
+        }
+
+        public void WriteData(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
+        {
+            compressor.WriteStoredString(writer, prefabForBuilder);
+            writer.Write(position.ToByte());
+            writer.Write((byte)direction);
+
+            writer.Write(uses);
+            writer.Write(cooldown);
+        }
+
+        private int EncodeData()
         {
             int num = 0;
 
             num |= uses;
-            num = num << 16;
+            num <<= 16;
             num |= cooldown;
 
             return num;
-        }
-
-        public void LoadEncodedData(int num)
-        {
-            uses = (ushort)(num >> 16);
-            cooldown = (ushort)num;
-        }
-
-        public override GameObject GetVisualPrefab()
-        {
-            return LevelStudioPlugin.Instance.genericStructureDisplays["adv_" + prefab];
         }
 
         public override void InitializeVisual(GameObject visualObject)

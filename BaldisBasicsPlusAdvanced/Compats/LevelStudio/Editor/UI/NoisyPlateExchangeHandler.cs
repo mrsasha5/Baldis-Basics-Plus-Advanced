@@ -80,7 +80,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
         {
             if (message == "setCooldown")
             {
-                if (int.TryParse((string)data, out int result))
+                if (ushort.TryParse((string)data, out ushort result))
                 {
                     loc.cooldown = result;
                     somethingChanged = true;
@@ -90,7 +90,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setUses")
             {
-                if (int.TryParse((string)data, out int result))
+                if (ushort.TryParse((string)data, out ushort result))
                 {
                     loc.uses = result;
                     somethingChanged = true;
@@ -100,7 +100,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setGenerosity")
             {
-                if (int.TryParse((string)data, out int result))
+                if (ushort.TryParse((string)data, out ushort result))
                 {
                     loc.generosity = result;
                     somethingChanged = true;

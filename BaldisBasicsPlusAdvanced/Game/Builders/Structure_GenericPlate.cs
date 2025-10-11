@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
@@ -96,40 +97,22 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         {
             base.Load(data);
 
-            List<int> extraData = new List<int>();
-
             for (int i = 0; i < data.Count; i++)
             {
                 BasePlate plate = BuildPrefab(data[i].prefab.GetComponent<BasePlate>(), 
                     ec.CellFromPosition(data[i].position), data[i].direction);
 
-                for (int i2 = i + 1; i2 < data.Count; i2++)
-                {
-                    if (data[i2].prefab == null)
-                    {
-                        extraData.Add(data[i2].data);
-                        i = i2;
-                    }
-                    else
-                    {
-                        i = i2 - 1;
-                        break;
-                    }
-                }
+                plate.Data.showsUses = data[i + 5].data.ToBool();
+                plate.Data.showsCooldown = data[i + 6].data.ToBool();
 
-                if (extraData.Count > 0)
-                    plate.SetMaxUses(extraData[0]);
+                plate.SetMaxUses(data[i + 1].data);
 
-                if (extraData.Count > 1 && plate.Data.initiallyHasCooldown)
-                {
-                    plate.Data.showsCooldown = true;
-                    plate.ForcefullyPatchCooldown(extraData[1]);
-                }
+                if (data[i + 2].data.ToBool())
+                    plate.ForcefullyPatchCooldown(data[i + 3].data);
 
-                if (extraData.Count > 2)
-                    plate.Data.timeToUnpress = BitConverter.ToSingle(BitConverter.GetBytes(extraData[2]), 0);
+                plate.Data.timeToUnpress = BitConverter.ToSingle(BitConverter.GetBytes(data[i + 4].data), 0);
 
-                extraData.Clear();
+                i += 6;
             }
 
         }

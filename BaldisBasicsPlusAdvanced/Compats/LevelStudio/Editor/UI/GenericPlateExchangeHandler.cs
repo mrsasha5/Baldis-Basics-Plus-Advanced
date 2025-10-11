@@ -12,9 +12,15 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
 
         private TextMeshProUGUI uses;
 
+        private TextMeshProUGUI cooldownTitle;
+
         private TextMeshProUGUI cooldown;
 
         private TextMeshProUGUI unpressTime;
+
+        private TextMeshProUGUI showsUses;
+
+        private TextMeshProUGUI showsCooldown;
 
         private bool somethingChanged;
 
@@ -45,20 +51,43 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             {
                 unpressTime = transform3.GetComponent<TextMeshProUGUI>();
             }
+
+            Transform transform4 = base.transform.Find("ShowsUses");
+            if (transform4 != null)
+            {
+                showsUses = transform4.GetComponent<TextMeshProUGUI>();
+            }
+
+            Transform transform5 = base.transform.Find("ShowsCooldown");
+            if (transform5 != null)
+            {
+                showsCooldown = transform5.GetComponent<TextMeshProUGUI>();
+            }
+
+            cooldownTitle = base.transform.Find("Cooldown").GetComponent<TextMeshProUGUI>();
         }
 
         public void Refresh()
         {
             if (uses != null)
             {
-                if (loc.uses == 0) uses.text = "INF";
+                if (loc.uses == 0) 
+                    uses.text = "INF";
                 else
                     uses.text = loc.uses.ToString();
             }
 
+            if (cooldownTitle != null)
+            {
+                if (loc.cooldownOverridingAllowed)
+                    cooldownTitle.color = Color.white;
+                else
+                    cooldownTitle.color = Color.grey;
+            }
+
             if (cooldown != null)
             {
-                if (loc.cooldown == 0) cooldown.text = "NO";
+                if (!loc.cooldownOverridingAllowed) cooldown.text = "NO";
                 else cooldown.text = loc.cooldown.ToString();
             }
 
@@ -66,6 +95,30 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             {
                 unpressTime.text = loc.unpressTime.ToString();
                 CheckIfFloatIsVisualized(unpressTime);
+            }
+
+            if (showsUses != null)
+            {
+                if (loc.showsUses)
+                {
+                    showsUses.color = Color.green;
+                }
+                else
+                {
+                    showsUses.color = Color.red;
+                }
+            }
+
+            if (showsCooldown != null)
+            {
+                if (loc.showsCooldown)
+                {
+                    showsCooldown.color = Color.green;
+                }
+                else
+                {
+                    showsCooldown.color = Color.red;
+                }
             }
         }
 
@@ -87,7 +140,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
         {
             if (message == "setUses")
             {
-                if (int.TryParse((string)data, out int result))
+                if (ushort.TryParse((string)data, out ushort result))
                 {
                     loc.uses = result;
                     somethingChanged = true;
@@ -97,7 +150,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setCooldown")
             {
-                if (int.TryParse((string)data, out int result))
+                if (ushort.TryParse((string)data, out ushort result))
                 {
                     loc.cooldown = result;
                     somethingChanged = true;
@@ -112,6 +165,24 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
                     loc.unpressTime = result;
                     somethingChanged = true;
                 }
+
+                Refresh();
+            }
+            else if (message == "toggleUsesVisual")
+            {
+                loc.showsUses = !loc.showsUses;
+
+                Refresh();
+            }
+            else if (message == "toggleCooldownVisual")
+            {
+                loc.showsCooldown = !loc.showsCooldown;
+
+                Refresh();
+            }
+            else if (message == "toggleCooldownOverriding")
+            {
+                loc.cooldownOverridingAllowed = !loc.cooldownOverridingAllowed;
 
                 Refresh();
             }

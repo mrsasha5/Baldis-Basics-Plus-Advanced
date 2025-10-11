@@ -79,9 +79,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setDistanceToBreak")
             {
-                if (ushort.TryParse((string)data, out ushort result))
+                if (byte.TryParse((string)data, out byte result))
                 {
-                    loc.percentageDistanceToBreak = (ushort)Mathf.Clamp((int)result, 0, 100);
+                    loc.percentageDistanceToBreak = (byte)Mathf.Clamp(result, 0, 100);
                     somethingChanged = true;
                 }
 

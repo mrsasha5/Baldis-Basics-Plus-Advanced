@@ -5,6 +5,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
 using BaldisBasicsPlusAdvanced.Helpers;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
+using PlusStudioLevelFormat;
 using PlusStudioLevelLoader;
 using UnityEngine;
 
@@ -14,13 +15,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
     {
 
         //Serializable
-        public string builderPrefab;
+        public string prefabForBuilder; 
 
-        public int cooldown;
+        public ushort cooldown;
 
-        public int uses;
+        public ushort uses;
 
-        public int generosity;
+        public ushort generosity;
 
         public int pointsPerAlarm;
 
@@ -33,35 +34,62 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
 
         public void LoadDefaultParameters()
         {
-            NoisyPlate prefab = LevelLoaderPlugin.Instance.structureAliases[owner.type].prefabAliases[builderPrefab]
+            NoisyPlate prefab = LevelLoaderPlugin.Instance.structureAliases[owner.type].prefabAliases[prefabForBuilder]
                 .GetComponent<NoisyPlate>();
 
-            cooldown = (int)prefab.Cooldown;
-            uses = prefab.Data.maxUses;
-            generosity = prefab.Generosity;
+            cooldown = (ushort)prefab.Cooldown;
+            uses = (ushort)prefab.Data.maxUses;
+            generosity = (ushort)prefab.Generosity;
             pointsPerAlarm = prefab.PointsReward;
         }
 
-        public void ReadParameters(byte version, BinaryReader reader)
+        public void CompileData(EditorLevelData data, BaldiLevel level, StructureInfo info)
         {
-            byte paramsCount = reader.ReadByte();
+            info.data.Add(new StructureDataInfo()
+            {
+                prefab = prefabForBuilder,
+                data = data.rooms.IndexOf(room)
+            });
 
-            if (paramsCount > 0)
-                cooldown = reader.ReadInt32();
+            info.data.Add(new StructureDataInfo()
+            {
+                data = cooldown
+            });
 
-            if (paramsCount > 1)
-                uses = reader.ReadInt32();
+            info.data.Add(new StructureDataInfo()
+            {
+                data = uses
+            });
 
-            if (paramsCount > 2)
-                generosity = reader.ReadInt32();
+            info.data.Add(new StructureDataInfo()
+            {
+                data = generosity
+            });
 
-            if (paramsCount > 3)
-                pointsPerAlarm = reader.ReadInt32();
+            info.data.Add(new StructureDataInfo()
+            {
+                data = pointsPerAlarm
+            });
         }
 
-        public void WriteParameters(BinaryWriter writer)
+        public void ReadData(byte version, EditorLevelData data, BinaryReader reader, StringCompressor compressor)
         {
-            writer.Write((byte)4);
+            prefabForBuilder = compressor.ReadStoredString(reader);
+            ushort roomId = reader.ReadUInt16();
+
+            room = data.RoomFromId(roomId);
+
+            cooldown = reader.ReadUInt16();
+            uses = reader.ReadUInt16();
+            generosity = reader.ReadUInt16();
+            pointsPerAlarm = reader.ReadInt32();
+        }
+
+        public void WriteData(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
+        {
+            compressor.WriteStoredString(writer, prefabForBuilder);
+            writer.Write(data.IdFromRoom(room));
+
             writer.Write(cooldown);
             writer.Write(uses);
             writer.Write(generosity);

@@ -186,7 +186,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 distance -= Time.deltaTime * speed * ec.EnvironmentTimeScale;
                 entity?.Teleport(transform.position);
 
-                if (uses <= 1 && !hasInfinityUses && distanceToBreak > distance)
+                if (uses < 1 && !hasInfinityUses && distanceToBreak > distance)
                 {
                     Break();
                 }
@@ -195,7 +195,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 {
                     OnZiplineEnds();
 
-                    if (!broken && uses <= 1 && !hasInfinityUses) Break();
+                    if (!broken && uses < 1 && !hasInfinityUses) Break();
                 }
             }
         }

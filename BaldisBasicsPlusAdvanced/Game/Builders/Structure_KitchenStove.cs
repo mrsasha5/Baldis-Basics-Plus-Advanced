@@ -9,7 +9,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
     public class Structure_KitchenStove : BaseStructure_Plate
     {
         [SerializeField]
-        private WeightedGameObject[] buttonsPre;
+        private GameButtonBase buttonPre;
 
         [SerializeField]
         private int buttonRange;
@@ -25,22 +25,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                     weight = 100
                 }
             };
-            buttonsPre = new WeightedGameObject[]
-            {
-                new WeightedGameObject()
-                {
-                    selection = AssetsStorage.gameButton.gameObject,
-                    weight = 100
-                }
-            };
+            buttonPre = AssetsStorage.gameButton;
         }
 
         public override BasePlate RandomlyBuildPrefab(Cell cell, System.Random rng, bool inRoom)
         {
             KitchenStove stove = (KitchenStove)base.RandomlyBuildPrefab(cell, rng, inRoom);
 
-            GameButtonBase button = GameButton.BuildInArea(ec, cell.position, buttonRange, stove.gameObject,
-                WeightedGameObject.ControlledRandomSelection(buttonsPre, rng).GetComponent<GameButton>(), rng);
+            GameButtonBase button = GameButton.BuildInArea(ec, cell.position, buttonRange, stove.gameObject, buttonPre, rng);
 
             if (button == null)
             {
