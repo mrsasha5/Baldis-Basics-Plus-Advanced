@@ -40,7 +40,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         private static int maxFoodCount = 4;
 
-        private static List<FoodRecipeData> data = new List<FoodRecipeData>();
+        private static List<FoodRecipeData> recipes = new List<FoodRecipeData>();
 
         [SerializeField]
         protected float coolingTime;
@@ -69,7 +69,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         public static int MaxFoodCount => maxFoodCount;
 
-        internal static List<FoodRecipeData> RecipeData => data;
+        internal static List<FoodRecipeData> RecipeData => recipes;
 
         protected override bool UpdatesPressedState => false;
 
@@ -78,6 +78,30 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         protected override bool VisualActiveStateOverridden => activeStateOverridden;
 
         public override bool IsUsable => base.IsUsable && !active && available;
+
+        public float CoolingTime
+        {
+            get
+            {
+                return coolingTime;
+            }
+            set
+            {
+                coolingTime = value;
+            }
+        }
+
+        public float CookingTime
+        {
+            get
+            {
+                return burningTime;
+            }
+            set
+            {
+                burningTime = value;
+            }
+        }
 
         public override void InitializePrefab(int variant)
         {
@@ -277,7 +301,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             if (pickups.Count + 1 - expelledItems.Length < maxFoodCount)
             {
                 recipeData =
-                    data.Find(x => x.ContainsListOfPickups(pickups) && x.RawFood.Contains(item) && pickups.Count < x.RawFood.Length);
+                    recipes.Find(x => x.ContainsListOfPickups(pickups) && x.RawFood.Contains(item) && pickups.Count < x.RawFood.Length);
                 return recipeData != null;
             }
             recipeData = null;
@@ -289,7 +313,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             if (pickups.Count + 1 < maxFoodCount)
             {
                 recipeData = 
-                    data.Find(x => x.ContainsListOfPickups(pickups) && x.RawFood.Contains(item) && pickups.Count < x.RawFood.Length);
+                    recipes.Find(x => x.ContainsListOfPickups(pickups) && x.RawFood.Contains(item) && pickups.Count < x.RawFood.Length);
                 return recipeData != null;
             }
             recipeData = null;
@@ -323,7 +347,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         public void Activate()
         {
-            currentRecipe = data.Find(x => x.ContainsListOfPickups(pickups) && pickups.Count == x.RawFood.Length);
+            currentRecipe = recipes.Find(x => x.ContainsListOfPickups(pickups) && pickups.Count == x.RawFood.Length);
 
             if (!IsCookingAvailable()) return;
 

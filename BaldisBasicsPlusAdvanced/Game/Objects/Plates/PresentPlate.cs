@@ -32,6 +32,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         {
             base.VirtualOnPress();
             SpawnRandomItem();
+            SetCooldown(0f);
         }
 
         private void SpawnRandomItem()

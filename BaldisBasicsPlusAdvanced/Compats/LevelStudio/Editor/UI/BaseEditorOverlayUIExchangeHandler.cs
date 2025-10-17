@@ -21,7 +21,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
 
         protected void CheckIfFloatIsVisualized(TMP_Text tmp)
         {
-            if (!tmp.text.Contains(","))
+            if (!tmp.text.Contains(",") && !tmp.text.Contains("E"))
                 tmp.text += ",0";
         }
 

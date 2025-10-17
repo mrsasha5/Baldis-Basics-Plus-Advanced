@@ -1,4 +1,6 @@
-﻿using BaldisBasicsPlusAdvanced.Cache;
+﻿using System;
+using System.Collections.Generic;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
@@ -26,6 +28,21 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 }
             };
             buttonPre = AssetsStorage.gameButton;
+        }
+
+        public override void Load(List<StructureData> data)
+        {
+            base.Load(data);
+            for (int i = 0; i < data.Count; i += 4)
+            {
+                KitchenStove stove = (KitchenStove)BuildPrefab(data[i].prefab.GetComponent<KitchenStove>(), 
+                    ec.CellFromPosition(data[i].position), data[i].direction);
+
+                GameButtonBase button = GameButton.Build(buttonPre, ec, data[i + 3].position, data[i + 3].direction);
+
+                stove.CookingTime = BitConverter.ToSingle(BitConverter.GetBytes(data[i + 1].data), 0);
+                stove.CoolingTime = BitConverter.ToSingle(BitConverter.GetBytes(data[i + 2].data), 0);
+            }
         }
 
         public override BasePlate RandomlyBuildPrefab(Cell cell, System.Random rng, bool inRoom)

@@ -40,6 +40,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             if (cooldown != null)
             {
                 cooldown.text = loc.cooldown.ToString();
+                CheckIfFloatIsVisualized(cooldown);
             }
 
             if (uses != null)
@@ -80,7 +81,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
         {
             if (message == "setCooldown")
             {
-                if (ushort.TryParse((string)data, out ushort result))
+                if (float.TryParse((string)data, out float result))
                 {
                     loc.cooldown = result;
                     somethingChanged = true;

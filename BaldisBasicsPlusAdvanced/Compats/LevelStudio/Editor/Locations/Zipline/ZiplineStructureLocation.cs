@@ -31,8 +31,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
                 }
             }
 
-            ZiplinePointLocation loc = new ZiplinePointLocation(this)
+            ZiplinePointLocation loc = new ZiplinePointLocation()
             {
+                owner = this,
                 prefabForBuilder = hangerPrefab, //Prefab for Structure Builder
                 prefab = "adv_zipline_pillar", //Prefab for editor only
                 position = pos,

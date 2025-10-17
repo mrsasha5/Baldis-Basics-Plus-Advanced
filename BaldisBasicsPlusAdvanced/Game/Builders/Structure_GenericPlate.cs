@@ -108,7 +108,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 plate.SetMaxUses(data[i + 1].data);
 
                 if (data[i + 2].data.ToBool())
-                    plate.ForcefullyPatchCooldown(data[i + 3].data);
+                    plate.ForcefullyPatchCooldown(BitConverter.ToSingle(BitConverter.GetBytes(data[i + 3].data), 0));
 
                 plate.Data.timeToUnpress = BitConverter.ToSingle(BitConverter.GetBytes(data[i + 4].data), 0);
 

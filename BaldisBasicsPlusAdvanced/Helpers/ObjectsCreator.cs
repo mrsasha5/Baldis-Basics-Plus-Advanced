@@ -304,7 +304,9 @@ namespace BaldisBasicsPlusAdvanced.Helpers
                 AudioSource audDevice = gm.AddComponent<AudioSource>();
                 audDevice.PlayOneShot(AssetsStorage.weirdErrorSound);
             }
-            
+
+            GlobalCam.Instance.Transition(UiTransition.Dither, 0.01666667f);
+
             MTM101BaldiDevAPI.CauseCrash(AdvancedCore.Instance.Info, e);
         }
     }

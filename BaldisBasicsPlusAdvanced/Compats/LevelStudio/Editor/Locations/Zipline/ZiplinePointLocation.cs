@@ -21,22 +21,15 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
         public ushort percentageDistanceToBreak = 50;
 
         //Not serializable fields
-        private bool overridingData;
-
         private bool destroyed;
 
         private GameObject hangerVisual;
 
-        private ZiplineStructureLocation structLoc;
-
         private ZiplinePointLocation connectedPoint;
 
-        public LineRenderer renderer;
+        public ZiplineStructureLocation owner;
 
-        public ZiplinePointLocation(ZiplineStructureLocation structLoc)
-        {
-            this.structLoc = structLoc;
-        }
+        public LineRenderer renderer;
 
         public void Compile(StructureInfo info)
         {
@@ -44,11 +37,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             {
                 prefab = prefabForBuilder,
                 position = PlusStudioLevelLoader.Extensions.ToData(position), //I am writing this way because
-                                                                                           //extension methods from Loader
-                                                                                           //and Studio are conflicting and when
-                                                                                           //I am using PlusStudioLevelLoader namespace
-                                                                                           //I cannot use .ToInt() for ByteVector2
-                                                                                           //anymore.
+                                                                              //extension methods from Loader
+                                                                              //and Studio are conflicting and when
+                                                                              //I am using PlusStudioLevelLoader namespace
+                                                                              //I cannot use .ToInt() for ByteVector2
+                                                                              //anymore.
                 direction = PlusDirection.North,
                 data = EncodeData()
             });
@@ -86,7 +79,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
         public void LoadDefaultParameters()
         {
             ZiplineHanger hangerPrefab =
-                LevelLoaderPlugin.Instance.structureAliases[structLoc.type].prefabAliases[prefabForBuilder].GetComponent<ZiplineHanger>();
+                LevelLoaderPlugin.Instance.structureAliases[owner.type].prefabAliases[prefabForBuilder].GetComponent<ZiplineHanger>();
 
             uses = (ushort)hangerPrefab.MinMaxUses.z;
         }
@@ -97,12 +90,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             loc.connectedPoint = this;
 
             ZiplineHanger hangerPrefab = 
-                LevelLoaderPlugin.Instance.structureAliases[structLoc.type].prefabAliases[prefabForBuilder].GetComponent<ZiplineHanger>();
+                LevelLoaderPlugin.Instance.structureAliases[owner.type].prefabAliases[prefabForBuilder].GetComponent<ZiplineHanger>();
 
             Vector3 pos = position.GetVector3FromCellPosition();
             Vector3 endPos = loc.position.GetVector3FromCellPosition();
 
-            hangerVisual = GameObject.Instantiate(LevelStudioIntegration.hangerVisuals[prefabForBuilder]);
+            hangerVisual = GameObject.Instantiate(LevelStudioIntegration.GetVisualPrefab(owner.type, prefabForBuilder));
             hangerVisual.transform.position = pos + hangerPrefab.Offset * (endPos - pos).normalized + Vector3.up * 5f;
             hangerVisual.GetComponent<EditorSettingsableComponent>().OnSettingsClicked = OnSettingsClicked;
             hangerVisual.GetComponent<EditorDeletableObject>().toDelete = this;
@@ -122,7 +115,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
         {
             base.CleanupVisual(visualObject);
             destroyed = true;
-            structLoc.locations.Remove(this);
+            owner.locations.Remove(this);
 
             if (hangerVisual != null) GameObject.Destroy(hangerVisual.gameObject);
             if (renderer != null) GameObject.Destroy(renderer.gameObject);

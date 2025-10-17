@@ -1,5 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,7 +43,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
                 foreach (NoisyPlate plate in currentPlates)
                 {
-                    plate.OverrideCooldown(data[i + 1].data);
+                    plate.OverrideCooldown(BitConverter.ToSingle(BitConverter.GetBytes(data[i + 1].data), 0));
 
                     if (data[i + 2].data > 0)
                     {

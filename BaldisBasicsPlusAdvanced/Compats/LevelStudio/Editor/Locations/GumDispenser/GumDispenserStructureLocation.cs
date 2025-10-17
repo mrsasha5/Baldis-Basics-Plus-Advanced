@@ -22,7 +22,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
         {
             GumDispenserLocation loc = new GumDispenserLocation()
             {
-                prefab = "adv_" + pre,
+                owner = this,
                 prefabForBuilder = pre,
                 position = pos,
                 direction = dir,

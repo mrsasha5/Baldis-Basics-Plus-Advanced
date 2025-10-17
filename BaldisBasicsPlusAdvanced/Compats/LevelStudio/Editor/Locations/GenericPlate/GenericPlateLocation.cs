@@ -16,7 +16,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
         public string prefabForBuilder;
 
-        public ushort cooldown;
+        public float cooldown;
 
         public ushort uses;
 
@@ -27,6 +27,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
         public bool showsUses;
 
         public bool showsCooldown;
+
+        public GenericPlateStructureLocation owner;
 
         public void LoadDefaultParameters(string type)
         {
@@ -61,7 +63,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
             info.data.Add(new StructureDataInfo()
             {
-                data = cooldown
+                data = BitConverter.ToInt32(BitConverter.GetBytes(cooldown), 0)
             });
 
             info.data.Add(new StructureDataInfo()
@@ -99,14 +101,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
         {
             prefabForBuilder = compressor.ReadStoredString(reader);
 
-            prefab = LevelStudioIntegration.genericPlateVisuals[prefabForBuilder];
-
             position = reader.ReadByteVector2().ToInt();
             direction = (Direction)reader.ReadByte();
 
             uses = reader.ReadUInt16();
             cooldownOverridingAllowed = reader.ReadBoolean();
-            cooldown = reader.ReadUInt16();
+            cooldown = reader.ReadSingle();
             unpressTime = reader.ReadSingle();
             showsUses = reader.ReadBoolean();
             showsCooldown = reader.ReadBoolean();
@@ -116,6 +116,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
         {
             base.InitializeVisual(visualObject);
             visualObject.GetComponent<SettingsComponent>().activateSettingsOn = this;
+        }
+
+        public override GameObject GetVisualPrefab()
+        {
+            return LevelStudioIntegration.GetVisualPrefab(owner.type, prefabForBuilder);
         }
 
         public void SettingsClicked()

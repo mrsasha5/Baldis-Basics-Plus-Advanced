@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI;
 using BaldisBasicsPlusAdvanced.Helpers;
 using PlusLevelStudio;
@@ -15,7 +16,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
 
         public ushort uses = 5;
 
-        public ushort cooldown = 30;
+        public float cooldown = 30;
+
+        public GumDispenserStructureLocation owner;
 
         public void CompileData(EditorLevelData data, BaldiLevel level, StructureInfo info)
         {
@@ -23,8 +26,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
             {
                 prefab = prefabForBuilder,
                 position = PlusStudioLevelLoader.Extensions.ToData(position),
-                direction = (PlusDirection)direction,
-                data = EncodeData()
+                direction = (PlusDirection)direction
+            });
+
+            info.data.Add(new StructureDataInfo()
+            {
+                data = uses
+            });
+
+            info.data.Add(new StructureDataInfo()
+            {
+                data = BitConverter.ToInt32(BitConverter.GetBytes(cooldown), 0)
             });
         }
 
@@ -35,9 +47,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
             direction = (Direction)reader.ReadByte();
 
             uses = reader.ReadUInt16();
-            cooldown = reader.ReadUInt16();
-
-            prefab = "adv_" + prefabForBuilder;
+            cooldown = reader.ReadSingle();
         }
 
         public void WriteData(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
@@ -50,26 +60,20 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
             writer.Write(cooldown);
         }
 
-        private int EncodeData()
-        {
-            int num = 0;
-
-            num |= uses;
-            num <<= 16;
-            num |= cooldown;
-
-            return num;
-        }
-
         public override void InitializeVisual(GameObject visualObject)
         {
             base.InitializeVisual(visualObject);
             visualObject.GetComponent<SettingsComponent>().activateSettingsOn = this;
         }
 
+        public override GameObject GetVisualPrefab()
+        {
+            return LevelStudioIntegration.GetVisualPrefab(owner.type, prefabForBuilder);
+        }
+
         public void SettingsClicked()
         {
-            Singleton<EditorController>.Instance.HoldUndo();
+            EditorController.Instance.HoldUndo();
 
             GumDispenserExchangeHandler handler = EditorController.Instance.CreateUI<GumDispenserExchangeHandler>(
                 "GumDispenserConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/GumDispenserConfig.json");

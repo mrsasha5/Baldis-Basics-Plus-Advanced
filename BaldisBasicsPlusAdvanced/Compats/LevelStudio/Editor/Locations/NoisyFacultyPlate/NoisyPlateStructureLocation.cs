@@ -126,9 +126,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
                     }
                     else
                     {
-                        gameObject = Object.Instantiate(
-                            LevelStudioPlugin.Instance.genericStructureDisplays[
-                                LevelStudioIntegration.noisyPlateVisuals[room.prefabForBuilder]]);
+                        gameObject = Object.Instantiate(LevelStudioIntegration.GetVisualPrefab(type, room.prefabForBuilder));
                         gameObject.GetComponent<EditorDeletableObject>().toDelete = room;
                         gameObject.GetComponent<SettingsComponent>().activateSettingsOn = room;
                         room.allocatedPlates.Add(gameObject);

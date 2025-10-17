@@ -27,12 +27,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             }
         }
 
-        /*protected override void VirtualStart()
-        {
-            //don't set light until builder do it
-            //base.VirtualStart();
-        }*/
-
         protected override void SetTextures()
         {
             SetTexturesByBaseName("adv_pressure_plate");

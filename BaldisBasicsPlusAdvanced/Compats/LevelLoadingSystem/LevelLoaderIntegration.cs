@@ -109,6 +109,15 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                     }
                 )
             );
+
+            LevelLoaderPlugin.Instance.structureAliases.Add("adv_kitchen_stove",
+                new LoaderStructureData(ObjectsStorage.StructureBuilders["Structure_KitchenStove"],
+                    new Dictionary<string, GameObject>()
+                    {
+                        { "kitchen_stove", ObjectsStorage.Objects["kitchen_stove"] }
+                    }
+                )
+            );
         }
 
         private static void InitializeActivities()

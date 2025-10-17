@@ -1,6 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -96,17 +97,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         public override void Load(List<StructureData> data)
         {
             base.Load(data);
-            for (int i = 0; i < data.Count; i += 2)
+            for (int i = 0; i < data.Count; i += 4)
             {
                 GumDispenser dispenser =
                     BuildDispenser(data[i].prefab.GetComponent<GumDispenser>(), ec.CellFromPosition(data[i].position), data[i].direction);
 
-                StructureData buttonData = data[i + 1];
+                int uses = data[i + 1].data;
+                float cooldown = BitConverter.ToSingle(BitConverter.GetBytes(data[i + 2].data), 0);
+
+                StructureData buttonData = data[i + 3];
 
                 GameButton.Build(buttonPre, ec, buttonData.position, buttonData.direction).SetUp(dispenser);
-
-                ushort uses = (ushort)(data[i].data >> 16);
-                ushort cooldown = (ushort)data[i].data;
 
                 dispenser.OverrideParameters(uses, cooldown);
             }

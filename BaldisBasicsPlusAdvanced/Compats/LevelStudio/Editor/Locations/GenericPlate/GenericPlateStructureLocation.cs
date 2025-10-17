@@ -19,6 +19,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
         {
             GenericPlateLocation loc = new GenericPlateLocation()
             {
+                owner = this,
                 prefabForBuilder = prefabName,
                 position = pos,
                 direction = dir,
@@ -27,11 +28,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
             if (!disableChecks && !loc.ValidatePosition(EditorController.Instance.levelData, ignoreSelf: true))
                 return null;
-
-            if (prefabName != null)
-            {
-                loc.prefab = LevelStudioIntegration.genericPlateVisuals[prefabName];
-            }
 
             locations.Add(loc);
 
@@ -46,11 +42,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
             return true;
         }
 
-        public override void CleanupVisual(GameObject visualObject)
-        {
-            
-        }
-
         public override StructureInfo Compile(EditorLevelData data, BaldiLevel level)
         {
             StructureInfo structInfo = new StructureInfo(type);
@@ -61,6 +52,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
             }
 
             return structInfo;
+        }
+
+        public override void CleanupVisual(GameObject visualObject)
+        {
+
         }
 
         public override GameObject GetVisualPrefab()
@@ -99,6 +95,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
                 if (!locations[i].ValidatePosition(data, ignoreSelf: true))
                 {
                     locations.RemoveAt(i);
+                    EditorController.Instance.RemoveVisual(locations[i]);
                     i--;
                 }
             }

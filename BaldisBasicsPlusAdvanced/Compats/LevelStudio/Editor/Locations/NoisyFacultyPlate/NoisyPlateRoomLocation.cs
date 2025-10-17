@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
@@ -17,7 +18,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
         //Serializable
         public string prefabForBuilder; 
 
-        public ushort cooldown;
+        public float cooldown;
 
         public ushort uses;
 
@@ -53,7 +54,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
 
             info.data.Add(new StructureDataInfo()
             {
-                data = cooldown
+                data = BitConverter.ToInt32(BitConverter.GetBytes(cooldown), 0)
             });
 
             info.data.Add(new StructureDataInfo()
@@ -79,7 +80,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
 
             room = data.RoomFromId(roomId);
 
-            cooldown = reader.ReadUInt16();
+            cooldown = reader.ReadSingle();
             uses = reader.ReadUInt16();
             generosity = reader.ReadUInt16();
             pointsPerAlarm = reader.ReadInt32();

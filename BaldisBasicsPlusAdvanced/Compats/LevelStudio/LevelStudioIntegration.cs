@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenStove;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
@@ -29,13 +31,63 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
         internal const string standardMsg_StructureVersionException = 
             "Incompatible structure format: saved maps on new format version can't be loaded on previous ones.";
 
-        //Key: prefab name from StructureData
-        public static Dictionary<string, GameObject> hangerVisuals;
+        private static List<StructureBuilderPrefabReference> visualPrefabs;
 
-        //Key: prefab name from StructureData, value: key from LevelStudioPlugin.Instance.genericStructureDisplays
-        public static Dictionary<string, string> noisyPlateVisuals;
+        public static List<GameObject> GetVisualPrefabsFrom(string type)
+        {
+            List<GameObject> prefabs = new List<GameObject>();
 
-        public static Dictionary<string, string> genericPlateVisuals;
+            for (int i = 0; i < visualPrefabs.Count; i++)
+            {
+                if (visualPrefabs[i].builder == type)
+                {
+                    prefabs.Add(visualPrefabs[i].visualPrefab);
+                }
+            }
+
+            return prefabs;
+        }
+
+        public static GameObject GetVisualPrefab(string type, string prefab)
+        {
+            for (int i = 0; i < visualPrefabs.Count; i++)
+            {
+                if (visualPrefabs[i].builder == type && visualPrefabs[i].prefab == prefab)
+                {
+                    return visualPrefabs[i].visualPrefab;
+                }
+            }
+
+            throw new Exception("Visual prefab reference is not in the list.");
+        }
+
+        public static bool ContainsStructureVisualPrefab(string type, string prefab)
+        {
+            for (int i = 0; i < visualPrefabs.Count; i++)
+            {
+                if (visualPrefabs[i].builder == type && visualPrefabs[i].prefab == prefab)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static GameObject AddStructureVisualPrefab(string type, string prefab, GameObject obj)
+        {
+            GameObject instance = EditorInterface.AddStructureGenericVisual("_99_seconds", obj);
+            LevelStudioPlugin.Instance.genericStructureDisplays.Remove("_99_seconds");
+
+            visualPrefabs.Add(new StructureBuilderPrefabReference()
+            {
+                builder = type,
+                prefab = prefab,
+                visualPrefab = instance
+            });
+
+            return instance;
+        }
 
         public LevelStudioIntegration() : base()
         {
@@ -67,6 +119,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             LevelStudioPlugin.Instance.structureTypes.Add("adv_gum_dispenser", typeof(GumDispenserStructureLocation));
             LevelStudioPlugin.Instance.structureTypes.Add("adv_noisy_plate", typeof(NoisyPlateStructureLocation));
             LevelStudioPlugin.Instance.structureTypes.Add("adv_generic_plate", typeof(GenericPlateStructureLocation));
+            LevelStudioPlugin.Instance.structureTypes.Add("adv_kitchen_stove", typeof(KitchenStoveStructureLocation));
         }
 
         private static void InitializeVisuals()
@@ -84,19 +137,15 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #endregion
 
+            visualPrefabs = new List<StructureBuilderPrefabReference>();
+
             #region Zipline Visuals
 
             EditorInterface.AddStructureGenericVisual("adv_zipline_pillar", Structure_Zipline.ceilingPillarPre);
+            AddStructureVisualPrefab("adv_zipline", "hanger_white", ObjectsStorage.Objects["zipline_hanger"]);
+            AddStructureVisualPrefab("adv_zipline", "hanger_black", ObjectsStorage.Objects["zipline_black_hanger"]);
 
-            hangerVisuals = new Dictionary<string, GameObject>()
-            {
-                { "hanger_white", EditorInterface.AddStructureGenericVisual("adv_zipline_hanger", 
-                    ObjectsStorage.Objects["zipline_hanger"])},
-                { "hanger_black", EditorInterface.AddStructureGenericVisual("adv_zipline_black_hanger", 
-                    ObjectsStorage.Objects["zipline_black_hanger"]) }
-            };
-
-            foreach (GameObject zipline in hangerVisuals.Values)
+            foreach (GameObject zipline in GetVisualPrefabsFrom("adv_zipline"))
             {
                 zipline.GetComponent<SphereCollider>().center = Vector3.up * 2.5f;
 
@@ -110,9 +159,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #region Gum Dispenser Visual
 
-            BoxCollider gumDispCollider = 
-                EditorInterface.AddStructureGenericVisual("adv_gum_dispenser", ObjectsStorage.Objects["gum_dispenser"])
-                    .AddComponent<BoxCollider>();
+            BoxCollider gumDispCollider = AddStructureVisualPrefab("adv_gum_dispenser", "gum_dispenser", ObjectsStorage.Objects["gum_dispenser"])
+                .AddComponent<BoxCollider>();
             gumDispCollider.size = new Vector3(8f, 8f, 1f);
             gumDispCollider.center = (Vector3.forward + Vector3.up) * 5f;
             gumDispCollider.gameObject.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
@@ -121,13 +169,21 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #region Noisy Plate Visual
 
-            EditorInterface.AddStructureGenericVisual("adv_noisy_plate", ObjectsStorage.Objects["noisy_plate"])
+            AddStructureVisualPrefab("adv_noisy_plate", "noisy_plate", ObjectsStorage.Objects["noisy_plate"])
                 .gameObject.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
 
-            noisyPlateVisuals = new Dictionary<string, string>()
-            {
-                { "noisy_plate", "adv_noisy_plate" }
-            };
+            #endregion
+
+            #region Kitchen Stove Visual
+
+            BoxCollider stoveCollider = 
+                AddStructureVisualPrefab("adv_kitchen_stove", "kitchen_stove", ObjectsStorage.Objects["kitchen_stove"])
+                    .GetComponent<BoxCollider>();
+
+            stoveCollider.size = new Vector3(10f, 1f, 10f);
+            stoveCollider.center = Vector3.zero;
+
+            stoveCollider.gameObject.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
 
             #endregion
 
@@ -138,24 +194,20 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 EditorInterface.AddObjectVisual("adv_" + name, ObjectsStorage.SodaMachines[name].gameObject, true);
             }
 
-            genericPlateVisuals = new Dictionary<string, string>();
-
             foreach (string name in ObjectsStorage.Objects.Keys)
             {
                 if (ObjectsStorage.Objects[name].TryGetComponent(out BasePlate plate))
                 {
-                    EditorInterface.AddObjectVisual("adv_" + name, ObjectsStorage.Objects[name], true);
-                    if (!LevelStudioPlugin.Instance.genericStructureDisplays.ContainsKey("adv_" + name))
+                    EditorInterface.AddObjectVisual("adv_" + name, ObjectsStorage.Objects[name], true); //This one for rooms only
+                    if (!ContainsStructureVisualPrefab("adv_generic_plate", name))
                     {
-                        GameObject plateVisual = EditorInterface.AddStructureGenericVisual("adv_" + name, ObjectsStorage.Objects[name]);
+                        GameObject plateVisual = AddStructureVisualPrefab("adv_generic_plate", name, plate.gameObject);
 
                         BoxCollider boxColl = plateVisual.GetComponent<BoxCollider>();
                         boxColl.size = new Vector3(10f, 1f, 10f);
                         boxColl.center = Vector3.zero;
 
-                        plateVisual.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
-
-                        genericPlateVisuals.Add(name, "adv_" + name);
+                        plateVisual.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;   
                     }
                 }
             }

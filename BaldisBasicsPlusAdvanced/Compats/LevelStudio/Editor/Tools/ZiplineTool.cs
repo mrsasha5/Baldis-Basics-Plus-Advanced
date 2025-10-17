@@ -62,8 +62,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
             if (notConnectedPoint != null && notConnectedPoint.renderer != null)
             {
                 _vectors[0] = new Vector3(notConnectedPoint.position.x * 10 + 5, 9f, notConnectedPoint.position.z * 10 + 5);
-                _vectors[1] = new Vector3(EditorController.Instance.mousePlanePosition.x, 9f, 
-                    EditorController.Instance.mousePlanePosition.z);
+                _vectors[1] = new Vector3((int)EditorController.Instance.mousePlanePosition.x, 9f, 
+                    (int)EditorController.Instance.mousePlanePosition.z);
                 notConnectedPoint.renderer.SetPositions(_vectors);
             }
             EditorController.Instance.selector.SelectTile(EditorController.Instance.mouseGridPosition);

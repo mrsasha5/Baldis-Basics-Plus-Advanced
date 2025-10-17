@@ -456,7 +456,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         public void SetCooldown(float cooldown)
         {
-            if (cooldownIgnores > 0 || cooldown <= 0f || overriddenCooldown == 0f) return;
+            if (cooldownIgnores > 0) return;
+            if (cooldown <= 0f && overriddenCooldown == null || overriddenCooldown == 0f) return;
 
             if (overriddenCooldown != null)
                 cooldown = overriddenCooldown.Value;

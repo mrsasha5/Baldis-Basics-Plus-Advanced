@@ -88,7 +88,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             if (cooldown != null)
             {
                 if (!loc.cooldownOverridingAllowed) cooldown.text = "NO";
-                else cooldown.text = loc.cooldown.ToString();
+                else
+                {
+                    cooldown.text = loc.cooldown.ToString();
+                    CheckIfFloatIsVisualized(cooldown);
+                }
             }
 
             if (unpressTime != null)
@@ -150,7 +154,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setCooldown")
             {
-                if (ushort.TryParse((string)data, out ushort result))
+                if (float.TryParse((string)data, out var result))
                 {
                     loc.cooldown = result;
                     somethingChanged = true;
