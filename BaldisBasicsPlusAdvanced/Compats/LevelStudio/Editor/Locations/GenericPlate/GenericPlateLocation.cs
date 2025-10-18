@@ -16,13 +16,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
         public string prefabForBuilder;
 
-        public float cooldown;
-
         public ushort uses;
 
-        public float unpressTime;
+        public bool cooldownOverridden;
 
-        public bool cooldownOverridingAllowed;
+        public float cooldown;
+
+        public float unpressTime;
 
         public bool showsUses;
 
@@ -30,7 +30,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
         public GenericPlateStructureLocation owner;
 
-        public void LoadDefaultParameters(string type)
+        public void LoadDefaults(string type)
         {
             BasePlate prefab = 
                 PlusStudioLevelLoader.
@@ -58,7 +58,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
             info.data.Add(new StructureDataInfo()
             {
-                data = cooldownOverridingAllowed.ToInt()
+                data = cooldownOverridden.ToInt()
             });
 
             info.data.Add(new StructureDataInfo()
@@ -90,7 +90,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
             writer.Write((byte)direction);
 
             writer.Write(uses);
-            writer.Write(cooldownOverridingAllowed);
+            writer.Write(cooldownOverridden);
             writer.Write(cooldown);
             writer.Write(unpressTime);
             writer.Write(showsUses);
@@ -105,7 +105,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
             direction = (Direction)reader.ReadByte();
 
             uses = reader.ReadUInt16();
-            cooldownOverridingAllowed = reader.ReadBoolean();
+            cooldownOverridden = reader.ReadBoolean();
             cooldown = reader.ReadSingle();
             unpressTime = reader.ReadSingle();
             showsUses = reader.ReadBoolean();

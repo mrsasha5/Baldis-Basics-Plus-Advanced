@@ -76,7 +76,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             writer.Write(percentageDistanceToBreak);
         }
 
-        public void LoadDefaultParameters()
+        public void LoadDefaults()
         {
             ZiplineHanger hangerPrefab =
                 LevelLoaderPlugin.Instance.structureAliases[owner.type].prefabAliases[prefabForBuilder].GetComponent<ZiplineHanger>();

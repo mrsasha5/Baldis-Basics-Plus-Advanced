@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate;
@@ -12,10 +11,7 @@ using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Builders;
-using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
-using BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate;
-using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Helpers;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
@@ -348,6 +344,10 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                     mode, "structures", new GenericPlateTool("adv_generic_plate", pair.Key,
                         AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/" + pair.Value)));
             }
+
+            EditorInterfaceModes.AddToolToCategory(mode, "structures", 
+                new KitchenStoveTool("adv_kitchen_stove", "kitchen_stove",
+                    AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_stove.png")));
 
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
                 new RoomTool("adv_english_class", AssetsStorage.sprites["adv_editor_english_floor"]));

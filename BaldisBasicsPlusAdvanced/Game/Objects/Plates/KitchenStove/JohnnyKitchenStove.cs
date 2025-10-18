@@ -40,8 +40,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             if (result)
             {
-                uses++;
-                SetVisualUses(uses, data.maxUses);
                 StoreRoomPatches.PlayJohnnyBuy(func);
                 CoreGameManager.Instance.AddPoints(-cookingPrice, 0, true);
 
@@ -59,28 +57,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             colorTransitionSpeed = 2f;
         }
 
-        protected override void OnActivatingPre()
+        protected override void OnPostActivating()
         {
-            base.OnActivatingPre();
-            textBase.gameObject.SetActive(false);
-        }
-
-        protected override void OnActivatingPost()
-        {
-            base.OnActivatingPost();
-            activeTime = burningTime; //Prevents for recipe's burning time overrides
-        }
-
-        protected override void OnDeactivatingPost()
-        {
-            base.OnDeactivatingPost();
-            if (pickups.Count == 0) textBase.gameObject.SetActive(true);
-        }
-
-        protected override void OnItemCollected(Pickup pickup, int player)
-        {
-            base.OnItemCollected(pickup, player);
-            if (pickups.Count == 0) textBase.gameObject.SetActive(true);
+            base.OnPostActivating();
+            activeTime = burningTime; //Prevents from recipe's burning time overriding
         }
 
     }

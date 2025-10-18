@@ -96,11 +96,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
             return true;
         }
 
-        public override void CleanupVisual(GameObject visualObject)
-        {
-            
-        }
-
         public override StructureInfo Compile(EditorLevelData data, BaldiLevel level)
         {
             StructureInfo structInfo = new StructureInfo(type);
@@ -134,15 +129,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
             }
         }
 
-        public override void ShiftBy(Vector3 worldOffset, IntVector2 cellOffset, IntVector2 sizeDifference)
-        {
-            for (int i = 0; i < dispenserLocations.Count; i++)
-            {
-                dispenserLocations[i].position -= cellOffset;
-                buttonLocations[i].position -= cellOffset;
-            }
-        }
-
         public override void UpdateVisual(GameObject visualObject)
         {
             for (int i = 0; i < dispenserLocations.Count; i++)
@@ -152,10 +138,22 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
             }
         }
 
+        public override void CleanupVisual(GameObject visualObject)
+        {
+
+        }
+
+        public override void ShiftBy(Vector3 worldOffset, IntVector2 cellOffset, IntVector2 sizeDifference)
+        {
+            for (int i = 0; i < dispenserLocations.Count; i++)
+            {
+                dispenserLocations[i].position -= cellOffset;
+                buttonLocations[i].position -= cellOffset;
+            }
+        }
+
         public override bool ValidatePosition(EditorLevelData data)
         {
-            if (dispenserLocations.Count == 0) return false;
-
             for (int i = 0; i < dispenserLocations.Count; i++)
             {
                 if (!dispenserLocations[i].ValidatePosition(data, ignoreSelf: true) || 
@@ -171,7 +169,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                 }
             }
 
-            return true;
+            return dispenserLocations.Count > 0;
         }
 
         private bool ValidatePositionInChildren(SimpleLocation child)
@@ -199,7 +197,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                 throw new System.Exception(LevelStudioIntegration.standardMsg_StructureVersionException);
 
             int count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
+            while (count > 0)
             {
                 CreateNewDispenser(data, null, default, default, disableChecks: true)
                     .ReadData(ver, data, reader, compressor);
@@ -208,6 +206,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                 Direction dir = (Direction)reader.ReadByte();
                 
                 CreateNewButton(data, pos, dir, loadingMode: true);
+
+                count--;
             }
         }
 

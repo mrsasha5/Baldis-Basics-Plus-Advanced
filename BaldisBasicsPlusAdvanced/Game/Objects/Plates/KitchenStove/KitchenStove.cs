@@ -115,7 +115,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             audBurningStart = AssetsStorage.sounds["adv_burning_start"];
             audBurningLoop = AssetsStorage.sounds["adv_burning_loop"];
-            audBurningEnd = AssetsStorage.sounds["adv_pah"];//AssetsStorage.sounds["adv_burning_end"];
+            audBurningEnd = AssetsStorage.sounds["adv_pah"];
 
             particleSystem = new GameObject("ParticleSystem").AddComponent<ParticleSystem>();
 
@@ -130,11 +130,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             MainModule main = particleSystem.main;
             main.playOnAwake = false;
             main.gravityModifier = -4f;
-            // main.startLifetimeMultiplier = 2.1f;
             main.startLifetime = 2f;
             main.startSize = 3f;
 
-            main.startSpeed = 0f; //no!!!! I need to have a normal up direction. 
+            main.startSpeed = 0f; 
 
             ShapeModule shape = particleSystem.shape;
             shape.shapeType = ParticleSystemShapeType.Sphere;
@@ -163,6 +162,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             interaction.stove = this;
             interaction.gameObject.SetActive(false);
+
+            audCooldownEnds = null;
         }
 
         public void ConnectButton(GameButtonBase button)
@@ -327,6 +328,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 DestroyPickup(pickup);
                 interaction.gameObject.SetActive(true);
             }
+
+            if (pickups.Count == 0 && (Data.showsUses || Data.showsCooldown)) textBase.gameObject.SetActive(true);
+
+            if (lockedByCooldown) SetCooldown(cooldownTime); //Update visual cooldown
         }
 
         protected override void VirtualTriggerStay(Collider other)
@@ -351,6 +356,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             if (!IsCookingAvailable()) return;
 
+            if (!Data.hasInfinityUses)
+            {
+                uses++;
+                SetVisualUses(uses, data.maxUses);
+            }
+
             activeStateOverridden = false;
             UpdateVisualActiveState(true);
             activeStateOverridden = true;
@@ -374,20 +385,20 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 }
             }
 
-            OnActivatingPre();
+            OnPreActivating();
             currentRecipe?.onKitchenStovePreActivating?.Invoke(this);
         }
 
-        protected virtual void OnActivatingPre()
+        protected virtual void OnPreActivating()
         {
-
+            textBase.gameObject.SetActive(false);
+            available = false;
         }
 
-        protected virtual void OnActivatingPost()
+        protected virtual void OnPostActivating()
         {
             particleSystem.Play();
             active = true;
-            available = false;
             if (currentRecipe != null && currentRecipe.CookingTime != null) activeTime = (float)currentRecipe.CookingTime;
             else activeTime = burningTime;
 
@@ -399,7 +410,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             currentRecipe?.onKitchenStovePostActivating?.Invoke(this);
         }
 
-        protected virtual void OnDeactivatingPre()
+        protected virtual void OnPreDeactivating()
         {
             particleSystem.Stop();
 
@@ -434,7 +445,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             if (pickups.Count == 0) interaction.gameObject.SetActive(true);
         }
 
-        protected virtual void OnDeactivatingPost()
+        protected virtual void OnPostDeactivating()
         {
             available = true;
 
@@ -447,6 +458,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                     cell.Block(Directions.DirFromVector3(
                         (this.cell.TileTransform.position - cell.TileTransform.position).normalized, 0f), block: false);
                 }
+            }
+
+            SetCooldown(0f);
+
+            if (pickups.Count == 0 && lockedByCooldown)
+            {
+                textBase.gameObject.SetActive(true);
+                SetVisualCooldown((int)cooldownTime);
             }
 
             currentRecipe?.onKitchenStovePostDeactivating?.Invoke(this);
@@ -482,10 +501,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
                 isHot = true;
 
-                OnActivatingPost();
+                OnPostActivating();
             } else
             {
-                OnDeactivatingPre();
+                OnPreDeactivating();
 
                 float time = (currentRecipe != null && currentRecipe.CoolingTime != null) ? (float)currentRecipe.CoolingTime : coolingTime;
 
@@ -514,7 +533,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 color = Color.white;
                 UpdateMeshColors(ref color);
 
-                OnDeactivatingPost();
+                OnPostDeactivating();
             }
             
         }

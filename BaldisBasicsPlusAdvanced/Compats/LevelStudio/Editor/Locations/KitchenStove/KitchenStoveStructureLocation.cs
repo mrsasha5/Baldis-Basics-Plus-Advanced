@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BaldisBasicsPlusAdvanced.Game;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
@@ -22,10 +21,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
         {
             KitchenStoveLocation loc = new KitchenStoveLocation()
             {
+                owner = this,
                 prefabForBuilder = prefab,
                 position = pos,
                 direction = dir,
-                deleteAction = OnDeleteLocation
+                deleteAction = OnDeleteStove
             };
 
             if (!disableChecks && !loc.ValidatePosition(EditorController.Instance.levelData, ignoreSelf: true))
@@ -54,7 +54,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
             return loc;
         }
 
-        private bool OnDeleteLocation(EditorLevelData level, SimpleLocation loc)
+        private bool OnDeleteStove(EditorLevelData level, SimpleLocation loc)
         {
             int index = stoves.IndexOf((KitchenStoveLocation)loc);
 
@@ -83,9 +83,15 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
         {
             StructureInfo structInfo = new StructureInfo(type);
 
-            foreach (KitchenStoveLocation location in stoves)
+            for (int i = 0; i < stoves.Count; i++)
             {
-                location.Compile(structInfo);
+                stoves[i].Compile(structInfo);
+
+                structInfo.data.Add(new StructureDataInfo()
+                {
+                    position = PlusStudioLevelLoader.Extensions.ToData(buttons[i].position),
+                    direction = (PlusDirection)buttons[i].direction
+                });
             }
 
             return structInfo;
@@ -132,9 +138,10 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
         {
             for (int i = 0; i < stoves.Count; i++)
             {
-                if (!stoves[i].ValidatePosition(data, ignoreSelf: true) || buttons[i].ValidatePosition(data, ignoreSelf: true))
+                if (!stoves[i].ValidatePosition(data, ignoreSelf: true) || !buttons[i].ValidatePosition(data, ignoreSelf: true))
                 {
-                    OnDeleteLocation(data, stoves[i]);
+                    OnDeleteStove(data, stoves[i]);
+                    i--;
                 }
             }
 
@@ -152,10 +159,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
 
             while (count > 0)
             {
-                CreateNewStove(null, default, default, true)
+                CreateNewStove(null, default, default, disableChecks: true)
                     .ReadData(ver, data, reader, compressor);
 
-                CreateNewButton(reader.ReadByteVector2().ToInt(), (Direction)reader.ReadByte(), true);
+                IntVector2 pos = reader.ReadByteVector2().ToInt();
+                Direction dir = (Direction)reader.ReadByte();
+
+                CreateNewButton(pos, dir, disableChecks: true);
 
                 count--;
             }
@@ -164,7 +174,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
         public override void Write(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
         {
             writer.Write(formatVersion);
-            writer.Write(stoves.Count * 2);
+            writer.Write(stoves.Count);
+
             for (int i = 0; i < stoves.Count; i++)
             {
                 stoves[i].WriteData(data, writer, compressor);

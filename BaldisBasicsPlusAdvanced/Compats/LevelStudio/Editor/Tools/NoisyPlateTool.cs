@@ -86,7 +86,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
                 return false;
             }
 
-            loc.LoadDefaultParameters();
+            loc.LoadDefaults();
 
             EditorController.Instance.AddHeldUndo();
 

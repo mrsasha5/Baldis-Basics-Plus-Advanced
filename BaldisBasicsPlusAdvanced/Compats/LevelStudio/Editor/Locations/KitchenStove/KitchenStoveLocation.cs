@@ -1,20 +1,34 @@
 ﻿using System;
 using System.IO;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI;
+using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
 using PlusStudioLevelLoader;
 using UnityEngine;
+using BaldisBasicsPlusAdvanced.Extensions;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenStove
 {
-    internal class KitchenStoveLocation : SimpleLocation
+    internal class KitchenStoveLocation : SimpleLocation, IEditorSettingsable
     {
 
         public string prefabForBuilder;
 
+        public ushort uses;
+
+        public bool cooldownOverridden;
+
+        public float cooldown;
+
         public float cookingTime;
 
         public float coolingTime;
+
+        public bool showsUses;
+
+        public bool showsCooldown;
 
         public KitchenStoveStructureLocation owner;
 
@@ -29,6 +43,21 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
 
             info.data.Add(new StructureDataInfo()
             {
+                data = uses
+            });
+
+            info.data.Add(new StructureDataInfo()
+            {
+                data = cooldownOverridden.ToInt()
+            });
+
+            info.data.Add(new StructureDataInfo()
+            {
+                data = BitConverter.ToInt32(BitConverter.GetBytes(cooldown), 0)
+            });
+
+            info.data.Add(new StructureDataInfo()
+            {
                 data = BitConverter.ToInt32(BitConverter.GetBytes(cookingTime), 0)
             });
 
@@ -36,27 +65,75 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
             {
                 data = BitConverter.ToInt32(BitConverter.GetBytes(coolingTime), 0)
             });
+
+            info.data.Add(new StructureDataInfo()
+            {
+                data = showsUses.ToInt()
+            });
+
+            info.data.Add(new StructureDataInfo()
+            {
+                data = showsCooldown.ToInt()
+            });
+        }
+
+        public void LoadDefaults()
+        {
+            Game.Objects.Plates.KitchenStove.KitchenStove prefab = 
+                LevelLoaderPlugin.Instance.structureAliases[owner.type].prefabAliases[prefabForBuilder]
+                .GetComponent<Game.Objects.Plates.KitchenStove.KitchenStove>();
+
+            uses = (ushort)prefab.Data.maxUses;
+            
+            cookingTime = prefab.CookingTime;
+            coolingTime = prefab.CoolingTime;
+
+            showsUses = prefab.Data.showsUses;
+            showsCooldown = prefab.Data.showsCooldown;
         }
 
         public void ReadData(byte version, EditorLevelData data, BinaryReader reader, StringCompressor compressor)
         {
             prefabForBuilder = compressor.ReadStoredString(reader);
+            position = reader.ReadByteVector2().ToInt();
+            direction = (Direction)reader.ReadByte();
+
+            uses = reader.ReadUInt16();
+            cooldownOverridden = reader.ReadBoolean();
+            cooldown = reader.ReadSingle();
             cookingTime = reader.ReadSingle();
             coolingTime = reader.ReadSingle();
+            showsUses = reader.ReadBoolean();
+            showsCooldown = reader.ReadBoolean();
         }
 
         public void WriteData(EditorLevelData data, BinaryWriter writer, StringCompressor compressor)
         {
             compressor.WriteStoredString(writer, prefabForBuilder);
+            writer.Write(position.ToByte());
+            writer.Write((byte)direction);
+
+            writer.Write(uses);
+            writer.Write(cooldownOverridden);
+            writer.Write(cooldown);
             writer.Write(cookingTime);
             writer.Write(coolingTime);
+            writer.Write(showsUses);
+            writer.Write(showsCooldown);
+        }
+
+        public override void InitializeVisual(GameObject visualObject)
+        {
+            base.InitializeVisual(visualObject);
+            visualObject.GetComponent<SettingsComponent>().activateSettingsOn = this;
         }
 
         public void SettingsClicked()
         {
-            // handler = EditorController.Instance.CreateUI<>(
-            //"KitchenStoveConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/KitchenStoveConfig.json");
-            //handler.OnInitialized(this);
+            KitchenStoveExchangeHandler handler = EditorController.Instance.CreateUI<KitchenStoveExchangeHandler>(
+                "KitchenStoveConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/KitchenStoveConfig.json");
+            handler.OnInitialized(this);
+            handler.Refresh();
         }
 
         public override GameObject GetVisualPrefab()

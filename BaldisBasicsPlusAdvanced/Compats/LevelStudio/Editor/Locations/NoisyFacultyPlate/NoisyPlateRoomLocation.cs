@@ -33,7 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
 
         public NoisyPlateStructureLocation owner;
 
-        public void LoadDefaultParameters()
+        public void LoadDefaults()
         {
             NoisyPlate prefab = LevelLoaderPlugin.Instance.structureAliases[owner.type].prefabAliases[prefabForBuilder]
                 .GetComponent<NoisyPlate>();

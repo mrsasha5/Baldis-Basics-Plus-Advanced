@@ -63,7 +63,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
             if (loc != null)
             {
-                loc.LoadDefaultParameters(type);
+                loc.LoadDefaults(type);
                 EditorController.Instance.AddVisual(loc);
 
                 EditorController.Instance.AddHeldUndo();
