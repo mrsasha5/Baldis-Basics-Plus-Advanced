@@ -36,7 +36,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
 
             info.data.Add(new StructureDataInfo()
             {
-                data = BitConverter.ToInt32(BitConverter.GetBytes(cooldown), 0)
+                data = PlusStudioLevelLoader.WeirdTechExtensions.ConvertToIntNoRecast(cooldown)
             });
         }
 

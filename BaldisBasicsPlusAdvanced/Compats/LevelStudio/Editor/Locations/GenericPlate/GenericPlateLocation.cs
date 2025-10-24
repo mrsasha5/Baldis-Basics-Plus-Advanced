@@ -63,12 +63,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
             info.data.Add(new StructureDataInfo()
             {
-                data = BitConverter.ToInt32(BitConverter.GetBytes(cooldown), 0)
+                data = PlusStudioLevelLoader.WeirdTechExtensions.ConvertToIntNoRecast(cooldown)
             });
 
             info.data.Add(new StructureDataInfo()
             {
-                data = BitConverter.ToInt32(BitConverter.GetBytes(unpressTime), 0)
+                data = PlusStudioLevelLoader.WeirdTechExtensions.ConvertToIntNoRecast(unpressTime)
             });
 
             info.data.Add(new StructureDataInfo()
