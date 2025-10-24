@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.AccelerationPlate;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenStove;
@@ -13,11 +14,13 @@ using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Builders;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
+using MTM101BaldAPI.Reflection;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelFormat;
 using UnityEngine;
+using static Mono.Security.X509.X520;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 {
@@ -116,12 +119,25 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             LevelStudioPlugin.Instance.structureTypes.Add("adv_noisy_plate", typeof(NoisyPlateStructureLocation));
             LevelStudioPlugin.Instance.structureTypes.Add("adv_generic_plate", typeof(GenericPlateStructureLocation));
             LevelStudioPlugin.Instance.structureTypes.Add("adv_kitchen_stove", typeof(KitchenStoveStructureLocation));
+            LevelStudioPlugin.Instance.structureTypes.Add("adv_acceleration_plate", typeof(AccelerationPlateStructureLocation));
         }
 
         private static void InitializeVisuals()
         {
+            #region Minor Methods 
+
+            BoxCollider CorrectPlateCollider(GameObject obj)
+            {
+                BoxCollider collider = obj.GetComponent<BoxCollider>();
+                collider.size = new Vector3(10f, 1f, 10f);
+                collider.center = Vector3.zero;
+                return collider;
+            }
+
+            #endregion
+
             #region Selectable Textures
-            
+
             LevelStudioPlugin.Instance.selectableTextures.Add("adv_english_wall");
             LevelStudioPlugin.Instance.selectableTextures.Add("adv_english_ceiling");
             LevelStudioPlugin.Instance.selectableTextures.Add("adv_english_floor");
@@ -165,21 +181,65 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #region Noisy Plate Visual
 
-            AddStructureVisualPrefab("adv_noisy_plate", "noisy_plate", ObjectsStorage.Objects["noisy_plate"])
+            CorrectPlateCollider(AddStructureVisualPrefab("adv_noisy_plate", "noisy_plate", ObjectsStorage.Objects["noisy_plate"]))
                 .gameObject.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
 
             #endregion
 
             #region Kitchen Stove Visual
 
-            BoxCollider stoveCollider = 
-                AddStructureVisualPrefab("adv_kitchen_stove", "kitchen_stove", ObjectsStorage.Objects["kitchen_stove"])
-                    .GetComponent<BoxCollider>();
+            CorrectPlateCollider(AddStructureVisualPrefab("adv_kitchen_stove", "kitchen_stove", ObjectsStorage.Objects["kitchen_stove"]))
+                .gameObject.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
 
-            stoveCollider.size = new Vector3(10f, 1f, 10f);
-            stoveCollider.center = Vector3.zero;
+            #endregion
 
-            stoveCollider.gameObject.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
+            #region Acceleration Plate Visual
+
+            GameObject accelPlate = CorrectPlateCollider(
+                AddStructureVisualPrefab("adv_acceleration_plate", "acceleration_plate", ObjectsStorage.Objects["acceleration_plate"]))
+                    .gameObject;
+
+            GameObject arrowTempPre = GameObject.Instantiate(AssetsHelper.LoadAsset<AnimatedSpriteRotator>("Arrow")).gameObject;
+
+            AnimatedSpriteRotator[] componentsInChildren = arrowTempPre.GetComponentsInChildren<AnimatedSpriteRotator>();
+            for (int i = 0; i < componentsInChildren.Length; i++)
+            {
+                SpriteRotationMap[] array = (SpriteRotationMap[])componentsInChildren[i].ReflectionGetVariable("spriteMap");
+                if (array.Length != 0)
+                {
+                    SpriteRenderer renderer = (SpriteRenderer)componentsInChildren[i].ReflectionGetVariable("renderer");
+                    SpriteRotator rotator = componentsInChildren[i].gameObject.AddComponent<SpriteRotator>();
+                    rotator.ReflectionSetVariable("spriteRenderer", renderer);
+                    Sprite[] array2 = (Sprite[])array[0].ReflectionGetVariable("spriteSheet");
+                    Sprite[] array3 = new Sprite[array2.Length];
+                    for (int j = 0; j < array2.Length; j++)
+                    {
+                        array3[j] = array2[(j + 9) % array2.Length];
+                    }
+
+                    rotator.ReflectionSetVariable("sprites", array3);
+                    UnityEngine.Object.DestroyImmediate(componentsInChildren[i]);
+                }
+            }
+
+            arrowTempPre.AddComponent<BoxCollider>().size = Vector3.one * 3f;
+            arrowTempPre.AddComponent<AccelerationPlateArrow>();
+            arrowTempPre.layer = LevelStudioPlugin.editorInteractableLayer;
+
+            for (byte i = 0; i < 4; i++)
+            {
+                GameObject arrow = GameObject.Instantiate(arrowTempPre);
+                arrow.transform.SetParent(accelPlate.transform, false);
+                arrow.transform.rotation = Quaternion.Euler(0f, i * 90f, 0f);
+                arrow.transform.localPosition = arrow.transform.forward * 10f + Vector3.up * 5f;
+
+                AccelerationPlateArrow arrowComp = arrow.GetComponent<AccelerationPlateArrow>();
+                arrowComp.index = i;
+                arrowComp.renderer = arrow.GetComponentInChildren<SpriteRenderer>();
+
+                if (i != 0)
+                    arrowComp.renderer.color = Color.gray;
+            }
 
             #endregion
 
@@ -197,13 +257,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                     EditorInterface.AddObjectVisual("adv_" + name, ObjectsStorage.Objects[name], true); //This one for rooms only
                     if (!ContainsStructureVisualPrefab("adv_generic_plate", name))
                     {
-                        GameObject plateVisual = AddStructureVisualPrefab("adv_generic_plate", name, plate.gameObject);
-
-                        BoxCollider boxColl = plateVisual.GetComponent<BoxCollider>();
-                        boxColl.size = new Vector3(10f, 1f, 10f);
-                        boxColl.center = Vector3.zero;
-
-                        plateVisual.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;   
+                        CorrectPlateCollider(AddStructureVisualPrefab("adv_generic_plate", name, plate.gameObject))
+                            .gameObject.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;   
                     }
                 }
             }
@@ -238,12 +293,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             EditorInterface.AddObjectVisualWithCustomBoxCollider("adv_farm_sign1", ObjectsStorage.Objects["farm_sign1"],
                 Vector3.one * 7.5f, Vector3.zero);
-
-            EditorInterface.AddObjectVisualWithCustomBoxCollider("adv_trigger_no_plate_cooldown",
-                ObjectsStorage.Triggers["no_plate_cooldown"].gameObject, Vector3.one * 5f, Vector3.zero);
-
-            EditorInterface.AddObjectVisualWithCustomBoxCollider("adv_trigger_low_plate_unpress_time", 
-                ObjectsStorage.Triggers["low_plate_unpress_time"].gameObject, Vector3.one * 5f, Vector3.zero);
 
             #endregion
 
@@ -320,10 +369,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new ObjectToolNoRotation("adv_farm_finish_points_flag", AssetsStorage.sprites["adv_editor_finish_points_flag"], 5f));
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
                 new ObjectToolNoRotation("adv_farm_sign1", AssetsStorage.sprites["adv_editor_corn_sign1"], 5f));
-            EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                new ObjectToolNoRotation("adv_trigger_no_plate_cooldown", AssetsStorage.sprites["adv_editor_no_cooldown_plate"], 5f));
-            EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                new ObjectToolNoRotation("adv_trigger_low_plate_unpress_time", AssetsStorage.sprites["adv_editor_low_unpress_time"], 5f));
 
             EditorInterfaceModes.AddToolToCategory(mode, "structures", 
                 new ZiplineTool("adv_zipline", "hanger_white", 
@@ -337,6 +382,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             EditorInterfaceModes.AddToolToCategory(mode, "structures",
                 new NoisyPlateTool("adv_noisy_plate", "noisy_plate",
                     AssetsStorage.sprites["adv_editor_noisy_plate"]));
+
+            Sprite accelPlateIcon = AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_acceleration_plate.png");
+
+            EditorInterfaceModes.AddToolToCategory(mode, "structures",
+                new AccelerationPlateTool("adv_acceleration_plate", "acceleration_plate", accelPlateIcon, buttonless: false));
+            EditorInterfaceModes.AddToolToCategory(mode, "structures",
+                new AccelerationPlateTool("adv_acceleration_plate", "acceleration_plate", accelPlateIcon, buttonless: true));
 
             foreach (KeyValuePair<string, string> pair in platesInfo)
             {

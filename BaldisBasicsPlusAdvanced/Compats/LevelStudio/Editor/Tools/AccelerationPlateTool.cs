@@ -1,34 +1,38 @@
 ﻿using System;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
+using System.Collections.Generic;
+using System.Text;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.AccelerationPlate;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenStove;
 using PlusLevelStudio.Editor;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 {
-    internal class KitchenStoveTool : EditorTool
+    internal class AccelerationPlateTool : EditorTool
     {
-
         private string type;
 
         private string prefab;
 
-        private KitchenStoveLocation notConnectedStove;
+        private AccelerationPlateLocation notConnectedPlate;
+
+        private bool buttonless;
 
         private IntVector2? selectPos;
 
-        public override string id => $"structure_{type}_{prefab}";
+        public override string id => $"structure_{type}_{prefab}" + (buttonless ? "_buttonless" : "");
 
-        public KitchenStoveTool(string type, string prefab, Sprite sprite)
+        public AccelerationPlateTool(string type, string prefab, Sprite sprite, bool buttonless)
         {
             this.type = type;
             this.prefab = prefab;
             this.sprite = sprite;
+            this.buttonless = buttonless;
         }
 
         public override void Begin()
         {
-            
+
         }
 
         public override void Update()
@@ -43,7 +47,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
         {
             if (selectPos == null)
             {
-                bool cancelTool = notConnectedStove == null;
+                bool cancelTool = notConnectedPlate == null;
                 ResetTool();
                 return cancelTool;
             }
@@ -61,15 +65,15 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         private void ResetTool()
         {
-            if (notConnectedStove != null)
+            if (notConnectedPlate != null)
             {
-                KitchenStoveStructureLocation structLoc =
-                (KitchenStoveStructureLocation)EditorController.Instance.AddOrGetStructureToData(type, onlyOne: true);
+                AccelerationPlateStructureLocation structLoc =
+                (AccelerationPlateStructureLocation)EditorController.Instance.AddOrGetStructureToData(type, onlyOne: true);
 
-                EditorController.Instance.RemoveVisual(notConnectedStove);
-                structLoc.stoves.Remove(notConnectedStove);
+                EditorController.Instance.RemoveVisual(notConnectedPlate);
+                structLoc.plates.Remove(notConnectedPlate);
 
-                notConnectedStove = null;
+                notConnectedPlate = null;
             }
             selectPos = null;
             EditorController.Instance.CancelHeldUndo();
@@ -90,36 +94,44 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
         private void Place(IntVector2 position, Direction dir)
         {
-            KitchenStoveStructureLocation structLoc =
-                (KitchenStoveStructureLocation)EditorController.Instance.AddOrGetStructureToData(type, onlyOne: true);
+            AccelerationPlateStructureLocation structLoc =
+                (AccelerationPlateStructureLocation)EditorController.Instance.AddOrGetStructureToData(type, onlyOne: true);
 
-            if (notConnectedStove == null)
+            if (notConnectedPlate == null)
             {
                 EditorController.Instance.HoldUndo();
 
-                notConnectedStove =
-                    structLoc.CreateNewStove(EditorController.Instance.levelData, prefab, position, dir);
+                notConnectedPlate =
+                    structLoc.CreateNewPlate(EditorController.Instance.levelData, prefab, position, dir);
 
-                if (notConnectedStove == null) return;
+                if (notConnectedPlate == null) return;
 
-                notConnectedStove.LoadDefaults();
+                notConnectedPlate.LoadDefaults(type);
 
-                EditorController.Instance.AddVisual(notConnectedStove);
+                EditorController.Instance.AddVisual(notConnectedPlate);
 
                 selectPos = null;
+
+                if (buttonless)
+                {
+                    EditorController.Instance.AddHeldUndo();
+                    EditorController.Instance.SwitchToTool(null);
+                    notConnectedPlate = null;
+                }
 
                 return;
             }
             else
             {
-                SimpleButtonLocation buttonLoc = structLoc.CreateNewButton(EditorController.Instance.levelData, position, dir);
+                SimpleButtonLocation buttonLoc = 
+                    structLoc.CreateNewButton(EditorController.Instance.levelData, notConnectedPlate, position, dir);
 
                 if (buttonLoc == null)
                     return;
 
                 EditorController.Instance.AddVisual(buttonLoc);
 
-                notConnectedStove = null;
+                notConnectedPlate = null;
 
                 selectPos = null;
             }

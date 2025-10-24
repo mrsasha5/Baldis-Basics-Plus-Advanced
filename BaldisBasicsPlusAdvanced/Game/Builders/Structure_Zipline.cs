@@ -66,8 +66,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
             for (int i = 0; i < data.Count; i += 2)
             {
-                Cell start = ec.CellFromPosition(data[i].position);
-                Cell end = ec.CellFromPosition(data[i + 1].position);
+                Cell start = ec.cells[data[i].position.x, data[i].position.z];
+                Cell end = ec.cells[data[i + 1].position.x, data[i + 1].position.z];
 
                 ZiplineHanger hanger =
                     Build(new KeyValuePair<Cell, Cell>(start, end), data[i].prefab.GetComponent<ZiplineHanger>());

@@ -17,7 +17,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
 
         public List<SimpleButtonLocation> buttons = new List<SimpleButtonLocation>();
 
-        public KitchenStoveLocation CreateNewStove(string prefab, IntVector2 pos, Direction dir, bool disableChecks = false)
+        public KitchenStoveLocation CreateNewStove(EditorLevelData data, 
+            string prefab, IntVector2 pos, Direction dir, bool disableChecks = false)
         {
             KitchenStoveLocation loc = new KitchenStoveLocation()
             {
@@ -28,7 +29,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
                 deleteAction = OnDeleteStove
             };
 
-            if (!disableChecks && !loc.ValidatePosition(EditorController.Instance.levelData, ignoreSelf: true))
+            if (!disableChecks && !loc.ValidatePosition(data, ignoreSelf: true))
                 return null;
 
             stoves.Add(loc);
@@ -36,7 +37,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
             return loc;
         }
 
-        public SimpleButtonLocation CreateNewButton(IntVector2 pos, Direction dir, bool disableChecks = false)
+        public SimpleButtonLocation CreateNewButton(EditorLevelData data, IntVector2 pos, Direction dir, bool disableChecks = false)
         {
             SimpleButtonLocation loc = new SimpleButtonLocation()
             {
@@ -54,7 +55,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
             return loc;
         }
 
-        private bool OnDeleteStove(EditorLevelData level, SimpleLocation loc)
+        private bool OnDeleteStove(EditorLevelData data, SimpleLocation loc)
         {
             int index = stoves.IndexOf((KitchenStoveLocation)loc);
 
@@ -67,7 +68,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
             return true;
         }
 
-        private bool OnDeleteButton(EditorLevelData level, SimpleLocation loc)
+        private bool OnDeleteButton(EditorLevelData data, SimpleLocation loc)
         {
             int index = buttons.IndexOf((SimpleButtonLocation)loc);
 
@@ -159,13 +160,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
 
             while (count > 0)
             {
-                CreateNewStove(null, default, default, disableChecks: true)
+                CreateNewStove(data, null, default, default, disableChecks: true)
                     .ReadData(ver, data, reader, compressor);
 
                 IntVector2 pos = reader.ReadByteVector2().ToInt();
                 Direction dir = (Direction)reader.ReadByte();
 
-                CreateNewButton(pos, dir, disableChecks: true);
+                CreateNewButton(data, pos, dir, disableChecks: true);
 
                 count--;
             }

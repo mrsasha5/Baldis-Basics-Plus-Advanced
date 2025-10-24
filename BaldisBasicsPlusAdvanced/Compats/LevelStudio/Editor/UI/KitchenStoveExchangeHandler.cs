@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
+﻿using System.Globalization;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenStove;
 using PlusLevelStudio.Editor;
 using TMPro;
@@ -167,7 +168,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setCooldown")
             {
-                if (float.TryParse((string)data, out var result))
+                if (float.TryParse((string)data, NumberStyles.Float, AdvancedCore.StandardCultureInfo, out float result))
                 {
                     loc.cooldown = result;
                     somethingChanged = true;
@@ -177,7 +178,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setCookingTime")
             {
-                if (float.TryParse((string)data, out float result))
+                if (float.TryParse((string)data, NumberStyles.Float, AdvancedCore.StandardCultureInfo, out float result))
                 {
                     loc.cookingTime = result;
                     somethingChanged = true;
@@ -187,7 +188,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setCoolingTime")
             {
-                if (float.TryParse((string)data, out float result))
+                if (float.TryParse((string)data, NumberStyles.Float, AdvancedCore.StandardCultureInfo, out float result))
                 {
                     loc.coolingTime = result;
                     somethingChanged = true;

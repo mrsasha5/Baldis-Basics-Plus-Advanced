@@ -74,6 +74,34 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             rotationSpeed = 180f;
         }
 
+        public void InitializePotentialDirections()
+        {
+            Cell mainCell = ec.CellFromPosition(transform.position);
+
+            for (int i = 0; i < 4; i++)
+            {
+                IntVector2 pos = mainCell.position + ((Direction)i).ToIntVector2();
+                if (!ec.ContainsCoordinates(pos)) continue;
+
+                Cell potentialCell = ec.CellFromPosition(pos);
+                if (!potentialCell.Null && !potentialCell.HasWallInDirection(((Direction)i).GetOpposite()))
+                {
+                    potentialAngles.Add(i * 90f);
+                }
+            }
+
+        }
+
+        public void DefineRotateDirection(float angle)
+        {
+            if (angle > 360f) angle %= 360f;
+
+            if (!potentialAngles.Contains(angle))
+            {
+                potentialAngles.Add(angle);
+            }
+        }
+
         public void ButtonPressed(bool val)
         {
             Rotate();
@@ -109,7 +137,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             audMan.PlaySingle(audRotate);
         }
 
-        public void SetAngleIndexByAngle(float angle)
+        public void UpdateAngleIndex(float angle)
         {
             for (int i = 0; i < potentialAngles.Count; i++)
             {
@@ -121,29 +149,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             }
         }
 
-        public void SetForwardByAngle(float angle)
+        public void SetRotation(float angle)
         {   
             Quaternion quaternion = default;
             quaternion.eulerAngles = new Vector3(90f, angle, 0f);
             meshRenderers[1].transform.rotation = quaternion;
-        }
-
-        public void InitializePotentialDirections()
-        {
-            Cell mainCell = ec.CellFromPosition(transform.position);
-
-            for (int i = 0; i < 4; i++)
-            {
-                IntVector2 pos = mainCell.position + ((Direction)i).ToIntVector2();
-                if (!ec.ContainsCoordinates(pos)) continue;
-
-                Cell potentialCell = ec.CellFromPosition(pos);
-                if (!potentialCell.Null && !potentialCell.HasWallInDirection(((Direction)i).GetOpposite()))
-                {
-                    potentialAngles.Add(i * 90f);
-                }
-            }
-
         }
 
         protected override void SetTextures()
@@ -172,10 +182,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
                 if (potentialAngles.Count > 1 && anglesToStop > 0f)
                 {
                     anglesToStop -= rotationSpeed * Timescale * Time.deltaTime;
-                    SetForwardByAngle(meshRenderers[1].transform.rotation.eulerAngles.y + rotationSpeed * ec.EnvironmentTimeScale * Time.deltaTime);
+                    SetRotation(meshRenderers[1].transform.rotation.eulerAngles.y + rotationSpeed * ec.EnvironmentTimeScale * Time.deltaTime);
                 } else
                 {
-                    SetForwardByAngle(potentialAngles[angleIndex]);
+                    SetRotation(potentialAngles[angleIndex]);
                     rotating = false;
 
                     UpdateVisualPressedState(false);

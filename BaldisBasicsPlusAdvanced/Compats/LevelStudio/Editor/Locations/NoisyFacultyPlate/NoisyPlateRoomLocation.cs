@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
 using BaldisBasicsPlusAdvanced.Helpers;
-using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
 using PlusStudioLevelLoader;
@@ -54,7 +52,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
 
             info.data.Add(new StructureDataInfo()
             {
-                data = BitConverter.ToInt32(BitConverter.GetBytes(cooldown), 0)
+                data = cooldown.ConvertToIntNoRecast()
             });
 
             info.data.Add(new StructureDataInfo()

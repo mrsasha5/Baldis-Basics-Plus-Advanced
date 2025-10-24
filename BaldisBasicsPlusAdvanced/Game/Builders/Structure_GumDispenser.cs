@@ -1,6 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects;
+using PlusStudioLevelLoader;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -100,10 +101,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             for (int i = 0; i < data.Count; i += 4)
             {
                 GumDispenser dispenser =
-                    BuildDispenser(data[i].prefab.GetComponent<GumDispenser>(), ec.CellFromPosition(data[i].position), data[i].direction);
+                    BuildDispenser(data[i].prefab.GetComponent<GumDispenser>(), 
+                        ec.cells[data[i].position.x, data[i].position.z], data[i].direction);
 
                 int uses = data[i + 1].data;
-                float cooldown = BitConverter.ToSingle(BitConverter.GetBytes(data[i + 2].data), 0);
+                float cooldown = data[i + 2].data.ConvertToFloatNoRecast();
 
                 StructureData buttonData = data[i + 3];
 
@@ -134,7 +136,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                         .GetComponent<GumDispenser>(), cell.ObjectBase);
 
             cell.HardCoverWall(dir, covered: true); //Based on game logic (Rotohalls uses that logic lol)
-                                                                  //And I mean that it will cover cell even if button wasn't built
+                                                    //And I mean that it will cover cell even if button wasn't built
 
             GameButtonBase button = GameButton.BuildInArea(ec, cell.position, buttonRange, dispenser.gameObject, buttonPre, lg.controlledRNG);
 

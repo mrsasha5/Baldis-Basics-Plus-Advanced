@@ -38,11 +38,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 }
             }
 
-            LevelLoaderPlugin.Instance.basicObjects.Add("adv_trigger_no_plate_cooldown",
-                ObjectsStorage.Triggers["no_plate_cooldown"].gameObject);
-            LevelLoaderPlugin.Instance.basicObjects.Add("adv_trigger_low_plate_unpress_time",
-                ObjectsStorage.Triggers["low_plate_unpress_time"].gameObject);
-
             LevelLoaderPlugin.Instance.npcAliases.Add("adv_criss_the_crystal", ObjectsStorage.Npcs["CrissTheCrystal"]);
 
             //Symbol Machine
@@ -115,6 +110,15 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                     new Dictionary<string, GameObject>()
                     {
                         { "kitchen_stove", ObjectsStorage.Objects["kitchen_stove"] }
+                    }
+                )
+            );
+
+            LevelLoaderPlugin.Instance.structureAliases.Add("adv_acceleration_plate",
+                new LoaderStructureData(ObjectsStorage.StructureBuilders["Structure_AccelerationPlate"],
+                    new Dictionary<string, GameObject>()
+                    {
+                        { "acceleration_plate", ObjectsStorage.Objects["acceleration_plate"] }
                     }
                 )
             );

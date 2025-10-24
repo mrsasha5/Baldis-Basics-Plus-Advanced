@@ -17,6 +17,7 @@ using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.SaveSystem;
 using System;
 using System.Collections;
+using System.Globalization;
 using System.IO;
 using UnityEngine;
 using static BepInEx.BepInDependency;
@@ -39,6 +40,8 @@ namespace BaldisBasicsPlusAdvanced
         public static AdvancedCore Instance => instance;
 
         internal static ManualLogSource Logging => Instance.Logger;
+
+        internal static CultureInfo StandardCultureInfo => CultureInfo.GetCultureInfo("eu");
 
         private static Harmony harmony;
 

@@ -59,7 +59,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
                 (GenericPlateStructureLocation)EditorController.Instance.AddOrGetStructureToData(type, onlyOne: true);
 
             GenericPlateLocation loc = 
-                structLoc.CreateNewChild(prefab, selectPos.Value, dir, disableChecks: false);
+                structLoc.CreateNewChild(EditorController.Instance.levelData, prefab, selectPos.Value, dir, disableChecks: false);
 
             if (loc != null)
             {

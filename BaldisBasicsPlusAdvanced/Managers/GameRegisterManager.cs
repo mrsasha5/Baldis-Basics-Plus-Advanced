@@ -1082,8 +1082,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             PrefabsCreator.CreateTrigger<NoPlatesCooldownTrigger>("no_plates_cooldown");
             PrefabsCreator.CreateTrigger<PitStopOverridesTrigger>("pit_stop_overrides");
-            PrefabsCreator.CreateTrigger<NoCooldownPlateCurrentPositionTrigger>("no_plate_cooldown");
-            PrefabsCreator.CreateTrigger<UnpressTimePlateCurrentPositionTrigger>("low_plate_unpress_time");
 
             //triggers end
 

@@ -15,7 +15,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
         public List<GenericPlateLocation> locations = new List<GenericPlateLocation>();
 
-        public GenericPlateLocation CreateNewChild(string prefabName, IntVector2 pos, Direction dir, bool disableChecks)
+        public GenericPlateLocation CreateNewChild(EditorLevelData data, 
+            string prefabName, IntVector2 pos, Direction dir, bool disableChecks)
         {
             GenericPlateLocation loc = new GenericPlateLocation()
             {
@@ -26,7 +27,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
                 deleteAction = OnDeleteLocation
             };
 
-            if (!disableChecks && !loc.ValidatePosition(EditorController.Instance.levelData, ignoreSelf: true))
+            if (!disableChecks && !loc.ValidatePosition(data, ignoreSelf: true))
                 return null;
 
             locations.Add(loc);
@@ -113,7 +114,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
             int count = reader.ReadInt32();
             while (count > 0)
             {
-                GenericPlateLocation loc = CreateNewChild(null, default, default, disableChecks: true);
+                GenericPlateLocation loc = CreateNewChild(data, null, default, default, disableChecks: true);
                 loc.ReadData(ver, reader, compressor);
                 count--;
             }

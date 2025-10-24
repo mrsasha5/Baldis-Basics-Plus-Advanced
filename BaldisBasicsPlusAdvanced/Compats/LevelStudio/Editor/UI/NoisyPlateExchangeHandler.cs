@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate;
+﻿using System.Globalization;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.UI;
 using TMPro;
@@ -81,7 +82,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
         {
             if (message == "setCooldown")
             {
-                if (float.TryParse((string)data, out float result))
+                if (float.TryParse((string)data, NumberStyles.Float, AdvancedCore.StandardCultureInfo, out float result))
                 {
                     loc.cooldown = result;
                     somethingChanged = true;

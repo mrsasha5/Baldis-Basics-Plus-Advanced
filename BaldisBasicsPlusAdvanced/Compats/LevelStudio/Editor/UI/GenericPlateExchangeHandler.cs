@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate;
+﻿using System.Globalization;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate;
 using PlusLevelStudio.Editor;
 using TMPro;
 using UnityEngine;
@@ -152,7 +153,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setCooldown")
             {
-                if (float.TryParse((string)data, out var result))
+                if (float.TryParse((string)data, NumberStyles.Float, AdvancedCore.StandardCultureInfo, out float result))
                 {
                     loc.cooldown = result;
                     somethingChanged = true;
@@ -162,7 +163,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "setUnpressTime")
             {
-                if (float.TryParse((string)data, out float result))
+                if (float.TryParse((string)data, NumberStyles.Float, AdvancedCore.StandardCultureInfo, out float result))
                 {
                     loc.unpressTime = result;
                     somethingChanged = true;

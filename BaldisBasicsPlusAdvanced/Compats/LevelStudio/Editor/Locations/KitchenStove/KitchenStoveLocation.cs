@@ -53,17 +53,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
 
             info.data.Add(new StructureDataInfo()
             {
-                data = BitConverter.ToInt32(BitConverter.GetBytes(cooldown), 0)
+                data = cooldown.ConvertToIntNoRecast()
             });
 
             info.data.Add(new StructureDataInfo()
             {
-                data = BitConverter.ToInt32(BitConverter.GetBytes(cookingTime), 0)
+                data = cookingTime.ConvertToIntNoRecast()
             });
 
             info.data.Add(new StructureDataInfo()
             {
-                data = BitConverter.ToInt32(BitConverter.GetBytes(coolingTime), 0)
+                data = coolingTime.ConvertToIntNoRecast()
             });
 
             info.data.Add(new StructureDataInfo()

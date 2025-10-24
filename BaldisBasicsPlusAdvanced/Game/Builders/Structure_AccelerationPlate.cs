@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
+using PlusStudioLevelLoader;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
@@ -34,6 +37,45 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             };
 
             minHallLength = 6;
+        }
+
+        public override void Load(List<StructureData> data)
+        {
+            base.Load(data);
+
+            for (int i = 0; i < data.Count; i += 7)
+            {
+                AccelerationPlate plate = (AccelerationPlate)
+                    BuildPrefab(data[i].prefab.GetComponent<AccelerationPlate>(), 
+                        ec.cells[data[i].position.x, data[i].position.z], data[i].direction);
+
+                int dirsCount = data[i].data;
+                Debug.Log($"Dirs count: {dirsCount}");
+                for (int j = 0; j < dirsCount; j++)
+                {
+                    plate.DefineRotateDirection(data[i].direction.ToDegrees() + j * 90f);
+                }
+
+                plate.UpdateAngleIndex(data[i].direction.ToDegrees());
+                plate.SetRotation(data[i].direction.ToDegrees());
+
+                plate.Data.showsUses = data[i + 4].data.ToBool();
+                plate.Data.showsCooldown = data[i + 5].data.ToBool();
+
+                plate.SetMaxUses(data[i + 1].data);
+
+                if (data[i + 2].data >= 0f)
+                    plate.ForcefullyPatchCooldown(data[i + 2].data.ConvertToFloatNoRecast());
+
+                plate.Data.timeToUnpress = data[i + 3].data.ConvertToFloatNoRecast();
+
+                if (data.Count >= i + 5 && data[i + 6].prefab == null)
+                {
+                    GameButtonBase button = GameButton.Build(buttonPre, ec, data[i + 6].position, data[i + 6].direction);
+                    button.SetUp(plate);
+                }
+                else i--;
+            }
         }
 
         public override void Build(LevelBuilder lb, System.Random rng, bool isRoomCells)
@@ -69,7 +111,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                         AccelerationPlate plate = (AccelerationPlate)RandomlyBuildPrefab(tiles[j].Key, rng, inRoom: false);
                         plate.transform.rotation = tiles[j].Value.ToRotation();
                         if (plate.IsRotatable)
-                            plate.SetAngleIndexByAngle((float)tiles[j].Value * 90f);
+                            plate.UpdateAngleIndex((float)tiles[j].Value * 90f);
                         count--;
                     }
 

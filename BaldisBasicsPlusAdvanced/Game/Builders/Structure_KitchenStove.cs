@@ -5,6 +5,7 @@ using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
+using PlusStudioLevelLoader;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
@@ -36,8 +37,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             base.Load(data);
             for (int i = 0; i < data.Count; i += 9)
             {
-                KitchenStove stove = (KitchenStove)BuildPrefab(data[i].prefab.GetComponent<KitchenStove>(), 
-                    ec.CellFromPosition(data[i].position), data[i].direction);
+                KitchenStove stove = (KitchenStove)BuildPrefab(data[i].prefab.GetComponent<KitchenStove>(),
+                    ec.cells[data[i].position.x, data[i].position.z], data[i].direction);
 
                 GameButtonBase button = GameButton.Build(buttonPre, ec, data[i + 8].position, data[i + 8].direction);
                 button.SetUp(stove);
@@ -49,11 +50,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 
                 if (data[i + 2].data.ToBool())
                 {
-                    stove.ForcefullyPatchCooldown(BitConverter.ToSingle(BitConverter.GetBytes(data[i + 3].data), 0));
+                    stove.ForcefullyPatchCooldown(data[i + 3].data.ConvertToFloatNoRecast());
                 }
 
-                stove.CookingTime = BitConverter.ToSingle(BitConverter.GetBytes(data[i + 4].data), 0);
-                stove.CoolingTime = BitConverter.ToSingle(BitConverter.GetBytes(data[i + 5].data), 0);
+                stove.CookingTime = data[i + 4].data.ConvertToFloatNoRecast();
+                stove.CoolingTime = data[i + 5].data.ConvertToFloatNoRecast();
             }
         }
 
