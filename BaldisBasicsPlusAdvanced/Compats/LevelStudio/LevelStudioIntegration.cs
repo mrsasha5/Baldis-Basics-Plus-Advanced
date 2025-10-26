@@ -7,11 +7,13 @@ using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenStove;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Pulley;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Builders;
+using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI.Reflection;
@@ -20,7 +22,6 @@ using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelFormat;
 using UnityEngine;
-using static Mono.Security.X509.X520;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 {
@@ -120,6 +121,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             LevelStudioPlugin.Instance.structureTypes.Add("adv_generic_plate", typeof(GenericPlateStructureLocation));
             LevelStudioPlugin.Instance.structureTypes.Add("adv_kitchen_stove", typeof(KitchenStoveStructureLocation));
             LevelStudioPlugin.Instance.structureTypes.Add("adv_acceleration_plate", typeof(AccelerationPlateStructureLocation));
+            LevelStudioPlugin.Instance.structureTypes.Add("adv_pulley", typeof(PulleyStructureLocation));
         }
 
         private static void InitializeVisuals()
@@ -247,6 +249,36 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             }
 
             GameObject.DestroyImmediate(arrowTempPre.gameObject);
+
+            #endregion
+
+            #region Pulley Visual
+
+            Pulley pulley = ObjectsStorage.Objects["pulley"].GetComponent<Pulley>();
+
+            GameObject pulleyVisual = new GameObject("PulleyVisual");
+            BoxCollider pulleyCollider = pulleyVisual.AddComponent<BoxCollider>();
+            pulleyCollider.size = new Vector3(10f, 10f, 1f);
+            pulleyCollider.center = Vector3.up * 5f + Vector3.forward * 5f;
+
+            MeshRenderer pulleyBg = ObjectsCreator.CreateQuadRenderer();
+            pulleyBg.name = "PulleyBackgroundRenderer";
+            pulleyBg.transform.SetParent(pulleyVisual.transform, false);
+            pulleyBg.transform.localPosition += Vector3.up * 5f + Vector3.forward * 5f;
+
+            MeshRenderer meshRenderer = ObjectsCreator.CreateQuadRenderer();
+            meshRenderer.name = "PulleyRenderer";
+            meshRenderer.transform.SetParent(pulleyBg.transform, false);
+            meshRenderer.transform.localScale = new Vector3(0.3f, 0.3f, 1f);
+            meshRenderer.transform.localPosition = Vector3.forward * -0.1f;
+
+            pulleyBg.material.mainTexture = pulley.FirstBg;
+            meshRenderer.material.mainTexture = pulley.SpriteRenderer.sprite.texture;
+
+            AddStructureVisualPrefab("adv_pulley", "pulley", pulleyVisual)
+                .AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
+
+            GameObject.DestroyImmediate(pulleyVisual);
 
             #endregion
 
@@ -407,6 +439,10 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             EditorInterfaceModes.AddToolToCategory(mode, "structures", 
                 new KitchenStoveTool("adv_kitchen_stove", "kitchen_stove",
                     AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_stove.png")));
+
+            EditorInterfaceModes.AddToolToCategory(mode, "structures",
+                new PulleyTool("adv_pulley", "pulley",
+                    AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_pulley.png")));
 
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
                 new RoomTool("adv_english_class", AssetsStorage.sprites["adv_editor_english_floor"]));

@@ -2,7 +2,6 @@
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects
@@ -37,22 +36,22 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         private LineRenderer lineRenderer;
 
         [SerializeField]
-        private int uses;
+        internal int uses;
+
+        [SerializeField]
+        internal int points;
+
+        [SerializeField]
+        internal int finalPoints;
+
+        [SerializeField]
+        internal float maxDistance;
 
         [SerializeField]
         private Color handleColor;
 
         [SerializeField]
-        private int points;
-
-        [SerializeField]
-        private int finalPoints;
-
-        [SerializeField]
         private Vector2 minMaxMultiplierSpeed;
-
-        [SerializeField]
-        private float maxDistance;
 
         [SerializeField]
         private float offsetForward;
@@ -68,8 +67,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         private EnvironmentController ec;
 
-        //1 - background
-        //2 - pulley
+        //1 - Background
+        //2 - Pulley
         private MeshRenderer[] renderers;
 
         private IEnumerator fadeOutAnimator;
@@ -92,7 +91,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         private Entity entity;
 
-        //it exists only for fixing cursor on one frame after returning back
+        //It exists only for fixing cursor on one frame after returning back
         private bool showCursor = true;
 
         private bool taken;
@@ -100,6 +99,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         private bool broken;
 
         public SpriteRenderer SpriteRenderer => spriteRenderer;
+
+        public Texture2D FirstBg => backgrounds[0];
 
         public void InitializePrefab(int variant)
         {

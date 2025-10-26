@@ -2,6 +2,7 @@
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Helpers;
+using PlusStudioLevelLoader;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
@@ -25,12 +26,27 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
         public void InitializePrefab(int variant)
         {
-            pulleyPre = ObjectsStorage.Objects["pulley"]
-                .GetComponent<Pulley>();
+            pulleyPre = ObjectsStorage.Objects["pulley"].GetComponent<Pulley>();
             offsetFromCenter = 2f;
             shapes = TileShapeMask.Corner | TileShapeMask.Straight | TileShapeMask.End | TileShapeMask.Single;
             coverage = CellCoverage.Center;
             includeOpen = true;
+        }
+
+        public override void Load(List<StructureData> data)
+        {
+            base.Load(data);
+
+            for (int i = 0; i < data.Count; i += 5)
+            {
+                Pulley pulley = Build(data[i].prefab.GetComponent<Pulley>(), ec.cells[data[i].position.x, data[i].position.z], 
+                    data[i].direction.GetOpposite());
+
+                pulley.uses = data[i + 1].data;
+                pulley.points = data[i + 2].data;
+                pulley.finalPoints = data[i + 3].data;
+                pulley.maxDistance = data[i + 4].data.ConvertToFloatNoRecast();
+            }
         }
 
         public override void PostOpenCalcGenerate(LevelGenerator lg, System.Random rng)
@@ -70,14 +86,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                     }
 
                     if (chosenDir != Direction.Null)
-                        Build(cell, chosenDir);
+                        Build(pulleyPre, cell, chosenDir);
                     
                     cells.Remove(cell);
                 }
             }
         }
 
-        public void Build(Cell cell, Direction dir)
+        public Pulley Build(Pulley pulleyPre, Cell cell, Direction dir)
         {
             Pulley pulley = Instantiate(pulleyPre, ec.transform);
 
@@ -101,6 +117,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
             pulley.Initialize(ec, cell.CenterWorldPosition - Directions.ToVector3(dir) * 5f, Directions.ToVector3(dir) * offsetFromCenter,
                 new MeshRenderer[] { backgroundRenderer, meshRenderer } );
+
+            return pulley;
         }
 
     }

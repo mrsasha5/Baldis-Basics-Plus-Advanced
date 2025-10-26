@@ -122,6 +122,15 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                     }
                 )
             );
+
+            LevelLoaderPlugin.Instance.structureAliases.Add("adv_pulley",
+                new LoaderStructureData(ObjectsStorage.StructureBuilders["Structure_Pulley"],
+                    new Dictionary<string, GameObject>()
+                    {
+                        { "pulley", ObjectsStorage.Objects["pulley"] }
+                    }
+                )
+            );
         }
 
         private static void InitializeActivities()

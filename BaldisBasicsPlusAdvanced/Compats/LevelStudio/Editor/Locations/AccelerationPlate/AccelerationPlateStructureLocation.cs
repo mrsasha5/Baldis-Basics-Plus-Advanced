@@ -141,6 +141,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Accelera
                     (plates[i].button != null && !plates[i].button.ValidatePosition(data, ignoreSelf: true)))
                 {
                     OnDeletePlate(data, plates[i]);
+                    i--;
                 }
             }
 
