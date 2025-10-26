@@ -2,6 +2,8 @@
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
+using BaldisBasicsPlusAdvanced.Game.Activities;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Managers;
@@ -27,6 +29,7 @@ namespace BaldisBasicsPlusAdvanced
     [BepInPlugin(modId, modName, version)]
     [BepInDependency("mtm101.rulerp.bbplus.baldidevapi", DependencyFlags.HardDependency)]
     [BepInDependency(IntegrationManager.levelLoaderId, DependencyFlags.HardDependency)]
+    [BepInDependency(LevelStudioIntegration.GUID, DependencyFlags.SoftDependency)]
     public class AdvancedCore : BaseUnityPlugin
     {
         public const string modId = "mrsasha5.baldi.basics.plus.advanced";

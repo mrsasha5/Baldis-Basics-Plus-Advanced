@@ -26,8 +26,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         public static Dictionary<string, Color> RoomColors => roomColors;
 
-        //Extra data
-
         private static List<CellTextureSerializableData> cellTextureData = new List<CellTextureSerializableData>();
 
         private static Dictionary<string, BaseSpawningData> spawningData = new Dictionary<string, BaseSpawningData>();
@@ -38,7 +36,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         private static List<CustomRoomData> customRoomData = new List<CustomRoomData>();
 
-        //Data that was used by API
+        //API data starts here
 
         private static Dictionary<PluginInfo, List<WeightedCouncilTopic>> topics = new Dictionary<PluginInfo, List<WeightedCouncilTopic>>();
 
@@ -52,7 +50,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         public static Dictionary<PluginInfo, List<string>> SymbolMachineWords => words;
 
-        //End of extra data
+        //Ends here
 
         private static Dictionary<string, SceneObject> sceneObjects = new Dictionary<string, SceneObject>();
 

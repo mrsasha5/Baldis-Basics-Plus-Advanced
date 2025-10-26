@@ -4,6 +4,7 @@ using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Activities;
+using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
@@ -39,6 +40,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
             }
 
             LevelLoaderPlugin.Instance.npcAliases.Add("adv_criss_the_crystal", ObjectsStorage.Npcs["CrissTheCrystal"]);
+
+            LevelLoaderPlugin.Instance.windowObjects.Add("adv_big_hole", 
+                ObjectsStorage.Npcs["CrissTheCrystal"].GetComponent<CrissTheCrystal>().windowObjectPre);
+
+            LevelLoaderPlugin.Instance.lightTransforms.Add("adv_advanced_education_lamp", 
+                AssetsHelper.LoadAsset<Transform>("AdvancedClassLampLight"));
 
             //Symbol Machine
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_symbol_machine", ObjectsStorage.Objects["symbol_machine"]);

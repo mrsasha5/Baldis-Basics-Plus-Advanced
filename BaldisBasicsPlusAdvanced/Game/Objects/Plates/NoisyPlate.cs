@@ -115,7 +115,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             audMan.PlaySingle(audAlarm, 2f);
             ec.MakeNoise(transform.position, 127);
 
-            if (room.Powered)
+            //Removed this feature since lightning in BB+ still sucks
+            /*if (room.Powered)
             {
                 for (int i = 0; i < room.lights.Count; i++)
                 {
@@ -123,7 +124,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
                     room.lights[i].SetLight(true);
                 }
                 StartCoroutine(ResetRoomColor(resetFacultyColorTime));
-            }
+            }*/
 
             if (callsPrincipal)
             {

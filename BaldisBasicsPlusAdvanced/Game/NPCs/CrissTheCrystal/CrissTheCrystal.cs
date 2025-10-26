@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
@@ -58,7 +59,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
         private Sprite gaugeIcon;
 
         [SerializeField]
-        private WindowObject windowObjectPre;
+        internal WindowObject windowObjectPre;
 
         [SerializeField]
         private AudioManager audMan;

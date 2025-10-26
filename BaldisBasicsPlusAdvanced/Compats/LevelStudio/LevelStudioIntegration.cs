@@ -13,6 +13,7 @@ using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Builders;
+using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -27,6 +28,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 {
     internal class LevelStudioIntegration : CompatibilityModule
     {
+
+        public const string GUID = "mtm101.rulerp.baldiplus.levelstudio";
 
         internal const string standardMsg_StructureVersionException = 
             "Incompatible structure format: saved maps on new format version can't be loaded on previous ones.";
@@ -91,7 +94,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
         public LevelStudioIntegration() : base()
         {
-            guid = "mtm101.rulerp.baldiplus.levelstudio";
+            guid = GUID;
             priority = 127;
             versionInfo = new VersionInfo(this);
 
@@ -335,6 +338,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #endregion
 
+            #region Door & Window Visuals
+
+            EditorInterface.AddWindow("adv_big_hole", 
+                ObjectsStorage.Npcs["CrissTheCrystal"].GetComponent<CrissTheCrystal>().windowObjectPre);
+
+            #endregion
+
             EditorInterface.AddRoomVisualManager<OutsideRoomVisualManager>("adv_corn_field");
         }
 
@@ -393,9 +403,16 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
                 new ObjectTool("adv_symbol_machine", AssetsStorage.sprites["adv_editor_symbol_machine"]));
 
+            EditorInterfaceModes.AddToolToCategory(mode, "doors",
+                new WindowTool("adv_big_hole", 
+                    AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Doors/adv_editor_big_hole.png")));
+
+            EditorInterfaceModes.AddToolToCategory(mode, "lights", 
+                new LightTool("adv_advanced_education_lamp", 
+                    AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Lights/adv_editor_advanced_class_lamp.png")));
+
             EditorInterfaceModes.AddToolToCategory(mode, "activities",
                 new ActivityTool("adv_advanced_math_machine", AssetsStorage.sprites["adv_editor_advanced_math_machine"], 0f));
-
             EditorInterfaceModes.AddToolToCategory(mode, "activities",
                 new ActivityTool("adv_advanced_math_machine_corner", AssetsStorage.sprites["adv_editor_advanced_math_machine_corner"], 0f));
 

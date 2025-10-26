@@ -6,11 +6,13 @@ using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
+using BepInEx.Logging;
 using HarmonyLib;
 using MTM101BaldAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Mono.Security.X509.X520;
 
 namespace BaldisBasicsPlusAdvanced.Managers
 {
@@ -329,6 +331,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     RegisterLevelData(name, floor, (CustomLevelObject)weightedLevelObj.selection);
                 }
             }
+
+#if DEBUG
+            DebugWeights(mainLevel);
+#endif
         }
 
         private static void InitializeKitchenStovePosters(LevelObject obj)
@@ -357,6 +363,55 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             posters.Clear();
         }
+
+#if DEBUG
+
+        private static void DebugWeights(SceneObject mainLevel)
+        {
+            if (mainLevel.levelObject != null)
+            {
+                DebugLevel(mainLevel.levelObject);
+            }
+
+            if (mainLevel.randomizedLevelObject.Length > 0)
+            {
+                foreach (WeightedLevelObject weightedLevelObj in mainLevel.randomizedLevelObject)
+                {
+                    DebugLevel(weightedLevelObj.selection);
+                }
+            }
+        }
+
+        private static void DebugLevel(LevelObject level)
+        {
+            AdvancedCore.Logging.LogInfo("-------------------------------------");
+            AdvancedCore.Logging.LogInfo($"Level name: {level.name}");
+
+            AdvancedCore.Logging.LogInfo("Potential Items:");
+
+            foreach (WeightedItemObject item in level.potentialItems)
+            {
+                AdvancedCore.Logging.LogInfo($"{item.selection.itemType.ToStringExtended()}: {item.weight}");
+            }
+
+            AdvancedCore.Logging.LogInfo("Random Events:");
+
+            foreach (WeightedRandomEvent @event in level.randomEvents)
+            {
+                AdvancedCore.Logging.LogInfo($"{@event.selection.Type.ToStringExtended()}: {@event.weight}");
+            }
+
+            AdvancedCore.Logging.LogInfo("Potential Structures:");
+
+            foreach (WeightedStructureWithParameters structure in level.potentialStructures)
+            {
+                AdvancedCore.Logging.LogInfo($"{structure.selection.prefab.name}: {structure.weight}");
+            }
+
+            AdvancedCore.Logging.LogInfo("-------------------------------------");
+        }
+
+#endif
 
     }
 }
