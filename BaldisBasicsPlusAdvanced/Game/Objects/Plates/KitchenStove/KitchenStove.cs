@@ -110,7 +110,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             obstacle = gameObject.AddComponent<NavMeshObstacle>();
             obstacle.shape = NavMeshObstacleShape.Box;
             obstacle.size = new Vector3(10f, 10f, 10f);
-            obstacle.carving = true; //let's cut out nav mesh!
+            obstacle.carving = true; //Looks like it's useless because BB+ navigation behaves weirdly
             obstacle.enabled = false;
 
             audBurningStart = AssetsStorage.sounds["adv_burning_start"];
@@ -397,15 +397,26 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         protected virtual void OnPostActivating()
         {
-            particleSystem.Play();
-            active = true;
             if (currentRecipe != null && currentRecipe.CookingTime != null) activeTime = (float)currentRecipe.CookingTime;
             else activeTime = burningTime;
 
-            audMan.FlushQueue(true);
-            audMan.QueueAudio(audBurningStart);
-            audMan.QueueAudio(audBurningLoop);
-            audMan.SetLoop(true);
+            if (activeTime <= 0f)
+            {
+                activeStateOverridden = false;
+                UpdateVisualActiveState(false);
+                colorAnimator.MoveNext();
+                activeStateOverridden = true;
+            }
+            else
+            {
+                particleSystem.Play();
+                active = true;
+
+                audMan.FlushQueue(true);
+                audMan.QueueAudio(audBurningStart);
+                audMan.QueueAudio(audBurningLoop);
+                audMan.SetLoop(true);
+            }
 
             currentRecipe?.onKitchenStovePostActivating?.Invoke(this);
         }
@@ -436,7 +447,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 if (currentRecipe.SoundOverridden)
                 {
                     if (currentRecipe.Sound != null) audMan.PlaySingle(currentRecipe.Sound);
-                } else
+                }
+                else
                     audMan.PlaySingle(AssetsStorage.sounds["adv_magic_1"]);
 
                 currentRecipe.onKitchenStovePreDeactivating?.Invoke(this);
@@ -462,10 +474,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             SetCooldown(0f);
 
-            if (pickups.Count == 0 && lockedByCooldown)
+            if (pickups.Count == 0)
             {
                 textBase.gameObject.SetActive(true);
-                SetVisualCooldown((int)cooldownTime);
+                if (lockedByCooldown)
+                    SetVisualCooldown((int)cooldownTime);
             }
 
             currentRecipe?.onKitchenStovePostDeactivating?.Invoke(this);
@@ -502,7 +515,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 isHot = true;
 
                 OnPostActivating();
-            } else
+                yield return null; //Added here to it wasn't resetting it to null in Update()
+                                   //if I want to replace IEnumerator in field from this code
+            }
+            else
             {
                 OnPreDeactivating();
 

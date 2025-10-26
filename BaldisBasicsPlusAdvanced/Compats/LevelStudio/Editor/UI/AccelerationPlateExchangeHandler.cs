@@ -1,34 +1,35 @@
 ﻿using System.Globalization;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenStove;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.AccelerationPlate;
 using PlusLevelStudio.Editor;
 using TMPro;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
 {
-
-    internal class KitchenStoveExchangeHandler : BaseEditorOverlayUIExchangeHandler
+    internal class AccelerationPlateExchangeHandler : BaseEditorOverlayUIExchangeHandler
     {
+
         private TextMeshProUGUI uses;
+
+        private TextMeshProUGUI cooldownTitle;
 
         private TextMeshProUGUI cooldown;
 
-        private TextMeshProUGUI cookingTime;
+        private TextMeshProUGUI unpressTime;
 
-        private TextMeshProUGUI coolingTime;
+        private TextMeshProUGUI initialSpeed;
+
+        private TextMeshProUGUI acceleration;
 
         private TextMeshProUGUI showsUses;
 
         private TextMeshProUGUI showsCooldown;
 
-        private TextMeshProUGUI cooldownTitle;
-
         private bool somethingChanged;
 
-        private KitchenStoveLocation loc;
+        private AccelerationPlateLocation loc;
 
-        public void OnInitialized(KitchenStoveLocation loc)
+        public void OnInitialized(AccelerationPlateLocation loc)
         {
             this.loc = loc;
         }
@@ -36,50 +37,21 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
         public override void OnElementsCreated()
         {
             base.OnElementsCreated();
-            Transform transform = base.transform.Find("UsesBox");
-            if (transform != null)
-            {
-                uses = transform.GetComponent<TextMeshProUGUI>();
-            }
-
-            Transform transform2 = base.transform.Find("CooldownBox");
-            if (transform2 != null)
-            {
-                cooldown = transform2.GetComponent<TextMeshProUGUI>();
-            }
-
-            Transform transform3 = base.transform.Find("CookingTimeBox");
-            if (transform3 != null)
-            {
-                cookingTime = transform3.GetComponent<TextMeshProUGUI>();
-            }
-
-            Transform transform4 = base.transform.Find("CoolingTimeBox");
-            if (transform4 != null)
-            {
-                coolingTime = transform4.GetComponent<TextMeshProUGUI>();
-            }
-
-            Transform transform5 = base.transform.Find("ShowsUses");
-            if (transform5 != null)
-            {
-                showsUses = transform5.GetComponent<TextMeshProUGUI>();
-            }
-
-            Transform transform6 = base.transform.Find("ShowsCooldown");
-            if (transform6 != null)
-            {
-                showsCooldown = transform6.GetComponent<TextMeshProUGUI>();
-            }
-
-            cooldownTitle = base.transform.Find("Cooldown").GetComponent<TextMeshProUGUI>();
+            uses = transform?.Find("UsesBox")?.GetComponent<TextMeshProUGUI>();
+            cooldown = transform?.Find("CooldownBox")?.GetComponent<TextMeshProUGUI>();
+            unpressTime = transform?.Find("UnpressTimeBox")?.GetComponent<TextMeshProUGUI>();
+            initialSpeed = transform?.Find("InitialSpeedBox")?.GetComponent<TextMeshProUGUI>();
+            acceleration = transform?.Find("AccelerationBox")?.GetComponent<TextMeshProUGUI>();
+            showsUses = transform?.Find("ShowsUses")?.GetComponent<TextMeshProUGUI>();
+            showsCooldown = transform.Find("ShowsCooldown")?.GetComponent<TextMeshProUGUI>();
+            cooldownTitle = transform?.Find("Cooldown")?.GetComponent<TextMeshProUGUI>();
         }
 
         public void Refresh()
         {
             if (uses != null)
             {
-                if (loc.uses == 0)
+                if (loc.uses == 0) 
                     uses.text = "INF";
                 else
                     uses.text = loc.uses.ToString();
@@ -103,16 +75,22 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
                 }
             }
 
-            if (cookingTime != null)
+            if (unpressTime != null)
             {
-                cookingTime.text = loc.cookingTime.ToString();
-                CheckIfFloatIsVisualized(cookingTime);
+                unpressTime.text = loc.unpressTime.ToString();
+                CheckIfFloatIsVisualized(unpressTime);
             }
 
-            if (coolingTime != null)
+            if (initialSpeed != null)
             {
-                coolingTime.text = loc.coolingTime.ToString();
-                CheckIfFloatIsVisualized(coolingTime);
+                initialSpeed.text = loc.initialSpeed.ToString();
+                CheckIfFloatIsVisualized(initialSpeed);
+            }
+
+            if (acceleration != null)
+            {
+                acceleration.text = loc.acceleration.ToString();
+                CheckIfFloatIsVisualized(acceleration);
             }
 
             if (showsUses != null)
@@ -176,21 +154,31 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
 
                 Refresh();
             }
-            else if (message == "setCookingTime")
+            else if (message == "setUnpressTime")
             {
                 if (float.TryParse((string)data, NumberStyles.Float, AdvancedCore.StandardCultureInfo, out float result))
                 {
-                    loc.cookingTime = result;
+                    loc.unpressTime = result;
                     somethingChanged = true;
                 }
 
                 Refresh();
             }
-            else if (message == "setCoolingTime")
+            else if (message == "setInitSpeed")
             {
                 if (float.TryParse((string)data, NumberStyles.Float, AdvancedCore.StandardCultureInfo, out float result))
                 {
-                    loc.coolingTime = result;
+                    loc.initialSpeed = result;
+                    somethingChanged = true;
+                }
+
+                Refresh();
+            }
+            else if (message == "setAcceleration")
+            {
+                if (float.TryParse((string)data, NumberStyles.Float, AdvancedCore.StandardCultureInfo, out float result))
+                {
+                    loc.acceleration = result;
                     somethingChanged = true;
                 }
 
@@ -215,8 +203,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
 
                 Refresh();
             }
+            
 
             base.SendInteractionMessage(message, data);
+
         }
+
     }
 }

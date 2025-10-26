@@ -2,7 +2,6 @@
 using System.IO;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
 using PlusStudioLevelLoader;
@@ -18,9 +17,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
 
         public ushort uses;
 
-        public bool cooldownOverridden;
-
-        public float cooldown;
+        public float cooldown = -1f;
 
         public float cookingTime;
 
@@ -44,11 +41,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
             info.data.Add(new StructureDataInfo()
             {
                 data = uses
-            });
-
-            info.data.Add(new StructureDataInfo()
-            {
-                data = cooldownOverridden.ToInt()
             });
 
             info.data.Add(new StructureDataInfo()
@@ -99,7 +91,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
             direction = (Direction)reader.ReadByte();
 
             uses = reader.ReadUInt16();
-            cooldownOverridden = reader.ReadBoolean();
             cooldown = reader.ReadSingle();
             cookingTime = reader.ReadSingle();
             coolingTime = reader.ReadSingle();
@@ -114,7 +105,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
             writer.Write((byte)direction);
 
             writer.Write(uses);
-            writer.Write(cooldownOverridden);
             writer.Write(cooldown);
             writer.Write(cookingTime);
             writer.Write(coolingTime);

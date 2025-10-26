@@ -43,24 +43,24 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         {
             base.Load(data);
 
-            for (int i = 0; i < data.Count; i += 7)
+            for (int i = 0; i < data.Count; i += 9)
             {
-                AccelerationPlate plate = (AccelerationPlate)
-                    BuildPrefab(data[i].prefab.GetComponent<AccelerationPlate>(), 
-                        ec.cells[data[i].position.x, data[i].position.z], data[i].direction);
+                AccelerationPlate plate = (AccelerationPlate)BuildPrefab(data[i].prefab.GetComponent<AccelerationPlate>(), 
+                    ec.cells[data[i].position.x, data[i].position.z], data[i].direction);
 
-                int dirsCount = data[i].data;
-                Debug.Log($"Dirs count: {dirsCount}");
-                for (int j = 0; j < dirsCount; j++)
+                float firstAngle = data[i].direction.ToDegrees();
+
+                for (int j = 1; j <= data[i].data; j++)
                 {
-                    plate.DefineRotateDirection(data[i].direction.ToDegrees() + j * 90f);
+                    plate.DefineRotateDirection(firstAngle + data[i + j].data.ConvertToFloatNoRecast());
                 }
+                i += data[i].data;
 
-                plate.UpdateAngleIndex(data[i].direction.ToDegrees());
-                plate.SetRotation(data[i].direction.ToDegrees());
+                plate.UpdateAngleIndex(firstAngle);
+                plate.SetRotation(firstAngle);
 
-                plate.Data.showsUses = data[i + 4].data.ToBool();
-                plate.Data.showsCooldown = data[i + 5].data.ToBool();
+                plate.Data.showsUses = data[i + 6].data.ToBool();
+                plate.Data.showsCooldown = data[i + 7].data.ToBool();
 
                 plate.SetMaxUses(data[i + 1].data);
 
@@ -68,10 +68,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                     plate.ForcefullyPatchCooldown(data[i + 2].data.ConvertToFloatNoRecast());
 
                 plate.Data.timeToUnpress = data[i + 3].data.ConvertToFloatNoRecast();
+                plate.initialSpeed = data[i + 4].data.ConvertToFloatNoRecast();
+                plate.acceleration = data[i + 5].data.ConvertToFloatNoRecast();
 
-                if (data.Count >= i + 5 && data[i + 6].prefab == null)
+                if (data.Count - 1 > i + 7 && data[i + 8].prefab == null)
                 {
-                    GameButtonBase button = GameButton.Build(buttonPre, ec, data[i + 6].position, data[i + 6].direction);
+                    GameButtonBase button = GameButton.Build(buttonPre, ec, data[i + 8].position, data[i + 8].direction);
                     button.SetUp(plate);
                 }
                 else i--;

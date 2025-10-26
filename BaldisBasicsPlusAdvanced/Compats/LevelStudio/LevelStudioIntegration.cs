@@ -198,6 +198,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             GameObject accelPlate = CorrectPlateCollider(
                 AddStructureVisualPrefab("adv_acceleration_plate", "acceleration_plate", ObjectsStorage.Objects["acceleration_plate"]))
                     .gameObject;
+            accelPlate.AddComponent<MoveAndSettingsComponent>().offset = Vector3.up * 15f;
 
             GameObject arrowTempPre = GameObject.Instantiate(AssetsHelper.LoadAsset<AnimatedSpriteRotator>("Arrow")).gameObject;
 
@@ -222,6 +223,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 }
             }
 
+            arrowTempPre.gameObject.SetActive(false);
             arrowTempPre.AddComponent<BoxCollider>().size = Vector3.one * 3f;
             arrowTempPre.AddComponent<AccelerationPlateArrow>();
             arrowTempPre.layer = LevelStudioPlugin.editorInteractableLayer;
@@ -238,8 +240,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 arrowComp.renderer = arrow.GetComponentInChildren<SpriteRenderer>();
 
                 if (i != 0)
-                    arrowComp.renderer.color = Color.gray;
+                {
+                    arrowComp.directionActive = false;
+                }
+                else arrowComp.directionActive = true;
             }
+
+            GameObject.DestroyImmediate(arrowTempPre.gameObject);
 
             #endregion
 

@@ -18,9 +18,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
         public ushort uses;
 
-        public bool cooldownOverridden;
-
-        public float cooldown;
+        public float cooldown = -1f;
 
         public float unpressTime;
 
@@ -58,11 +56,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
 
             info.data.Add(new StructureDataInfo()
             {
-                data = cooldownOverridden.ToInt()
-            });
-
-            info.data.Add(new StructureDataInfo()
-            {
                 data = PlusStudioLevelLoader.WeirdTechExtensions.ConvertToIntNoRecast(cooldown)
             });
 
@@ -90,7 +83,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
             writer.Write((byte)direction);
 
             writer.Write(uses);
-            writer.Write(cooldownOverridden);
             writer.Write(cooldown);
             writer.Write(unpressTime);
             writer.Write(showsUses);
@@ -105,7 +97,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
             direction = (Direction)reader.ReadByte();
 
             uses = reader.ReadUInt16();
-            cooldownOverridden = reader.ReadBoolean();
             cooldown = reader.ReadSingle();
             unpressTime = reader.ReadSingle();
             showsUses = reader.ReadBoolean();

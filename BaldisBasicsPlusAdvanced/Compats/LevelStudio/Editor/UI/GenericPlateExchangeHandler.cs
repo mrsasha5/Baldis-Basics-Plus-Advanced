@@ -78,7 +78,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
 
             if (cooldownTitle != null)
             {
-                if (loc.cooldownOverridden)
+                if (loc.cooldown >= 0f)
                     cooldownTitle.color = Color.white;
                 else
                     cooldownTitle.color = Color.grey;
@@ -86,7 +86,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
 
             if (cooldown != null)
             {
-                if (!loc.cooldownOverridden) cooldown.text = "NO";
+                if (loc.cooldown < 0f) cooldown.text = "NO";
                 else
                 {
                     cooldown.text = loc.cooldown.ToString();
@@ -179,7 +179,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI
             }
             else if (message == "toggleCooldownOverriding")
             {
-                loc.cooldownOverridden = !loc.cooldownOverridden;
+                if (loc.cooldown >= 0f) loc.cooldown = -1f;
+                else loc.cooldown = 0f;
 
                 Refresh();
             }

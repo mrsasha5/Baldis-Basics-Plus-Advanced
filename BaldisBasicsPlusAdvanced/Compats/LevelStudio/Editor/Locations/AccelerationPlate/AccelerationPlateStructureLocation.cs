@@ -56,12 +56,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Accelera
 
         private bool OnDeletePlate(EditorLevelData level, SimpleLocation loc)
         {
-            int index = plates.IndexOf((AccelerationPlateLocation)loc);
-
             EditorController.Instance.RemoveVisual(loc);
-            EditorController.Instance.RemoveVisual(plates[index].button);
+            if (((AccelerationPlateLocation)loc).button != null) 
+                EditorController.Instance.RemoveVisual(((AccelerationPlateLocation)loc).button);
 
-            plates.RemoveAt(index);
+            plates.Remove((AccelerationPlateLocation)loc);
 
             return true;
         }
@@ -72,6 +71,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Accelera
             {
                 if (plates[i].button == loc)
                 {
+                    EditorController.Instance.RemoveVisual(plates[i]);
                     EditorController.Instance.RemoveVisual(plates[i].button);
                     plates.RemoveAt(i);
 
@@ -129,7 +129,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Accelera
             for (int i = 0; i < plates.Count; i++)
             {
                 plates[i].position -= cellOffset;
-                plates[i].button.position -= cellOffset;
+                if (plates[i].button != null) plates[i].button.position -= cellOffset;
             }
         }
 
@@ -137,7 +137,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Accelera
         {
             for (int i = 0; i < plates.Count; i++)
             {
-                if (!plates[i].ValidatePosition(data, ignoreSelf: true) || !plates[i].button.ValidatePosition(data, ignoreSelf: true))
+                if (!plates[i].ValidatePosition(data, ignoreSelf: true) || 
+                    (plates[i].button != null && !plates[i].button.ValidatePosition(data, ignoreSelf: true)))
                 {
                     OnDeletePlate(data, plates[i]);
                 }

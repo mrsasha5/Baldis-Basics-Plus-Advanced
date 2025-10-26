@@ -92,6 +92,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         protected virtual bool VisualActiveStateOverridden => false;
 
+        protected virtual bool UsesSystemOverridden => false;
+
         protected virtual bool UnpressesItself => true;
 
         protected virtual bool UnpressesWithNoReason => false;
@@ -378,8 +380,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
             UpdateVisualPressedState(true);
             if (IsUsable)
             {
-                if (!data.hasInfinityUses) uses++;
-                SetVisualUses(uses, data.maxUses);
+                if (!UsesSystemOverridden) LoseOneUse();
                 VirtualOnPress();
             }
             UpdateVisualActiveState();
@@ -474,6 +475,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
             data.SetUses(uses);
             SetVisualUses(this.uses, data.maxUses);
             UpdateVisualActiveState();
+        }
+
+        protected void LoseOneUse()
+        {
+            if (!data.hasInfinityUses) uses++;
+            SetVisualUses(uses, data.maxUses);
         }
 
         public void SetUses(int uses)

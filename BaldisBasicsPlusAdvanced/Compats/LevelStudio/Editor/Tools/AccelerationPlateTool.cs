@@ -114,9 +114,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 
                 if (buttonless)
                 {
+                    notConnectedPlate = null;
                     EditorController.Instance.AddHeldUndo();
                     EditorController.Instance.SwitchToTool(null);
-                    notConnectedPlate = null;
                 }
 
                 return;

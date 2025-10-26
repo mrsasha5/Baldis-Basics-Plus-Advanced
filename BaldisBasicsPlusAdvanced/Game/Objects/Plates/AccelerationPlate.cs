@@ -46,7 +46,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 
         public bool IsRotatable => potentialAngles.Count > 1;
 
-        protected override bool UnpressesWithNoReason => base.UnpressesWithNoReason || cooldownTime <= 0f;
+        protected override bool UnpressesWithNoReason => IsUsable && (base.UnpressesWithNoReason || cooldownTime <= 0f);
+
+        protected override bool UsesSystemOverridden => true;
 
         public void ConnectButton(GameButtonBase button)
         {
@@ -197,7 +199,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         protected override void VirtualOnUnpress()
         {
             base.VirtualOnUnpress();
-            if (entities.Count <= 0) return;
+            if (entities.Count <= 0 || !IsUsable) return;
+            LoseOneUse();
+
             audMan.PlaySingle(audBoing);
             float time = Math.Abs(initialSpeed / acceleration);
 

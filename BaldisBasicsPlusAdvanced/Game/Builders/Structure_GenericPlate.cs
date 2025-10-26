@@ -98,22 +98,20 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         {
             base.Load(data);
 
-            for (int i = 0; i < data.Count; i++)
+            for (int i = 0; i < data.Count; i += 6)
             {
                 BasePlate plate = BuildPrefab(data[i].prefab.GetComponent<BasePlate>(),
                     ec.cells[data[i].position.x, data[i].position.z], data[i].direction);
 
-                plate.Data.showsUses = data[i + 5].data.ToBool();
-                plate.Data.showsCooldown = data[i + 6].data.ToBool();
+                plate.Data.showsUses = data[i + 4].data.ToBool();
+                plate.Data.showsCooldown = data[i + 5].data.ToBool();
 
                 plate.SetMaxUses(data[i + 1].data);
 
-                if (data[i + 2].data.ToBool())
-                    plate.ForcefullyPatchCooldown(data[i + 3].data.ConvertToFloatNoRecast());
+                if (data[i + 2].data.ConvertToFloatNoRecast() >= 0f)
+                    plate.ForcefullyPatchCooldown(data[i + 2].data.ConvertToFloatNoRecast());
 
-                plate.Data.timeToUnpress = data[i + 4].data.ConvertToFloatNoRecast();
-
-                i += 6;
+                plate.Data.timeToUnpress = data[i + 3].data.ConvertToFloatNoRecast();
             }
 
         }
