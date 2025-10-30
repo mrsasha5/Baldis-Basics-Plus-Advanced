@@ -80,6 +80,8 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         private static Dictionary<string, RoomFunctionContainer> roomFunctionsContainers = new Dictionary<string, RoomFunctionContainer>();
 
+        private static List<PosterObject> posters = new List<PosterObject>();
+
         public static Dictionary<string, SceneObject> SceneObjects => sceneObjects;
 
         public static Dictionary<string, NPC> Npcs => npcs;
@@ -107,6 +109,8 @@ namespace BaldisBasicsPlusAdvanced.Cache
         public static Dictionary<string, RoomGroup> RoomGroups => roomGroups;
 
         public static Dictionary<string, RoomFunctionContainer> RoomFunctionsContainers => roomFunctionsContainers;
+
+        public static List<PosterObject> Posters => posters;
 
         public static Dictionary<string, BaseTrigger> Triggers => triggers;
 

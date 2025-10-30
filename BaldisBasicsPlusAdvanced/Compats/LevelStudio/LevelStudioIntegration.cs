@@ -17,11 +17,13 @@ using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
+using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Reflection;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelFormat;
+using PlusStudioLevelLoader;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
@@ -471,6 +473,16 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new RoomTool("adv_advanced_class", AssetsStorage.sprites["adv_editor_advanced_class_floor"]));
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
                 new RoomTool("adv_corn_field", AssetsStorage.sprites["adv_editor_corn_field"]));
+
+            foreach (PosterObject poster in ObjectsStorage.Posters)
+            {
+                if (poster.name.StartsWith("Adv_Poster_Recipe"))
+                    EditorInterfaceModes.AddToolToCategory(mode, "posters", 
+                        new IndependentInfoPosterTool(poster.name.ToLower().Replace("_poster", ""), "Ed_Poster_Title_adv_recipe_example",
+                            "Ed_Poster_Desc_adv_recipe_example"));
+                else
+                    EditorInterfaceModes.AddToolToCategory(mode, "posters", new PosterTool(poster.name.ToLower().Replace("_poster", "")));
+            }
         }
 
         private static void InitializeTextureContainers(Dictionary<string, TextureContainer> containers)

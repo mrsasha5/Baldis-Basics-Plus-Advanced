@@ -1,8 +1,10 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BepInEx;
 using MTM101BaldAPI.PlusExtensions;
 using MTM101BaldAPI.UI;
+using PlusStudioLevelLoader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +23,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         #region Values for poster
 
-        private static Texture2D posterTex = AssetsHelper.TextureFromFile("Textures/Posters/adv_poster_recipe_example.png");
+        private static Texture2D posterTex = AssetsHelper.TextureFromFile("Textures/Posters/Adv_Poster_Recipe_Example.png");
 
         private static IntVector2[] posterRawFoodPositions = new IntVector2[]
                 { new IntVector2(23, -118), new IntVector2(61, -118),
@@ -283,7 +285,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         internal FoodRecipeData CreateRecipePoster()
         {
             posterObj = ScriptableObject.CreateInstance<ExtendedPosterObject>();
-            Poster.name = $"RecipePoster_{KitchenStove.RecipeData.Count + 1}";
+            Poster.name = $"Adv_Poster_Recipe_{KitchenStove.RecipeData.Count + 1}";
             Poster.baseTexture = posterTex;
             Poster.textData = new PosterTextData[]
             {
@@ -323,6 +325,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             };
 
             RefreshOverlayData();
+
+            ObjectsStorage.Posters.Add(posterObj);
+
+            LevelLoaderPlugin.Instance.posterAliases.Add(Poster.name.ToLower().Replace("_poster", ""), posterObj);
 
             return this;
         }

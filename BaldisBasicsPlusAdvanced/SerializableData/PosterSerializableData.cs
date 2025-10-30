@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
 using MTM101BaldAPI.UI;
@@ -13,22 +14,34 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
     public class PosterSerializableData
     {
 
-        public static PosterObject GetPosterFromFile(string pngPath, bool overrideBasePath = false)
+        internal static PosterTextData[] emptyTextArray = new PosterTextData[0];
+
+        public static PosterObject GetPosterAndDataFromFile(string pngPath, bool overrideBasePath, out PosterSerializableData posterData)
         {
             string jsonPath = overrideBasePath ? pngPath.Replace(".png", ".json") : AssetsHelper.modPath + pngPath.Replace(".png", ".json");
 
-            PosterSerializableData posterData = null;
+            posterData = null;
 
             if (File.Exists(jsonPath))
             {
+                Debug.Log(jsonPath);
                 posterData = GetFromFile(jsonPath);
             }
 
-            PosterObject posterObject = 
+            PosterObject posterObject =
                 ObjectCreators.CreatePosterObject(AssetsHelper.TextureFromFile(pngPath, overrideBasePath),
-                    posterData == null ? new PosterTextData[0] : posterData.Texts);
+                    posterData == null || posterData.Texts == null || posterData.Texts.Length == 0 ? emptyTextArray : posterData.Texts);
+
+            posterObject.name = Path.GetFileNameWithoutExtension(pngPath);
+
+            ObjectsStorage.Posters.Add(posterObject);
 
             return posterObject;
+        }
+
+        public static PosterObject GetPosterFromFile(string pngPath, bool overrideBasePath = false)
+        {
+            return GetPosterAndDataFromFile(pngPath, overrideBasePath, out _);
         }
 
         public static PosterSerializableData GetFromFile(string path)

@@ -273,29 +273,27 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadModTexture("adv_poster_criss_the_crystal", "Npcs/CrissTheCrystal/adv_poster_criss_the_crystal.png");
 
             //ROOMS AND POSTERS
-            LoadModTexture("adv_poster_symbol_machine", "Posters/adv_poster_symbol_machine.png");
-            LoadModTexture("adv_poster_extra_points", "Posters/adv_poster_extra_points.png");
-            LoadModTexture("adv_poster_recipe_example", "Posters/adv_poster_recipe_example.png");
+            LoadModTexture("adv_poster_recipe_example", "Posters/Adv_Poster_Recipe_Example.png");
 
-            LoadModTexture("adv_english_ceiling", "Rooms/EnglishClass/adv_english_ceiling.png");
-            LoadModTexture("adv_english_floor", "Rooms/EnglishClass/adv_english_floor.png");
-            LoadModTexture("adv_english_wall", "Rooms/EnglishClass/adv_english_wall.png");
-            LoadModTexture("adv_english_class_bg", "Rooms/EnglishClass/adv_english_class_bg.png");
-            LoadModTexture("adv_english_class_door_closed", "Rooms/EnglishClass/adv_english_door_closed.png");
-            LoadModTexture("adv_english_class_door_open", "Rooms/EnglishClass/adv_english_door_open.png");
+            LoadModTexture("adv_english_ceiling", "Rooms/EnglishClass/Adv_English_Ceiling.png");
+            LoadModTexture("adv_english_floor", "Rooms/EnglishClass/Adv_English_Floor.png");
+            LoadModTexture("adv_english_wall", "Rooms/EnglishClass/Adv_English_Wall.png");
+            LoadModTexture("adv_english_class_bg", "Rooms/EnglishClass/Adv_English_Class_Bg.png");
+            LoadModTexture("adv_english_class_door_closed", "Rooms/EnglishClass/Adv_English_Door_Closed.png");
+            LoadModTexture("adv_english_class_door_open", "Rooms/EnglishClass/Adv_English_Door_Open.png");
 
-            LoadModTexture("adv_advanced_class_ceiling", "Rooms/AdvancedClass/adv_advanced_class_ceiling.png");
-            LoadModTexture("adv_advanced_class_floor", "Rooms/AdvancedClass/adv_advanced_class_floor.png");
-            LoadModTexture("adv_advanced_class_wall", "Rooms/AdvancedClass/adv_advanced_class_wall.png");
-            LoadModTexture("adv_advanced_class_door_closed", "Rooms/AdvancedClass/adv_advanced_class_door_closed.png");
-            LoadModTexture("adv_advanced_class_door_open", "Rooms/AdvancedClass/adv_advanced_class_door_open.png");
-            LoadModTexture("adv_advanced_class_bg", "Rooms/AdvancedClass/adv_advanced_class_bg.png");
-            LoadModTexture("adv_advanced_class_lamp", "Rooms/AdvancedClass/adv_advanced_class_lamp.png");
+            LoadModTexture("adv_advanced_class_ceiling", "Rooms/AdvancedClass/Adv_Advanced_Class_Ceiling.png");
+            LoadModTexture("adv_advanced_class_floor", "Rooms/AdvancedClass/Adv_Advanced_Class_Floor.png");
+            LoadModTexture("adv_advanced_class_wall", "Rooms/AdvancedClass/Adv_Advanced_Class_Wall.png");
+            LoadModTexture("adv_advanced_class_door_closed", "Rooms/AdvancedClass/Adv_Advanced_Class_Door_Closed.png");
+            LoadModTexture("adv_advanced_class_door_open", "Rooms/AdvancedClass/Adv_Advanced_Class_Door_Open.png");
+            LoadModTexture("adv_advanced_class_bg", "Rooms/AdvancedClass/Adv_Advanced_Class_bg.png");
+            LoadModTexture("adv_advanced_class_lamp", "Rooms/AdvancedClass/Adv_Advanced_Class_Lamp.png");
 
-            LoadModTexture("adv_school_council_door_open", "Rooms/SchoolCouncil/adv_school_council_door_open.png");
-            LoadModTexture("adv_school_council_door_closed", "Rooms/SchoolCouncil/adv_school_council_door_closed.png");
-            LoadModTexture("adv_school_council_wall", "Rooms/SchoolCouncil/adv_school_council_wall.png");
-            LoadModTexture("adv_school_council_bg", "Rooms/SchoolCouncil/adv_school_council_bg.png");
+            LoadModTexture("adv_school_council_door_open", "Rooms/SchoolCouncil/Adv_School_Council_Door_Open.png");
+            LoadModTexture("adv_school_council_door_closed", "Rooms/SchoolCouncil/Adv_School_Council_Door_Closed.png");
+            LoadModTexture("adv_school_council_wall", "Rooms/SchoolCouncil/Adv_School_Council_Wall.png");
+            LoadModTexture("adv_school_council_bg", "Rooms/SchoolCouncil/Adv_School_Council_Bg.png");
             //Rooms & posters END
 
             LoadModTexture("adv_ballot_front", "Objects/VotingBallot/adv_ballot_front.png");
@@ -720,14 +718,14 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
                     pitStop.posters.Add(new PosterData()
                     {
-                        poster = ObjectCreators.CreatePosterObject(textures["adv_poster_extra_points"], new PosterTextData[0]),
+                        poster = ObjectsStorage.Posters.Find(x => x.name == "Adv_Poster_Extra_Points"),
                         position = new IntVector2(36, 3),
                         direction = Direction.East
                     });
 
                     pitStop.posters.Add(new PosterData()
                     {
-                        poster = ObjectCreators.CreatePosterObject(textures["adv_poster_symbol_machine"], new PosterTextData[0]),
+                        poster = ObjectsStorage.Posters.Find(x => x.name == "Adv_Poster_Symbol_Machine"),
                         position = new IntVector2(39, 4),
                         direction = Direction.East
                     });
@@ -736,8 +734,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                     {
                         pitStop.posters.Add(new PosterData()
                         {
-                            poster = PosterSerializableData.
-                            GetPosterFromFile("Textures/Posters/Advertisement/Adv_Poster_RecommendedCharacters_Ad.png"),
+                            poster = ObjectsStorage.Posters.Find(x => x.name == "Adv_Poster_Recommended_Characters_Ad"),
                             position = new IntVector2(39, 5),
                             direction = Direction.East
                         });
@@ -749,8 +746,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                     {
                         pitStop.posters.Add(new PosterData()
                         {
-                            poster = PosterSerializableData.
-                                GetPosterFromFile("Textures/Posters/Advertisement/Adv_Poster_ContentPacks_Ad.png"),
+                            poster = ObjectsStorage.Posters.Find(x => x.name == "Adv_Poster_Content_Packs_Ad"),
                             position = new IntVector2(39, 6),
                             direction = Direction.East
                         });
@@ -785,10 +781,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
                     pitStop.posters.Add(new PosterData()
                     {
-                        poster = ObjectCreators.CreatePosterObject(
-                            AssetsHelper.TextureFromFile("Textures/Posters/adv_poster_kitchen_stove.png"),
-                            PosterSerializableData.GetFromFile(
-                                AssetsHelper.modPath + "Textures/Posters/adv_poster_kitchen_stove.json").Texts),
+                        poster = ObjectsStorage.Posters.Find(x => x.name == "Adv_Poster_Kitchen_Stove"),
                         position = new IntVector2(36, 13),
                         direction = Direction.East
                     });

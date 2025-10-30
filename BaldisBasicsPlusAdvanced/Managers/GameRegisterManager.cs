@@ -1277,9 +1277,14 @@ namespace BaldisBasicsPlusAdvanced.Managers
         #endregion
 
         #region Generic Posters Initialization
+
         public static void InitializePosters()
         {
-            PosterTextData[] emptyTextArray = new PosterTextData[0];
+            PosterSerializableData.GetPosterFromFile("Textures/Posters/Advertisement/Adv_Poster_Recommended_Characters_Ad.png");
+            PosterSerializableData.GetPosterFromFile("Textures/Posters/Advertisement/Adv_Poster_Content_Packs_Ad.png");
+            PosterSerializableData.GetPosterFromFile("Textures/Posters/Adv_Poster_Kitchen_Stove.png");
+            PosterSerializableData.GetPosterFromFile("Textures/Posters/Adv_Poster_Symbol_Machine.png");
+            PosterSerializableData.GetPosterFromFile("Textures/Posters/Adv_Poster_Extra_Points.png");
 
             foreach (string path in Directory.GetFiles(
                 AssetsHelper.modPath + "Textures/Posters/GenericPosters/", "*.png", SearchOption.AllDirectories))
@@ -1288,18 +1293,14 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
                 if (!File.Exists(jsonPath)) throw new Exception("Json for generic poster is missing!");
 
-                PosterSerializableData posterData = PosterSerializableData.GetFromFile(jsonPath);
+                PosterObject poster = 
+                    PosterSerializableData.GetPosterAndDataFromFile(path, overrideBasePath: true, out PosterSerializableData data);
 
                 ObjectsStorage.WeightedPosterObjects.Add(new WeightedPosterObject()
                 {
-                    selection = ObjectCreators.CreatePosterObject(
-                        AssetsHelper.TextureFromFile(path, overrideBasePath: true),
-                            posterData.Texts != null ? posterData.Texts : emptyTextArray),
-                    weight = posterData.weight
+                    selection = poster,
+                    weight = data.weight
                 });
-
-                ObjectsStorage.WeightedPosterObjects[ObjectsStorage.WeightedPosterObjects.Count - 1]
-                    .selection.name = Path.GetFileNameWithoutExtension(path);
             }
         }
 

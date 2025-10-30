@@ -39,29 +39,49 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 }
             }
 
+            InitializeNpcs();
+            InitializePosters();
+            InitializeDoors();
+            InitializeLights();
+            InitializeObjects();
+            InitializeActivities();
+            InitializeStructures();
+            InitializeRoomSettings();
+            InitializeRoomTextureAliases();
+        }
+
+        private static void InitializeNpcs()
+        {
             LevelLoaderPlugin.Instance.npcAliases.Add("adv_criss_the_crystal", ObjectsStorage.Npcs["CrissTheCrystal"]);
+        }
 
-            LevelLoaderPlugin.Instance.windowObjects.Add("adv_big_hole", 
+        private static void InitializePosters()
+        {
+            foreach (PosterObject poster in ObjectsStorage.Posters)
+            {
+                LevelLoaderPlugin.Instance.posterAliases.Add(poster.name.ToLower().Replace("_poster", ""), poster);
+            }
+        }
+
+        private static void InitializeDoors()
+        {
+            LevelLoaderPlugin.Instance.windowObjects.Add("adv_big_hole",
                 ObjectsStorage.Npcs["CrissTheCrystal"].GetComponent<CrissTheCrystal>().windowObjectPre);
+        }
 
-            LevelLoaderPlugin.Instance.lightTransforms.Add("adv_advanced_education_lamp", 
+        private static void InitializeLights()
+        {
+            LevelLoaderPlugin.Instance.lightTransforms.Add("adv_advanced_education_lamp",
                 AssetsHelper.LoadAsset<Transform>("AdvancedClassLampLight"));
+        }
 
-            //Symbol Machine
+        private static void InitializeObjects()
+        {
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_symbol_machine", ObjectsStorage.Objects["symbol_machine"]);
-
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_voting_ballot", ObjectsStorage.Objects["voting_ballot"]);
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_farm_finish_flag", ObjectsStorage.Objects["farm_flag"]);
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_farm_finish_points_flag", ObjectsStorage.Objects["farm_points_flag"]);
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_farm_sign1", ObjectsStorage.Objects["farm_sign1"]);
-
-            InitializeActivities();
-
-            InitializeStructures();
-
-            InitializeRoomSettings();
-
-            InitializeRoomTextureAliases();
         }
 
         private static void InitializeStructures()
