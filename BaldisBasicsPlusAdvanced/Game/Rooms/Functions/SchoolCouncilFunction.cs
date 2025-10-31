@@ -1,25 +1,30 @@
 ﻿using BaldisBasicsPlusAdvanced.Game.Events;
-using System;
+using BaldisBasicsPlusAdvanced.Game.Objects;
 
 namespace BaldisBasicsPlusAdvanced.Game.Rooms.Functions
 {
     public class SchoolCouncilFunction : RoomFunction
     {
-        private VotingEvent eventInstance;
 
-        private LevelBuilder levelBuilder;
-
-        public LevelBuilder LevelBuilder => levelBuilder;
+        private VotingEvent voting;
 
         public void Assign(VotingEvent votingEvent)
         {
-            this.eventInstance = votingEvent;
+            voting = votingEvent;
         }
 
-        public override void Build(LevelBuilder builder, Random rng)
+        public override void OnGenerationFinished()
         {
-            base.Build(builder, rng);
-            this.levelBuilder = builder;
+            base.OnGenerationFinished();
+            if (voting != null && voting.Screens.Count == 0)
+            {
+                foreach (VotingCeilingScreen screen in FindObjectsOfType<VotingCeilingScreen>())
+                {
+                    voting.Screens.Add(screen);
+                }
+
+                voting.UpdateTexts();
+            }
         }
 
     }

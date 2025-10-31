@@ -6,13 +6,11 @@ using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
-using BepInEx.Logging;
 using HarmonyLib;
 using MTM101BaldAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Mono.Security.X509.X520;
 
 namespace BaldisBasicsPlusAdvanced.Managers
 {

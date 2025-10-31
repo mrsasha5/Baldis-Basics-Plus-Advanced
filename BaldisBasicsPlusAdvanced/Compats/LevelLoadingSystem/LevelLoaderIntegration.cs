@@ -37,8 +37,10 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                     string key = "adv_" + name;
                     LevelLoaderPlugin.Instance.basicObjects.Add(key, plate.gameObject);
                 }
+            
             }
 
+            InitializeEvents();
             InitializeNpcs();
             InitializePosters();
             InitializeDoors();
@@ -48,6 +50,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
             InitializeStructures();
             InitializeRoomSettings();
             InitializeRoomTextureAliases();
+        }
+
+        private static void InitializeEvents()
+        {
+            LevelLoaderPlugin.Instance.randomEventAliases.Add("adv_disappearing_characters", ObjectsStorage.Events["DisappearingCharacters"]);
+            LevelLoaderPlugin.Instance.randomEventAliases.Add("adv_cold_school", ObjectsStorage.Events["ColdSchool"]);
+            LevelLoaderPlugin.Instance.randomEventAliases.Add("adv_portal_chaos", ObjectsStorage.Events["PortalChaos"]);
+            LevelLoaderPlugin.Instance.randomEventAliases.Add("adv_voting", ObjectsStorage.Events["Voting"]);
         }
 
         private static void InitializeNpcs()
@@ -82,6 +92,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_farm_finish_flag", ObjectsStorage.Objects["farm_flag"]);
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_farm_finish_points_flag", ObjectsStorage.Objects["farm_points_flag"]);
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_farm_sign1", ObjectsStorage.Objects["farm_sign1"]);
+            LevelLoaderPlugin.Instance.basicObjects.Add("adv_voting_ceiling_screen", ObjectsStorage.Objects["voting_screen"]);
         }
 
         private static void InitializeStructures()
@@ -251,7 +262,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 
         private static void InitializeRoomTextureAliases()
         {
-            //What the heck, why texture keys are named through PascalCase in Level Loader, while other stuff use snake_case
             LevelLoaderPlugin.Instance.roomTextureAliases.Add(
                 "adv_english_ceiling", AssetsStorage.textures["adv_english_ceiling"]);
             LevelLoaderPlugin.Instance.roomTextureAliases.Add(

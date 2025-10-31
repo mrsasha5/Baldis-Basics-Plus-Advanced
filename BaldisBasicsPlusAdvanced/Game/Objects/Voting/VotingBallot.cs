@@ -221,9 +221,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
             chalkboardMenu.GetText("title").font = bigFont.FontAsset();
             chalkboardMenu.GetText("title").fontSize = bigFont.FontSize();
 
-            chalkboardMenu.GetText("info").text = chosenTopic.Desc;
-            chalkboardMenu.GetText("info").font = smallFont.FontAsset();
-            chalkboardMenu.GetText("info").fontSize = smallFont.FontSize();
+            if (chosenTopic != null)
+            {
+                chalkboardMenu.GetText("info").text = chosenTopic.Desc;
+                chalkboardMenu.GetText("info").font = smallFont.FontAsset();
+                chalkboardMenu.GetText("info").fontSize = smallFont.FontSize();
+            }
 
             UpdateChalkBoard(player);
 
@@ -361,9 +364,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
 
         public bool ShouldVotingBeEnded()
         {
+            if (votingEvent.Ec.Npcs.Count == 0 && !IsPlayerVoted()) return false;
+
             int npcsLeft = votingEvent.Ec.Npcs.Count - CountTotalVotes();
+
             if (npcsLeft <= 0) return true;
-            return (CountPosVotes() > npcsLeft || CountNegVotes() > npcsLeft);
+
+            return CountPosVotes() > npcsLeft || CountNegVotes() > npcsLeft;
         }
 
         public int CountTotalVotes()
@@ -381,6 +388,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
             for (int i = 0; i < votes.Count; i++)
             {
                 if (votes[i].npc == npc) return true;
+            }
+            return false;
+        }
+
+        public bool IsPlayerVoted()
+        {
+            for (int i = 0; i < votes.Count; i++)
+            {
+                if (votes[i].value && votes[i].isPlayer) return true;
             }
             return false;
         }

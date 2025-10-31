@@ -24,7 +24,6 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
 
             if (File.Exists(jsonPath))
             {
-                Debug.Log(jsonPath);
                 posterData = GetFromFile(jsonPath);
             }
 

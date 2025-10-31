@@ -1,6 +1,8 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.NPCs.Behavior.States.Navigation;
+using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Game.Rooms;
@@ -77,13 +79,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private Balloon[] balloons;
 
         [SerializeField]
+        private GameObject screenPre;
+
+        [SerializeField]
         private int balloonsOnChunk;
 
         [SerializeField]
         private int chunkSize;
-
-        [SerializeField]
-        private BaldiFonts screenFont;
 
         [SerializeField]
         private IntVector2 minMaxScreens;
@@ -111,7 +113,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
         private bool lightTurnedOn;
 
-        private List<TextMeshPro> screenTexts = new List<TextMeshPro>();
+        private LevelBuilder levelBuilder;
+
+        private List<VotingCeilingScreen> screens = new List<VotingCeilingScreen>();
 
         private List<PrincipalController> principals = new List<PrincipalController>();
 
@@ -122,6 +126,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private static TextMeshProUGUI[] texts = new TextMeshProUGUI[2];
 
         private static List<Cell> usedCells = new List<Cell>();
+
+        public List<VotingCeilingScreen> Screens => screens;
 
         public bool RoomAssigned { get; private set; }
 
@@ -166,7 +172,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             screenCoverage = CellCoverage.Up;
             includeOpenToGenScreens = true;
             minMaxScreens = new IntVector2(2, 5);
-            screenFont = BaldiFonts.ComicSans12;
 
             balloons = new Balloon[8];
 
@@ -174,6 +179,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             {
                 balloons[i] = AssetsHelper.LoadAsset<Balloon>($"Balloon_{i}");
             }
+
+            screenPre = ObjectsStorage.Objects["voting_screen"];
         }
 
         public static void LoadRoomAssetsForAllPrefabs()
@@ -212,6 +219,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             potentialRoomAssets = assets.ToArray();
         }
 
+        public override void Initialize(EnvironmentController controller, System.Random rng)
+        {
+            base.Initialize(controller, rng);
+            levelBuilder = FindObjectOfType<LevelBuilder>();
+        }
+
         public override void AssignRoom(RoomController room)
         {
             base.AssignRoom(room);
@@ -226,12 +239,25 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             //lockedDoorsFunc = room.functions.GetComponent<LockedDoorsFunction>();
         }
 
+        public override void PremadeSetup()
+        {
+            base.PremadeSetup();
+            foreach (RoomController room in ec.rooms)
+            {
+                if (room.functions.TryGetComponent<SchoolCouncilFunction>(out _))
+                {
+                    AssignRoom(room);
+                    break;
+                }
+            }
+        }
+
         public override void AfterUpdateSetup(System.Random rng)
         {
             base.AfterUpdateSetup(rng);
             if (RoomAssigned)
             {
-                if (!highCeilingLevelTypes.Contains(councilRoomFunc.LevelBuilder.ld.type))
+                if (!highCeilingLevelTypes.Contains(levelBuilder.ld.type))
                 {
                     BuildScreens(rng);
                     UpdateTexts();
@@ -241,28 +267,28 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             else gameObject.SetActive(false); //then don't update this
         }
 
-        private void UpdateTexts()
+        public void UpdateTexts()
         {
             switch (state)
             {
                 case VotingState.NotStarted:
-                    for (int i = 0; i < screenTexts.Count; i++)
+                    for (int i = 0; i < screens.Count; i++)
                     {
-                        screenTexts[i].text = "Adv_Voting_Not_Started".Localize();
+                        screens[i].UpdateTexts("Adv_Voting_Not_Started".Localize());
                     }
                     break;
                 case VotingState.Active:
-                    for (int i = 0; i < screenTexts.Count; i++)
+                    for (int i = 0; i < screens.Count; i++)
                     {
-                        screenTexts[i].text = string.Format("Adv_Voting_Active".Localize(),
-                            (int)remainingTime / 60, (int)remainingTime - (int)remainingTime / 60 * 60);
+                        screens[i].UpdateTexts(string.Format("Adv_Voting_Active".Localize(),
+                            (int)remainingTime / 60, (int)remainingTime - (int)remainingTime / 60 * 60));
                     }
                     break;
                 case VotingState.WaitingTvToShowResult:
-                    for (int i = 0; i < screenTexts.Count; i++)
+                    for (int i = 0; i < screens.Count; i++)
                     {
-                        screenTexts[i].text = string.Format("Adv_Voting_Ended".Localize(),
-                            $"{ballot.CountPosVotes()} : <color=#ff0000>{ballot.CountNegVotes()}</color>");
+                        screens[i].UpdateTexts(string.Format("Adv_Voting_Ended".Localize(),
+                            $"{ballot.CountPosVotes()} : <color=#ff0000>{ballot.CountNegVotes()}</color>"));
                     }
                     break;
             }
@@ -277,8 +303,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private void Update()
         {
             if (!RoomAssigned) return;
-            if (!ballot.Initialized && councilRoomFunc.LevelBuilder != null
-                && councilRoomFunc.LevelBuilder.levelCreated) ballot.Initialize(crng, this, room.ec);
+            if (!ballot.Initialized && levelBuilder != null
+                && levelBuilder.levelCreated) ballot.Initialize(crng, this, room.ec);
             ballot?.Topic?.Update();
 
             if (active)
@@ -643,49 +669,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
         private void BuildScreen(Cell cell, Direction direction)
         {
-            float height = 9.5f;
+            GameObject screen = Instantiate(screenPre);
+            screen.transform.SetParent(cell.room.objectObject.transform, false);
+            screen.transform.position = cell.FloorWorldPosition;
 
-            GameObject gm = new GameObject("VotingScreen");
-            gm.transform.SetParent(cell.room.objectObject.transform, false);
-            gm.transform.position = cell.FloorWorldPosition;
-
-            GameObject cubeGameobject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cubeGameobject.name = "Model";
-            cubeGameobject.transform.SetParent(gm.transform, false);
-            cubeGameobject.transform.localPosition = Vector3.up * height;
-            cubeGameobject.transform.localScale = Vector3.one + Vector3.right * 7f;
-
-            MeshRenderer renderer = cubeGameobject.GetComponent<MeshRenderer>();
-            renderer.material = new Material(AssetsStorage.materials["belt"]);
-            renderer.material.SetMainTexture(AssetsStorage.textures["white"]);
-            renderer.material.SetColor(Color.black);
-
-            RectTransform rect1 = new GameObject().AddComponent<RectTransform>();
-            rect1.name = "ForwardText";
-            rect1.SetParent(gm.transform, false);
-            TextMeshPro text1 = rect1.gameObject.AddComponent<TextMeshPro>();
-            rect1.localPosition = Vector3.forward * 0.52f + Vector3.up * height;
-            rect1.localScale = Vector3.one * 0.5f;
-            rect1.rotation = Quaternion.Euler(0f, 180f, 0f);
-            text1.text = "???";
-            text1.alignment = TextAlignmentOptions.Center;
-            text1.font = screenFont.FontAsset();
-            text1.fontSize = screenFont.FontSize();
-            text1.color = Color.green;
-
-            RectTransform rect2 = new GameObject().AddComponent<RectTransform>();
-            rect2.name = "BackText";
-            rect2.SetParent(gm.transform, false);
-            TextMeshPro text2 = rect2.gameObject.AddComponent<TextMeshPro>();
-            rect2.localPosition = Vector3.back * 0.52f + Vector3.up * height;
-            rect2.localScale = Vector3.one * 0.5f;
-            text2.text = "???";
-            text2.alignment = TextAlignmentOptions.Center;
-            text2.font = screenFont.FontAsset();
-            text2.fontSize = screenFont.FontSize();
-            text2.color = Color.green;
-
-            gm.transform.rotation = Quaternion.Euler(0f, direction.ToDegrees(), 0f);
+            screen.transform.rotation = Quaternion.Euler(0f, direction.ToDegrees(), 0f);
 
             List<Direction> dirs = Directions.All().FindAll(x => x != direction && x != direction.GetOpposite());
             CellCoverage cover = CellCoverage.None;
@@ -697,10 +685,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             }
             else cell.HardCover(screenCoverage);
 
-            screenTexts.Add(text1);
-            screenTexts.Add(text2);
-
-            Destroy(cubeGameobject.GetComponent<Collider>());
+            screens.Add(screen.GetComponent<VotingCeilingScreen>());
         }
     }
 }

@@ -112,6 +112,10 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
         protected override void Initialize()
         {
             base.Initialize();
+
+            AssetLoader.LoadLocalizationFolder(AssetsHelper.modPath + 
+                "Compats/LevelStudio/Language/English/", Language.English);
+
             InitializeVisuals();
             InitializeStructureLocs();
             EditorInterfaceModes.AddModeCallback(InitializeTools);
@@ -312,6 +316,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             EditorInterface.AddObjectVisual("adv_symbol_machine", ObjectsStorage.Objects["symbol_machine"], true);
 
             EditorInterface.AddObjectVisual("adv_voting_ballot", ObjectsStorage.Objects["voting_ballot"], true);
+            EditorInterface.AddObjectVisual("adv_voting_ceiling_screen", ObjectsStorage.Objects["voting_screen"], true);
+            GameObject.Destroy(ObjectsStorage.Objects["voting_screen"].GetComponent<Collider>());
 
             GameObject advancedMMVisual = 
                 EditorInterface.AddActivityVisual("adv_advanced_math_machine", ObjectsStorage.Objects["advanced_math_machine"]);
@@ -347,6 +353,15 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #endregion
 
+            LevelStudioPlugin.Instance.eventSprites.Add("adv_disappearing_characters", 
+                AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Invisibility_Event.png"));
+            LevelStudioPlugin.Instance.eventSprites.Add("adv_cold_school",
+                AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Cold_School_Event.png"));
+            LevelStudioPlugin.Instance.eventSprites.Add("adv_portal_chaos",
+                AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Portal_Chaos_Event.png"));
+            LevelStudioPlugin.Instance.eventSprites.Add("adv_voting",
+                AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Voting_Event.png"));
+
             EditorInterface.AddRoomVisualManager<OutsideRoomVisualManager>("adv_corn_field");
         }
 
@@ -369,8 +384,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #endregion
 
+            mode.availableRandomEvents.Add("adv_disappearing_characters");
+            mode.availableRandomEvents.Add("adv_cold_school");
+            mode.availableRandomEvents.Add("adv_portal_chaos");
+            mode.availableRandomEvents.Add("adv_voting");
+
             EditorInterfaceModes.AddToolToCategory(mode, "npcs",
-                    new NPCTool("adv_criss_the_crystal", AssetsStorage.sprites["adv_editor_criss_the_crystal"]));
+                new NPCTool("adv_criss_the_crystal", AssetsStorage.sprites["adv_editor_criss_the_crystal"]));
 
             foreach (string objectName in ObjectsStorage.ItemObjects.Keys)
             {
@@ -419,6 +439,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new ActivityTool("adv_advanced_math_machine_corner", AssetsStorage.sprites["adv_editor_advanced_math_machine_corner"], 0f));
 
             EditorInterfaceModes.AddToolToCategory(mode, "objects",
+                new ObjectTool("adv_voting_ceiling_screen",
+                    AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Objects/adv_editor_voting_screen.png")));
+            EditorInterfaceModes.AddToolToCategory(mode, "objects",
                 new ObjectTool("adv_voting_ballot", AssetsStorage.sprites["adv_editor_voting_ballot"]));
 
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
@@ -441,7 +464,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new NoisyPlateTool("adv_noisy_plate", "noisy_plate",
                     AssetsStorage.sprites["adv_editor_noisy_plate"]));
 
-            Sprite accelPlateIcon = AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_acceleration_plate.png");
+            Sprite accelPlateIcon = 
+                AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_acceleration_plate.png");
 
             EditorInterfaceModes.AddToolToCategory(mode, "structures",
                 new AccelerationPlateTool("adv_acceleration_plate", "acceleration_plate", accelPlateIcon, buttonless: false));

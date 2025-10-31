@@ -663,7 +663,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 )
                 .SetWeight(floor: 2, 125)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory, LevelType.Laboratory, LevelType.Maintenance)
-                //.SetEndless(true) //no endless
                 .SetBannedFloors(1);
         }
 
@@ -1110,6 +1109,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .transform.SetParent(cornSign.transform, false);
             cornSign.ConvertToPrefab(true);
             ObjectsStorage.Objects.Add("farm_sign1", cornSign);
+
+            PrefabsCreator.CreateObjectPrefab<VotingCeilingScreen>("VotingScreen", "voting_screen");
         }
 
         #endregion

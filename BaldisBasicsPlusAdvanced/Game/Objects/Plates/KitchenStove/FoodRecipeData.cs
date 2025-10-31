@@ -8,7 +8,6 @@ using PlusStudioLevelLoader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using TMPro;
 using UnityEngine;
 
@@ -326,9 +325,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             RefreshOverlayData();
 
-            ObjectsStorage.Posters.Add(posterObj);
+            //ObjectsStorage.Posters.Add(posterObj);
 
-            LevelLoaderPlugin.Instance.posterAliases.Add(Poster.name.ToLower().Replace("_poster", ""), posterObj);
+            //LevelLoaderPlugin.Instance.posterAliases.Add(Poster.name.ToLower().Replace("_poster", ""), posterObj);
 
             return this;
         }

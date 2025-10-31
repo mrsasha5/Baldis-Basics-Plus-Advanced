@@ -10,8 +10,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.RandomEvents
 
         [HarmonyPatch("RandomizeEvents")]
         [HarmonyPrefix]
-        private static void OnRandomizeEvents(/*int numberOfEvents, float initialGap, float minGap, float maxGap,*/
-            List<RandomEvent> ___events, List<float> ___eventTimes)
+        private static void OnRandomizeEvents(List<RandomEvent> ___events, List<float> ___eventTimes)
         {
             List<RandomEvent> mainEvents = ___events.FindAll(x => x is VotingEvent);
 

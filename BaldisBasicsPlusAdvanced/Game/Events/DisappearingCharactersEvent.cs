@@ -47,9 +47,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             List<NPC> npcs = GetAvailableNPCs();
 
+            if (npcs.Count == 0) yield break;
+
             float time = cooldown;
             ObjectsCreator.AddChalkCloudEffect(npcs[0], effectTime, ec);
-            //addParticlesEffect(npcs[0], effectTime);
             while (npcs.Count > 0)
             {
                 time -= Time.deltaTime * ec.EnvironmentTimeScale;
@@ -59,7 +60,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                     if (npcs.Count > 1)
                     {
                         ObjectsCreator.AddChalkCloudEffect(npcs[1], effectTime, ec);
-                        //addParticlesEffect(npcs[1], effectTime); //to the next npc
                     }
                     Disappear(npc, true);
                     npcs.Remove(npc);
@@ -76,7 +76,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                 }
                 yield return null;
             }
-            yield break;
         }
 
         private List<NPC> GetAvailableNPCs()
@@ -91,7 +90,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         {
             npc.GetComponent<Entity>().SetVisible(!hide);
 
-            //I leave this sound as unique part of the event
             AudioManager audMan = ObjectsCreator.CreatePropagatedAudMan(Vector3.zero, destroyWhenAudioEnds: true);
             audMan.transform.SetParent(npc.transform, false);
             
@@ -107,7 +105,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         public override void End()
         {
             base.End();
-            if (activeEvents == 1) //for compability with chaos mode
+            if (activeEvents == 1) //For compatibility with chaos mode
+                                   //(funny to understand that game events themselves barely compatible in BBCR)
             {
                 StopAllCoroutines();
                 foreach (NPC npc in ec.Npcs)

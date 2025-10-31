@@ -88,14 +88,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                 //cancelEventTextOnBegin = true;
                 base.Begin();
                 StartCoroutine(FadeOnFog());
-                audMan.PlaySingle(AssetsStorage.sounds["adv_mysterious_machine"]);
+                ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_mysterious_machine"]);
                 StartCoroutine(PlayMusicIn(4f));
                 canvasFrozen.gameObject.SetActive(true);
                 canvasFrozen.worldCamera = Singleton<CoreGameManager>.Instance.GetCamera(0).canvasCam;
             } else
             {
                 base.Begin();
-                audMan.PlaySingle(AssetsStorage.sounds["adv_mysterious_machine"]);
+                ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_mysterious_machine"]);
             }
             ec.MaxRaycast = maxRaycast;
             activeEvents++;
@@ -201,11 +201,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             playerControl = StartCoroutine(PlayerController());
             frozenOverlay.color = new Color(1f, 1f, 1f, fogStrength2);
-            //if (activeEvents < 2) setEventText(descriptionKey);
 
             AddMoveModifiers();
             moveMod.movementMultiplier = minMultiplier;
-            audMan.PlaySingle(AssetsStorage.sounds["adv_frozen"]);
+            ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_frozen"]);
         }
 
         private IEnumerator FadeOffFog()
