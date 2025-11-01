@@ -216,6 +216,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetWeight(2, 50)
                 .SetEndless(true)
                 .SetLevelTypes(LevelType.Schoolhouse);
+
+            ObjectsStorage.Posters.Add(ObjectsStorage.Npcs["CrissTheCrystal"].Poster);
+            ObjectsStorage.Npcs["CrissTheCrystal"].Poster.name = "Adv_Poster_Criss_The_Crystal";
         }
 
         #endregion

@@ -10,6 +10,10 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameManager
 
         public static Action onFailPress;
 
+        public static Action onPause;
+
+        public static Action onUnpause;
+
         [HarmonyPatch("Start")] //Game itself doesn't use Boom()...
         [HarmonyPostfix]
         private static void OnStart()
@@ -22,9 +26,15 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameManager
         [HarmonyPrefix]
         private static bool OnPause(ref bool ___paused)
         {
-            if (___paused) return true;
+            if (pauseDisables < 1)
+            {
+                if (___paused)
+                    onUnpause?.Invoke();
+                else
+                    onPause?.Invoke();
 
-            if (pauseDisables < 1) return true;
+                return true;
+            }
 
             onFailPress?.Invoke();
             return false;
@@ -34,8 +44,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameManager
         [HarmonyPrefix]
         private static bool OnOpenMap(ref bool ___paused)
         {
-            if (___paused) return true;
-
             if (pauseDisables < 1) return true;
 
             onFailPress?.Invoke();

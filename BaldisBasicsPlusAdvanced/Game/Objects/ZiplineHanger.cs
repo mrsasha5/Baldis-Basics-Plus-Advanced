@@ -206,23 +206,35 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             {
                 NPC npc = other.GetComponent<NPC>();
 
+                if (npc.Navigator._startTile == null || npc.Navigator._targetTile == null) return;
+
                 Cell currentCell = ec.CellFromPosition(npc.transform.position);
+
                 Cell destPoint = ec.CellFromPosition(positionIndex == 1 ? positions.Key : positions.Value);
 
                 ec.FindPath(npc.Navigator._startTile, npc.Navigator._targetTile, PathType.Nav, out List<Cell> path, out bool success);
 
+                if (!success) return;
+
                 int destIndex = path.IndexOf(destPoint);
                 int curCellIndex = path.IndexOf(currentCell);
 
-                if (success && curCellIndex != -1 && 
-                    (destIndex != -1 ? (curCellIndex < destIndex) : 
-                        (Vector3.Distance(npc.Navigator._targetTile.FloorWorldPosition, destPoint.FloorWorldPosition) <= 50f)) && 
-                        ReflEvent_OnPreTakingZipline(npc) &&
-                        SetEntity(npc.Navigator.Entity, kickEntity: false))
+                //The fuck, npc.Navigator.Entity.CanBeOverridden, Mystman forgot about null check for EntityOverrider
+                //ARGH!!!
+                if (curCellIndex != -1 && destIndex != -1 && curCellIndex < destIndex &&
+                     !ReflectionHelper.GetValue<bool>(npc.Navigator.Entity, "overridden"))
                 {
-                    SetMoving();
-                    npc.transform.forward = direction;
-                    ReflEvent_OnTakingZipline(npc);
+                    EntityOverrider overrider =
+                        ReflectionHelper.GetValue<EntityOverrider>(npc.Navigator.Entity, "overrider");
+
+                    if ((overrider == null || !overrider.active) && ReflEvent_OnPreTakingZipline(npc) &&
+                        SetEntity(npc.Navigator.Entity, kickEntity: false))
+                    {
+                        SetMoving();
+                        npc.transform.forward = direction;
+                        ReflEvent_OnTakingZipline(npc);
+                    }
+                    
                 }
             }
         }
@@ -366,6 +378,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             if (entity != null && entity.Override(overrider))
             {
                 entity.Teleport(transform.position);
+                entity.KillAllForces();
 
                 entity.ExternalActivity.moveMods.Add(moveMod);
 

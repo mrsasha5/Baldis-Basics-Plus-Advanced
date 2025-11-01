@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.AccelerationPlate;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
 using UnityEngine;
@@ -27,7 +26,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Pulley
                 owner = this
             };
 
-            if (!disableChecks && !loc.ValidatePosition(data, ignoreSelf: true))
+            if (!disableChecks && !loc.ValidatePosition(data, ignoreSelf: false))
                 return null;
 
             locations.Add(loc);
@@ -89,11 +88,21 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Pulley
             }
         }
 
+        public override bool OccupiesWall(IntVector2 pos, Direction dir)
+        {
+            for (int i = 0; i < locations.Count; i++)
+            {
+                if (locations[i].position == pos && locations[i].direction == dir) return true;
+            }
+
+            return base.OccupiesWall(pos, dir);
+        }
+
         public override bool ValidatePosition(EditorLevelData data)
         {
             for (int i = 0; i < locations.Count; i++)
             {
-                if (!locations[i].ValidatePosition(data, ignoreSelf: true))
+                if (!locations[i].ValidatePosition(data, ignoreSelf: true) || !ValidatePositionInChildren(locations[i]))
                 {
                     EditorController.Instance.RemoveVisual(locations[i]);
                     locations.RemoveAt(i);
@@ -102,6 +111,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Pulley
             }
 
             return locations.Count > 0;
+        }
+
+        private bool ValidatePositionInChildren(SimpleLocation child)
+        {
+            for (int i = 0; i < locations.Count; i++)
+            {
+                if (locations[i] != child && locations[i].position == child.position && locations[i].direction == child.direction) 
+                    return false;
+            }
+
+            return true;
         }
 
         public override void ReadInto(EditorLevelData data, BinaryReader reader, StringCompressor compressor)

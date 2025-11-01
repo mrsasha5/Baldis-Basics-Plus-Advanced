@@ -85,9 +85,31 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
 
         private static string GetTip()
         {
-            return string.Format(text, MusicManager.Instance.MidiPlayer.MPTK_MidiName,
+            return string.Format(text, GetTrackName(),
                 MusicManager.Instance.MidiPlayer.MPTK_PlayTime.ToString("mm':'ss"), 
                 MusicManager.Instance.MidiPlayer.MPTK_Duration.ToString("mm':'ss"));
+        }
+
+        private static string GetTrackName()
+        {
+            string trackName = MusicManager.Instance.MidiPlayer.MPTK_MidiName;
+
+            if (MusicManager.Instance.MidiPlayer.MPTK_MidiName.StartsWith("custom_CustomMusicsMIDI_"))
+            {
+                trackName = trackName.Replace("custom_CustomMusicsMIDI_", "");
+            }
+            else if (MusicManager.Instance.MidiPlayer.MPTK_MidiName.StartsWith("custom_"))
+            {
+                trackName = trackName.Replace("custom_", "");
+            }
+
+            if (trackName.Length > 50)
+            {
+                trackName = trackName.Substring(0, 47);
+                trackName += "...";
+            }
+
+            return trackName;
         }
 
         private static void OverrideTips()

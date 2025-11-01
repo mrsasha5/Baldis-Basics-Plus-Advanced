@@ -167,6 +167,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             entityOverrider.SetHeight(8f);
             entityOverrider.entity?.UpdateHeightAndScale(); //MYSTMAN DID WRONG ORDER IN CODE, BRUH!!!
 
+            foreach (Jumprope jumprope in GameObject.FindObjectsOfType<Jumprope>())
+            {
+                jumprope.End(false);
+            }
+
             active = true;
             updateAllowed = true;
             if (renderer != null) renderer.transform.localPosition = Vector3.zero;

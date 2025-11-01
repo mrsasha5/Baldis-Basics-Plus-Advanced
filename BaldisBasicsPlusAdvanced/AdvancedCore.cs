@@ -113,8 +113,6 @@ namespace BaldisBasicsPlusAdvanced
                     ObjectsCreator.CauseCrash(e);
                 }
                 yield return assetsLoading.Current;
-
-
             }
         }
 

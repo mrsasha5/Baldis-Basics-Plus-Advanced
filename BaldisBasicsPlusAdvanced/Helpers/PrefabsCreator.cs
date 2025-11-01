@@ -43,7 +43,8 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             }
 
             ObjectsStorage.Npcs.Add(npc.Character.ToStringExtended(), npc);
-            ObjectsStorage.SpawningData.Add("npc_" + npc.Character.ToStringExtended(), new NPCSpawningData(npc.Character.ToStringExtended(), npc));
+            ObjectsStorage.SpawningData.Add("npc_" + npc.Character.ToStringExtended(), 
+                new NPCSpawningData(npc.Character.ToStringExtended(), npc));
 
             return (NPCSpawningData)ObjectsStorage.SpawningData["npc_" + npc.Character.ToStringExtended()];
         }

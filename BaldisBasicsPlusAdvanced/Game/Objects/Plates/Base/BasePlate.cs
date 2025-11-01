@@ -116,6 +116,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         public List<Entity> Entities => entities;
 
+        public MeshRenderer[] Renderers => Renderers;
+
+        public TextMeshPro Indicator => indicator;
+
         /*protected virtual void SetupLight()
         {
             if (Data.hasLight)

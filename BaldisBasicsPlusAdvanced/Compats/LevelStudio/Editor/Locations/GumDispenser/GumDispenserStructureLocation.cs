@@ -29,7 +29,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
                 deleteAction = OnDeleteDispenser
             };
 
-            if (!disableChecks && (!loc.ValidatePosition(level, ignoreSelf: true) || !ValidatePositionInChildren(loc)))
+            if (!disableChecks && !loc.ValidatePosition(level, ignoreSelf: false))
                 return null;
 
             dispenserLocations.Add(loc);

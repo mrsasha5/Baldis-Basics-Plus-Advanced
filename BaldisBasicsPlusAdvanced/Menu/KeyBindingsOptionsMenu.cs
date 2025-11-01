@@ -208,25 +208,6 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
         private IEnumerator Waiter(StandardMenuButton button, KeyBindingData data)
         {
-            /*while (Input.inputString.Length == 0)
-            {
-                yield return null;
-            }
-
-            //Debug.Log("Input: " + Input.inputString); //input string works so bad
-            */
-
-            //0 - left
-            //1 - right
-            //2 - middle
-            /*while (!Input.anyKey || Input.GetKey(KeyCode.Mouse0) || Input.GetKey(KeyCode.Mouse1) || 
-                Input.GetKey(KeyCode.Mouse2) || Input.GetKey(KeyCode.Mouse3) ||
-                Input.GetKey(KeyCode.Mouse4) || Input.GetKey(KeyCode.Mouse5) || Input.GetKey(KeyCode.Mouse6)
-                ) //thanks you fucking coders of the Unity
-            {
-                yield return null; //bye bye bad solution
-            }*/
-
             yield return null; //lol yeah. I just will skip the one frame.
 
             KeyCode pressed = KeyCode.None;
@@ -246,7 +227,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
             CoreManagerPausePatch.SetPauseDisable(false);
 
-            button.text.text = pressed.ToString();//Input.inputString.ToUpper();
+            button.text.text = pressed.ToString();
             CursorController.Instance.Hide(false);
 
             data.OverrideButton(pressed);

@@ -116,7 +116,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             handleColor = Color.yellow;
 
-            audMan = gameObject.AddComponent<PropagatedAudioManager>();
+            audMan = ObjectsCreator.CreateAudMan(gameObject);
             motorAudMan = ObjectsCreator.CreateAudMan(Vector3.zero);
             motorAudMan.name = "Motor";
             motorAudMan.transform.SetParent(transform, false);

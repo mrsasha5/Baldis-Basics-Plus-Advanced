@@ -13,10 +13,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
         private void Update()
         {
-            if (!Singleton<CoreGameManager>.Instance.Paused && initiator.currentCursor == null)
+            if (!CoreGameManager.Instance.Paused && initiator.currentCursor == null)
             {
                 initiator.Inititate();
-                if (correctCursorPriority) initiator.currentCursor.transform.SetSiblingIndex(initiator.currentCursor.transform.parent.childCount + indexAddend);
+                if (correctCursorPriority) 
+                    initiator.currentCursor.transform.SetSiblingIndex(initiator.currentCursor.transform.parent.childCount + indexAddend);
             }
         }
 

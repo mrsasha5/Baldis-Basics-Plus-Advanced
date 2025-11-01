@@ -10,6 +10,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Texts;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
 using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Patches.GameManager;
 using MTM101BaldAPI.UI;
 using TMPro;
 using UnityEngine;
@@ -202,20 +203,27 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
             else chosenTopic.OnVotingEndedPre(false);
         }
 
+        private void OnPause()
+        {
+            chalkboardMenu.chalkboard.gameObject.SetActive(false);
+        }
+
+        private void OnUnpause()
+        {
+            chalkboardMenu.chalkboard.gameObject.SetActive(true);
+        }
+
         private void InitializeMenu(int player)
         {
             chalkboardMenu = Instantiate(ObjectsStorage.Objects["chalkboard_menu"].GetComponent<ChalkboardMenu>());
+            CoreManagerPausePatch.onPause += OnPause;
+            CoreManagerPausePatch.onUnpause += OnUnpause;
 
             Destroy(CursorController.Instance.gameObject); //reinit cursor
 
             BaldiFonts bigFont = BaldiFonts.ComicSans24;
             BaldiFonts smallFont = BaldiFonts.ComicSans18;
-            chalkboardMenu.GetButton("exit").OnPress.AddListener(
-            delegate ()
-            {
-                    DestroyMenu(player);
-            }
-            );
+            chalkboardMenu.GetButton("exit").OnPress.AddListener(() => DestroyMenu(player));
 
             chalkboardMenu.GetText("title").text = "Adv_SC_Topic_Base".Localize();
             chalkboardMenu.GetText("title").font = bigFont.FontAsset();
@@ -331,6 +339,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
 
         private void DestroyMenu(int player)
         {
+            CoreManagerPausePatch.onPause -= OnPause;
+            CoreManagerPausePatch.onUnpause -= OnUnpause;
+
             GlobalCam.Instance.Transition(UiTransition.Dither, 0.01666667f);
             Destroy(chalkboardMenu.canvas.gameObject);
             CoreGameManager.Instance.GetPlayer(player).plm.Entity.ExternalActivity.moveMods.Remove(zeroMod);
