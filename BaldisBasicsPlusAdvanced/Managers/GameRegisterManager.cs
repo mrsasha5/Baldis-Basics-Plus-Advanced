@@ -55,6 +55,7 @@ using BepInEx.Bootstrap;
 using BepInEx;
 using BaldisBasicsPlusAdvanced.Game;
 using BaldisBasicsPlusAdvanced.Extensions;
+using MTM101BaldAPI.Reflection;
 #endregion
 
 namespace BaldisBasicsPlusAdvanced.Managers
@@ -96,7 +97,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         #region MIDIs Post Initialization (For mods)
 
-        public static void InitializeMidisPost()
+        public static void PostInitializeMidis()
         {
             void LoadFrom(string path, string typeName)
             {
@@ -1280,7 +1281,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         #endregion
 
-        #region Generic Posters Initialization
+        #region Posters Initialization
+
+        private static List<WeightedPosterObject> _facultyPosters = new List<WeightedPosterObject>();
 
         public static void InitializePosters()
         {
@@ -1291,13 +1294,13 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PosterSerializableData.GetPosterFromFile("Textures/Posters/Adv_Poster_Extra_Points.png");
 
             foreach (string path in Directory.GetFiles(
-                AssetsHelper.modPath + "Textures/Posters/GenericPosters/", "*.png", SearchOption.AllDirectories))
+                AssetsHelper.modPath + "Textures/Posters/GenericPosters", "*.png", SearchOption.AllDirectories))
             {
                 string jsonPath = path.Replace(".png", ".json");
 
                 if (!File.Exists(jsonPath)) throw new Exception("Json for generic poster is missing!");
 
-                PosterObject poster = 
+                PosterObject poster =
                     PosterSerializableData.GetPosterAndDataFromFile(path, overrideBasePath: true, out PosterSerializableData data);
 
                 ObjectsStorage.WeightedPosterObjects.Add(new WeightedPosterObject()
@@ -1306,6 +1309,30 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     weight = data.weight
                 });
             }
+
+            foreach (string path in Directory.GetFiles(
+                AssetsHelper.modPath + "Textures/Posters/Faculties/", "*.png", SearchOption.AllDirectories))
+            {
+                PosterObject poster =
+                    PosterSerializableData.GetPosterAndDataFromFile(path, overrideBasePath: true, out PosterSerializableData data);
+                _facultyPosters.Add(new WeightedPosterObject()
+                {
+                    selection = poster,
+                    weight = data.weight
+                });
+            }
+        }
+
+        public static void PostInitializePosters()
+        {
+            RoomAsset[] rooms = Array.FindAll(AssetsHelper.LoadAssets<RoomAsset>(), x => x.category == RoomCategory.Faculty);
+
+            for (int i = 0; i < rooms.Length; i++)
+            {
+                rooms[i].posters.AddRange(_facultyPosters);
+            }
+
+            _facultyPosters = null;
         }
 
         #endregion

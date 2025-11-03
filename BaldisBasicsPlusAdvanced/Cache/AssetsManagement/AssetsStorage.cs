@@ -3,9 +3,11 @@ using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches;
+using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
+using MTM101BaldAPI.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -199,6 +201,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadSound("food_plate_lift", "PlateLift");
             LoadSound("chip_crunch", "ChipCrunch");
             LoadSound("vent_vacuum", "Vent_Vacuum"); //Store here
+            LoadSound("explosion", "Explosion");
             //LoadSound("vent_travel", "Vent_Travel"); //BRUH, Mystman uses AudioClip
             sounds.Add(
                 "vent_travel",
@@ -225,6 +228,11 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadSprite("plant", "Plant");
             LoadSprite("food_plate_cover", "Cover_Sprite");
             LoadSprite("food_plate", "Plate_Sprite");
+
+            for (int i = 0; i < ElevatorAdditionsPatch.explosionSprites.Length; i++)
+            {
+                ElevatorAdditionsPatch.explosionSprites[i] = AssetsHelper.LoadAsset<Sprite>($"Explostion_Sheet_{i + 1}");
+            }
 
             //QMarkSheet_0
 
@@ -380,7 +388,8 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
             for (int i = 1; i <= 3; i++)
             {
-                LoadModSprite($"adv_elevator_tubes_glow_{i}", $"Textures/UI/Elevator/TubesGlow/Adv_Elevator_TubesGlow_{i}.png");
+                LoadModSprite($"adv_elv_tubes_glow_{i}", $"Textures/UI/Elevator/Tubes/Elv_TubesGlow_{i}.png");
+                LoadModSprite($"adv_elv_tube_mask_{i}", $"Textures/UI/Elevator/Tubes/Elv_Tube_Mask_{i}.png");
             }
 
             LoadModSprite("adv_gauge_protection", "Textures/Gauges/adv_gauge_protection.png");
@@ -640,6 +649,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                 //Elevator screen overrides
                 ElevatorScreen elvScreen = AssetsHelper.LoadAsset<ElevatorScreen>("ElevatorScreen");
                 elvScreen.GetComponent<AudioManager>().positional = false;
+
                 //Elevator ends
 
                 LevelAsset pitStop = AssetsHelper.LoadAsset<LevelAsset>("Pitstop");

@@ -104,7 +104,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
         {
             if (CoreGameManager.Instance.levelGenError && !levelGenError)
             {
-                ElevatorTipsPatch.SetOverride("Adv_Elv_LevelGenErrorTip", priority: 128);
+                ElevatorAdditionsPatch.SetOverride("Adv_Elv_LevelGenErrorTip", priority: 128);
                 levelGenError = true;
             }
 

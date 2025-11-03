@@ -151,11 +151,15 @@ namespace BaldisBasicsPlusAdvanced
 
         private static IEnumerator OnAssetsPostLoad()
         {
-            yield return 2;
+            yield return 3;
 
             yield return "Initializing new MIDIs...";
 
-            GameRegisterManager.InitializeMidisPost();
+            GameRegisterManager.PostInitializeMidis();
+
+            yield return "Initializing posters...";
+
+            GameRegisterManager.PostInitializePosters();
 
             yield return "Invoking OnAssetsLoadPost for modules...";
 

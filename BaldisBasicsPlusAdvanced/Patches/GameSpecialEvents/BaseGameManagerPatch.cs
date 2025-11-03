@@ -6,7 +6,7 @@ using System;
 
 namespace BaldisBasicsPlusAdvanced.Patches.GameSpecialEvents
 {
-    [HarmonyPatch(typeof(BaseGameManager))]
+    [HarmonyPatch]
     internal class BaseGameManagerPatch
     {
         [HarmonyPatch(typeof(BaseGameManager), "Initialize")]
@@ -32,6 +32,13 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameSpecialEvents
         private static void OnLoadNextLevel(BaseGameManager __instance)
         {
             LevelDataManager.LevelData.OnLoadNextLevel(__instance is PitstopGameManager);
+        }
+
+        [HarmonyPatch(typeof(MainGameManager), "RestartLevel")]
+        [HarmonyPostfix]
+        private static void OnRestartLevel()
+        {
+            ElevatorAdditionsPatch.StartLoseAnimation();
         }
     }
 }

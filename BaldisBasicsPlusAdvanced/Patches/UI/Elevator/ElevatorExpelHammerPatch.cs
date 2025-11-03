@@ -332,7 +332,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 expelButton.OnHighlight.AddListener(
                     delegate ()
                     {
-                        overrider = ElevatorTipsPatch.SetOverride("Adv_Elv_ExpelTip", priority: 127);
+                        overrider = ElevatorAdditionsPatch.SetOverride("Adv_Elv_ExpelTip", priority: 127);
                     }
                 );
 

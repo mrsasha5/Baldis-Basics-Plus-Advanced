@@ -33,7 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
         {
             boomBox = __instance.GetComponentInChildren<BoomBox>();
             boomBoxImage = boomBox.GetComponent<Image>();
-            if (button == null && ElevatorTipsPatch.LoadTip)
+            if (button == null && ElevatorAdditionsPatch.LoadTip)
             {
                 text = "Adv_CustomMusics_Elv_Tip".Localize();
 
@@ -114,7 +114,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
 
         private static void OverrideTips()
         {
-            overrider = ElevatorTipsPatch.SetOverride(GetTip(), priority: 0);
+            overrider = ElevatorAdditionsPatch.SetOverride(GetTip(), priority: 0);
             if (overrider != null) overrider.onUpdate += Update;
         }
 

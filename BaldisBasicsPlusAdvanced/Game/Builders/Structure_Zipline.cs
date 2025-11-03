@@ -40,6 +40,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             pillar.transform.localScale = Vector3.one - Vector3.up * 0.25f;
             MeshRenderer renderer = pillar.GetComponent<MeshRenderer>();
             renderer.material = new Material(AssetsStorage.materials["belt"]);
+            renderer.material.mainTexture = AssetsHelper.TextureFromFile("Textures/Objects/Adv_Zipline_Pillar.png");
             Destroy(pillar.GetComponent<Collider>());
 
             pillar.transform.SetParent(ceilingPillarPre.transform, false);

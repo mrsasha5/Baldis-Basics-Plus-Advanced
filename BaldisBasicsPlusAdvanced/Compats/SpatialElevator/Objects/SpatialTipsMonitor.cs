@@ -110,7 +110,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects
 
             tmp.text = "";
 
-            string text = ElevatorTipsPatch.GetRawTip();
+            string text = ElevatorAdditionsPatch.GetRawTip();
 
             int index = 0;
 
