@@ -69,7 +69,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
         {
             foreach (PosterObject poster in ObjectsStorage.Posters)
             {
-                LevelLoaderPlugin.Instance.posterAliases.Add(poster.name.ToLower().Replace("_poster", ""), poster);
+                LevelLoaderPlugin.Instance.posterAliases.Add(poster.name.ToLower().ReplaceFirst("_poster", ""), poster);
             }
         }
 

@@ -127,11 +127,9 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             string name, ItemObject requiredItem, Material face, Material faceOut, ItemObject item, int weight,
             WeightedItemObject[] potentialItems = null)
         {
-            SodaMachine component = UnityEngine.Object.Instantiate(AssetsHelper.LoadAsset<SodaMachine>("ZestyMachine"));
-            component.gameObject.name = name;
-            component.gameObject.ConvertToPrefab(true);
-            BaseSodaMachine sodaMachine = component.gameObject.AddComponent<BaseSodaMachine>();
-            GameObject.Destroy(component);
+            SodaMachine sodaMachine = UnityEngine.Object.Instantiate(AssetsHelper.LoadAsset<SodaMachine>("ZestyMachine"));
+            sodaMachine.gameObject.name = name;
+            sodaMachine.gameObject.ConvertToPrefab(true);
 
             MeshRenderer meshRenderer = sodaMachine.GetComponent<MeshRenderer>();
             Material[] goodMachineMaterials = meshRenderer.materials;
@@ -172,11 +170,10 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             string name, ItemObject requiredItem, int requitedAmmount, Material face, Material faceOut, 
             ItemObject item, int weight, WeightedItemObject[] potentialItems = null)
         {
-            SodaMachine component = UnityEngine.Object.Instantiate(AssetsHelper.LoadAsset<SodaMachine>("ZestyMachine"));
-            component.gameObject.name = name;
-            component.gameObject.ConvertToPrefab(true);
-            MultipleRequiredSodaMachine sodaMachine = component.gameObject.AddComponent<MultipleRequiredSodaMachine>();
-            GameObject.Destroy(component);
+            MultipleRequiredItemsSodaMachine sodaMachine = UnityEngine.Object.Instantiate(AssetsHelper.LoadAsset<SodaMachine>("ZestyMachine"))
+                .gameObject.SwapComponent<SodaMachine, MultipleRequiredItemsSodaMachine>();
+            sodaMachine.gameObject.name = name;
+            sodaMachine.gameObject.ConvertToPrefab(true);
 
             MeshRenderer meshRenderer = sodaMachine.GetComponent<MeshRenderer>();
             Material[] goodMachineMaterials = meshRenderer.materials;
@@ -184,7 +181,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             meshRenderer.materials = goodMachineMaterials;
 
             ReflectionHelper.SetValue<ItemObject>(sodaMachine, "requiredItem", requiredItem);
-            sodaMachine.requiredAmmount = requitedAmmount;
+            sodaMachine.requiredItemsAmmount = requitedAmmount;
             ReflectionHelper.SetValue<ItemObject>(sodaMachine, "item", item);
             ReflectionHelper.SetValue<MeshRenderer>(sodaMachine, "meshRenderer", meshRenderer);
             ReflectionHelper.SetValue<Material>(sodaMachine, "outOfStockMat", faceOut);

@@ -9,8 +9,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameSpecialEvents
     [HarmonyPatch(typeof(BaseGameManager))]
     internal class BaseGameManagerPatch
     {
-
-        [HarmonyPatch("Initialize")]
+        [HarmonyPatch(typeof(BaseGameManager), "Initialize")]
+        [HarmonyPatch(typeof(PitstopGameManager), "Initialize")]
         [HarmonyPostfix]
         private static void OnInit(BaseGameManager __instance)
         {
@@ -20,19 +20,18 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameSpecialEvents
             SpatialChalkboard.OnGameManagerInit(__instance);
         }
 
-        [HarmonyPatch("LoadSceneObject", new Type[] { typeof(SceneObject), typeof(bool) })]
+        [HarmonyPatch(typeof(BaseGameManager), "LoadSceneObject", new Type[] { typeof(SceneObject), typeof(bool) })]
         [HarmonyPostfix]
         private static void OnLoadSceneObject(SceneObject sceneObject, bool restarting)
         {
             LevelDataManager.LevelData.OnLoadSceneObject(sceneObject, restarting);
         }
 
-        [HarmonyPatch("LoadNextLevel")]
+        [HarmonyPatch(typeof(BaseGameManager), "LoadNextLevel")]
         [HarmonyPostfix]
         private static void OnLoadNextLevel(BaseGameManager __instance)
         {
             LevelDataManager.LevelData.OnLoadNextLevel(__instance is PitstopGameManager);
         }
-
     }
 }

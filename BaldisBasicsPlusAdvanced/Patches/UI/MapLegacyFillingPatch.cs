@@ -14,6 +14,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
 
         private static Map map;
 
+        private static FieldInfo _gridPosField = AccessTools.Field(typeof(Map), "_gridPosition");
+
         private static IntVector2 _gridPosition;
 
         [HarmonyPatch("Awake")]
@@ -41,8 +43,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
             matcher
                 .MatchBack(false, new CodeMatch(OpCodes.Ldarg_0))
                 .Advance(-6);
-                //.MatchBack(false, new CodeMatch(OpCodes.Ldarg_0)) //I SPENT MANY TIME ON DEBUGGING TO FIND THAT THIS SHIT IS NOT WORKING
-                //.MatchBack(false, new CodeMatch(OpCodes.Ldarg_0)); //AS I THOUGHT
 
             if (matcher.IsInvalid)
             {
@@ -69,11 +69,13 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
                 .InsertAndAdvance(new CodeInstruction(OpCodes.Call, staticMethod))
                 .InsertAndAdvance(hackyInstruction);
 
-            if (matcher.Length != 874)
+            //917 beginning from 0.13
+            if (matcher.Length != 874 && matcher.Length != 917)
             {
                 AdvancedCore.Logging.LogWarning(
                     "Detected wrong instructions length in MapLegacyFillingPatch!\n" +
                     "Is game codebase updated or somebody joined to my party?");
+                AdvancedCore.Logging.LogWarning(matcher.Length);
             }
 
             return matcher.InstructionEnumeration();
@@ -81,7 +83,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
 
         private static bool CanFillAllTiles()
         {
-            _gridPosition = IntVector2.GetGridPosition(map.targets[0].transform.position);
+            _gridPosition = (IntVector2)_gridPosField.GetValue(map);
+            //IntVector2.GetGridPosition(map.targets[0].transform.position);
 
             return map.Ec.cells[_gridPosition.x, _gridPosition.z].room.type != RoomType.Hall 
                 && map.Ec.cells[_gridPosition.x, _gridPosition.z].room.functions.name != "CornFieldFunctionContainer(Clone)";

@@ -662,9 +662,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 soundKey: "adv_bal_event_voting",
                 minTime: 100f,
                 maxTime: 100f,
-                flags: RandomEventFlags.AffectsGenerator
+                flags: RandomEventFlags.CharacterSpecific | RandomEventFlags.RoomSpecific | RandomEventFlags.AffectsGenerator
                 )
-                .SetWeight(floor: 2, 125)
+                .SetWeight(floor: 2, 75)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory, LevelType.Laboratory, LevelType.Maintenance)
                 .SetBannedFloors(1);
         }
@@ -678,7 +678,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateMultipleRequiredVendingMachine("GoodMachine",
                 ItemMetaStorage.Instance.FindByEnum(Items.Quarter).itemObjects[0], 2,
                 AssetsStorage.materials["adv_good_machine"], AssetsStorage.materials["adv_good_machine_out"], null,
-                weight: 100, 
+                weight: 150, 
                 new WeightedItemObject[] {
                 new WeightedItemObject()
                 {

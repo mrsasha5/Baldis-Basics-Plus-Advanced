@@ -96,11 +96,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
 
             if (MusicManager.Instance.MidiPlayer.MPTK_MidiName.StartsWith("custom_CustomMusicsMIDI_"))
             {
-                trackName = trackName.Replace("custom_CustomMusicsMIDI_", "");
+                trackName = trackName.ReplaceFirst("custom_CustomMusicsMIDI_", "");
             }
             else if (MusicManager.Instance.MidiPlayer.MPTK_MidiName.StartsWith("custom_"))
             {
-                trackName = trackName.Replace("custom_", "");
+                trackName = trackName.ReplaceFirst("custom_", "");
             }
 
             if (trackName.Length > 50)

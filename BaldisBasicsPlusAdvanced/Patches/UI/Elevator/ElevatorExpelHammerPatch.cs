@@ -19,8 +19,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-#warning Refresh the code
-
 namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 {
     [HarmonyPatch(typeof(ElevatorScreen))]
@@ -77,17 +75,20 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         public static Status GetStatus(BaseGameManager gameManager)
         {
-            if (gameManager is PitstopGameManager || GetPotentialCharacters().Count == 0)
+            if (shouldInitialize)
             {
-                return Status.Existing;
-            }
-            else if (shouldInitialize && !Available)
-            {
-                return Status.ShouldBreak;
-            }
-            else if (shouldInitialize && Available)
-            {
-                return Status.Available;
+                if (!Available)
+                {
+                    return Status.ShouldBreak;
+                }
+                else if (GetPotentialCharacters().Count == 0)
+                {
+                    return Status.Existing;
+                }
+                else
+                {
+                    return Status.Available;
+                }
             }
             else return Status.NotAvailable;
         }

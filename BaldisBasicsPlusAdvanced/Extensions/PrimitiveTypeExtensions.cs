@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BaldisBasicsPlusAdvanced.Extensions
+﻿namespace BaldisBasicsPlusAdvanced.Extensions
 {
     public static class PrimitiveTypeExtensions
     {
@@ -15,6 +11,16 @@ namespace BaldisBasicsPlusAdvanced.Extensions
         public static int ToInt(this bool value)
         {
             return value ? 1 : 0;
+        }
+
+        public static string ReplaceFirst(this string text, string search, string replace)
+        {
+            int pos = text.IndexOf(search);
+            if (pos < 0)
+            {
+                return text;
+            }
+            return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
 
     }

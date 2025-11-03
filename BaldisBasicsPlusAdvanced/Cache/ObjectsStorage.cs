@@ -68,7 +68,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         private static Dictionary<string, StructureBuilder> structureBuilders = new Dictionary<string, StructureBuilder>();
 
-        private static Dictionary<string, BaseSodaMachine> sodaMachines = new Dictionary<string, BaseSodaMachine>();
+        private static Dictionary<string, SodaMachine> sodaMachines = new Dictionary<string, SodaMachine>();
 
         private static Dictionary<string, Canvas> overlays = new Dictionary<string, Canvas>();
 
@@ -96,7 +96,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         public static Dictionary<string, StructureBuilder> StructureBuilders => structureBuilders;
 
-        public static Dictionary<string, BaseSodaMachine> SodaMachines => sodaMachines;
+        public static Dictionary<string, SodaMachine> SodaMachines => sodaMachines;
 
         public static Dictionary<string, Canvas> Overlays => overlays;
 

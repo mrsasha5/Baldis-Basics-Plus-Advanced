@@ -28,7 +28,11 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Data
 
         public void OnLoadNextLevel(bool afterPitStop)
         {
-            if (!afterPitStop)
+        }
+
+        public void OnLoadSceneObject(SceneObject sceneObject, bool restarting)
+        {
+            if (sceneObject.manager is PitstopGameManager && !restarting)
             {
                 if (hammerLives > 0)
                 {
@@ -59,10 +63,6 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Data
                 }
 
             }
-        }
-
-        public void OnLoadSceneObject(SceneObject sceneObject, bool restarting)
-        {
         }
 
         public void OnLoad()

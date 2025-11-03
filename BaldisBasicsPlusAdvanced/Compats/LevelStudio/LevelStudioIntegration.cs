@@ -502,7 +502,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             {
                 if (poster.name.StartsWith("Adv_Poster_Recipe"))
                     EditorInterfaceModes.AddToolToCategory(mode, "posters", 
-                        new IndependentInfoPosterTool(poster.name.ToLower().Replace("_poster", ""), "Ed_Poster_Title_adv_recipe_example",
+                        new IndependentInfoPosterTool(poster.name.ToLower().ReplaceFirst("_poster", ""), "Ed_Poster_Title_adv_recipe_example",
                             "Ed_Poster_Desc_adv_recipe_example"));
                 else
                     EditorInterfaceModes.AddToolToCategory(mode, "posters", new PosterTool(poster.name.ToLower().Replace("_poster", "")));
