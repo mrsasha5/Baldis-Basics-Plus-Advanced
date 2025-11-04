@@ -296,7 +296,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadModTexture("adv_advanced_class_wall", "Rooms/AdvancedClass/Adv_Advanced_Class_Wall.png");
             LoadModTexture("adv_advanced_class_door_closed", "Rooms/AdvancedClass/Adv_Advanced_Class_Door_Closed.png");
             LoadModTexture("adv_advanced_class_door_open", "Rooms/AdvancedClass/Adv_Advanced_Class_Door_Open.png");
-            LoadModTexture("adv_advanced_class_bg", "Rooms/AdvancedClass/Adv_Advanced_Class_bg.png");
+            LoadModTexture("adv_advanced_class_bg", "Rooms/AdvancedClass/Adv_Advanced_Class_Bg.png");
             LoadModTexture("adv_advanced_class_lamp", "Rooms/AdvancedClass/Adv_Advanced_Class_Lamp.png");
 
             LoadModTexture("adv_school_council_door_open", "Rooms/SchoolCouncil/Adv_School_Council_Door_Open.png");
@@ -416,7 +416,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadModSprite("adv_dough", "Textures/Items/LargeSprites/adv_dough_large.png", 50f);
 
             //Lamps!!!
-            LoadModSprite("adv_advanced_class_lamp", "Textures/Rooms/AdvancedClass/adv_advanced_class_lamp.png", 50f);
+            LoadModSprite("adv_advanced_class_lamp", "Textures/Rooms/AdvancedClass/Adv_Advanced_Class_Lamp.png", 50f);
 
             string alphabet = "abcdefghijklmnopqrstuvwxyz";
             for (int i = 0; i < alphabet.Length; i++)

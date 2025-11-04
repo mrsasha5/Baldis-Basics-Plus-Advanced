@@ -284,7 +284,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 "adv_school_council_wall", AssetsStorage.textures["adv_school_council_wall"]);
 
             LevelLoaderPlugin.Instance.roomTextureAliases.Add("adv_corn_wall",
-                AssetsHelper.TextureFromFile("Textures/Rooms/CornField/adv_thick_corn_wall.png"));
+                AssetsHelper.TextureFromFile("Textures/Rooms/CornField/Adv_Thick_Corn_Wall.png"));
             LevelLoaderPlugin.Instance.roomTextureAliases.Add(
                 "adv_corn_floor", AssetsHelper.LoadAsset<Texture2D>("ground2"));
         }
