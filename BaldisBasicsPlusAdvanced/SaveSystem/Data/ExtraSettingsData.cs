@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace BaldisBasicsPlusAdvanced.SaveSystem.Data
 {
-    //[Serializable]
     [JsonObject(MemberSerialization.Fields)]
     public class ExtraSettingsData
     {
@@ -14,14 +13,6 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Data
 
         [NonSerialized]
         internal bool showNotif;
-
-        //not needed now
-        /*internal static JsonSerializerSettings serializerSettings = new JsonSerializerSettings()
-        {
-            Formatting = Formatting.Indented,
-            //Gets or sets how reference loops (e.g. a class referencing itself) are handled. The default value is Error.
-            //ReferenceLoopHandling = ReferenceLoopHandling.Ignore 
-        };*/
 
         public T GetValue<T>(string key)
         {
@@ -40,6 +31,7 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Data
             CheckValue("tips_during_game", false);
             CheckValue("particles", true);
             CheckValue("first_prize_extensions", false);
+            CheckValue("elevator_animations", true);
         }
 
         private void CheckValue(string key, object value)

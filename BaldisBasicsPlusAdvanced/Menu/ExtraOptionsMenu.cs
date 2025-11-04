@@ -48,10 +48,18 @@ namespace BaldisBasicsPlusAdvanced.Menu
             );
 
             CreateSynchronizatedToggleButton(
+                synchronizableName: "elevator_animations",
+                nameKey: "Adv_Option_Elv_Animations",
+                descKey: "Adv_Option_Elv_Animations_Desc",
+                pos: new Vector3(70f, -85f, 0f),
+                width: 250f
+            );
+
+            CreateSynchronizatedToggleButton(
                 synchronizableName: "first_prize_extensions",
                 nameKey: "Adv_Option_FirstPrizeFeature",
                 descKey: "Adv_Option_FirstPrizeFeature_Desc",
-                pos: new Vector3(70f, -85f, 0f),
+                pos: new Vector3(70f, -125f, 0f),
                 width: 250f,
                 setDisabledCover: true
             ).Disable(gameInitialized);

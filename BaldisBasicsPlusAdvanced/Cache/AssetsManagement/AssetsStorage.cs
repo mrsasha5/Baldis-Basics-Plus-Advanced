@@ -202,6 +202,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadSound("chip_crunch", "ChipCrunch");
             LoadSound("vent_vacuum", "Vent_Vacuum"); //Store here
             LoadSound("explosion", "Explosion");
+            LoadSound("power_breaker_lights_on", "PowerBreaker_LightsOn");
             //LoadSound("vent_travel", "Vent_Travel"); //BRUH, Mystman uses AudioClip
             sounds.Add(
                 "vent_travel",

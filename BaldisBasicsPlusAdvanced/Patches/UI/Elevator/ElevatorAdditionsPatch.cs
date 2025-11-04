@@ -17,7 +17,7 @@ using UnityEngine.UI;
 
 namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 {
-    //I would override prefab, but Mystman copied that in MainMenu and overriding prefab is not affecting prefab from Main Menu
+    //I would override prefab, but Mystman copied that in MainMenu and overriding prefab is not affecting instance from MainMenu
     [HarmonyPatch(typeof(ElevatorScreen))]
     internal class ElevatorAdditionsPatch
     {
@@ -45,6 +45,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         private static Dictionary<string, int> tipUsesData = new Dictionary<string, int>();
 
         private static int tipMaxUses = 3;
+
+        private static StandardMenuButton tubesButton;
 
         private static TipsMonitor.MonitorOverrider tubesOverrider;
 
@@ -85,6 +87,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         public static bool LoadTip => !(ObjectsStorage.TipKeys.Count == 0) &&
                 (OptionsDataManager.ExtraSettings.GetValue<bool>("tips"));
+
+        public static bool AnimationsEnabled => OptionsDataManager.ExtraSettings.GetValue<bool>("elevator_animations");
 
         public static string GetTipText()
         {
@@ -153,11 +157,20 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             int currentLives = CoreGameManager.Instance.Lives + 1;
 
-            if (lastSentLifes != null && currentLives != lastSentLifes)
+            if (AnimationsEnabled)
             {
-                tubesUpdateRequired = true;
+                if (!loseAnimationQueued && tubesUpdateRequired)
+                    OnNewLifesAdded();
+
+                if (lastSentLifes != null && currentLives != lastSentLifes)
+                {
+                    if (loseAnimationQueued)
+                        tubesUpdateRequired = true;
+                    else
+                        OnNewLifesAdded();
+                }
+                else lastSentLifes = currentLives;
             }
-            else lastSentLifes = currentLives;
 
             tubesOverrider?.UpdateText(string.Format("Adv_Elv_TubesTip".Localize(), currentLives,
                                     ReflectionHelper.GetValue<int>(CoreGameManager.Instance, "extraLives"),
@@ -185,13 +198,19 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             elvScreen = __instance;
             elvScreen.gameObject.AddComponent<UnityEventsTracker>();
 
-            lifesAudio = new GameObject("LifesAudio").AddComponent<AudioSource>();
-            lifesAudio.transform.SetParent(__instance.transform, false);
+            if (AnimationsEnabled)
+            {
+                lifesAudio = new GameObject("LifesAudio").AddComponent<AudioSource>();
+                lifesAudio.transform.SetParent(__instance.transform, false);
+                lifesAudio.ignoreListenerPause = true;
+            }
 
             originalText = GetRawTip();
 
             monitor = CreateTipText(originalText);
             monitor.gameObject.SetActive(false);
+
+            InitializeTubesGlowImage();
 
             if (LoadTip)
             {
@@ -199,12 +218,15 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 InitializeTubesButton();
             }
 
-            InitializeMasks();
+            if (AnimationsEnabled)
+            {
+                InitializeMasks();
 
-            if (loseAnimationQueued) PrepareLoseAnimation();
+                if (loseAnimationQueued) PrepareLoseAnimation();
+            }
         }
 
-        private static void InitializeTubesButton()
+        private static void InitializeTubesGlowImage()
         {
             Image tubesImage = Array.Find(elvScreen.GetComponentsInChildren<Image>(), x => x.name == "Lives");
 
@@ -219,14 +241,23 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             tubesGlowImage.ToCenter();
             tubesGlowImage.transform.localPosition = Vector3.right * 160f;
             tubesGlowImage.gameObject.SetActive(false);
+        }
 
-            StandardMenuButton button = ObjectsCreator.CreateSpriteButton(AssetsStorage.sprites["transparent"],
+        private static void InitializeTubesButton()
+        {
+            Image tubesImage = Array.Find(elvScreen.GetComponentsInChildren<Image>(), x => x.name == "Lives");
+
+            int glowNum = CoreGameManager.Instance.Lives + 1;
+
+            if (glowNum > 3) glowNum = 3;
+
+            tubesButton = ObjectsCreator.CreateSpriteButton(AssetsStorage.sprites["transparent"],
                 Vector3.right * 200f, elvScreen.Canvas.transform);
-            button.name = "LivesCursorChecker";
-            button.transform.SetSiblingIndex(tubesGlowImage.transform.GetSiblingIndex() + 1);
-            button.image.rectTransform.sizeDelta = new Vector2(100f, 232f);
-            button.eventOnHigh = true;
-            button.OnHighlight.AddListener(delegate()
+            tubesButton.name = "LivesCursorChecker";
+            tubesButton.transform.SetSiblingIndex(tubesGlowImage.transform.GetSiblingIndex() + 1);
+            tubesButton.image.rectTransform.sizeDelta = new Vector2(100f, 232f);
+            tubesButton.eventOnHigh = true;
+            tubesButton.OnHighlight.AddListener(delegate()
             {
                 tubesOverrider = SetOverride(
                     string.Format("Adv_Elv_TubesTip".Localize(), CoreGameManager.Instance.Lives + 1,
@@ -235,7 +266,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 tubesGlowImage?.gameObject.SetActive(true);
             }
             );
-            button.OffHighlight.AddListener(delegate ()
+            tubesButton.OffHighlight.AddListener(delegate ()
             {
                 tubesGlowImage?.gameObject.SetActive(false);
                 tubesOverrider?.Release();
@@ -296,7 +327,34 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         public static void StartLoseAnimation()
         {
-            loseAnimationQueued = true;
+            if (AnimationsEnabled)
+                loseAnimationQueued = true;
+        }
+
+        private static void OnNewLifesAdded()
+        {
+            if (tubesButton != null) tubesButton.gameObject.SetActive(false);
+            lifesAudio.PlayOneShot(AssetsStorage.sounds["power_breaker_lights_on"].soundClip, 4f);
+            elvScreen.StartCoroutine(NewLifesAnimator());
+        }
+
+        private static IEnumerator NewLifesAnimator()
+        {
+            tubesGlowImage.gameObject.SetActive(true);
+
+            Color color = Color.white;
+            tubesGlowImage.color = color;
+
+            while (color.a > 0f)
+            {
+                color.a -= Time.unscaledDeltaTime;
+                tubesGlowImage.color = color;
+                yield return null;
+            }
+
+            tubesGlowImage.gameObject.SetActive(false);
+            if (tubesButton != null) tubesButton.gameObject.SetActive(true);
+            tubesGlowImage.color = Color.white;
         }
 
         private static void PrepareLoseAnimation()
@@ -314,7 +372,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             lifesAudio.clip = AssetsStorage.sounds["adv_turning_loop"].soundClip;
             lifesAudio.loop = true;
-            lifesAudio.ignoreListenerPause = true;
             lifesAudio.Play();
 
             Image explosion =
@@ -333,10 +390,10 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             }, fps: 10);
             explosionAnimator.enabled = false;
 
-            elvScreen.StartCoroutine(ExplosionAnimator(4f, 1.5f, lifes));
+            elvScreen.StartCoroutine(ExplosionAnimator(4f, 2f, 1.5f, lifes));
         }
 
-        private static IEnumerator ExplosionAnimator(float delay, float time, int index)
+        private static IEnumerator ExplosionAnimator(float delay, float timeBeforeUpdateTubes, float time, int index)
         {
             Image tubesImage = Array.Find(elvScreen.GetComponentsInChildren<Image>(), x => x.name == "Lives");
             Sprite[] lifeImages = ReflectionHelper.GetValue<Sprite[]>(elvScreen, "lifeImages");
