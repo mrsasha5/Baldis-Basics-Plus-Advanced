@@ -19,11 +19,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             {
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["safety_trapdoor"],
-                    weight = 25,
-                },
-                new WeightedGameObject()
-                {
                     selection = ObjectsStorage.Objects["invisibility_plate"],
                     weight = 75
                 },

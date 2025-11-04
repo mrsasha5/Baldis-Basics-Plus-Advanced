@@ -679,7 +679,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreateMultipleRequiredVendingMachine("GoodMachine",
                 ItemMetaStorage.Instance.FindByEnum(Items.Quarter).itemObjects[0], 2,
                 AssetsStorage.materials["adv_good_machine"], AssetsStorage.materials["adv_good_machine_out"], null,
-                weight: 150, 
+                weight: 0,
                 new WeightedItemObject[] {
                 new WeightedItemObject()
                 {
@@ -698,7 +698,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 },
             })
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Maintenance, LevelType.Factory)
-                .SetForced(true);
+                .SetForced(true)
+                .SetWeight(2, 50)
+                .SetWeight(3, 75);
         }
 
         #endregion
@@ -1075,7 +1077,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabsCreator.CreatePlate<ProtectionPlate>("protection_plate");
             PrefabsCreator.CreatePlate<TeleportationPlate>("teleportation_plate");
             PrefabsCreator.CreatePlate<MysteriousPlate>("fake_plate");
-            PrefabsCreator.CreatePlate<SafetyTrapdoor>("safety_trapdoor");
+            //PrefabsCreator.CreatePlate<SafetyTrapdoor>("safety_trapdoor");
             PrefabsCreator.CreatePlate<KitchenStove>("kitchen_stove");
             PrefabsCreator.CreatePlate<JohnnyKitchenStove>("johnny_kitchen_stove");
 

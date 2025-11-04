@@ -10,6 +10,7 @@ using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
 using PlusStudioLevelLoader;
 using UnityEngine;
+using static Rewired.Platforms.Custom.CustomPlatformUnifiedKeyboardSource.KeyPropertyMap;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 {
@@ -24,11 +25,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 LevelLoaderPlugin.Instance.itemObjects.Add(key, ObjectsStorage.ItemObjects[objectName]);
             }
 
-            foreach (string vendingMachineName in ObjectsStorage.SodaMachines.Keys)
+            /*foreach (string vendingMachineName in ObjectsStorage.SodaMachines.Keys)
             {
                 string key = "adv_" + vendingMachineName;
                 LevelLoaderPlugin.Instance.basicObjects.Add(key, ObjectsStorage.SodaMachines[vendingMachineName].gameObject);
-            }
+            }*/
+
+            LevelLoaderPlugin.Instance.basicObjects.Add("adv_good_machine", 
+                ObjectsStorage.SodaMachines["GoodMachine"].gameObject);
 
             foreach (string name in ObjectsStorage.Objects.Keys)
             {

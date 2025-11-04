@@ -25,6 +25,7 @@ using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelFormat;
 using PlusStudioLevelLoader;
 using UnityEngine;
+using static Mono.Security.X509.X520;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 {
@@ -293,10 +294,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #region Generic Object Visuals
 
-            foreach (string name in ObjectsStorage.SodaMachines.Keys)
+            /*foreach (string name in ObjectsStorage.SodaMachines.Keys)
             {
                 EditorInterface.AddObjectVisual("adv_" + name, ObjectsStorage.SodaMachines[name].gameObject, true);
-            }
+            }*/
+
+            EditorInterface.AddObjectVisual("adv_good_machine", ObjectsStorage.SodaMachines["GoodMachine"].gameObject, true);
 
             foreach (string name in ObjectsStorage.Objects.Keys)
             {
@@ -399,9 +402,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                     new ItemTool(key));
             }
 
-#warning Rename this one in dictionary and include in filter fix
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                new ObjectTool("adv_GoodMachine", 
+                new ObjectTool("adv_good_machine", 
                     AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Objects/adv_editor_GoodMachine.png")));
 
             //Plates are supposed to be used in some premades, so they still exist as objects in Level Studio as well
@@ -549,8 +551,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 texBase + "Structures/adv_editor_acceleration_plate.png");
             AssetsStorage.LoadModSprite("adv_editor_noisy_plate",
                 texBase + "Structures/adv_editor_noisy_plate.png");
-            AssetsStorage.LoadModSprite("adv_editor_safety_trapdoor",
-                texBase + "Structures/adv_editor_safety_trapdoor.png");
             AssetsStorage.LoadModSprite("adv_editor_voting_ballot",
                 texBase + "Objects/adv_editor_voting_ballot.png");
             AssetsStorage.LoadModSprite("adv_editor_advanced_math_machine",
@@ -570,11 +570,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 texBase + "Rooms/adv_room_advanced.png");
             AssetsStorage.LoadModSprite("adv_editor_corn_field",
                 texBase + "Rooms/adv_room_corn_field.png");
-
-            AssetsStorage.LoadModSprite("adv_editor_no_cooldown_plate",
-                texBase + "Objects/adv_editor_no_cooldown.png");
-            AssetsStorage.LoadModSprite("adv_editor_low_unpress_time",
-                texBase + "Objects/adv_editor_low_unpress_time.png");
         }
     }
 }

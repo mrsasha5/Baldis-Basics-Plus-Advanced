@@ -361,9 +361,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             LoadModTexture("adv_fake_plate_activated", "Objects/Plates/FakePlate/adv_fake_plate_activated.png");
             LoadModTexture("adv_fake_plate_surprize", "Objects/Plates/FakePlate/adv_fake_plate_surprize.png");
 
-            LoadModTexture("adv_safety_trapdoor_deactivated", "Objects/SafetyTrapdoor/adv_safety_trapdoor_deactivated.png");
-            LoadModTexture("adv_safety_trapdoor_activated", "Objects/SafetyTrapdoor/adv_safety_trapdoor_activated.png");
-
             LoadModTexture("adv_kitchen_stove", "Objects/KitchenStove/adv_kitchen_stove.png");
 
             LoadModTexture("adv_gum_dispenser", "Objects/GumDispenser/adv_gum_dispenser.png");

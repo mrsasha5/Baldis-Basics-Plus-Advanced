@@ -51,7 +51,6 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Managers
         {
             PrepareKeyBinding("wind_blower_switch", "Adv_KeyBind_WindBlowerSwitch", "Adv_KeyBind_WindBlowerSwitch_Desc", KeyCode.B);
             PrepareKeyBinding("balloon_pop_action", "Adv_KeyBind_BalloonPopAction", "Adv_KeyBind_BalloonPopAction_Desc", KeyCode.P);
-            PrepareKeyBinding("exit_from_trapdoor", "Adv_KeyBind_ExitFromTrapdoor", "Adv_KeyBind_ExitFromTrapdoor_Desc", KeyCode.Mouse0);
             //PrepareKeyBinding("update_mod", "Adv_KeyBind_UpdateMod", "Adv_KeyBind_UpdateMod_Desc", KeyCode.U);
             /*for (int i = 0; i < 10; i++)
             {
