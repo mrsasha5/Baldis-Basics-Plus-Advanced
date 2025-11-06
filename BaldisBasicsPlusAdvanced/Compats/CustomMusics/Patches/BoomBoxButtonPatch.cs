@@ -41,6 +41,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
             }
         }
 
+        [HarmonyPatch("Press")]
+        [HarmonyPostfix]
+        private static void OnPress()
+        {
+            overrider?.monitor.OverrideText(overrider.text);
+        }
+
         private static void Update()
         {
             overrider?.UpdateText(GetTip());

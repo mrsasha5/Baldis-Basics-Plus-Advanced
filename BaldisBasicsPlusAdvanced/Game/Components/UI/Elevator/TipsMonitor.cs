@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BepInEx;
 using MTM101BaldAPI.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static Rewired.Platforms.Custom.CustomPlatformUnifiedKeyboardSource.KeyPropertyMap;
 
 namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 {
@@ -203,7 +200,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
             }         
         }
 
-        private void OverrideText(string text)
+        public void OverrideText(string text)
         {
             tmp.text = text;
 
