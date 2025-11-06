@@ -12,7 +12,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics
         {
             guid = "pixelguy.pixelmodding.baldiplus.custommusics";
             versionInfo = new VersionInfo(this)
-                .SetMinVersion("1.1.1.1", exceptCurrent: false);
+                .SetMinVersion("1.1.2", exceptCurrent: false);
 
             CreateConfigValue("Custom Musics",
                 "All required music will be synchronized with the internal system of this modification to provide better compatibility.");

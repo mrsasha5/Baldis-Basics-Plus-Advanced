@@ -1,17 +1,95 @@
 ﻿using BaldisBasicsPlusAdvanced.Attributes;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
-using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BBPlusCustomMusics.MonoBehaviours;
 using HarmonyLib;
-using UnityEngine;
-using UnityEngine.UI;
 
 namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
 {
-    [HarmonyPatch(typeof(ElevatorScreen))]
+    [HarmonyPatch(typeof(BoomBox))]
+    [ConditionalPatchIntegrableMod(typeof(CustomMusicsIntegration))]
+    internal class BoomBoxButtonPatch
+    {
+
+        private static TipsMonitor.MonitorOverrider overrider;
+
+        private static string text;
+
+        private static bool highlighted;
+
+        [HarmonyPatch("Highlight")]
+        [HarmonyPostfix]
+        private static void OnHighlight()
+        {
+            if (ElevatorAdditionsPatch.LoadTip && !highlighted)
+            {
+                text = "Adv_CustomMusics_Elv_Tip".Localize();
+                OverrideTips();
+                highlighted = true;
+            }
+        }
+
+        [HarmonyPatch("Unhighlight")]
+        [HarmonyPostfix]
+        private static void OnUnhighlight()
+        {
+            if (highlighted)
+            {
+                ResetOverride();
+                highlighted = false;
+            }
+        }
+
+        private static void Update()
+        {
+            overrider?.UpdateText(GetTip());
+        }
+
+        private static string GetTip()
+        {
+            return string.Format(text, GetTrackName(),
+                MusicManager.Instance.MidiPlayer.MPTK_PlayTime.ToString("mm':'ss"),
+                MusicManager.Instance.MidiPlayer.MPTK_Duration.ToString("mm':'ss"));
+        }
+
+        private static string GetTrackName()
+        {
+            string trackName = MusicManager.Instance.MidiPlayer.MPTK_MidiName;
+
+            if (MusicManager.Instance.MidiPlayer.MPTK_MidiName.StartsWith("custom_CustomMusicsMIDI_"))
+            {
+                trackName = trackName.ReplaceFirst("custom_CustomMusicsMIDI_", "");
+            }
+            else if (MusicManager.Instance.MidiPlayer.MPTK_MidiName.StartsWith("custom_"))
+            {
+                trackName = trackName.ReplaceFirst("custom_", "");
+            }
+
+            if (trackName.Length > 50)
+            {
+                trackName = trackName.Substring(0, 47);
+                trackName += "...";
+            }
+
+            return trackName;
+        }
+
+        private static void OverrideTips()
+        {
+            overrider = ElevatorAdditionsPatch.SetOverride(GetTip(), priority: 0);
+            if (overrider != null) overrider.onUpdate += Update;
+        }
+
+        private static void ResetOverride()
+        {
+            overrider?.Release();
+            overrider = null;
+        }
+
+    }
+
+    /*[HarmonyPatch(typeof(ElevatorScreen))]
     [ConditionalPatchIntegrableMod(typeof(CustomMusicsIntegration))]
     
     internal class BoomBoxButtonPatch
@@ -124,5 +202,5 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
             overrider = null;
         }
 
-    }
+    }*/
 }

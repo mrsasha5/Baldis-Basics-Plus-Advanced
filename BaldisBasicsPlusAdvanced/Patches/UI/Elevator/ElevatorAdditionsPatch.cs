@@ -334,6 +334,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         private static void OnNewLifesAdded()
         {
             if (tubesButton != null) tubesButton.gameObject.SetActive(false);
+            lifesAudio.volume = 1f;
             lifesAudio.PlayOneShot(AssetsStorage.sounds["power_breaker_lights_on"].soundClip, 2f);
             elvScreen.StartCoroutine(NewLifesAnimator());
         }
@@ -390,7 +391,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             }, fps: 10);
             explosionAnimator.enabled = false;
 
-            elvScreen.StartCoroutine(ExplosionAnimator(4f, 2f, 1.5f, lifes));
+            elvScreen.StartCoroutine(ExplosionAnimator(3f, 2f, 1.5f, lifes));
         }
 
         private static IEnumerator ExplosionAnimator(float delay, float timeBeforeUpdateTubes, float time, int index)
@@ -413,7 +414,8 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             while (delay > 0f)
             {
                 delay -= Time.unscaledDeltaTime;
-                lifesAudio.volume = 1f - (delay / _delay);
+                if (delay < 0f) delay = 0f;
+                lifesAudio.volume = (1f - (delay / _delay)) * 0.75f;
                 yield return null;
             }
 
