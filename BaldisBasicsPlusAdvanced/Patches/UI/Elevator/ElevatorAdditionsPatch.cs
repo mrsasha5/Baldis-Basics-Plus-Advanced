@@ -378,7 +378,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             Image explosion =
                 UIHelpers.CreateImage(explosionSprites[0], elvScreen.Canvas.transform, Vector3.zero, false);
             explosion.name = "Explosion";
-            explosion.transform.SetSiblingIndex(elvScreen.Canvas.transform.childCount - 2);
+            explosion.transform.SetSiblingIndex(masks[0].transform.GetSiblingIndex() + 1);
             explosion.ToCenter();
             explosion.transform.localPosition = explosionPositions[lifes];
             explosion.color = new Color(1f, 1f, 1f, 0f);
@@ -389,13 +389,15 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             {
                 {  "standard", explosionSprites }
             }, fps: 10);
-            explosionAnimator.enabled = false;
+            explosionAnimator.gameObject.SetActive(false);
 
             elvScreen.StartCoroutine(ExplosionAnimator(3f, 2f, 1.5f, lifes));
         }
 
         private static IEnumerator ExplosionAnimator(float delay, float timeBeforeUpdateTubes, float time, int index)
         {
+            LevelBuilder builder = GameObject.FindObjectOfType<LevelBuilder>();
+
             Image tubesImage = Array.Find(elvScreen.GetComponentsInChildren<Image>(), x => x.name == "Lives");
             Sprite[] lifeImages = ReflectionHelper.GetValue<Sprite[]>(elvScreen, "lifeImages");
 
@@ -419,6 +421,18 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 yield return null;
             }
 
+            while (!builder.levelCreated)
+            {
+                yield return null;
+            }
+
+            float time2 = 0.5f;
+            while (time2 > 0f)
+            {
+                time2 -= Time.unscaledDeltaTime;
+                yield return null;
+            }
+
             lifesAudio.loop = false;
             lifesAudio.clip = null;
             lifesAudio.PlayOneShot(AssetsStorage.sounds["adv_turning_end"].soundClip);
@@ -434,7 +448,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 yield return null;
             }
 
-            explosionAnimator.enabled = true;
+            explosionAnimator.gameObject.SetActive(true);
             explosionAnimator.image.color = Color.white;
             explosionAnimator.Play("standard", 99f);
             explosionAnimator.ChangeSpeed(1f);
@@ -454,6 +468,14 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             }
 
             explosionAnimator.gameObject.SetActive(false);
+            tubesImage.sprite = lifeImages[index];
+            masks[index].gameObject.SetActive(false);
+
+            while (timeBeforeUpdateTubes > 0f)
+            {
+                timeBeforeUpdateTubes -= Time.unscaledDeltaTime;
+                yield return null;
+            }
 
             loseAnimationQueued = false;
 
