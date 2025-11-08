@@ -378,7 +378,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             Image explosion =
                 UIHelpers.CreateImage(explosionSprites[0], elvScreen.Canvas.transform, Vector3.zero, false);
             explosion.name = "Explosion";
-            explosion.transform.SetSiblingIndex(masks[0].transform.GetSiblingIndex() + 1);
+            explosion.transform.SetSiblingIndex(tubesGlowImage.transform.GetSiblingIndex() + 1);
             explosion.ToCenter();
             explosion.transform.localPosition = explosionPositions[lifes];
             explosion.color = new Color(1f, 1f, 1f, 0f);
