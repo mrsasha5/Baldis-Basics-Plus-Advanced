@@ -1,5 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.Helpers;
-using MTM101BaldAPI.Components;
+using MTM101BaldAPI.Components.Animation;
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
@@ -20,12 +20,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         private AudioManager audMan;
 
         [SerializeField]
-        private RotatedSpriteAnimator animator;
+        private CustomRotatedSpriteAnimator animator;
 
         [SerializeField]
         private SpriteRotator rotator;
-
-        private static Sprite[][] sprites;
 
         private static float windSpeed = 30f;
 
@@ -63,8 +61,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
 
-            animator = gameObject.AddComponent<RotatedSpriteAnimator>();
+            animator = gameObject.AddComponent<CustomRotatedSpriteAnimator>();
 
+            Sprite[][] sprites;
+            
             sprites = new Sprite[2][];
 
             sprites[0] = new Sprite[]
@@ -89,6 +89,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_backside.png", pixelsPerUnit),
                 AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_2.png", pixelsPerUnit),
             };
+
+            animator.rotator = rotator;
+            animator.AddAnimation("blowing", new SpriteArrayAnimation(10, sprites));
+            animator.SetDefaultAnimation("blowing", 3f);
         }
 
         public void Initialize(EnvironmentController ec, Vector3 position, Quaternion rotation, float livingTime, bool turnOff = true)
@@ -117,13 +121,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             if (turnOff) SetActivityState(false);
 
             time = livingTime;
-
-            animator.affectedObject = rotator;
-            animator.PopulateAnimations(new Dictionary<string, Sprite[][]>() {
-                { "blowing", sprites }
-            }, fps: 60);
-
-            animator.SetDefaultAnimation("blowing", 1f);
         }
 
         private void CorrectSelfPosition(bool playThud = true, bool playOnlyIfPosReallyChanged = true)

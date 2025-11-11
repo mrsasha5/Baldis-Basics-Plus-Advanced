@@ -102,10 +102,10 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                 yield return null;
             }
 
-            criss.Animator.SetDefaultAnimation("Shooting", 10f);
-            criss.Animator.Play("PreparingToShoot", 0.05f);
+            criss.Animator.SetDefaultAnimation("Shooting", 1f);
+            criss.Animator.Play("PreparingToShoot", 1f);
 
-            while (criss.Animator.currentAnimationName == "PreparingToShoot")
+            while (criss.Animator.AnimationId == "PreparingToShoot")
             {
                 UpdateDirection();
                 yield return null;

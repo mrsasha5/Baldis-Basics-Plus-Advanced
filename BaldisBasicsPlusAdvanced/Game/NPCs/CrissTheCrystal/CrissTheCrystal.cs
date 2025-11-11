@@ -6,7 +6,7 @@ using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
-using MTM101BaldAPI.Components;
+using MTM101BaldAPI.Components.Animation;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
@@ -38,24 +38,6 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
         private SoundObject audLaserEnd;
 
         [SerializeField]
-        private Sprite[] idleSprites;
-
-        [SerializeField]
-        private Sprite[] walkingSprites;
-
-        [SerializeField]
-        private Sprite[] crazyRunningSprites;
-
-        [SerializeField]
-        private Sprite[] goingToShootSprites;
-
-        [SerializeField]
-        private Sprite[] loopedShootingSprites;
-
-        [SerializeField]
-        private Sprite[] turnsCrazySprites;
-
-        [SerializeField]
         private Sprite gaugeIcon;
 
         [SerializeField]
@@ -65,7 +47,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
         private AudioManager audMan;
 
         [SerializeField]
-        private CustomSpriteAnimator animator;
+        private CustomSpriteRendererAnimator animator;
 
         [SerializeField]
         private Vector2 minMaxCooldown;
@@ -99,7 +81,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
         public LaserObject Laser => laser;
 
-        public CustomSpriteAnimator Animator => animator;
+        public CustomSpriteRendererAnimator Animator => animator;
 
         public WindowObject WindowPre => windowObjectPre;
 
@@ -116,7 +98,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             windowObjectPre.windowPre.openOnStart = true;
 
             audMan = gameObject.GetComponent<AudioManager>();
-            animator = gameObject.AddComponent<CustomSpriteAnimator>();
+            animator = gameObject.AddComponent<CustomSpriteRendererAnimator>();
             blindCooldown = 1f;
             laserSize = 5f;
             blindTime = 10f;
@@ -124,14 +106,12 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             runSpeed = 30f;
             pitchSpeed = 0.15f;
             destroyingWallTime = 2f;
-
             minMaxCooldown = new Vector2(30f, 60f);
-
             audLaserStart = AssetsStorage.sounds["adv_laser_start"];
             audLaserLoop = AssetsStorage.sounds["adv_laser_loop"];
             audLaserEnd = AssetsStorage.sounds["adv_laser_end"];
 
-            animator.spriteRenderer = spriteRenderer[0];
+            animator.renderer = spriteRenderer[0];
             spriteRenderer[0].transform.localPosition = Vector3.zero;
 
             Sprite[] sprites =
@@ -142,38 +122,33 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
             gaugeIcon = AssetsHelper.SpriteFromFile("Textures/Gauges/adv_gauge_crystal_blindness.png");
 
-            turnsCrazySprites = new Sprite[4];
-
-            crazyRunningSprites = new Sprite[6];
+            Sprite[] turnsCrazySprites = new Sprite[4];
+            Sprite[] crazyRunningSprites = new Sprite[6];
+            Sprite[] idleSprites = new Sprite[4];
+            Sprite[] walkingSprites = new Sprite[4];
+            Sprite[] goingToShootSprites = new Sprite[7];
+            Sprite[] loopedShootingSprites = new Sprite[4];
 
             for (int i = 0; i < turnsCrazySprites.Length; i++)
             {
                 turnsCrazySprites[i] = crazySprites[i];
             }
-
             for (int i = 0; i <= 2; i++)
             {
                 crazyRunningSprites[i] = crazySprites[i + 3];
             }
-
             crazyRunningSprites[3] = crazySprites[3];
             crazyRunningSprites[4] = crazySprites[6];
             crazyRunningSprites[5] = crazySprites[7];
-
-            idleSprites = new Sprite[4];
-            walkingSprites = new Sprite[4];
             for (int i = 0; i < idleSprites.Length; i++)
             {
                 idleSprites[i] = sprites[i];
                 walkingSprites[i] = sprites[i];
             }
-
-            goingToShootSprites = new Sprite[7];
             for (int i = 0; i < goingToShootSprites.Length; i++)
             {
                 goingToShootSprites[i] = sprites[i + 3];
             }
-            loopedShootingSprites = new Sprite[4];
             for (int i = 0; i < loopedShootingSprites.Length; i++)
             {
                 loopedShootingSprites[i] = sprites[i + 11];
@@ -188,6 +163,14 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
             spriteRenderer[0].sprite = walkingSprites[0];
 
+            animator.AddAnimation("Idle", new SpriteAnimation(10, idleSprites));
+            animator.AddAnimation("Walking", new SpriteAnimation(10, walkingSprites));
+            animator.AddAnimation("PreparingToShoot", new SpriteAnimation(10, goingToShootSprites));
+            animator.AddAnimation("Shooting", new SpriteAnimation(10, loopedShootingSprites));
+            animator.AddAnimation("TurnsCrazy", new SpriteAnimation(10, turnsCrazySprites));
+            animator.AddAnimation("Crazy_Running", new SpriteAnimation(10, crazyRunningSprites));
+            animator.SetDefaultAnimation("Idle", 1f);
+
             //GameObject laserObj = new GameObject("Laser");
 
             //laserObj.transform.SetParent(transform, false);
@@ -198,18 +181,6 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
         public override void Initialize()
         {
             base.Initialize();
-            animator.PopulateAnimations(
-                new Dictionary<string, Sprite[]>()
-                {
-                    { "Idle", idleSprites },
-                    { "Walking", walkingSprites },
-                    { "PreparingToShoot", goingToShootSprites },
-                    { "Shooting", loopedShootingSprites },
-                    { "TurnsCrazy", turnsCrazySprites },
-                    { "Crazy_Running", crazyRunningSprites}
-                }, fps: 10
-            );
-            animator.SetDefaultAnimation("Idle", 1f);
 
             GameObject laserObj = new GameObject("Criss Laser");
             laser = laserObj.AddComponent<LaserObject>();

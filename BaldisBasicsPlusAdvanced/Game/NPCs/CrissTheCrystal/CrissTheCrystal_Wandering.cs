@@ -24,6 +24,8 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             time = Random.Range(criss.MinMaxCooldown.x, criss.MinMaxCooldown.y);
             phraseTime = Random.Range(20f, 40f);
             criss.Animator.SetDefaultAnimation("Walking", 1f);
+#warning I guess that null check will be removed, so this solution is supposed to die
+            criss.Animator.Play("Walking", 1f, loop: true);
             criss.SetWalkSpeed();
             npc.behaviorStateMachine.ChangeNavigationState(new NavigationState_WanderRandom(npc, 0));
         }

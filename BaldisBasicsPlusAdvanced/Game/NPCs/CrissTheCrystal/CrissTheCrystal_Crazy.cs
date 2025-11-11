@@ -22,7 +22,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             baseTime = 20f;
             time = baseTime;
             color = new Color(1f, 0f, 0f, 1f);
-            criss.Animator.SetDefaultAnimation("Crazy_Running", 50f);
+            criss.Animator.SetDefaultAnimation("Crazy_Running", 1.5f);
             criss.Animator.Play("TurnsCrazy", 1f);
             criss.StartCoroutine(WaitsAnimation());
         }
@@ -31,7 +31,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
         private IEnumerator WaitsAnimation()
         {
-            while (criss.Animator.currentAnimationName == "TurnsCrazy")
+            while (criss.Animator.AnimationId == "TurnsCrazy")
             {
                 yield return null;
             }

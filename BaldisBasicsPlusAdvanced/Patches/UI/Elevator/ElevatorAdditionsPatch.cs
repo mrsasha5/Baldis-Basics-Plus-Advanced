@@ -6,8 +6,7 @@ using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
-using MTM101BaldAPI.Components;
-using MTM101BaldAPI.Reflection;
+using MTM101BaldAPI.Components.Animation;
 using MTM101BaldAPI.UI;
 using System;
 using System.Collections;
@@ -383,12 +382,10 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             explosion.transform.localPosition = explosionPositions[lifes];
             explosion.color = new Color(1f, 1f, 1f, 0f);
             explosionAnimator = explosion.gameObject.AddComponent<CustomImageAnimator>();
-            explosionAnimator.useUnscaledTime = true;
+            explosionAnimator.useScaledTime = false;
+            explosionAnimator.timeScale = TimeScaleType.Null;
             explosionAnimator.image = explosion;
-            explosionAnimator.PopulateAnimations(new Dictionary<string, Sprite[]>()
-            {
-                {  "standard", explosionSprites }
-            }, fps: 10);
+            explosionAnimator.AddAnimation("standard", new SpriteAnimation(10, explosionSprites));
             explosionAnimator.gameObject.SetActive(false);
 
             elvScreen.StartCoroutine(ExplosionAnimator(3f, 2f, 1.5f, lifes));
@@ -457,9 +454,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             lifesAudio.PlayOneShot(AssetsStorage.sounds["explosion"].soundClip);
 
-            while (explosionAnimator.currentAnimation != null)
+            while (explosionAnimator.AnimationId != null)
             {
-                if (!livesUpdated && explosionAnimator.currentFrameIndex >= 5)
+                if (!livesUpdated && explosionAnimator.AnimationFrame >= 5)
                 {
                     tubesImage.sprite = lifeImages[index];
                     masks[index].gameObject.SetActive(false);
