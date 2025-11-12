@@ -192,10 +192,11 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         [HarmonyPatch("Start")]
         [HarmonyPostfix]
-        private static void OnStart(ElevatorScreen __instance, ref Canvas ___canvas)
+        private static void OnStart(ElevatorScreen __instance, ref Canvas ___canvas, ref AudioManager ___audMan)
         {
             elvScreen = __instance;
             elvScreen.gameObject.AddComponent<UnityEventsTracker>();
+            ___audMan.positional = false;
 
             if (AnimationsEnabled)
             {

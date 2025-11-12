@@ -4,8 +4,7 @@ using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 namespace BaldisBasicsPlusAdvanced.API
 {
     /// <summary>
-    /// It's second API class that provides methods for you.
-    /// And also this is a container of fields which tells you what is available and what is not.
+    /// Helps you in managing PIT Stop's stuff
     /// </summary>
     public class PitOverrides
     {

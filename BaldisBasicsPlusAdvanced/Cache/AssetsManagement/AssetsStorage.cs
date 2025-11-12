@@ -1,8 +1,8 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
-using BaldisBasicsPlusAdvanced.Patches;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using MTM101BaldAPI;
@@ -644,12 +644,6 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                 sounds["bal_game_over"].color = Color.green;
                 sounds["error_maybe"].soundKey = "Adv_Sub_Error_Maybe";
 
-                //Elevator screen overrides
-                ElevatorScreen elvScreen = AssetsHelper.LoadAsset<ElevatorScreen>("ElevatorScreen");
-                elvScreen.GetComponent<AudioManager>().positional = false;
-
-                //Elevator ends
-
                 LevelAsset pitStop = AssetsHelper.LoadAsset<LevelAsset>("Pitstop");
                 RoomData hall = pitStop.rooms.Find(x => x.category == RoomCategory.Null);
 
@@ -784,16 +778,32 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                     hall.basicObjects.Add(new BasicObjectData()
                     {
                         prefab = ObjectsStorage.Objects["johnny_kitchen_stove"].transform,
-                        position = new Vector3(365f, 0f, 145f)
+                        position = new Vector3(365f, 0f, 95f)
                     });
 
-                    pitStop.posters.Add(new PosterData()
+                    GameObject textBase = new GameObject("113");
+                    TextMeshPro tmp =
+                        ObjectsCreator.CreateTextMesh(BaldiFonts.ComicSans12, new Vector2(10f, 25f), textBase.transform, Vector3.zero);
+                    textBase.gameObject.ConvertToPrefab(true);
+                    tmp.transform.localScale = Vector3.one * 0.75f;
+                    tmp.gameObject.layer = LayersHelper.billboard;
+                    tmp.color = Color.red;
+                    tmp.text = "POTENTIALLY PLACEHOLDER POSITION";
+                    tmp.gameObject.AddComponent<PickupBob>();
+                    tmp.gameObject.AddComponent<BillboardUpdater>();
+
+                    hall.basicObjects.Add(new BasicObjectData()
+                    {
+                        prefab = textBase.transform,
+                        position = new Vector3(355f, 5f, 85f)
+                    });
+
+                    /*pitStop.posters.Add(new PosterData()
                     {
                         poster = ObjectsStorage.Posters.Find(x => x.name == "Adv_Poster_Kitchen_Stove"),
                         position = new IntVector2(36, 13),
                         direction = Direction.East
-                    });
-
+                    });*/
                 }
 
                 overridden = true;

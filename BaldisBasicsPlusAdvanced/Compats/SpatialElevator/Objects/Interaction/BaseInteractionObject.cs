@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
@@ -54,3 +54,4 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
         }
     }
 }
+*/

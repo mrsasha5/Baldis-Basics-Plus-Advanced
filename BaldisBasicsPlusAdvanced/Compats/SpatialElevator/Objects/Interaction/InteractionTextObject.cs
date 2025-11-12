@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿/*using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -115,4 +115,4 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
                 tmp.fontStyle = styleOnUnsight;
         }
     }
-}
+}*/

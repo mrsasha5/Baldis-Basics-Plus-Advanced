@@ -99,7 +99,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
         {
             guid = GUID;
             priority = 127;
-            versionInfo = new VersionInfo(this);
+            versionInfo = new VersionInfo(this)
+                .SetMinVersion("1.4.1.0", exceptCurrent: false);
 
             CreateConfigValue("Level Studio",
                 "Adds support for Level Studio like new objects, structures and other content which can be used on your levels!");
@@ -119,8 +120,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             InitializeVisuals();
             InitializeStructureLocs();
+            InitializeTextureContainers();
             EditorInterfaceModes.AddModeCallback(InitializeTools);
-            EditorLevelData.AddDefaultTextureAction(InitializeTextureContainers);
         }
 
         private static void InitializeStructureLocs()
@@ -512,17 +513,17 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             }
         }
 
-        private static void InitializeTextureContainers(Dictionary<string, TextureContainer> containers)
+        private static void InitializeTextureContainers()
         {
-            containers.Add("adv_english_class", 
+            LevelStudioPlugin.Instance.defaultRoomTextures.Add("adv_english_class", 
                 new TextureContainer("adv_english_floor", "adv_english_wall", "adv_english_ceiling"));
-            containers.Add("adv_english_class_timer",
-                new TextureContainer(containers["adv_english_class"]));
-            containers.Add("adv_school_council_class", 
+            LevelStudioPlugin.Instance.defaultRoomTextures.Add("adv_english_class_timer",
+                new TextureContainer(LevelStudioPlugin.Instance.defaultRoomTextures["adv_english_class"]));
+            LevelStudioPlugin.Instance.defaultRoomTextures.Add("adv_school_council_class", 
                 new TextureContainer("BasicFloor", "adv_school_council_wall", "Ceiling"));
-            containers.Add("adv_advanced_class", 
+            LevelStudioPlugin.Instance.defaultRoomTextures.Add("adv_advanced_class", 
                 new TextureContainer("adv_advanced_class_floor", "adv_advanced_class_wall", "adv_advanced_class_ceiling"));
-            containers.Add("adv_corn_field", 
+            LevelStudioPlugin.Instance.defaultRoomTextures.Add("adv_corn_field", 
                 new TextureContainer("adv_corn_floor", "adv_corn_wall", "None"));
         }
 

@@ -7,18 +7,25 @@ using BaldisBasicsPlusAdvanced.Game.Activities;
 using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
+using BepInEx.Bootstrap;
 using MTM101BaldAPI;
 using PlusStudioLevelLoader;
 using UnityEngine;
-using static Rewired.Platforms.Custom.CustomPlatformUnifiedKeyboardSource.KeyPropertyMap;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 {
     internal class LevelLoaderIntegration
     {
 
+        private const string minVersion = "1.6.0.0";
+
         public static void Initialize()
         {
+            if (Chainloader.PluginInfos[IntegrationManager.levelLoaderId].Metadata.Version < new Version(minVersion))
+            {
+                ObjectsCreator.CauseCrash(new Exception("Level Loading system is outdated, please update it!"));
+            }
+
             foreach (string objectName in ObjectsStorage.ItemObjects.Keys)
             {
                 string key = "adv_" + objectName;

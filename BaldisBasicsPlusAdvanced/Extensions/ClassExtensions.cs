@@ -36,6 +36,11 @@ namespace BaldisBasicsPlusAdvanced.Extensions
             return rb;
         }
 
+        public static List<RoomFunction> GetFunctions(this RoomFunctionContainer controller)
+        {
+            return ReflectionHelper.GetValue<List<RoomFunction>>(controller, "functions");
+        }
+
         public static void RemoveFunction(this RoomFunctionContainer controller, RoomFunction function)
         {
             ReflectionHelper.GetValue<List<RoomFunction>>(controller, "functions").Remove(function);

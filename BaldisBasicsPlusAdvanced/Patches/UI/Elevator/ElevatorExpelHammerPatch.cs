@@ -1,7 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats;
-using BaldisBasicsPlusAdvanced.Compats.SpatialElevator;
+//using BaldisBasicsPlusAdvanced.Compats.SpatialElevator;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.Movement;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
@@ -121,7 +121,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             if (!Available) return;
             shouldInitialize = true;
 
-            if (IntegrationManager.IsActive<SpatialElevatorIntegration>()) return;
+            //if (IntegrationManager.IsActive<SpatialElevatorIntegration>()) return;
 
             elvScreen = __instance;
 

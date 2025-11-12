@@ -20,7 +20,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
         [HarmonyPostfix]
         private static void OnGenerationFinished(StoreRoomFunction __instance)
         {
-
             JohnnyKitchenStove stove = GameObject.FindObjectOfType<JohnnyKitchenStove>();
             if (stove != null)
             {
@@ -50,12 +49,12 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
             if (!PitOverrides.ExpelHammerPickupDisabled)
             {
                 hammerPriceTag = CreatePriceTag(hammerPrice.ToString());
-                hammerPriceTag.transform.localPosition = new Vector3(20f, 2.65f, 46f);
+                hammerPriceTag.transform.localPosition = new Vector3(25f, 2.65f, 4f);
             }
 
             if (Singleton<BaseGameManager>.Instance is PitstopGameManager && !PitOverrides.ExpelHammerPickupDisabled)
             {
-                CreatePickup<ExpelHammerPickup>(hammerPriceTag, hammerPrice, new Vector3(20f, 5f, 48f));
+                CreatePickup<ExpelHammerPickup>(hammerPriceTag, hammerPrice, new Vector3(25f, 5f, 2f));
             }
             else
             {

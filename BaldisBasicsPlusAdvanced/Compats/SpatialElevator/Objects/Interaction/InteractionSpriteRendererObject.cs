@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿/*using System.Collections;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
@@ -117,4 +117,4 @@ namespace BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects.Interaction
         }
 
     }
-}
+}*/

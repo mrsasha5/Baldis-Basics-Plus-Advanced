@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects;
+﻿//using BaldisBasicsPlusAdvanced.Compats.SpatialElevator.Objects;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using HarmonyLib;
@@ -17,7 +17,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameSpecialEvents
             ElevatorExpelHammerPatch.OnGameManagerInit(__instance);
 
             //Part of compatibility
-            SpatialChalkboard.OnGameManagerInit(__instance);
+            //SpatialChalkboard.OnGameManagerInit(__instance);
         }
 
         [HarmonyPatch(typeof(BaseGameManager), "LoadSceneObject", new Type[] { typeof(SceneObject), typeof(bool) })]
