@@ -2,6 +2,7 @@
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 using BaldisBasicsPlusAdvanced.Extensions;
+using BaldisBasicsPlusAdvanced.Game.Builders;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BaldisBasicsPlusAdvanced.SerializableData;
@@ -775,35 +776,14 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
                 if (!PitOverrides.KitchenStoveDisabled)
                 {
-                    hall.basicObjects.Add(new BasicObjectData()
+                    Structure_PitStopLevelStove stoveBuilder = 
+                        new GameObject("Structure_JohnnyKitchenStove").AddComponent<Structure_PitStopLevelStove>();
+                    stoveBuilder.gameObject.ConvertToPrefab(true);
+                    stoveBuilder.InitializePrefab(1);
+                    pitStop.structures.Add(new StructureBuilderData
                     {
-                        prefab = ObjectsStorage.Objects["johnny_kitchen_stove"].transform,
-                        position = new Vector3(365f, 0f, 95f)
+                        prefab = stoveBuilder
                     });
-
-                    GameObject textBase = new GameObject("113");
-                    TextMeshPro tmp =
-                        ObjectsCreator.CreateTextMesh(BaldiFonts.ComicSans12, new Vector2(10f, 25f), textBase.transform, Vector3.zero);
-                    textBase.gameObject.ConvertToPrefab(true);
-                    tmp.transform.localScale = Vector3.one * 0.75f;
-                    tmp.gameObject.layer = LayersHelper.billboard;
-                    tmp.color = Color.red;
-                    tmp.text = "POTENTIALLY PLACEHOLDER POSITION";
-                    tmp.gameObject.AddComponent<PickupBob>();
-                    tmp.gameObject.AddComponent<BillboardUpdater>();
-
-                    hall.basicObjects.Add(new BasicObjectData()
-                    {
-                        prefab = textBase.transform,
-                        position = new Vector3(355f, 5f, 85f)
-                    });
-
-                    /*pitStop.posters.Add(new PosterData()
-                    {
-                        poster = ObjectsStorage.Posters.Find(x => x.name == "Adv_Poster_Kitchen_Stove"),
-                        position = new IntVector2(36, 13),
-                        direction = Direction.East
-                    });*/
                 }
 
                 overridden = true;

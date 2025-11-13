@@ -26,7 +26,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         {
             bool allowed = currentRecipe != null;
             bool isYTPsEnough = CoreGameManager.Instance.GetPoints(0) >= cookingPrice;
-            bool result = allowed && isYTPsEnough;
+            bool result = allowed && isYTPsEnough && base.IsCookingAvailable();
 
             if (!allowed)
             {

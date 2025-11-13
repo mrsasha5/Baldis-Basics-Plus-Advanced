@@ -16,23 +16,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
 
         private static PriceTag priceTagPre;
 
-        [HarmonyPatch("OnGenerationFinished")]
-        [HarmonyPostfix]
-        private static void OnGenerationFinished(StoreRoomFunction __instance)
-        {
-            JohnnyKitchenStove stove = GameObject.FindObjectOfType<JohnnyKitchenStove>();
-            if (stove != null)
-            {
-                stove.Assign(__instance);
-
-                IntVector2 pos = __instance.Room.ec.CellFromPosition(stove.transform.position).position;
-                pos.x -= 1;
-                GameButton button = (GameButton)GameButton.Build(AssetsStorage.gameButton, __instance.Room.ec,
-                    pos, Direction.North);
-                button.SetUp(stove);
-            }
-        }
-
         [HarmonyPatch("Initialize")]
         [HarmonyPostfix]
         private static void OnInitialize(StoreRoomFunction __instance, RoomController room, ref PriceTag ___mapTag, ref SceneObject ___storeData)
@@ -61,7 +44,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
                 //TAG_Sale
                 hammerPriceTag?.SetText(Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Tag_Out"));
             }
-            
         }
 
         private static T CreatePickup<T>(PriceTag tag, int price, Vector3 pos) where T : BasePickup
