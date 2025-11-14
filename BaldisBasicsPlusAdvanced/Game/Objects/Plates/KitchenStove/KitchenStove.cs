@@ -299,7 +299,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 }
             }
 
-            if (pickups.Count + 1 - expelledItems.Length < maxFoodCount)
+            if (pickups.Count + 1 - expelledItems.Length <= maxFoodCount)
             {
                 recipeData =
                     recipes.Find(x => x.ContainsListOfPickups(pickups) && x.RawFood.Contains(item) && pickups.Count < x.RawFood.Length);
@@ -311,7 +311,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         public bool CurrentSetFitsWith(ItemObject item, out FoodRecipeData recipeData)
         {
-            if (pickups.Count + 1 < maxFoodCount)
+            if (pickups.Count + 1 <= maxFoodCount)
             {
                 recipeData = 
                     recipes.Find(x => x.ContainsListOfPickups(pickups) && x.RawFood.Contains(item) && pickups.Count < x.RawFood.Length);
@@ -653,7 +653,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                     ItemManager inventory = Singleton<CoreGameManager>.Instance.GetPlayer(player).itm;
                     ItemObject selectedItem = inventory.items[inventory.selectedItem];
 
-                    if (stove.CurrentSetFitsWith(selectedItem, out FoodRecipeData recipe))
+                    if (stove.CurrentSetFitsWith(selectedItem, out FoodRecipeData _))
                     {
                         stove.CreatePickup(selectedItem);
 

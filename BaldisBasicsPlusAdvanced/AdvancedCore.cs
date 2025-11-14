@@ -36,7 +36,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "BB+ Advanced Edition";
 
-        public const string version = "0.3.2";
+        public const string version = "0.3.2.1";
 
         private static AdvancedCore instance;
 
