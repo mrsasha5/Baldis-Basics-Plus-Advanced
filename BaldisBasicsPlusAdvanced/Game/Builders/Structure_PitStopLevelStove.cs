@@ -27,7 +27,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
         public void InitializePrefab(int variant)
         {
-            buttonPre = AssetsHelper.LoadAsset<GameButton>("RstockButton");
+            buttonPre = AssetsStorage.gameButton;
             standardNeonPosterPre = AssetsHelper.LoadAsset<PosterObject>("StoreNeon_4");
             buttonInfoPosterPre = Instantiate(AssetsHelper.LoadAsset<PosterObject>("StoreNeon_4_wRestockBase"));
             buttonInfoPosterPre.name = "Adv_Poster_PIT_Stove_Button";
