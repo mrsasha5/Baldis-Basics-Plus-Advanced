@@ -6,8 +6,8 @@ using System.Collections.Generic;
 using MTM101BaldAPI.Registers;
 using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Game.Interfaces;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
+using BaldisBasicsPlusAdvanced.Cache;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects
 {
@@ -69,25 +69,25 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             sprites[0] = new Sprite[]
             {
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_2.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_3.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_1.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_1.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_1.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_1.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_backside.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_2.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_2.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_3.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_1.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_1.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_1.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_1.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_backside.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_2.png", pixelsPerUnit),
             };
             sprites[1] = new Sprite[]
             {
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_2.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_4.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_2.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_2.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_1.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_1.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_backside.png", pixelsPerUnit),
-                AssetsHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_2.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_2.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_4.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_2.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_2.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_1.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_1.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_backside.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_2.png", pixelsPerUnit),
             };
 
             animator.rotator = rotator;
@@ -107,7 +107,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             entity.Initialize(ec, position);
             ReflectionHelper.SetValue<bool>(entity, "squished", false);
 
-            wind = ObjectsCreator.CreateWindObject(windSize, windSpeed, true);
+            wind = ObjectCreator.CreateWindObject(windSize, windSpeed, true);
 
             wind.transform.SetParent(transform, false);
 
@@ -116,7 +116,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             wind.transform.localPosition += Vector3.forward * 2f;
 
-            audMan.PlaySingle(AssetsStorage.sounds["lock_door_stop"]);
+            audMan.PlaySingle(AssetStorage.sounds["lock_door_stop"]);
 
             if (turnOff) SetActivityState(false);
 
@@ -127,7 +127,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         {
             if (playThud && (!playOnlyIfPosReallyChanged || (playOnlyIfPosReallyChanged && transform.position != transform.position.CorrectForCell())))
             {
-                audMan.PlaySingle(AssetsStorage.sounds["lock_door_stop"]);
+                audMan.PlaySingle(AssetStorage.sounds["lock_door_stop"]);
             }
             transform.position = transform.position.CorrectForCell();
             correctedPosition = transform.position;
@@ -157,14 +157,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         public void Turn()
         {
             StartCoroutine(Turning());
-            audMan.PlaySingle(AssetsStorage.sounds["clock_wind"]);
+            audMan.PlaySingle(AssetStorage.sounds["clock_wind"]);
         }
 
         public void Break() {
             broken = true;
-            if (activated) audMan.PlaySingle(AssetsStorage.sounds["adv_pah"]);
+            if (activated) audMan.PlaySingle(AssetStorage.sounds["adv_pah"]);
             SetActivityState(false);
-            audMan.PlaySingle(AssetsStorage.sounds["bal_break"]);
+            audMan.PlaySingle(AssetStorage.sounds["bal_break"]);
         }
 
         public void Repair()
@@ -180,7 +180,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             if (!activated)
             {
-                audMan.PlaySingle(AssetsStorage.sounds["adv_inhale"]);
+                audMan.PlaySingle(AssetStorage.sounds["adv_inhale"]);
                 CorrectSelfPosition();
             }
 
@@ -193,7 +193,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             
             if (transform.position == correctedPosition)
             {
-                if (activated) audMan.PlaySingle(AssetsStorage.sounds["adv_pah"]);
+                if (activated) audMan.PlaySingle(AssetStorage.sounds["adv_pah"]);
                 SetActivityState(wind.Hidden);
             }
 

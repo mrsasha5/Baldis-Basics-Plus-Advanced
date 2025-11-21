@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm;
 using BaldisBasicsPlusAdvanced.Helpers;
 using UnityEngine;
@@ -36,7 +36,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects
 
         public void InitializePrefab(int variant)
         {
-            renderer = ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_farm_flag"]);
+            renderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_farm_flag"]);
             renderer.transform.parent.SetParent(transform, false);
             renderer.transform.parent.localPosition = Vector3.up * 84f;
 
@@ -67,7 +67,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects
                 if (ytpsReward > 0)
                 {
                     CoreGameManager.Instance.AddPoints(ytpsReward, 0, playAnimation: true);
-                    CoreGameManager.Instance.audMan.PlaySingle(AssetsStorage.sounds["ytp_pickup_2"]);
+                    CoreGameManager.Instance.audMan.PlaySingle(AssetStorage.sounds["ytp_pickup_2"]);
                     StartCoroutine(Disappear());
                 }
             }

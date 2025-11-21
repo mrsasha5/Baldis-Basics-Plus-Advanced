@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Helpers;
 using System;
 using System.Collections;
@@ -24,11 +24,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 entity.ExternalActivity.moveMods.Add(moveMod);
             }
 
-            AudioManager audMan = ObjectsCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
+            AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
             audMan.transform.parent = entity.transform;
-            audMan.PlaySingle(AssetsStorage.sounds["adv_frozen"]);
+            audMan.PlaySingle(AssetStorage.sounds["adv_frozen"]);
 
-            frozenSprite = ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_frozen_enemy"]).transform.parent.gameObject;
+            frozenSprite = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_frozen_enemy"]).transform.parent.gameObject;
             frozenSprite.transform.name = "adv_frozen_enemy";
             frozenSprite.transform.parent = entity.transform;
             frozenSprite.transform.localPosition = Vector3.up * -3.5f;

@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using System.Collections;
 using UnityEngine;
 
@@ -64,7 +64,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             if (validCollision && other.TryGetComponent(out Entity entity))
             {
                 entity.AddForce(new Force((entity.transform.position - criss.transform.position).normalized, 50f, -50f));
-                criss.AudMan.PlaySingle(AssetsStorage.sounds["bang"]);
+                criss.AudMan.PlaySingle(AssetStorage.sounds["bang"]);
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using System.Collections;
@@ -21,7 +21,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
         public override void OnPostInitialization()
         {
             base.OnPostInitialization();
-            renderer = ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_boxing_glove_trick"]);
+            renderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_boxing_glove_trick"]);
             renderer.transform.parent.SetParent(Plate.transform, false);
             renderer.transform.localPosition = Vector3.up * -5f;
             renderer.gameObject.SetActive(false);
@@ -48,7 +48,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
         {
             renderer.gameObject.SetActive(true);
             Plate.SetSurprizeVisual(true, playAudio: false, playPressingAudio: false);
-            Plate.AudMan.PlaySingle(AssetsStorage.sounds["adv_boing"]);
+            Plate.AudMan.PlaySingle(AssetStorage.sounds["adv_boing"]);
 
             float maxHeight = 8f;
 
@@ -64,7 +64,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
             addendHeight = maxHeight;
             renderer.transform.localPosition = Vector3.up * (-5f + addendHeight);
 
-            if (Plate.Entities.Count > 0) Plate.AudMan.PlaySingle(AssetsStorage.sounds["bang"]);
+            if (Plate.Entities.Count > 0) Plate.AudMan.PlaySingle(AssetStorage.sounds["bang"]);
 
             for (int i = 0; i < Plate.Entities.Count; i++)
             {

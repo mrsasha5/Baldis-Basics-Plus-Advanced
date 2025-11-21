@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using UnityEngine;
@@ -71,9 +71,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
                     pull.transform.SetParent(entrance.gameObject.transform, false);
                     pull.maxForce = 40f;
 
-                    AudioManager audMan = ObjectsCreator.CreatePropagatedAudMan(pull.gameObject);
-                    audMan.QueueAudio(AssetsStorage.sounds["vent_vacuum"]);
-                    audMan.QueueAudio(AssetsStorage.sounds["vent_travel"]);
+                    AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(pull.gameObject);
+                    audMan.QueueAudio(AssetStorage.sounds["vent_vacuum"]);
+                    audMan.QueueAudio(AssetStorage.sounds["vent_travel"]);
                     audMan.SetLoop(true);
 
                     pull.CreateSphere(60f);

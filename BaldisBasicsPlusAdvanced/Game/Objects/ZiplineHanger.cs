@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -95,12 +94,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         {
             const float pixelsPerUnit = 25f;
 
-            audRestore = AssetsStorage.sounds["adv_appearing"];
-            audBreak = AssetsStorage.sounds["bal_break"];
+            audRestore = AssetStorage.sounds["adv_appearing"];
+            audBreak = AssetStorage.sounds["bal_break"];
             audOnEnd = new SoundObject[]
             {
-                AssetsStorage.sounds["adv_wood_3"],
-                AssetsStorage.sounds["lock_door_stop"]
+                AssetStorage.sounds["adv_wood_3"],
+                AssetStorage.sounds["lock_door_stop"]
             };
 
             height = 7f;
@@ -112,10 +111,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             hasInfinityUses = true;
             canAcceptNPCs = true;
 
-            genericSprite = AssetsHelper.SpriteFromFile("Textures/Objects/Hangers/adv_hanger.png", pixelsPerUnit);
-            brokenSprite = AssetsHelper.SpriteFromFile("Textures/Objects/Hangers/adv_broken_hanger.png", pixelsPerUnit);
+            genericSprite = AssetHelper.SpriteFromFile("Textures/Objects/Hangers/adv_hanger.png", pixelsPerUnit);
+            brokenSprite = AssetHelper.SpriteFromFile("Textures/Objects/Hangers/adv_broken_hanger.png", pixelsPerUnit);
 
-            renderer = ObjectsCreator.CreateSpriteRendererBase(genericSprite);
+            renderer = ObjectCreator.CreateSpriteRendererBase(genericSprite);
             renderer.transform.parent.SetParent(transform, false);
             renderer.transform.localPosition += Vector3.up * 3f;
 
@@ -123,15 +122,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             collider.radius = 3f;
             collider.isTrigger = true;
 
-            motorAudMan = ObjectsCreator.CreatePropagatedAudMan(Vector3.zero);
+            motorAudMan = ObjectCreator.CreatePropagatedAudMan(Vector3.zero);
             motorAudMan.transform.SetParent(transform, false);
 
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
 
             if (variant == 2)
             {
-                genericSprite = AssetsHelper.SpriteFromFile("Textures/Objects/Hangers/adv_black_hanger.png", pixelsPerUnit);
-                brokenSprite = AssetsHelper.SpriteFromFile("Textures/Objects/Hangers/adv_broken_black_hanger.png", pixelsPerUnit);
+                genericSprite = AssetHelper.SpriteFromFile("Textures/Objects/Hangers/adv_black_hanger.png", pixelsPerUnit);
+                brokenSprite = AssetHelper.SpriteFromFile("Textures/Objects/Hangers/adv_broken_black_hanger.png", pixelsPerUnit);
                 renderer.sprite = genericSprite;
                 hasInfinityUses = false;
                 minMaxUses.x = 2;
@@ -306,7 +305,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 SetMoving();
             } else
             {
-                pm.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["error_maybe"]);
+                pm.ec.GetAudMan().PlaySingle(AssetStorage.sounds["error_maybe"]);
             }
 
             PlayerInteractionController.Instance.SetGameTip(player);
@@ -327,10 +326,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 if (positionIndex == 1) direction *= -1f;
 
                 distance = Vector3.Distance(positions.Key, positions.Value);
-                audMan.PlaySingle(AssetsStorage.sounds["grapple_clang"]);
+                audMan.PlaySingle(AssetStorage.sounds["grapple_clang"]);
 
                 motorAudMan.pitchModifier = 1f;
-                motorAudMan.QueueAudio(AssetsStorage.sounds["grapple_loop"]);
+                motorAudMan.QueueAudio(AssetStorage.sounds["grapple_loop"]);
                 motorAudMan.SetLoop(true);
 
                 if (!hasInfinityUses)

@@ -117,7 +117,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericP
         public void SettingsClicked()
         {
             GenericPlateExchangeHandler handler = EditorController.Instance.CreateUI<GenericPlateExchangeHandler>(
-                "GenericPlateConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/GenericPlateConfig.json");
+                "GenericPlateConfig", AssetHelper.modPath + "Compats/LevelStudio/UI/GenericPlateConfig.json");
             handler.OnInitialized(this);
             handler.Refresh();
         }

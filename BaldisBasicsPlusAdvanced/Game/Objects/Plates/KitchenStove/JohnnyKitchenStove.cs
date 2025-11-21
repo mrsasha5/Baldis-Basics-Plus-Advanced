@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Patches.Shop;
 using UnityEngine;
@@ -30,7 +30,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             if (!allowed)
             {
-                audMan.PlaySingle(AssetsStorage.sounds["buzz_elv"]);
+                audMan.PlaySingle(AssetStorage.sounds["buzz_elv"]);
             }
 
             if (!isYTPsEnough)

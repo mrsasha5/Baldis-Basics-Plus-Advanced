@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
 using System;
@@ -35,7 +35,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
             snowBootsController.RegisterOnDestroy(OnDestroyEvent, false);
 
-            audioManager.QueueAudio(AssetsStorage.sounds["whoosh"]);
+            audioManager.QueueAudio(AssetStorage.sounds["whoosh"]);
 
             return true;
         }

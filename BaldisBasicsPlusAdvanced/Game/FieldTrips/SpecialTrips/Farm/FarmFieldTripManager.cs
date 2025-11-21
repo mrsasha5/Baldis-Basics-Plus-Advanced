@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
@@ -79,7 +78,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
             }
             if (!flagIsReached)
                 FieldTripsLoader.onGameLoadedBack += 
-                    () => FieldTripsLoader.PrevEc.GetAudMan().PlaySingle(AssetsStorage.sounds["bal_game_over"]);
+                    () => FieldTripsLoader.PrevEc.GetAudMan().PlaySingle(AssetStorage.sounds["bal_game_over"]);
             gauge?.Deactivate();
             //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(1, 1f);
             //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(5, 1f);
@@ -88,9 +87,9 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
 
         public void InitializePrefab(int variant)
         {
-            reaperIconGauge = AssetsHelper.SpriteFromFile("Textures/Gauges/adv_gauge_reaper.png");
-            baldiPre = AssetsStorage.genericBaldi;
-            reaperPre = ObjectsStorage.Objects["farm_reaper"].GetComponent<Reaper>();
+            reaperIconGauge = AssetHelper.SpriteFromFile("Textures/Gauges/adv_gauge_reaper.png");
+            baldiPre = AssetStorage.genericBaldi;
+            reaperPre = ObjectStorage.Objects["farm_reaper"].GetComponent<Reaper>();
             reaperBaseTime = 30f;
             timePerCell = 1.5f;
             minMaxSigns = new IntVector2(5, 12);
@@ -102,7 +101,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
             {
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["farm_sign1"],
+                    selection = ObjectStorage.Objects["farm_sign1"],
                     weight = 100
                 }
             };
@@ -166,8 +165,8 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
             GameObject quadObj = GameObject.CreatePrimitive(PrimitiveType.Quad);
             quadObj.name = "GrassField";
             MeshRenderer renderer = quadObj.GetComponent<MeshRenderer>();
-            renderer.material = new Material(AssetsStorage.graphsStandardShader);
-            renderer.material.mainTexture = AssetsStorage.textures["grass"];
+            renderer.material = new Material(AssetStorage.graphsStandardShader);
+            renderer.material.mainTexture = AssetStorage.textures["grass"];
             renderer.material.mainTextureScale = Vector2.one * 100f;
             quadObj.transform.position = Vector3.up * -1f;
             quadObj.transform.eulerAngles = new Vector3(90f, 0f, 0f);
@@ -255,7 +254,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
 
             Singleton<MusicManager>.Instance.StopMidi();
 
-            ChalkboardMenu chalkMenu = Instantiate(ObjectsStorage.Objects["chalkboard_menu"].GetComponent<ChalkboardMenu>());
+            ChalkboardMenu chalkMenu = Instantiate(ObjectStorage.Objects["chalkboard_menu"].GetComponent<ChalkboardMenu>());
 
             Destroy(CursorController.Instance.gameObject); //reinit cursor
 
@@ -266,7 +265,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
             AudioSource audio = chalkMenu.gameObject.AddComponent<AudioSource>();
             audio.ignoreListenerPause = true;
 
-            audio.PlayOneShot(AssetsStorage.sounds["adv_mus_win"].soundClip);
+            audio.PlayOneShot(AssetStorage.sounds["adv_mus_win"].soundClip);
         }
 
         private void OnExitButtonPress(GameObject menuToDestroy)
@@ -274,7 +273,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
             Destroy(menuToDestroy);
             FieldTripsLoader.onGameLoadedBack += delegate
             {
-                FieldTripsLoader.PrevEc.GetAudMan().PlaySingle(AssetsStorage.sounds["bal_wow"]);
+                FieldTripsLoader.PrevEc.GetAudMan().PlaySingle(AssetStorage.sounds["bal_wow"]);
             };
             GiveRewards();
             CloseFieldTrip();
@@ -284,7 +283,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
         {
             List<ItemObject> items = new List<ItemObject>();
 
-            foreach (ItemMetaData meta in ItemMetaStorage.Instance.FindAll(x => x.tags.Contains(TagsStorage.perfectRate)))
+            foreach (ItemMetaData meta in ItemMetaStorage.Instance.FindAll(x => x.tags.Contains(TagStorage.perfectRate)))
             {
                 if (!items.Contains(meta.value))
                 {
@@ -301,7 +300,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
 
             while (items.Count > 0 && cells.Count > 0 && itemsCounter > 0)
             {
-                Pickup pickup = Instantiate(AssetsStorage.pickup, cells[0].CenterWorldPosition, Quaternion.identity, room.transform);
+                Pickup pickup = Instantiate(AssetStorage.pickup, cells[0].CenterWorldPosition, Quaternion.identity, room.transform);
                 cells.RemoveAt(0);
 
                 ItemObject item = items[UnityEngine.Random.Range(0, items.Count)];
@@ -315,7 +314,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
 
             while (pointsItems.Count > 0 && cells.Count > 0 && pointsCounter > 0)
             {
-                Pickup pickup = Instantiate(AssetsStorage.pickup, cells[0].CenterWorldPosition, Quaternion.identity, room.transform);
+                Pickup pickup = Instantiate(AssetStorage.pickup, cells[0].CenterWorldPosition, Quaternion.identity, room.transform);
                 cells.RemoveAt(0);
 
                 ItemObject item = pointsItems[UnityEngine.Random.Range(0, pointsItems.Count)];
@@ -551,7 +550,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
             while (itemsCounter > 0 && cells.Count > 0)
             {
                 Cell cell = cells[rng.Next(0, cells.Count)];
-                Pickup pickup = Instantiate(AssetsStorage.pickup, room.transform);
+                Pickup pickup = Instantiate(AssetStorage.pickup, room.transform);
                 pickup.transform.position = cell.CenterWorldPosition;
                 pickup.AssignItem(WeightedItemObject.ControlledRandomSelection(items, rng));
 

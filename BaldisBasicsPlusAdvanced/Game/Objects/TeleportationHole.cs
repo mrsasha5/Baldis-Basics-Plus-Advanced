@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.InventoryItems;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -72,7 +72,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             GameObject childObj = new GameObject("AudMan");
             childObj.transform.SetParent(transform, false);
 
-            gameObject.layer = LayersHelper.ignoreRaycastB;
+            gameObject.layer = LayerHelper.ignoreRaycastB;
 
             audManForBoom = childObj.AddComponent<PropagatedAudioManager>();
             ReflectionHelper.SetValue<bool>(audManForBoom, "disableSubtitles", true);
@@ -119,7 +119,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             shape.radius = 0f;
 
             ParticleSystemRenderer renderer = particleSystem.GetComponent<ParticleSystemRenderer>();
-            renderer.material = AssetsStorage.materials["qmark_sheet"];
+            renderer.material = AssetStorage.materials["qmark_sheet"];
 
             anim.enabled = true; //not enabled
             anim.numTilesX = 4;
@@ -152,13 +152,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         {
             this.ec = ec;
             time = endsIn;
-            audManForBoom.PlaySingle(AssetsStorage.sounds["adv_explosion"]);
+            audManForBoom.PlaySingle(AssetStorage.sounds["adv_explosion"]);
             if (OptionsDataManager.ExtraSettings.GetValue<bool>("particles"))
             {
                 particleSystems[0].Play();
                 particleSystems[1].Play();
-                audMan.QueueAudio(AssetsStorage.sounds["adv_activation_start"]);
-                audMan.QueueAudio(AssetsStorage.sounds["adv_activation_loop"]);
+                audMan.QueueAudio(AssetStorage.sounds["adv_activation_start"]);
+                audMan.QueueAudio(AssetStorage.sounds["adv_activation_loop"]);
                 audMan.SetLoop(true);
             }
             DestroyWindows();
@@ -185,7 +185,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
                 _distance = Vector3.Distance(base.transform.position, entities[i].transform.position);
                 ray = new Ray(base.transform.position, entities[i].transform.position - base.transform.position);
-                hits = Physics.RaycastAll(ray, _distance, LayersHelper.gumCollisionMask, QueryTriggerInteraction.Ignore);
+                hits = Physics.RaycastAll(ray, _distance, LayerHelper.gumCollisionMask, QueryTriggerInteraction.Ignore);
                 hitTransforms.Clear();
                 _obstacleHit = false;
                 if (hits.Length != 0)
@@ -259,7 +259,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                 Destroy(gameObject, 5f);
 
                 audMan.FlushQueue(true);
-                audMan.QueueAudio(AssetsStorage.sounds["adv_activation_end"]);
+                audMan.QueueAudio(AssetStorage.sounds["adv_activation_end"]);
             }
         }
 

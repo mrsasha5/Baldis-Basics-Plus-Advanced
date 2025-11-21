@@ -35,7 +35,7 @@ namespace BaldisBasicsPlusAdvanced.Compats
 
         public virtual bool IsIntegrable()
         {
-            return AssetsHelper.ModInstalled(guid) && versionInfo.IsPluginCorrect() && configValue.Value;
+            return AssetHelper.ModInstalled(guid) && versionInfo.IsPluginCorrect() && configValue.Value;
         }
 
         protected void CreateConfigValue(string name, string desc, bool defValue = true)

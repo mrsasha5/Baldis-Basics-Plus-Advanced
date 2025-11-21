@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using PlusStudioLevelLoader;
 using System;
@@ -29,11 +28,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             {
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["gum_dispenser"],
+                    selection = ObjectStorage.Objects["gum_dispenser"],
                     weight = 100
                 }
             };
-            buttonPre = AssetsStorage.gameButton;
+            buttonPre = AssetStorage.gameButton;
             buttonRange = 6;
         }
 

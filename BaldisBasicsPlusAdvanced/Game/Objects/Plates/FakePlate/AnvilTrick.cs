@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Projectiles;
 using UnityEngine;
 
@@ -42,9 +41,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
                 activated = true;
                 time = 2f;
                 Plate.SetSurprizeVisual(true, playAudio: false, playPressingAudio: false);
-                Plate.AudMan.PlaySingle(AssetsStorage.sounds["adv_boing"]);
+                Plate.AudMan.PlaySingle(AssetStorage.sounds["adv_boing"]);
 
-                AnvilProjectile projectile = Instantiate(ObjectsStorage.Objects["anvil_projectile"].GetComponent<AnvilProjectile>());
+                AnvilProjectile projectile = Instantiate(ObjectStorage.Objects["anvil_projectile"].GetComponent<AnvilProjectile>());
                 projectile.Initialize(Plate.Ec, transform.position, this);
                 projectile.SetFlying(true);
                 projectile.SetHeight(2f);

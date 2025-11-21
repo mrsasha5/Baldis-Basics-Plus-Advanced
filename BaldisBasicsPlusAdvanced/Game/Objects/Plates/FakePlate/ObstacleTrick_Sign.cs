@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,7 +26,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
         {
             Destroy(collider.gameObject);
             Destroy(renderer.transform.parent.gameObject);
-            plate.AudMan.PlaySingle(AssetsStorage.sounds["bal_break"]);
+            plate.AudMan.PlaySingle(AssetStorage.sounds["bal_break"]);
             plate.EndTrick();
         }
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
 using UnityEngine;
@@ -104,20 +104,20 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         public void InitializePrefab(int variant)
         {
-            audSnap = AssetsStorage.sounds["bal_break"];
-            audBreak = AssetsStorage.sounds["adv_super_break"];
-            audClick = AssetsStorage.sounds["adv_pulley_click"];
-            audLaunch = AssetsStorage.sounds["grapple_launch"];
+            audSnap = AssetStorage.sounds["bal_break"];
+            audBreak = AssetStorage.sounds["adv_super_break"];
+            audClick = AssetStorage.sounds["adv_pulley_click"];
+            audLaunch = AssetStorage.sounds["grapple_launch"];
             audProgress = new SoundObject[] {
-                AssetsStorage.sounds["ytp_pickup_0"],
-                AssetsStorage.sounds["ytp_pickup_1"],
-                AssetsStorage.sounds["ytp_pickup_2"],
+                AssetStorage.sounds["ytp_pickup_0"],
+                AssetStorage.sounds["ytp_pickup_1"],
+                AssetStorage.sounds["ytp_pickup_2"],
             };
 
             handleColor = Color.yellow;
 
-            audMan = ObjectsCreator.CreateAudMan(gameObject);
-            motorAudMan = ObjectsCreator.CreateAudMan(Vector3.zero);
+            audMan = ObjectCreator.CreateAudMan(gameObject);
+            motorAudMan = ObjectCreator.CreateAudMan(Vector3.zero);
             motorAudMan.name = "Motor";
             motorAudMan.transform.SetParent(transform, false);
 
@@ -125,10 +125,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             for (int i = 0; i < backgrounds.Length; i++)
             {
-                backgrounds[i] = AssetsStorage.textures["adv_pulley_base" + (i + 1)];
+                backgrounds[i] = AssetStorage.textures["adv_pulley_base" + (i + 1)];
             }
 
-            spriteRenderer = ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_pulley"]);
+            spriteRenderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_pulley"]);
             spriteRenderer.transform.parent.SetParent(transform);
             spriteRenderer.color = Color.yellow;
             collider = gameObject.AddComponent<SphereCollider>();
@@ -146,7 +146,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             lineRenderer.allowOcclusionWhenDynamic = false;
             lineRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             lineRenderer.receiveShadows = false;
-            lineRenderer.material = new Material(AssetsStorage.materials["black_behind"]);
+            lineRenderer.material = new Material(AssetStorage.materials["black_behind"]);
             lineRenderer.enabled = false;
 
             maxDistance = 40f;
@@ -292,7 +292,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             if (!ClickableHidden())
             {
                 Take(Singleton<CoreGameManager>.Instance.GetPlayer(player).GetComponent<Entity>());
-                spriteRenderer.gameObject.layer = LayersHelper.takenBalloonLayer;
+                spriteRenderer.gameObject.layer = LayerHelper.takenBalloonLayer;
             }
         }
 

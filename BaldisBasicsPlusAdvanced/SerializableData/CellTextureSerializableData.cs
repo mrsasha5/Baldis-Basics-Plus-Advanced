@@ -34,7 +34,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
 
             CellTextureSerializableData instance = 
                 JsonConvert.DeserializeObject<CellTextureSerializableData>(File.ReadAllText(jsonPath));
-            instance.tex = AssetsHelper.TextureFromFile(path, overrideBasePath: true);
+            instance.tex = AssetHelper.TextureFromFile(path, overrideBasePath: true);
 
             return instance;
         }

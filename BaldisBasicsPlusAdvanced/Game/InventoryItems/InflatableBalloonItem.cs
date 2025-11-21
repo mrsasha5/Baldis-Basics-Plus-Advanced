@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
@@ -20,7 +20,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 return true;
             }
 
-            pm.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["error_maybe"]);
+            pm.ec.GetAudMan().PlaySingle(AssetStorage.sounds["error_maybe"]);
             Destroy(gameObject);
             return false;
         }

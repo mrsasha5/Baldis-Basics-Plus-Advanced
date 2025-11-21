@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Helpers;
 using System.Collections;
 using UnityEngine;
@@ -64,7 +64,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
 
         public override void InitializePrefab(int variant)
         {
-            gaugeIcon = AssetsHelper.LoadAsset<Sprite>("beans_gum_icon");
+            gaugeIcon = AssetHelper.LoadAsset<Sprite>("beans_gum_icon");
 
             entity = gameObject.GetComponent<Entity>();
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
@@ -119,12 +119,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
                     canvas.worldCamera = CoreGameManager.Instance.GetCamera(other.GetComponent<PlayerManager>().playerNumber).canvasCam;
                     attachedToPlayer = true;
                     gauge = CoreGameManager.Instance.GetHud(0).gaugeManager.ActivateNewGauge(gaugeIcon, setTime);;
-                    CoreGameManager.Instance.audMan.PlaySingle(AssetsStorage.sounds["splat"]);
+                    CoreGameManager.Instance.audMan.PlaySingle(AssetStorage.sounds["splat"]);
                 }
                 else
                 {
                     actMod.moveMods.Add(moveMod);
-                    audMan.PlaySingle(AssetsStorage.sounds["splat"]);
+                    audMan.PlaySingle(AssetStorage.sounds["splat"]);
                 }
             }
             else if (!other.isTrigger)
@@ -143,7 +143,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             base.transform.rotation = Quaternion.LookRotation(hit.normal * -1f, Vector3.up);
 
             audMan.FlushQueue(endCurrent: true);
-            audMan.PlaySingle(AssetsStorage.sounds["splat"]);
+            audMan.PlaySingle(AssetStorage.sounds["splat"]);
 
             aliveTime = 10f;
 

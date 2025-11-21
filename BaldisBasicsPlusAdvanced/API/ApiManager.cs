@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
@@ -256,7 +255,7 @@ namespace BaldisBasicsPlusAdvanced.API
         [Obsolete]
         public static T CreatePlate<T>(string name) where T : BasePlate
         {
-            return PrefabsCreator.CreatePlate<T>(name, putInMemory: false);
+            return PrefabCreator.CreatePlate<T>(name, putInMemory: false);
         }
 
         /// <summary>
@@ -269,14 +268,14 @@ namespace BaldisBasicsPlusAdvanced.API
         {
             symbol = symbol.ToLower();
 
-            if (ObjectsStorage.Spelloons.ContainsKey("spelloon_" + symbol))
+            if (ObjectStorage.Spelloons.ContainsKey("spelloon_" + symbol))
             {
                 logger.LogWarning($"Spelloon \"{symbol}\" already exists!");
                 return false;
             }
 
             MathMachineNumber mathNumComp = GameObject.Instantiate(
-                AssetsStorage.gameObjects["math_num_0"].GetComponent<MathMachineNumber>());
+                AssetStorage.gameObjects["math_num_0"].GetComponent<MathMachineNumber>());
             GameObject.Destroy(mathNumComp);
             mathNumComp.gameObject.ConvertToPrefab(true);
 
@@ -285,14 +284,14 @@ namespace BaldisBasicsPlusAdvanced.API
             spelloon.InitializePrefab(1);
             spelloon.InitializePrefabPost(symbol, sprite);
 
-            SymbolMachine[] machines = AssetsHelper.LoadAssets<SymbolMachine>();
+            SymbolMachine[] machines = AssetHelper.LoadAssets<SymbolMachine>();
 
             for (int i = 0; i < machines.Length; i++)
             {
                 if (!machines[i].potentialSymbols.Contains(spelloon.Value)) machines[i].potentialSymbols.Add(spelloon.Value);
             }
             
-            ObjectsStorage.Spelloons.Add("spelloon_" + symbol, spelloon);
+            ObjectStorage.Spelloons.Add("spelloon_" + symbol, spelloon);
             return true;
         }
 
@@ -305,13 +304,13 @@ namespace BaldisBasicsPlusAdvanced.API
         {
             symbol = symbol.ToLower();
 
-            if (!ObjectsStorage.Spelloons.ContainsKey("spelloon_" + symbol))
+            if (!ObjectStorage.Spelloons.ContainsKey("spelloon_" + symbol))
             {
                 logger.LogWarning($"Spelloon \"{symbol}\" doesn't exist!");
                 return false;
             }
 
-            Spelloon spelloon = ObjectsStorage.Spelloons["spelloon_" + symbol];
+            Spelloon spelloon = ObjectStorage.Spelloons["spelloon_" + symbol];
 
             List<string> words = GetAllSymbolMachineWords();
             for (int i = 0; i < words.Count; i++)
@@ -324,7 +323,7 @@ namespace BaldisBasicsPlusAdvanced.API
                 }
             }
 
-            SymbolMachine[] machines = AssetsHelper.LoadAssets<SymbolMachine>();
+            SymbolMachine[] machines = AssetHelper.LoadAssets<SymbolMachine>();
 
             for (int i = 0; i < machines.Length; i++)
             {
@@ -333,7 +332,7 @@ namespace BaldisBasicsPlusAdvanced.API
 
             UnloadSymbolMachineWordsFromAllMods(words.ToArray());
 
-            ObjectsStorage.Spelloons.Remove("spelloon_" + symbol);
+            ObjectStorage.Spelloons.Remove("spelloon_" + symbol);
             spelloon.gameObject.RemoveUnloadMark();
             GameObject.Destroy(spelloon.gameObject);
 
@@ -349,13 +348,13 @@ namespace BaldisBasicsPlusAdvanced.API
         public static bool UpdateSpelloonSprite(string symbol, Sprite sprite)
         {
             symbol = symbol.ToLower();
-            if (!ObjectsStorage.Spelloons.ContainsKey("spelloon_" + symbol))
+            if (!ObjectStorage.Spelloons.ContainsKey("spelloon_" + symbol))
             {
                 logger.LogWarning($"Spelloon \"{symbol}\" doesn't exist!");
                 return false;
             }
 
-            Spelloon spelloon = ObjectsStorage.Spelloons["spelloon_" + symbol];
+            Spelloon spelloon = ObjectStorage.Spelloons["spelloon_" + symbol];
 
             spelloon.GetComponentInChildren<SpriteRenderer>().sprite = sprite;
 
@@ -370,10 +369,10 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <returns>List (new instance).</returns>
         public static List<WeightedCouncilTopic> GetAllWeightedSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
         {
-            if (!ObjectsStorage.Topics.ContainsKey(pluginInfo))
+            if (!ObjectStorage.Topics.ContainsKey(pluginInfo))
                 return null;
 
-            return new List<WeightedCouncilTopic>(ObjectsStorage.Topics[pluginInfo]);
+            return new List<WeightedCouncilTopic>(ObjectStorage.Topics[pluginInfo]);
         }
 
         [Obsolete("Use GetAllWeightedSchoolCouncilTopicsFrom!")]
@@ -385,11 +384,11 @@ namespace BaldisBasicsPlusAdvanced.API
         [Obsolete("Use GetAllWeightedSchoolCouncilTopicsFrom!")]
         public static List<BaseTopic> GetAllSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
         {
-            if (!ObjectsStorage.Topics.ContainsKey(pluginInfo))
+            if (!ObjectStorage.Topics.ContainsKey(pluginInfo))
                 return null;
 
             List<BaseTopic> topics = new List<BaseTopic>();
-            List<WeightedCouncilTopic> _topics = ObjectsStorage.Topics[pluginInfo];
+            List<WeightedCouncilTopic> _topics = ObjectStorage.Topics[pluginInfo];
 
             for (int i = 0; i < _topics.Count; i++)
             {
@@ -407,7 +406,7 @@ namespace BaldisBasicsPlusAdvanced.API
         {
             List<BaseTopic> topics = new List<BaseTopic>();
 
-            foreach (List<WeightedCouncilTopic> _topics in ObjectsStorage.Topics.Values)
+            foreach (List<WeightedCouncilTopic> _topics in ObjectStorage.Topics.Values)
             {
                 for (int i = 0; i < _topics.Count; i++)
                 {
@@ -426,10 +425,10 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <param name="weight"></param>
         public static void CreateSchoolCouncilTopic<T>(PluginInfo pluginInfo, int weight = 100) where T : BaseTopic, new()
         {
-            if (!ObjectsStorage.Topics.ContainsKey(pluginInfo)) 
-                ObjectsStorage.Topics.Add(pluginInfo, new List<WeightedCouncilTopic>());
+            if (!ObjectStorage.Topics.ContainsKey(pluginInfo)) 
+                ObjectStorage.Topics.Add(pluginInfo, new List<WeightedCouncilTopic>());
 
-            ObjectsStorage.Topics[pluginInfo].Add(new WeightedCouncilTopic()
+            ObjectStorage.Topics[pluginInfo].Add(new WeightedCouncilTopic()
             {
                 selection = new T(),
                 weight = weight
@@ -444,11 +443,11 @@ namespace BaldisBasicsPlusAdvanced.API
         public static List<PluginInfo> UnloadAllSchoolCouncilTopicsExcept(params PluginInfo[] pluginInfos)
         {
             List<PluginInfo> unloadedPlugins = new List<PluginInfo>();
-            foreach (PluginInfo pluginInfo in ObjectsStorage.Topics.Keys.ToArray())
+            foreach (PluginInfo pluginInfo in ObjectStorage.Topics.Keys.ToArray())
             {
                 if (!pluginInfos.Contains(pluginInfo))
                 {
-                    ObjectsStorage.Topics.Remove(pluginInfo);
+                    ObjectStorage.Topics.Remove(pluginInfo);
                     unloadedPlugins.Add(pluginInfo);
                 }
             }
@@ -465,9 +464,9 @@ namespace BaldisBasicsPlusAdvanced.API
             List<PluginInfo> unloadedPlugins = new List<PluginInfo>();
             foreach (PluginInfo pluginInfo in pluginInfos)
             {
-                if (ObjectsStorage.Topics.ContainsKey(pluginInfo))
+                if (ObjectStorage.Topics.ContainsKey(pluginInfo))
                 {
-                    ObjectsStorage.Topics.Remove(pluginInfo);
+                    ObjectStorage.Topics.Remove(pluginInfo);
                     unloadedPlugins.Add(pluginInfo);
                 }
             }
@@ -479,7 +478,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// </summary>
         public static void UnloadAllSchoolCouncilTopics()
         {
-            ObjectsStorage.Topics.Clear();
+            ObjectStorage.Topics.Clear();
         }
 
         /// <summary>
@@ -488,7 +487,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <param name="topics"></param>
         public static void UnloadSchoolCouncilTopics(params BaseTopic[] topics)
         {
-            foreach (List<WeightedCouncilTopic> _topics in ObjectsStorage.Topics.Values)
+            foreach (List<WeightedCouncilTopic> _topics in ObjectStorage.Topics.Values)
             {
                 for (int i = 0; i < _topics.Count; i++)
                 {
@@ -541,7 +540,7 @@ namespace BaldisBasicsPlusAdvanced.API
         public static List<string> GetAllSymbolMachineWordsFrom(params PluginInfo[] pluginInfos)
         {
             List<string> words = new List<string>();
-            foreach (KeyValuePair<PluginInfo, List<string>> pair in ObjectsStorage.SymbolMachineWords)
+            foreach (KeyValuePair<PluginInfo, List<string>> pair in ObjectStorage.SymbolMachineWords)
             {
                 words.AddRange(pair.Value);
             }
@@ -552,13 +551,13 @@ namespace BaldisBasicsPlusAdvanced.API
         [Obsolete("Use overload with array argument!")]
         public static List<string> GetAllSymbolMachineWordsFrom(PluginInfo pluginInfo)
         {
-            if (!ObjectsStorage.SymbolMachineWords.ContainsKey(pluginInfo))
+            if (!ObjectStorage.SymbolMachineWords.ContainsKey(pluginInfo))
             {
                 logger.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
                 return null;
             }
 
-            return new List<string>(ObjectsStorage.SymbolMachineWords[pluginInfo]);
+            return new List<string>(ObjectStorage.SymbolMachineWords[pluginInfo]);
         }
 
         /// <summary>
@@ -569,7 +568,7 @@ namespace BaldisBasicsPlusAdvanced.API
         {
             List<string> words = new List<string>();
 
-            foreach (List<string> _words in ObjectsStorage.SymbolMachineWords.Values)
+            foreach (List<string> _words in ObjectStorage.SymbolMachineWords.Values)
             {
                 words.AddRange(_words);
             }
@@ -587,8 +586,8 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <returns>List (reference). Do not modify.</returns>
         public static List<string> AddNewSymbolMachineWords(PluginInfo pluginInfo, params string[] words)
         {
-            if (!ObjectsStorage.SymbolMachineWords.ContainsKey(pluginInfo)) 
-                ObjectsStorage.SymbolMachineWords.Add(pluginInfo, new List<string>());
+            if (!ObjectStorage.SymbolMachineWords.ContainsKey(pluginInfo)) 
+                ObjectStorage.SymbolMachineWords.Add(pluginInfo, new List<string>());
 
             for (int i = 0; i < words.Length; i++)
             {
@@ -600,18 +599,18 @@ namespace BaldisBasicsPlusAdvanced.API
 
                 foreach (char symbol in words[i])
                 {
-                    if (!ObjectsStorage.Spelloons.ContainsKey("spelloon_" + symbol.ToString().ToLower()))
+                    if (!ObjectStorage.Spelloons.ContainsKey("spelloon_" + symbol.ToString().ToLower()))
                     {
                         logger.LogWarning("Word " + words[i] + " is skipped, because it contains not existing symbol(s).");
                         goto EndAndDontAdd;
                     }
                 }
                 
-                ObjectsStorage.SymbolMachineWords[pluginInfo].Add(words[i]);
+                ObjectStorage.SymbolMachineWords[pluginInfo].Add(words[i]);
             EndAndDontAdd:;
             }
 
-            return ObjectsStorage.SymbolMachineWords[pluginInfo];
+            return ObjectStorage.SymbolMachineWords[pluginInfo];
         }
 
         /// <summary>
@@ -621,7 +620,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <param name="words">Words to remove.</param>
         public static void UnloadSymbolMachineWordsFromAllMods(params string[] words)
         {
-            foreach (List<string> _words in ObjectsStorage.SymbolMachineWords.Values)
+            foreach (List<string> _words in ObjectStorage.SymbolMachineWords.Values)
             {
                 for (int i = 0; i < words.Length; i++)
                 {
@@ -641,7 +640,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <returns>List (new instance). May return null if plugin is not found.</returns>
         public static List<string> UnloadSymbolMachineWords(PluginInfo pluginInfo, params string[] words)
         {
-            if (!ObjectsStorage.SymbolMachineWords.ContainsKey(pluginInfo))
+            if (!ObjectStorage.SymbolMachineWords.ContainsKey(pluginInfo))
             {
                 logger.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
                 return null;
@@ -649,15 +648,15 @@ namespace BaldisBasicsPlusAdvanced.API
 
             for (int i = 0; i < words.Length; i++)
             {
-                if (!ObjectsStorage.SymbolMachineWords[pluginInfo].Contains(words[i]))
+                if (!ObjectStorage.SymbolMachineWords[pluginInfo].Contains(words[i]))
                 {
                     logger.LogWarning("Word " + words[i] + " doesn't exist in collection!");
                     continue;
                 }
-                ObjectsStorage.SymbolMachineWords[pluginInfo].Remove(words[i]);
+                ObjectStorage.SymbolMachineWords[pluginInfo].Remove(words[i]);
             }
 
-            return new List<string>(ObjectsStorage.SymbolMachineWords[pluginInfo]);
+            return new List<string>(ObjectStorage.SymbolMachineWords[pluginInfo]);
         }
 
         /// <summary>
@@ -667,12 +666,12 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <returns>True, if the action was successful.</returns>
         public static bool UnloadAllSymbolMachineWordsFrom(PluginInfo pluginInfo)
         {
-            if (!ObjectsStorage.SymbolMachineWords.ContainsKey(pluginInfo))
+            if (!ObjectStorage.SymbolMachineWords.ContainsKey(pluginInfo))
             {
                 logger.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
                 return false;
             }
-            ObjectsStorage.SymbolMachineWords.Remove(pluginInfo);
+            ObjectStorage.SymbolMachineWords.Remove(pluginInfo);
             return true;
         }
 
@@ -681,7 +680,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// </summary>
         public static void UnloadAllSymbolMachineWords()
         {
-            ObjectsStorage.SymbolMachineWords.Clear();
+            ObjectStorage.SymbolMachineWords.Clear();
         }
 
         /// <summary>
@@ -693,11 +692,11 @@ namespace BaldisBasicsPlusAdvanced.API
         {
             List<PluginInfo> unloadedPlugins = new List<PluginInfo>();
 
-            foreach (PluginInfo info in ObjectsStorage.SymbolMachineWords.Keys.ToArray())
+            foreach (PluginInfo info in ObjectStorage.SymbolMachineWords.Keys.ToArray())
             {
                 if (!pluginInfos.Contains(info))
                 {
-                    ObjectsStorage.SymbolMachineWords.Remove(info);
+                    ObjectStorage.SymbolMachineWords.Remove(info);
                     unloadedPlugins.Add(info);
                 }
             }
@@ -716,13 +715,13 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <returns>List (new instance).</returns>
         public static List<string> GetAllTipsFrom(PluginInfo pluginInfo)
         {
-            if (!ObjectsStorage.TipKeys.ContainsKey(pluginInfo))
+            if (!ObjectStorage.TipKeys.ContainsKey(pluginInfo))
             {
                 logger.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
                 return null;
             }
 
-            return new List<string>(ObjectsStorage.TipKeys[pluginInfo]);
+            return new List<string>(ObjectStorage.TipKeys[pluginInfo]);
         }
 
         /// <summary>
@@ -733,7 +732,7 @@ namespace BaldisBasicsPlusAdvanced.API
         {
             List<string> tips = new List<string>();
 
-            foreach (List<string> partOfTips in ObjectsStorage.TipKeys.Values)
+            foreach (List<string> partOfTips in ObjectStorage.TipKeys.Values)
             {
                 tips.AddRange(partOfTips);
             }
@@ -749,9 +748,9 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <returns>List of tips (new instance) from provided mod.</returns>
         public static List<string> AddNewTips(PluginInfo pluginInfo, params string[] localizationKeys)
         {
-            if (!ObjectsStorage.TipKeys.ContainsKey(pluginInfo)) ObjectsStorage.TipKeys.Add(pluginInfo, new List<string>());
+            if (!ObjectStorage.TipKeys.ContainsKey(pluginInfo)) ObjectStorage.TipKeys.Add(pluginInfo, new List<string>());
 
-            List<string> tips = ObjectsStorage.TipKeys[pluginInfo];
+            List<string> tips = ObjectStorage.TipKeys[pluginInfo];
 
             for (int i = 0; i < localizationKeys.Length; i++)
             {
@@ -769,13 +768,13 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <returns>List of tips (new instance) from provided mod. Do not modify! Use for analyze.</returns>
         public static List<string> UnloadTips(PluginInfo pluginInfo, params string[] localizationKeys)
         {
-            if (!ObjectsStorage.TipKeys.ContainsKey(pluginInfo))
+            if (!ObjectStorage.TipKeys.ContainsKey(pluginInfo))
             {
                 logger.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
                 return null;
             }
 
-            List<string> tips = ObjectsStorage.TipKeys[pluginInfo];
+            List<string> tips = ObjectStorage.TipKeys[pluginInfo];
 
             for (int i = 0; i < localizationKeys.Length; i++)
             {
@@ -795,7 +794,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// </summary>
         public static void UnloadAllTips()
         {
-            ObjectsStorage.TipKeys.Clear();
+            ObjectStorage.TipKeys.Clear();
         }
 
         /// <summary>
@@ -805,13 +804,13 @@ namespace BaldisBasicsPlusAdvanced.API
         /// <returns>Returns true, if the action was successful.</returns>
         public static bool UnloadAllTipsFrom(PluginInfo pluginInfo)
         {
-            if (!ObjectsStorage.TipKeys.ContainsKey(pluginInfo))
+            if (!ObjectStorage.TipKeys.ContainsKey(pluginInfo))
             {
                 logger.LogWarning("Requested PluginInfo doesn't exist in dictionary!");
                 return false;
             }
 
-            ObjectsStorage.TipKeys.Remove(pluginInfo);
+            ObjectStorage.TipKeys.Remove(pluginInfo);
             return true;
         }
 
@@ -824,11 +823,11 @@ namespace BaldisBasicsPlusAdvanced.API
         {
             List<PluginInfo> unloadedPlugins = new List<PluginInfo>();
 
-            foreach (PluginInfo info in ObjectsStorage.TipKeys.Keys.ToArray())
+            foreach (PluginInfo info in ObjectStorage.TipKeys.Keys.ToArray())
             {
                 if (!pluginInfos.Contains(info))
                 {
-                    ObjectsStorage.TipKeys.Remove(info);
+                    ObjectStorage.TipKeys.Remove(info);
                     unloadedPlugins.Add(info);
                 }
             }

@@ -40,7 +40,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         private CapsuleCollider capsuleCollider;
 
         [SerializeField]
-        private LayerMask layerMask = LayersHelper.gumCollisionMask;
+        private LayerMask layerMask = LayerHelper.gumCollisionMask;
 
         public float maxForce = 20f;
 

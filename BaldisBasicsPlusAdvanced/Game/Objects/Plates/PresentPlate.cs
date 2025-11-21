@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using MTM101BaldAPI.Registers;
 using System.Collections.Generic;
@@ -46,15 +45,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             }
 
             ItemMetaData[] metas = ItemMetaStorage.Instance.FindAll(x => x.id != Items.None && x.flags != ItemFlags.InstantUse && 
-                !x.tags.Contains(TagsStorage.forbiddenPresent) && !x.tags.Contains(TagsStorage.narrowlyFunctional));
+                !x.tags.Contains(TagStorage.forbiddenPresent) && !x.tags.Contains(TagStorage.narrowlyFunctional));
 
             if (metas.Length > 0)
             {
-                Pickup pickup = Instantiate(AssetsStorage.pickup, transform.position + Vector3.up * 5f, Quaternion.identity, transform);
+                Pickup pickup = Instantiate(AssetStorage.pickup, transform.position + Vector3.up * 5f, Quaternion.identity, transform);
 
                 ItemObject item = metas[UnityEngine.Random.Range(0, metas.Length)].value;
                 pickup.item = item;
-                audMan.PlaySingle(AssetsStorage.sounds["bal_wow"]);
+                audMan.PlaySingle(AssetStorage.sounds["bal_wow"]);
                 spawnedPickups.Add(pickup);
             }
             

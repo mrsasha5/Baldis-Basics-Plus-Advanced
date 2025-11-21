@@ -18,7 +18,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
 
         public static PosterObject GetPosterAndDataFromFile(string pngPath, bool overrideBasePath, out PosterSerializableData posterData)
         {
-            string jsonPath = overrideBasePath ? pngPath.Replace(".png", ".json") : AssetsHelper.modPath + pngPath.Replace(".png", ".json");
+            string jsonPath = overrideBasePath ? pngPath.Replace(".png", ".json") : AssetHelper.modPath + pngPath.Replace(".png", ".json");
 
             posterData = null;
 
@@ -28,12 +28,12 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
             }
 
             PosterObject posterObject =
-                ObjectCreators.CreatePosterObject(AssetsHelper.TextureFromFile(pngPath, overrideBasePath),
+                ObjectCreators.CreatePosterObject(AssetHelper.TextureFromFile(pngPath, overrideBasePath),
                     posterData == null || posterData.Texts == null || posterData.Texts.Length == 0 ? emptyTextArray : posterData.Texts);
 
             posterObject.name = Path.GetFileNameWithoutExtension(pngPath);
 
-            ObjectsStorage.Posters.Add(posterObject);
+            ObjectStorage.Posters.Add(posterObject);
 
             return posterObject;
         }

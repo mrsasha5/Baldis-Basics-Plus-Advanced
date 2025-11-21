@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using System.Collections;
@@ -52,9 +51,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
 
         public void InitializePrefab(Entity entity, int variant)
         {
-            audPlaceOnGround = AssetsStorage.sounds["food_plate_drop"];
-            audOpen = AssetsStorage.sounds["food_plate_lift"];
-            audEat = AssetsStorage.sounds["adv_yum"];
+            audPlaceOnGround = AssetStorage.sounds["food_plate_drop"];
+            audOpen = AssetStorage.sounds["food_plate_lift"];
+            audEat = AssetStorage.sounds["adv_yum"];
 
             entity.gameObject.SetRigidbody();
 
@@ -70,8 +69,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
             renderers = new SpriteRenderer[3];
 
             renderers[0] = GetComponentInChildren<SpriteRenderer>(); //plate renderer
-            renderers[1] = ObjectsCreator.CreateSpriteRenderer(null);
-            renderers[2] = ObjectsCreator.CreateSpriteRenderer(AssetsStorage.sprites["food_plate_cover"]);
+            renderers[1] = ObjectCreator.CreateSpriteRenderer(null);
+            renderers[2] = ObjectCreator.CreateSpriteRenderer(AssetStorage.sprites["food_plate_cover"]);
 
             renderers[0].transform.parent.gameObject
                 .AddComponent<SortingGroup>(); //oh oh!!!! Finally, I can change the rendering priority without any layers conflicts!!
@@ -141,7 +140,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
                 if (entity.CompareTag("Player"))
                 {
                     entity.SetSpeedEffect(1.4f, 10f,
-                        ObjectsStorage.ItemObjects["CookedChickenLeg"].itemSpriteSmall);
+                        ObjectStorage.ItemObjects["CookedChickenLeg"].itemSpriteSmall);
                     entity.GetComponent<PlayerMovement>().AddStamina(25f, false);
                 }
                 else 

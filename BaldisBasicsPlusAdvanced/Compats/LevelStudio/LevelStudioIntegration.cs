@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.AccelerationPlate;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
@@ -115,7 +114,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
         {
             base.Initialize();
 
-            AssetLoader.LoadLocalizationFolder(AssetsHelper.modPath + 
+            AssetLoader.LoadLocalizationFolder(AssetHelper.modPath + 
                 "Compats/LevelStudio/Language/English/", Language.English);
 
             InitializeVisuals();
@@ -167,8 +166,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             #region Zipline Visuals
 
             EditorInterface.AddStructureGenericVisual("adv_zipline_pillar", Structure_Zipline.ceilingPillarPre);
-            AddStructureVisualPrefab("adv_zipline", "hanger_white", ObjectsStorage.Objects["zipline_hanger"]);
-            AddStructureVisualPrefab("adv_zipline", "hanger_black", ObjectsStorage.Objects["zipline_black_hanger"]);
+            AddStructureVisualPrefab("adv_zipline", "hanger_white", ObjectStorage.Objects["zipline_hanger"]);
+            AddStructureVisualPrefab("adv_zipline", "hanger_black", ObjectStorage.Objects["zipline_black_hanger"]);
 
             foreach (GameObject zipline in GetVisualPrefabsFrom("adv_zipline"))
             {
@@ -184,7 +183,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #region Gum Dispenser Visual
 
-            BoxCollider gumDispCollider = AddStructureVisualPrefab("adv_gum_dispenser", "gum_dispenser", ObjectsStorage.Objects["gum_dispenser"])
+            BoxCollider gumDispCollider = AddStructureVisualPrefab("adv_gum_dispenser", "gum_dispenser", ObjectStorage.Objects["gum_dispenser"])
                 .AddComponent<BoxCollider>();
             gumDispCollider.size = new Vector3(8f, 8f, 1f);
             gumDispCollider.center = (Vector3.forward + Vector3.up) * 5f;
@@ -194,14 +193,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #region Noisy Plate Visual
 
-            CorrectPlateCollider(AddStructureVisualPrefab("adv_noisy_plate", "noisy_plate", ObjectsStorage.Objects["noisy_plate"]))
+            CorrectPlateCollider(AddStructureVisualPrefab("adv_noisy_plate", "noisy_plate", ObjectStorage.Objects["noisy_plate"]))
                 .gameObject.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
 
             #endregion
 
             #region Kitchen Stove Visual
 
-            CorrectPlateCollider(AddStructureVisualPrefab("adv_kitchen_stove", "kitchen_stove", ObjectsStorage.Objects["kitchen_stove"]))
+            CorrectPlateCollider(AddStructureVisualPrefab("adv_kitchen_stove", "kitchen_stove", ObjectStorage.Objects["kitchen_stove"]))
                 .gameObject.AddComponent<SettingsComponent>().offset = Vector3.up * 15f;
 
             #endregion
@@ -209,11 +208,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             #region Acceleration Plate Visual
 
             GameObject accelPlate = CorrectPlateCollider(
-                AddStructureVisualPrefab("adv_acceleration_plate", "acceleration_plate", ObjectsStorage.Objects["acceleration_plate"]))
+                AddStructureVisualPrefab("adv_acceleration_plate", "acceleration_plate", ObjectStorage.Objects["acceleration_plate"]))
                     .gameObject;
             accelPlate.AddComponent<MoveAndSettingsComponent>().offset = Vector3.up * 15f;
 
-            GameObject arrowTempPre = GameObject.Instantiate(AssetsHelper.LoadAsset<AnimatedSpriteRotator>("Arrow")).gameObject;
+            GameObject arrowTempPre = GameObject.Instantiate(AssetHelper.LoadAsset<AnimatedSpriteRotator>("Arrow")).gameObject;
 
             AnimatedSpriteRotator[] componentsInChildren = arrowTempPre.GetComponentsInChildren<AnimatedSpriteRotator>();
             for (int i = 0; i < componentsInChildren.Length; i++)
@@ -265,19 +264,19 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #region Pulley Visual
 
-            Pulley pulley = ObjectsStorage.Objects["pulley"].GetComponent<Pulley>();
+            Pulley pulley = ObjectStorage.Objects["pulley"].GetComponent<Pulley>();
 
             GameObject pulleyVisual = new GameObject("PulleyVisual");
             BoxCollider pulleyCollider = pulleyVisual.AddComponent<BoxCollider>();
             pulleyCollider.size = new Vector3(10f, 10f, 1f);
             pulleyCollider.center = Vector3.up * 5f + Vector3.forward * 5f;
 
-            MeshRenderer pulleyBg = ObjectsCreator.CreateQuadRenderer();
+            MeshRenderer pulleyBg = ObjectCreator.CreateQuadRenderer();
             pulleyBg.name = "PulleyBackgroundRenderer";
             pulleyBg.transform.SetParent(pulleyVisual.transform, false);
             pulleyBg.transform.localPosition += Vector3.up * 5f + Vector3.forward * 5f;
 
-            MeshRenderer meshRenderer = ObjectsCreator.CreateQuadRenderer();
+            MeshRenderer meshRenderer = ObjectCreator.CreateQuadRenderer();
             meshRenderer.name = "PulleyRenderer";
             meshRenderer.transform.SetParent(pulleyBg.transform, false);
             meshRenderer.transform.localScale = new Vector3(0.3f, 0.3f, 1f);
@@ -300,13 +299,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 EditorInterface.AddObjectVisual("adv_" + name, ObjectsStorage.SodaMachines[name].gameObject, true);
             }*/
 
-            EditorInterface.AddObjectVisual("adv_good_machine", ObjectsStorage.SodaMachines["GoodMachine"].gameObject, true);
+            EditorInterface.AddObjectVisual("adv_good_machine", ObjectStorage.SodaMachines["GoodMachine"].gameObject, true);
 
-            foreach (string name in ObjectsStorage.Objects.Keys)
+            foreach (string name in ObjectStorage.Objects.Keys)
             {
-                if (ObjectsStorage.Objects[name].TryGetComponent(out BasePlate plate))
+                if (ObjectStorage.Objects[name].TryGetComponent(out BasePlate plate))
                 {
-                    EditorInterface.AddObjectVisual("adv_" + name, ObjectsStorage.Objects[name], true); //This one for rooms only
+                    EditorInterface.AddObjectVisual("adv_" + name, ObjectStorage.Objects[name], true); //This one for rooms only
                     if (!ContainsStructureVisualPrefab("adv_generic_plate", name))
                     {
                         CorrectPlateCollider(AddStructureVisualPrefab("adv_generic_plate", name, plate.gameObject))
@@ -315,22 +314,22 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 }
             }
 
-            EditorInterface.AddNPCVisual("adv_criss_the_crystal", ObjectsStorage.Npcs["CrissTheCrystal"]);
+            EditorInterface.AddNPCVisual("adv_criss_the_crystal", ObjectStorage.Npcs["CrissTheCrystal"]);
 
-            EditorInterface.AddObjectVisual("adv_symbol_machine", ObjectsStorage.Objects["symbol_machine"], true);
+            EditorInterface.AddObjectVisual("adv_symbol_machine", ObjectStorage.Objects["symbol_machine"], true);
 
-            EditorInterface.AddObjectVisual("adv_voting_ballot", ObjectsStorage.Objects["voting_ballot"], true);
-            EditorInterface.AddObjectVisual("adv_voting_ceiling_screen", ObjectsStorage.Objects["voting_screen"], true);
-            GameObject.Destroy(ObjectsStorage.Objects["voting_screen"].GetComponent<Collider>());
+            EditorInterface.AddObjectVisual("adv_voting_ballot", ObjectStorage.Objects["voting_ballot"], true);
+            EditorInterface.AddObjectVisual("adv_voting_ceiling_screen", ObjectStorage.Objects["voting_screen"], true);
+            GameObject.Destroy(ObjectStorage.Objects["voting_screen"].GetComponent<Collider>());
 
             GameObject advancedMMVisual = 
-                EditorInterface.AddActivityVisual("adv_advanced_math_machine", ObjectsStorage.Objects["advanced_math_machine"]);
-            BoxCollider mmCollider = ObjectsStorage.Objects["advanced_math_machine"].transform.Find("Model").GetComponent<BoxCollider>();
+                EditorInterface.AddActivityVisual("adv_advanced_math_machine", ObjectStorage.Objects["advanced_math_machine"]);
+            BoxCollider mmCollider = ObjectStorage.Objects["advanced_math_machine"].transform.Find("Model").GetComponent<BoxCollider>();
 
             GameObject advancedCornerMMVisual =
-                EditorInterface.AddActivityVisual("adv_advanced_math_machine_corner", ObjectsStorage.Objects["advanced_math_machine_corner"]);
+                EditorInterface.AddActivityVisual("adv_advanced_math_machine_corner", ObjectStorage.Objects["advanced_math_machine_corner"]);
             BoxCollider cornerMmCollider = 
-                ObjectsStorage.Objects["advanced_math_machine_corner"].transform.Find("Model").GetComponent<BoxCollider>();
+                ObjectStorage.Objects["advanced_math_machine_corner"].transform.Find("Model").GetComponent<BoxCollider>();
 
             BoxCollider ammCollider = advancedMMVisual.AddComponent<BoxCollider>();
             ammCollider.size = mmCollider.size;
@@ -340,12 +339,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             cornerAmmCollider.size = cornerMmCollider.size;
             cornerAmmCollider.center = cornerMmCollider.center;
 
-            EditorInterface.AddObjectVisual("adv_farm_finish_flag", ObjectsStorage.Objects["farm_flag"], true)
+            EditorInterface.AddObjectVisual("adv_farm_finish_flag", ObjectStorage.Objects["farm_flag"], true)
                 .GetComponentInChildren<SpriteRenderer>().RemoveBillboard();
-            EditorInterface.AddObjectVisual("adv_farm_finish_points_flag", ObjectsStorage.Objects["farm_points_flag"], true)
+            EditorInterface.AddObjectVisual("adv_farm_finish_points_flag", ObjectStorage.Objects["farm_points_flag"], true)
                 .GetComponentInChildren<SpriteRenderer>().RemoveBillboard();
 
-            EditorInterface.AddObjectVisualWithCustomBoxCollider("adv_farm_sign1", ObjectsStorage.Objects["farm_sign1"],
+            EditorInterface.AddObjectVisualWithCustomBoxCollider("adv_farm_sign1", ObjectStorage.Objects["farm_sign1"],
                 Vector3.one * 7.5f, Vector3.zero);
 
             #endregion
@@ -353,18 +352,18 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             #region Door & Window Visuals
 
             EditorInterface.AddWindow("adv_big_hole", 
-                ObjectsStorage.Npcs["CrissTheCrystal"].GetComponent<CrissTheCrystal>().windowObjectPre);
+                ObjectStorage.Npcs["CrissTheCrystal"].GetComponent<CrissTheCrystal>().windowObjectPre);
 
             #endregion
 
             LevelStudioPlugin.Instance.eventSprites.Add("adv_disappearing_characters", 
-                AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Invisibility_Event.png"));
+                AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Invisibility_Event.png"));
             LevelStudioPlugin.Instance.eventSprites.Add("adv_cold_school",
-                AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Cold_School_Event.png"));
+                AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Cold_School_Event.png"));
             LevelStudioPlugin.Instance.eventSprites.Add("adv_portal_chaos",
-                AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Portal_Chaos_Event.png"));
+                AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Portal_Chaos_Event.png"));
             LevelStudioPlugin.Instance.eventSprites.Add("adv_voting",
-                AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Voting_Event.png"));
+                AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Voting_Event.png"));
 
             EditorInterface.AddRoomVisualManager<OutsideRoomVisualManager>("adv_corn_field");
         }
@@ -394,9 +393,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             mode.availableRandomEvents.Add("adv_voting");
 
             EditorInterfaceModes.AddToolToCategory(mode, "npcs",
-                new NPCTool("adv_criss_the_crystal", AssetsStorage.sprites["adv_editor_criss_the_crystal"]));
+                new NPCTool("adv_criss_the_crystal", AssetStorage.sprites["adv_editor_criss_the_crystal"]));
 
-            foreach (string objectName in ObjectsStorage.ItemObjects.Keys)
+            foreach (string objectName in ObjectStorage.ItemObjects.Keys)
             {
                 string key = "adv_" + objectName;
                 EditorInterfaceModes.AddToolToCategory(mode, "items", 
@@ -405,14 +404,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
                 new ObjectTool("adv_good_machine", 
-                    AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Objects/adv_editor_GoodMachine.png")));
+                    AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Objects/adv_editor_GoodMachine.png")));
 
             //Plates are supposed to be used in some premades, so they still exist as objects in Level Studio as well
             if (mode.id == "rooms")
             {
-                foreach (string name in ObjectsStorage.Objects.Keys)
+                foreach (string name in ObjectStorage.Objects.Keys)
                 {
-                    if (ObjectsStorage.Objects[name].TryGetComponent(out BasePlate plate))
+                    if (ObjectStorage.Objects[name].TryGetComponent(out BasePlate plate))
                     {
                         string key = "adv_" + name;
 
@@ -420,55 +419,55 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
                         EditorInterfaceModes.AddToolToCategory(mode, "objects",
                             new ObjectTool(key, 
-                                AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/" + platesInfo[name])));
+                                AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/" + platesInfo[name])));
                     }
                 }
             }
             
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                new ObjectTool("adv_symbol_machine", AssetsStorage.sprites["adv_editor_symbol_machine"]));
+                new ObjectTool("adv_symbol_machine", AssetStorage.sprites["adv_editor_symbol_machine"]));
 
             EditorInterfaceModes.AddToolToCategory(mode, "doors",
                 new WindowTool("adv_big_hole", 
-                    AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Doors/adv_editor_big_hole.png")));
+                    AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Doors/adv_editor_big_hole.png")));
 
             EditorInterfaceModes.AddToolToCategory(mode, "lights", 
                 new LightTool("adv_advanced_education_lamp", 
-                    AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Lights/adv_editor_advanced_class_lamp.png")));
+                    AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Lights/adv_editor_advanced_class_lamp.png")));
 
             EditorInterfaceModes.AddToolToCategory(mode, "activities",
-                new ActivityTool("adv_advanced_math_machine", AssetsStorage.sprites["adv_editor_advanced_math_machine"], 0f));
+                new ActivityTool("adv_advanced_math_machine", AssetStorage.sprites["adv_editor_advanced_math_machine"], 0f));
             EditorInterfaceModes.AddToolToCategory(mode, "activities",
-                new ActivityTool("adv_advanced_math_machine_corner", AssetsStorage.sprites["adv_editor_advanced_math_machine_corner"], 0f));
+                new ActivityTool("adv_advanced_math_machine_corner", AssetStorage.sprites["adv_editor_advanced_math_machine_corner"], 0f));
 
             EditorInterfaceModes.AddToolToCategory(mode, "objects",
                 new ObjectTool("adv_voting_ceiling_screen",
-                    AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Objects/adv_editor_voting_screen.png")));
+                    AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Objects/adv_editor_voting_screen.png")));
             EditorInterfaceModes.AddToolToCategory(mode, "objects",
-                new ObjectTool("adv_voting_ballot", AssetsStorage.sprites["adv_editor_voting_ballot"]));
+                new ObjectTool("adv_voting_ballot", AssetStorage.sprites["adv_editor_voting_ballot"]));
 
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                new ObjectToolNoRotation("adv_farm_finish_flag", AssetsStorage.sprites["adv_editor_finish_flag"], 5f));
+                new ObjectToolNoRotation("adv_farm_finish_flag", AssetStorage.sprites["adv_editor_finish_flag"], 5f));
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                new ObjectToolNoRotation("adv_farm_finish_points_flag", AssetsStorage.sprites["adv_editor_finish_points_flag"], 5f));
+                new ObjectToolNoRotation("adv_farm_finish_points_flag", AssetStorage.sprites["adv_editor_finish_points_flag"], 5f));
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
-                new ObjectToolNoRotation("adv_farm_sign1", AssetsStorage.sprites["adv_editor_corn_sign1"], 5f));
+                new ObjectToolNoRotation("adv_farm_sign1", AssetStorage.sprites["adv_editor_corn_sign1"], 5f));
 
             EditorInterfaceModes.AddToolToCategory(mode, "structures", 
                 new ZiplineTool("adv_zipline", "hanger_white", 
-                    AssetsStorage.sprites["adv_editor_zipline_white"]));
+                    AssetStorage.sprites["adv_editor_zipline_white"]));
             EditorInterfaceModes.AddToolToCategory(mode, "structures",
                 new ZiplineTool("adv_zipline", "hanger_black", 
-                    AssetsStorage.sprites["adv_editor_zipline_black"]));
+                    AssetStorage.sprites["adv_editor_zipline_black"]));
             EditorInterfaceModes.AddToolToCategory(mode, "structures", 
                 new GumDispenserTool("adv_gum_dispenser", "gum_dispenser", 
-                    AssetsStorage.sprites["adv_editor_gum_dispenser"]));
+                    AssetStorage.sprites["adv_editor_gum_dispenser"]));
             EditorInterfaceModes.AddToolToCategory(mode, "structures",
                 new NoisyPlateTool("adv_noisy_plate", "noisy_plate",
-                    AssetsStorage.sprites["adv_editor_noisy_plate"]));
+                    AssetStorage.sprites["adv_editor_noisy_plate"]));
 
             Sprite accelPlateIcon = 
-                AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_acceleration_plate.png");
+                AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_acceleration_plate.png");
 
             EditorInterfaceModes.AddToolToCategory(mode, "structures",
                 new AccelerationPlateTool("adv_acceleration_plate", "acceleration_plate", accelPlateIcon, buttonless: false));
@@ -479,29 +478,29 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             {
                 EditorInterfaceModes.AddToolToCategory(
                     mode, "structures", new GenericPlateTool("adv_generic_plate", pair.Key,
-                        AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/" + pair.Value)));
+                        AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/" + pair.Value)));
             }
 
             EditorInterfaceModes.AddToolToCategory(mode, "structures", 
                 new KitchenStoveTool("adv_kitchen_stove", "kitchen_stove",
-                    AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_stove.png")));
+                    AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_stove.png")));
 
             EditorInterfaceModes.AddToolToCategory(mode, "structures",
                 new PulleyTool("adv_pulley", "pulley",
-                    AssetsHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_pulley.png")));
+                    AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_pulley.png")));
 
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
-                new RoomTool("adv_english_class", AssetsStorage.sprites["adv_editor_english_floor"]));
+                new RoomTool("adv_english_class", AssetStorage.sprites["adv_editor_english_floor"]));
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
-                new RoomTool("adv_english_class_timer", AssetsStorage.sprites["adv_editor_english_floor_timer"]));
+                new RoomTool("adv_english_class_timer", AssetStorage.sprites["adv_editor_english_floor_timer"]));
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
-                new RoomTool("adv_school_council_class", AssetsStorage.sprites["adv_editor_school_council_floor"]));
+                new RoomTool("adv_school_council_class", AssetStorage.sprites["adv_editor_school_council_floor"]));
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
-                new RoomTool("adv_advanced_class", AssetsStorage.sprites["adv_editor_advanced_class_floor"]));
+                new RoomTool("adv_advanced_class", AssetStorage.sprites["adv_editor_advanced_class_floor"]));
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
-                new RoomTool("adv_corn_field", AssetsStorage.sprites["adv_editor_corn_field"]));
+                new RoomTool("adv_corn_field", AssetStorage.sprites["adv_editor_corn_field"]));
 
-            foreach (PosterObject poster in ObjectsStorage.Posters)
+            foreach (PosterObject poster in ObjectStorage.Posters)
             {
                 if (poster.name.StartsWith("Adv_Poster_Recipe"))
 
@@ -531,45 +530,45 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
         {
             string texBase = "Compats/LevelStudio/Textures/";
 
-            AssetsStorage.LoadModSprite("adv_editor_zipline_white",
+            AssetStorage.LoadModSprite("adv_editor_zipline_white",
                 texBase + "Structures/adv_editor_zipline_white.png");
-            AssetsStorage.LoadModSprite("adv_editor_zipline_black",
+            AssetStorage.LoadModSprite("adv_editor_zipline_black",
                 texBase + "Structures/adv_editor_zipline_black.png");
-            AssetsStorage.LoadModSprite("adv_editor_gum_dispenser",
+            AssetStorage.LoadModSprite("adv_editor_gum_dispenser",
                 texBase + "Structures/adv_editor_gum_dispenser.png");
 
-            AssetsStorage.LoadModSprite("adv_editor_criss_the_crystal",
+            AssetStorage.LoadModSprite("adv_editor_criss_the_crystal",
                 texBase + "NPCs/adv_editor_criss_the_crystal.png");
 
-            AssetsStorage.LoadModSprite("adv_editor_corn_sign1",
+            AssetStorage.LoadModSprite("adv_editor_corn_sign1",
                 texBase + "Objects/adv_editor_corn_sign1.png");
-            AssetsStorage.LoadModSprite("adv_editor_finish_flag",
+            AssetStorage.LoadModSprite("adv_editor_finish_flag",
                 texBase + "Objects/adv_editor_finish_flag.png");
-            AssetsStorage.LoadModSprite("adv_editor_finish_points_flag",
+            AssetStorage.LoadModSprite("adv_editor_finish_points_flag",
                 texBase + "Objects/adv_editor_finish_points_flag.png");
 
-            AssetsStorage.LoadModSprite("adv_editor_acceleration_plate",
+            AssetStorage.LoadModSprite("adv_editor_acceleration_plate",
                 texBase + "Structures/adv_editor_acceleration_plate.png");
-            AssetsStorage.LoadModSprite("adv_editor_noisy_plate",
+            AssetStorage.LoadModSprite("adv_editor_noisy_plate",
                 texBase + "Structures/adv_editor_noisy_plate.png");
-            AssetsStorage.LoadModSprite("adv_editor_voting_ballot",
+            AssetStorage.LoadModSprite("adv_editor_voting_ballot",
                 texBase + "Objects/adv_editor_voting_ballot.png");
-            AssetsStorage.LoadModSprite("adv_editor_advanced_math_machine",
+            AssetStorage.LoadModSprite("adv_editor_advanced_math_machine",
                 texBase + "Objects/adv_editor_activity_advanced_math_machine.png");
-            AssetsStorage.LoadModSprite("adv_editor_advanced_math_machine_corner",
+            AssetStorage.LoadModSprite("adv_editor_advanced_math_machine_corner",
                 texBase + "Objects/adv_editor_activity_advanced_math_machine_corner.png");
 
-            AssetsStorage.LoadModSprite("adv_editor_symbol_machine",
+            AssetStorage.LoadModSprite("adv_editor_symbol_machine",
                 texBase + "Objects/adv_editor_symbol_machine.png");
-            AssetsStorage.LoadModSprite("adv_editor_english_floor",
+            AssetStorage.LoadModSprite("adv_editor_english_floor",
                 texBase + "Rooms/adv_room_english.png");
-            AssetsStorage.LoadModSprite("adv_editor_school_council_floor",
+            AssetStorage.LoadModSprite("adv_editor_school_council_floor",
                 texBase + "Rooms/adv_room_school_council.png");
-            AssetsStorage.LoadModSprite("adv_editor_english_floor_timer",
+            AssetStorage.LoadModSprite("adv_editor_english_floor_timer",
                 texBase + "Rooms/adv_room_english_timer.png");
-            AssetsStorage.LoadModSprite("adv_editor_advanced_class_floor",
+            AssetStorage.LoadModSprite("adv_editor_advanced_class_floor",
                 texBase + "Rooms/adv_room_advanced.png");
-            AssetsStorage.LoadModSprite("adv_editor_corn_field",
+            AssetStorage.LoadModSprite("adv_editor_corn_field",
                 texBase + "Rooms/adv_room_corn_field.png");
         }
     }

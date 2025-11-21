@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using System;
@@ -54,8 +53,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
 
         public void InitializePrefab(Entity entity, int variant)
         {
-            audOnSlip = AssetsStorage.sounds["banana_slip"];
-            audSput = AssetsStorage.sounds["banana_sput"];
+            audOnSlip = AssetStorage.sounds["banana_slip"];
+            audSput = AssetStorage.sounds["banana_sput"];
 
             SpriteRenderer renderer = GetComponentInChildren<SpriteRenderer>();
             renderer.transform.localScale = new Vector3(2.5f, 2f, 2f);
@@ -172,7 +171,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
 
                 if (pmTarget != null)
                     gauge = Singleton<CoreGameManager>.Instance.GetHud(0).gaugeManager
-                            .ActivateNewGauge(ObjectsStorage.ItemObjects["Dough"].itemSpriteSmall, lifetime);
+                            .ActivateNewGauge(ObjectStorage.ItemObjects["Dough"].itemSpriteSmall, lifetime);
             }
         }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
@@ -25,11 +24,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             hallPrefabs = new WeightedGameObject[] {
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["kitchen_stove"],
+                    selection = ObjectStorage.Objects["kitchen_stove"],
                     weight = 100
                 }
             };
-            buttonPre = AssetsStorage.gameButton;
+            buttonPre = AssetStorage.gameButton;
         }
 
         public override void Load(List<StructureData> data)

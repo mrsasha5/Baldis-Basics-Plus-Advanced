@@ -20,7 +20,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Characters
             {
                 NPCMetadata meta = other.GetComponent<NPC>().GetMeta();
 
-                if (meta == null || meta.tags.Contains(TagsStorage.firstPrizeImmunity))
+                if (meta == null || meta.tags.Contains(TagStorage.firstPrizeImmunity))
                     return;
 
                 ___moveModsMan.AddMoveMod(other.transform);
@@ -39,7 +39,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Characters
             {
                 NPCMetadata meta = other.GetComponent<NPC>().GetMeta();
 
-                if (meta == null || meta.tags.Contains(TagsStorage.firstPrizeImmunity))
+                if (meta == null || meta.tags.Contains(TagStorage.firstPrizeImmunity))
                     return;
 
                 ___moveModsMan.Remove(other.transform);

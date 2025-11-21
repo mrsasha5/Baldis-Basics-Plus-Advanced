@@ -14,10 +14,10 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems.Food
             switch (variant)
             {
                 case 1:
-                    chickenGround = ObjectsStorage.Entities["RawChichenGroundTrap"].GetComponent<PlateFoodTrap>();
+                    chickenGround = ObjectStorage.Entities["RawChichenGroundTrap"].GetComponent<PlateFoodTrap>();
                     break;
                 case 2:
-                    chickenGround = ObjectsStorage.Entities["CookedChichenGroundTrap"].GetComponent<PlateFoodTrap>();
+                    chickenGround = ObjectStorage.Entities["CookedChichenGroundTrap"].GetComponent<PlateFoodTrap>();
                     break;
             }
 

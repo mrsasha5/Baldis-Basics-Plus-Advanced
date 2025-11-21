@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
@@ -64,11 +63,11 @@ namespace BaldisBasicsPlusAdvanced.Menu
                 setDisabledCover: true
             ).Disable(gameInitialized);
 
-            StandardMenuButton creditsButton = CreateButton(LoadCreditsScreen, AssetsHelper.LoadAsset<Sprite>("QMark_Sheet_1"),
+            StandardMenuButton creditsButton = CreateButton(LoadCreditsScreen, AssetHelper.LoadAsset<Sprite>("QMark_Sheet_1"),
                 "CreditsButton", new Vector3(155f, 70f, 0f));
             creditsButton.swapOnHigh = true;
             creditsButton.image = creditsButton.GetComponent<Image>();
-            creditsButton.highlightedSprite = AssetsHelper.LoadAsset<Sprite>("QMark_Sheet_0");
+            creditsButton.highlightedSprite = AssetHelper.LoadAsset<Sprite>("QMark_Sheet_0");
             creditsButton.unhighlightedSprite = creditsButton.image.sprite;
 
             AddTooltip(creditsButton, "Adv_Option_Credits_Desc");
@@ -78,7 +77,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
             if (OptionsDataManager.ExtraSettings.showNotif)
             {
                 Image notif =
-                    UIHelpers.CreateImage(AssetsStorage.sprites["exclamation_point_sheet0"], transform,
+                    UIHelpers.CreateImage(AssetStorage.sprites["exclamation_point_sheet0"], transform,
                     Vector3.zero, correctPosition: false);
                 notif.ToCenter();
 
@@ -91,7 +90,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
         private void LoadCreditsScreen()
         {
-            CreditsScreen screen = Instantiate(ObjectsStorage.Objects["credits_screen"].GetComponent<CreditsScreen>());
+            CreditsScreen screen = Instantiate(ObjectStorage.Objects["credits_screen"].GetComponent<CreditsScreen>());
             screen.onScreenClose += delegate
             {
                 transform.parent.gameObject.SetActive(true);
@@ -107,12 +106,12 @@ namespace BaldisBasicsPlusAdvanced.Menu
                 OptionsDataManager.ExtraSettings.SetValue(keys[i], synchronizatedToggles[keys[i]].Value);
             }
             OptionsDataManager.Save();
-            GetComponentInParent<AudioManager>().PlaySingle(AssetsStorage.sounds["bell"]);
+            GetComponentInParent<AudioManager>().PlaySingle(AssetStorage.sounds["bell"]);
         }
 
         private void DisableToggleOnPress(MenuToggle toggle)
         {
-            GetComponentInParent<AudioManager>().PlaySingle(AssetsStorage.sounds["elv_buzz"]);
+            GetComponentInParent<AudioManager>().PlaySingle(AssetStorage.sounds["elv_buzz"]);
             toggle.Set(false);
         }
 
@@ -126,7 +125,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
             //DisabledCover
             if (setDisabledCover) {
-                GameObject obj = Instantiate(AssetsHelper.LoadAsset<GameObject>("DisabledCover"));
+                GameObject obj = Instantiate(AssetHelper.LoadAsset<GameObject>("DisabledCover"));
                 ReflectionHelper.SetValue(toggle, "disableCover", obj);
                 obj.transform.SetParent(toggle.transform, false);
                 obj.GetComponent<RectTransform>().sizeDelta = new Vector2(100f, 48f);

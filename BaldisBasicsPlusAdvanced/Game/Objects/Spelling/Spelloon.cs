@@ -61,7 +61,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
             entity.SetGrounded(false);
 
-            explosionPre = AssetsHelper.LoadAsset<GameObject>("QuickPop");
+            explosionPre = AssetHelper.LoadAsset<GameObject>("QuickPop");
         }
 
         public void InitializePrefabPost(string symbol, Sprite sprite)
@@ -167,7 +167,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
         {
             floater.enabled = false;
             sprite.localPosition = spriteHeldPosition;
-            sprite.gameObject.layer = LayersHelper.takenBalloonLayer;
+            sprite.gameObject.layer = LayerHelper.takenBalloonLayer;
             Entity entity = player.GetComponent<Entity>();
             while (trackingPlayer)
             {

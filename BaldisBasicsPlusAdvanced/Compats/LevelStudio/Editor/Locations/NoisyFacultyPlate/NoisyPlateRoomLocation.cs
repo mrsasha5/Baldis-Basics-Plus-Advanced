@@ -98,7 +98,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFac
         public void SettingsClicked()
         {
             NoisyPlateExchangeHandler handler = EditorController.Instance.CreateUI<NoisyPlateExchangeHandler>(
-                "NoisyRoomConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/NoisyRoomConfig.json");
+                "NoisyRoomConfig", AssetHelper.modPath + "Compats/LevelStudio/UI/NoisyRoomConfig.json");
             handler.OnInitialized(this);
             handler.Refresh();
         }

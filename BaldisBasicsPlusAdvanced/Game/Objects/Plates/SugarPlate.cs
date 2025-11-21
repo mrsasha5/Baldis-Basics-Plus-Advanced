@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -17,8 +17,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         public override void InitializePrefab(int variant)
         {
             base.InitializePrefab(variant);
-            audBoost = AssetsStorage.sounds["adv_boost"];
-            gaugeIcon = AssetsHelper.SpriteFromFile("Textures/Gauges/adv_gauge_sugar_addiction.png");
+            audBoost = AssetStorage.sounds["adv_boost"];
+            gaugeIcon = AssetHelper.SpriteFromFile("Textures/Gauges/adv_gauge_sugar_addiction.png");
         }
 
         protected override void SetTextures()

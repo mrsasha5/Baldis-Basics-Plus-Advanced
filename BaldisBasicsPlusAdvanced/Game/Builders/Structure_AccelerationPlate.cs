@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
@@ -25,13 +24,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         {
             base.InitializePrefab(1);
             buttonRange = 6;
-            buttonPre = AssetsStorage.gameButton;
+            buttonPre = AssetStorage.gameButton;
 
             hallPrefabs = new WeightedGameObject[]
             {
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["acceleration_plate"],
+                    selection = ObjectStorage.Objects["acceleration_plate"],
                     weight = 100
                 }
             };

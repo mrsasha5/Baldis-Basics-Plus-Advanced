@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
 using BaldisBasicsPlusAdvanced.SaveSystem;
@@ -19,7 +19,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Menu
         {
             if (OptionsDataManager.ExtraSettings.showNotif && !__instance.TryGetComponent(out NotifiedMainMenu _))
             {
-                Image image = UIHelpers.CreateImage(AssetsStorage.sprites["about_notif"], __instance.transform, 
+                Image image = UIHelpers.CreateImage(AssetStorage.sprites["about_notif"], __instance.transform, 
                     Vector3.zero, correctPosition: false);
                 image.ToCenter();
 

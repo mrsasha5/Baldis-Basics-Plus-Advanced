@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -42,7 +41,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             PlayerInteractionController.Instance.SetIgnorePlayerEntitiesInteraction(true);
 
             HudGauge gauge = Singleton<CoreGameManager>.Instance.GetHud(0).gaugeManager
-                            .ActivateNewGauge(ObjectsStorage.ItemObjects["MagicClock"].itemSpriteSmall, freezingTime + unfreezingTime);
+                            .ActivateNewGauge(ObjectStorage.ItemObjects["MagicClock"].itemSpriteSmall, freezingTime + unfreezingTime);
 
             /*for (int i = 0; i < affectedNPCs.Count; i++)
             {
@@ -51,7 +50,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
             pm.ec.AddTimeScale(timeScale);
 
-            pm.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_time_stops"]);
+            pm.ec.GetAudMan().PlaySingle(AssetStorage.sounds["adv_time_stops"]);
 
             float val = 1f;
             float time = freezingTime;
@@ -70,7 +69,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             }
 
             time = unfreezingTime;
-            pm.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_time_starts"]);
+            pm.ec.GetAudMan().PlaySingle(AssetStorage.sounds["adv_time_starts"]);
 
             while (time > 0f)
             {

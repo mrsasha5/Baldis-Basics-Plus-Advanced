@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Projectiles;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -27,7 +27,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
         public void InitializePrefab(int variant)
         {
-            audBang = AssetsStorage.sounds["bang"];
+            audBang = AssetStorage.sounds["bang"];
 
             pushSpeed = 125f;
             pushAcceleration = -62.5f;

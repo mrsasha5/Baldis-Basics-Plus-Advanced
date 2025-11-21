@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -64,7 +63,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             if (owner == ControllerOwner.Player)
             {
                 gauge = Singleton<CoreGameManager>.Instance.GetHud(0).gaugeManager
-                    .ActivateNewGauge(ObjectsStorage.ItemObjects["InflatableBalloon"].itemSpriteSmall, time);
+                    .ActivateNewGauge(ObjectStorage.ItemObjects["InflatableBalloon"].itemSpriteSmall, time);
             }
             baseTime = time;
         }
@@ -109,7 +108,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             {
                 entity.ExternalActivity.moveMods.Remove((MovementModifier)zeroMoveMod);
             }
-            audMan.PlaySingle(AssetsStorage.sounds["pop"]);
+            audMan.PlaySingle(AssetStorage.sounds["pop"]);
             GameObject.Destroy(audMan.gameObject, 3f);
 
             gauge?.Deactivate();
@@ -120,7 +119,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             float size = 0.15f;
             float speed = 1f;
 
-            renderer = ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["balloon_orange"], true);
+            renderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["balloon_orange"], true);
             renderer.transform.parent.SetParent(entity.transform, false);
 
             //Physics.Raycast(entity.transform.position, entity.transform.forward, out RaycastHit hit, float.PositiveInfinity,
@@ -128,11 +127,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 
             renderer.transform.localPosition = Vector3.forward * 4f + Vector3.up * -3.4f + Vector3.right * 0.3f; //* (hit.distance >= 4f ? 4f : 0f) + Vector3.up * -3.4f + Vector3.right * 0.3f;
             renderer.transform.localScale = Vector3.one * size;
-            if (owner == ControllerOwner.Player) renderer.gameObject.layer = LayersHelper.takenBalloonLayer;
+            if (owner == ControllerOwner.Player) renderer.gameObject.layer = LayerHelper.takenBalloonLayer;
 
-            audMan = ObjectsCreator.CreatePropagatedAudMan(entity.transform.position);
+            audMan = ObjectCreator.CreatePropagatedAudMan(entity.transform.position);
             audMan.transform.SetParent(entity.transform);
-            audMan.PlaySingle(AssetsStorage.sounds["adv_balloon_inflation"]);
+            audMan.PlaySingle(AssetStorage.sounds["adv_balloon_inflation"]);
             
             while (size < 1f)
             {

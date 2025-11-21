@@ -1,5 +1,5 @@
 ﻿using System;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Cache;
 
 namespace BaldisBasicsPlusAdvanced.API
 {
@@ -48,7 +48,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// </summary>
         public static void DisableAllContent()
         {
-            if (AssetsStorage.Overridden)
+            if (AssetStorage.Overridden)
             {
                 ApiManager.logger.LogWarning("DisableAllOverrides() doesn't work on assets post load! Assets are overridden already.");
                 return;
@@ -65,7 +65,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// </summary>
         public static void DisableAccelerationPlate()
         {
-            if (AssetsStorage.Overridden && !kitchenStoveDisabled)
+            if (AssetStorage.Overridden && !kitchenStoveDisabled)
             {
                 ApiManager.logger.LogWarning("Acceleration Plate cannot be disabled! Assets are overridden already.");
                 return;
@@ -78,7 +78,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// </summary>
         public static void DisableKitchenStove()
         {
-            if (AssetsStorage.Overridden && !kitchenStoveDisabled)
+            if (AssetStorage.Overridden && !kitchenStoveDisabled)
             {
                 ApiManager.logger.LogWarning("Kitchen Stove cannot be disabled! Assets are overridden already.");
                 return;
@@ -91,7 +91,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// </summary>
         public static void DisableEnglishClass()
         {
-            if (AssetsStorage.Overridden && !englishClassDisabled)
+            if (AssetStorage.Overridden && !englishClassDisabled)
             {
                 ApiManager.logger.LogWarning("English class cannot be disabled! Assets are overridden already.");
                 return;

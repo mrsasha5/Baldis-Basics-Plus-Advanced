@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
 using UnityEngine;
@@ -25,7 +25,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             bool created = controllerSystem.CreateController(out PlayerWindController windController);
             if (!created)
             {
-                pm.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["error_maybe"]);
+                pm.ec.GetAudMan().PlaySingle(AssetStorage.sounds["error_maybe"]);
                 Destroy(gameObject);
                 return false;
             }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using BaldisBasicsPlusAdvanced.API;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
@@ -119,10 +119,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
         public void InitializePrefab(int variant)
         {
-            transparentPlaySprite = AssetsHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_play_transparent.png");
-            playSprite = AssetsHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_play.png");
-            transparentPauseSprite = AssetsHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_pause_transparent.png");
-            pauseSprite = AssetsHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_pause.png");
+            transparentPlaySprite = AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_play_transparent.png");
+            playSprite = AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_play.png");
+            transparentPauseSprite = AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_pause_transparent.png");
+            pauseSprite = AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_pause.png");
 
             skipBackButtonHeight = 500f;
             skipForwardButtonHeight = 1000f;
@@ -130,29 +130,29 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             switchBgTime = 10f;
             fadeSpeed = 0.5f;
 
-            musMan = ObjectsCreator.CreateAudMan(Vector3.zero);
+            musMan = ObjectCreator.CreateAudMan(Vector3.zero);
             musMan.transform.SetParent(transform, false);
             musMan.ignoreListenerPause = true;
             musMan.useUnscaledPitch = true;
 
             audMusics = new List<SoundObject>()
             {
-                AssetsHelper.LoadAsset<SoundObject>("Mus_Party"),
-                AssetsStorage.sounds["creepy_old_computer"]
+                AssetHelper.LoadAsset<SoundObject>("Mus_Party"),
+                AssetStorage.sounds["creepy_old_computer"]
             };
             midiNames = new List<string>();
 
             speed = 30f;
 
-            canvas = ObjectsCreator.CreateCanvas(gameObject, setGlobalCam: true);
+            canvas = ObjectCreator.CreateCanvas(gameObject, setGlobalCam: true);
             canvas.transform.SetParent(transform, false);
 
             backgroundSprites = new List<Sprite>();
 
-            foreach (string path in Directory.GetFiles(AssetsHelper.modPath + "Textures/Backgrounds/Credits", 
+            foreach (string path in Directory.GetFiles(AssetHelper.modPath + "Textures/Backgrounds/Credits", 
                 "*.*", SearchOption.AllDirectories))
             {
-                backgroundSprites.Add(AssetsHelper.SpriteFromFile(path.Replace(AssetsHelper.modPath, "")));
+                backgroundSprites.Add(AssetHelper.SpriteFromFile(path.Replace(AssetHelper.modPath, "")));
             }
 
             backgroundImage = UIHelpers.CreateImage(backgroundSprites[0], canvas.transform, Vector3.zero, false);
@@ -164,7 +164,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
             int linesCount = 0;
 
-            using (StreamReader reader = new StreamReader(AssetsHelper.modPath + "Language/English/Credits.txt"))
+            using (StreamReader reader = new StreamReader(AssetHelper.modPath + "Language/English/Credits.txt"))
             {
                 offset = float.Parse(reader.ReadLine().Replace("Offset: ", ""), CultureInfo.InvariantCulture);
                 maxHeight = float.Parse(reader.ReadLine().Replace("Max Height: ", ""), CultureInfo.InvariantCulture);
@@ -182,30 +182,30 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             tmpText.rectTransform.sizeDelta = new Vector2(480, 50);
             tmpText.alignment = TextAlignmentOptions.Center;
 
-            exitButton = ObjectsCreator.CreateSpriteButton(
-                AssetsHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_door_exit_transparent.png"), 
+            exitButton = ObjectCreator.CreateSpriteButton(
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_door_exit_transparent.png"), 
                 new Vector3(208, 148), canvas.transform, 
-                AssetsHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_door_exit.png"),
-                AssetsHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_door_exit_pressed.png")
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_door_exit.png"),
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_door_exit_pressed.png")
             );
 
-            pauseButton = ObjectsCreator.CreateSpriteButton(
+            pauseButton = ObjectCreator.CreateSpriteButton(
                 transparentPauseSprite,
                 new Vector3(208, -85), canvas.transform,
                 pauseSprite,
                 pauseSprite
             );
 
-            skipForwardButton = ObjectsCreator.CreateSpriteButton(
-                AssetsHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_acceleration_transparent.png"),
+            skipForwardButton = ObjectCreator.CreateSpriteButton(
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_acceleration_transparent.png"),
                 new Vector3(208, -148), canvas.transform,
-                AssetsHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_acceleration.png")
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_acceleration.png")
             );
 
-            skipBackButton = ObjectsCreator.CreateSpriteButton(
-                AssetsHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_acceleration_transparent.png"),
+            skipBackButton = ObjectCreator.CreateSpriteButton(
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_acceleration_transparent.png"),
                 new Vector3(145, -148), canvas.transform,
-                AssetsHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_acceleration.png")
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_acceleration.png")
             );
             skipBackButton.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
 

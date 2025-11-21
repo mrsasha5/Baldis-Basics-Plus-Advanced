@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -69,7 +68,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                 yield return null;
             }
 
-            audMan.PlaySingle(AssetsStorage.sounds["creepy_old_computer"]);
+            audMan.PlaySingle(AssetStorage.sounds["creepy_old_computer"]);
 
             yield break;
         }
@@ -78,7 +77,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         {
             if (canvasFrozen == null)
             {
-                canvasFrozen = Instantiate(ObjectsStorage.Overlays["FrozenOverlay"]);
+                canvasFrozen = Instantiate(ObjectStorage.Overlays["FrozenOverlay"]);
                 frozenOverlay = canvasFrozen.GetComponentInChildren<Image>();
                 frozenOverlay.color = new Color(1f, 1f, 1f, 0f);
             }
@@ -88,14 +87,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                 //cancelEventTextOnBegin = true;
                 base.Begin();
                 StartCoroutine(FadeOnFog());
-                ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_mysterious_machine"]);
+                ec.GetAudMan().PlaySingle(AssetStorage.sounds["adv_mysterious_machine"]);
                 StartCoroutine(PlayMusicIn(4f));
                 canvasFrozen.gameObject.SetActive(true);
                 canvasFrozen.worldCamera = Singleton<CoreGameManager>.Instance.GetCamera(0).canvasCam;
             } else
             {
                 base.Begin();
-                ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_mysterious_machine"]);
+                ec.GetAudMan().PlaySingle(AssetStorage.sounds["adv_mysterious_machine"]);
             }
             ec.MaxRaycast = maxRaycast;
             activeEvents++;
@@ -136,7 +135,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private List<NPC> GetAvailableNPCs()
         {
             List<NPC> npcs = ec.Npcs.FindAll(x => x.TryGetComponent(out Entity _) &&
-                (x.GetMeta() == null || !x.GetMeta().tags.Contains(TagsStorage.coldSchoolEventImmunity)));
+                (x.GetMeta() == null || !x.GetMeta().tags.Contains(TagStorage.coldSchoolEventImmunity)));
             npcs.Mix();
             return npcs;
         }
@@ -204,7 +203,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             AddMoveModifiers();
             moveMod.movementMultiplier = minMultiplier;
-            ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_frozen"]);
+            ec.GetAudMan().PlaySingle(AssetStorage.sounds["adv_frozen"]);
         }
 
         private IEnumerator FadeOffFog()

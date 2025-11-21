@@ -1,5 +1,5 @@
 ﻿using System;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -14,7 +14,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
         {
             base.SetEntityValues();
             SetEntityName("Mysterious Teleporter");
-            SetEntitySprite(AssetsStorage.sprites["adv_mysterious_teleporter"]);
+            SetEntitySprite(AssetStorage.sprites["adv_mysterious_teleporter"]);
             SetEntityTrigger(1.5f);
         }
 
@@ -34,8 +34,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
         {
             SetFlying(false);
             Destroy(gameObject);
-            AudioManager audMan = ObjectsCreator.CreatePropagatedAudMan(transform.position, destroyWhenAudioEnds: true);
-            audMan.PlaySingle(AssetsStorage.sounds["teleport"]);
+            AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(transform.position, destroyWhenAudioEnds: true);
+            audMan.PlaySingle(AssetStorage.sounds["teleport"]);
         }
 
         private void OnCorruptionEffectPreEnd(NPC npc)
@@ -48,9 +48,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             CorruptionNpcEffect corruptionEffect = npc.gameObject.AddComponent<CorruptionNpcEffect>();
             corruptionEffect.Initialize(npc.spriteRenderer[0]);
             corruptionEffect.Hit();
-            AudioManager audMan = ObjectsCreator.CreatePropagatedAudMan(npc.transform.position, destroyWhenAudioEnds: true);
+            AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(npc.transform.position, destroyWhenAudioEnds: true);
             audMan.transform.SetParent(npc.transform, true);
-            audMan.PlaySingle(AssetsStorage.sounds["buzz_lose"]);
+            audMan.PlaySingle(AssetStorage.sounds["buzz_lose"]);
             corruptionEffect.onEffectPreEnd = delegate {
                 OnCorruptionEffectPreEnd(npc);
             };

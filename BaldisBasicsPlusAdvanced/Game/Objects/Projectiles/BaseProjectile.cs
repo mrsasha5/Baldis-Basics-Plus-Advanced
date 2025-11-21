@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Adjusters;
 using BaldisBasicsPlusAdvanced.Helpers;
 using UnityEngine;
@@ -83,7 +83,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             EntityAdjuster entityBuilder = new EntityAdjuster(gameObject)
                 .SetName(_name)
                 .SetLayer("StandardEntities")
-                .SetLayerCollisionMask(LayersHelper.gumCollisionMask) //like gum
+                .SetLayerCollisionMask(LayerHelper.gumCollisionMask) //like gum
                 .AddRigidbody()
                 .AddDefaultRenderBaseFunction(_sprite);
 
@@ -120,7 +120,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             this.flying = flying;
             if (flying)
             {
-                audMan.QueueAudio(AssetsStorage.sounds["whoosh"]);
+                audMan.QueueAudio(AssetStorage.sounds["whoosh"]);
                 audMan.SetLoop(true);
             }
             else if (audMan.loop)

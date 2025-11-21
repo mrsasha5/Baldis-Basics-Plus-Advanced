@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Compats;
 //using BaldisBasicsPlusAdvanced.Compats.SpatialElevator;
 using BaldisBasicsPlusAdvanced.Extensions;
@@ -103,7 +102,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                     SetState(true, animate: true);
                     break;
                 case Status.ShouldBreak:
-                    elvScreen.GetComponent<AudioManager>().PlaySingle(AssetsStorage.sounds["bal_break"]);
+                    elvScreen.GetComponent<AudioManager>().PlaySingle(AssetStorage.sounds["bal_break"]);
                     expelImage.StartCoroutine(AlphaAnimation(false, animSpeed, new Color(1f, 1f, 1f, 0f), lockedColor, true));
                     break;
                 default:
@@ -125,7 +124,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             elvScreen = __instance;
 
-            expelImage = UIHelpers.CreateImage(AssetsStorage.sprites["adv_expel_hammer"], __instance.Canvas.transform,
+            expelImage = UIHelpers.CreateImage(AssetStorage.sprites["adv_expel_hammer"], __instance.Canvas.transform,
                 Vector3.zero, correctPosition: false);
             expelImage.name = "Expel Button";
             expelImage.ToCenter();
@@ -133,7 +132,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             expelImage.transform.localScale = Vector3.one * 2f;
             expelImage.tag = "Button";
 
-            arrowsImage = UIHelpers.CreateImage(AssetsStorage.sprites["adv_arrows"], __instance.Canvas.transform,
+            arrowsImage = UIHelpers.CreateImage(AssetStorage.sprites["adv_arrows"], __instance.Canvas.transform,
                 Vector3.zero, correctPosition: false);
             arrowsImage.ToCenter();
             arrowsImage.transform.localPosition = new Vector3(180f, -110f, 0f);
@@ -145,9 +144,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             StandardMenuButton expelButton = expelImage.gameObject.AddComponent<StandardMenuButton>();
             expelButton.image = expelImage;
-            expelButton.heldSprite = AssetsStorage.sprites["adv_expel_hammer"];
-            expelButton.unhighlightedSprite = AssetsStorage.sprites["adv_expel_hammer"]; //on cursor enter
-            expelButton.highlightedSprite = AssetsStorage.sprites["adv_expel_hammer"];
+            expelButton.heldSprite = AssetStorage.sprites["adv_expel_hammer"];
+            expelButton.unhighlightedSprite = AssetStorage.sprites["adv_expel_hammer"]; //on cursor enter
+            expelButton.highlightedSprite = AssetStorage.sprites["adv_expel_hammer"];
             expelButton.swapOnHold = true; //on press
             expelButton.swapOnHigh = true; //on high
 
@@ -201,7 +200,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             Singleton<GlobalCam>.Instance.Transition(UiTransition.Dither, 0.01666667f);
 
-            chalkboard = UIHelpers.CreateImage(AssetsStorage.sprites["chalkboard_standard"], canvas.transform,
+            chalkboard = UIHelpers.CreateImage(AssetStorage.sprites["chalkboard_standard"], canvas.transform,
                 Vector3.zero, correctPosition: false);
             chalkboard.ToCenter();
 
@@ -216,7 +215,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             text.alignment = TextAlignmentOptions.Top;
 
 
-            Image exitImage = UIHelpers.CreateImage(AssetsStorage.sprites["adv_exit_transparent"], chalkboard.transform,
+            Image exitImage = UIHelpers.CreateImage(AssetStorage.sprites["adv_exit_transparent"], chalkboard.transform,
                 Vector3.zero, correctPosition: false);
 
             exitImage.ToCenter();
@@ -228,9 +227,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             StandardMenuButton exitButton = exitImage.gameObject.AddComponent<StandardMenuButton>();
             exitButton.image = exitImage;
-            exitButton.heldSprite = AssetsStorage.sprites["adv_exit"];
-            exitButton.unhighlightedSprite = AssetsStorage.sprites["adv_exit_transparent"];
-            exitButton.highlightedSprite = AssetsStorage.sprites["adv_exit"];
+            exitButton.heldSprite = AssetStorage.sprites["adv_exit"];
+            exitButton.unhighlightedSprite = AssetStorage.sprites["adv_exit_transparent"];
+            exitButton.highlightedSprite = AssetStorage.sprites["adv_exit"];
 
             exitButton.swapOnHold = true; //on press
             exitButton.swapOnHigh = true; //on high
@@ -257,7 +256,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             if (pages.Count > 1)
             {
-                Image leftArrowImage = UIHelpers.CreateImage(AssetsStorage.sprites["menuArrow2"], chalkboard.transform,
+                Image leftArrowImage = UIHelpers.CreateImage(AssetStorage.sprites["menuArrow2"], chalkboard.transform,
                 Vector3.zero, correctPosition: false);
                 leftArrowImage.ToCenter();
                 leftArrowImage.transform.localPosition = new Vector3(-160, -108);
@@ -266,9 +265,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
                 StandardMenuButton leftArrowButton = leftArrowImage.gameObject.AddComponent<StandardMenuButton>();
                 leftArrowButton.image = leftArrowImage;
-                leftArrowButton.heldSprite = AssetsStorage.sprites["menuArrow0"];
-                leftArrowButton.unhighlightedSprite = AssetsStorage.sprites["menuArrow2"];
-                leftArrowButton.highlightedSprite = AssetsStorage.sprites["menuArrow0"];
+                leftArrowButton.heldSprite = AssetStorage.sprites["menuArrow0"];
+                leftArrowButton.unhighlightedSprite = AssetStorage.sprites["menuArrow2"];
+                leftArrowButton.highlightedSprite = AssetStorage.sprites["menuArrow0"];
 
                 leftArrowButton.swapOnHold = true; //on press
                 leftArrowButton.swapOnHigh = true; //on high
@@ -276,7 +275,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
                 leftArrowButton.OnPress.AddListener(SetBackPage);
 
-                Image rightArrowImage = UIHelpers.CreateImage(AssetsStorage.sprites["menuArrow3"], chalkboard.transform,
+                Image rightArrowImage = UIHelpers.CreateImage(AssetStorage.sprites["menuArrow3"], chalkboard.transform,
                 Vector3.zero, correctPosition: false);
                 rightArrowImage.ToCenter();
                 rightArrowImage.transform.localPosition = new Vector3(156, -108);
@@ -285,9 +284,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
                 StandardMenuButton rightArrowButton = rightArrowImage.gameObject.AddComponent<StandardMenuButton>();
                 rightArrowButton.image = rightArrowImage;
-                rightArrowButton.heldSprite = AssetsStorage.sprites["menuArrow1"];
-                rightArrowButton.unhighlightedSprite = AssetsStorage.sprites["menuArrow3"];
-                rightArrowButton.highlightedSprite = AssetsStorage.sprites["menuArrow1"];
+                rightArrowButton.heldSprite = AssetStorage.sprites["menuArrow1"];
+                rightArrowButton.unhighlightedSprite = AssetStorage.sprites["menuArrow3"];
+                rightArrowButton.highlightedSprite = AssetStorage.sprites["menuArrow1"];
 
                 rightArrowButton.swapOnHold = true; //on press
                 rightArrowButton.swapOnHigh = true; //on high
@@ -440,7 +439,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             SetState(false, animate: false);
             
-            elvScreen.GetComponent<AudioManager>().PlaySingle(AssetsStorage.sounds["adv_boing"]);
+            elvScreen.GetComponent<AudioManager>().PlaySingle(AssetStorage.sounds["adv_boing"]);
             
         }
 
@@ -458,7 +457,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
                 npcText.GetComponent<RectTransform>().sizeDelta = size;
                 npcText.alignment = TextAlignmentOptions.Top;
 
-                StandardMenuButton menuButton = ObjectsCreator.AddButtonProperties(npcText, size, true);
+                StandardMenuButton menuButton = ObjectCreator.AddButtonProperties(npcText, size, true);
                 textButtons.Add(menuButton);
             }
         }
@@ -481,11 +480,11 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
                 LevelGenerationParameters ld = BaseGameManager.Instance.levelObject;
 
-                if (meta.tags.Contains(TagsStorage.expelHammerImmunity) || meta.tags.Contains(TagsStorage.faculty) ||
-                    meta.tags.Contains(TagsStorage.teacher)) continue;
+                if (meta.tags.Contains(TagStorage.expelHammerImmunity) || meta.tags.Contains(TagStorage.faculty) ||
+                    meta.tags.Contains(TagStorage.teacher)) continue;
 
                 //forced npcs and potential baldis
-                if (!meta.tags.Contains(TagsStorage.expelHammerWeakness) &&
+                if (!meta.tags.Contains(TagStorage.expelHammerWeakness) &&
                     (ld.forcedNpcs.Contains(npc) || Array.Find(ld.potentialBaldis,
                         x => x.selection.Character == npc.Character) != null)) continue;
 

@@ -207,7 +207,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Accelera
         public void SettingsClicked()
         {
             AccelerationPlateExchangeHandler handler = EditorController.Instance.CreateUI<AccelerationPlateExchangeHandler>(
-                "AccelerationPlateConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/AccelerationPlateConfig.json");
+                "AccelerationPlateConfig", AssetHelper.modPath + "Compats/LevelStudio/UI/AccelerationPlateConfig.json");
             handler.OnInitialized(this);
             handler.Refresh();
         }

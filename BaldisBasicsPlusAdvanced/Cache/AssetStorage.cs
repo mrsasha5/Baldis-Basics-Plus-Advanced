@@ -16,10 +16,10 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
+namespace BaldisBasicsPlusAdvanced.Cache
 {
 
-    internal class AssetsStorage
+    internal class AssetStorage
     {
 
         public class AssetDictionary<T>
@@ -120,7 +120,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
         public static void InitializeCriticalResources()
         {
-            weirdErrorSound = AssetsHelper.LoadAsset<AudioClip>("WeirdError");
+            weirdErrorSound = AssetHelper.LoadAsset<AudioClip>("WeirdError");
             LoadSound("buzz_elv", "Elv_Buzz");
             LoadSprite("tooltip_bg", "TooltipBG");
         }
@@ -137,23 +137,23 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 #endif
 
             graphsStandardShader = Shader.Find("Shader Graphs/Standard");
-            genericBaldi = AssetsHelper.LoadAsset<Baldi>("Baldi_Main1");
+            genericBaldi = AssetHelper.LoadAsset<Baldi>("Baldi_Main1");
 
-            campingMidi = AssetsHelper.LoadAsset<TextAsset>("Minigame_Campfire");
+            campingMidi = AssetHelper.LoadAsset<TextAsset>("Minigame_Campfire");
 
-            weightedPlacer = AssetsHelper.LoadAsset<Structure_EnvironmentObjectPlacer>("Structure_EnvironmentObjectBuilder_Weighted");
-            individualPlacer = AssetsHelper.LoadAsset<Structure_EnvironmentObjectPlacer>("Structure_EnvironmentObjectBuilder_Individual");
-            windManager = AssetsHelper.LoadAsset<BeltManager>("BeltManager");
-            windGraphicsParent = AssetsHelper.LoadAsset<Transform>("WindGraphicsParent");
-            coverCloud = AssetsHelper.LoadAsset<CoverCloud>("ChalkCloudStartsOff");
-            pickup = Array.Find(AssetsHelper.LoadAssets<Pickup>("Pickup"), x => x.gameObject.activeSelf);
-            classDoor = AssetsHelper.LoadAsset<StandardDoor>("ClassDoor_Standard");
-            cursor = AssetsHelper.LoadAsset<CursorController>("CursorOrigin");
-            gameButton = Array.Find(AssetsHelper.LoadAssets<GameButton>("GameButton"), x => x.gameObject.activeSelf);
+            weightedPlacer = AssetHelper.LoadAsset<Structure_EnvironmentObjectPlacer>("Structure_EnvironmentObjectBuilder_Weighted");
+            individualPlacer = AssetHelper.LoadAsset<Structure_EnvironmentObjectPlacer>("Structure_EnvironmentObjectBuilder_Individual");
+            windManager = AssetHelper.LoadAsset<BeltManager>("BeltManager");
+            windGraphicsParent = AssetHelper.LoadAsset<Transform>("WindGraphicsParent");
+            coverCloud = AssetHelper.LoadAsset<CoverCloud>("ChalkCloudStartsOff");
+            pickup = Array.Find(AssetHelper.LoadAssets<Pickup>("Pickup"), x => x.gameObject.activeSelf);
+            classDoor = AssetHelper.LoadAsset<StandardDoor>("ClassDoor_Standard");
+            cursor = AssetHelper.LoadAsset<CursorController>("CursorOrigin");
+            gameButton = Array.Find(AssetHelper.LoadAssets<GameButton>("GameButton"), x => x.gameObject.activeSelf);
 
-            texts.Add("total_display", AssetsHelper.LoadAsset<TextMeshPro>("TotalDisplay"));
+            texts.Add("total_display", AssetHelper.LoadAsset<TextMeshPro>("TotalDisplay"));
 
-            bullyTakeouts = ReflectionHelper.GetValue<SoundObject[]>(AssetsHelper.LoadAsset<Bully>("Bully"), "takeouts");
+            bullyTakeouts = ReflectionHelper.GetValue<SoundObject[]>(AssetHelper.LoadAsset<Bully>("Bully"), "takeouts");
 
             LoadSound("blowing", "Cmlo_Blowing");
             LoadSound("buzz_lose", "Lose_Buzz");
@@ -175,7 +175,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
             sounds.Add(
                 "grapple_loop",
-                ObjectCreators.CreateSoundObject(AssetsHelper.LoadAsset<AudioClip>("GrappleLoop"), "",
+                ObjectCreators.CreateSoundObject(AssetHelper.LoadAsset<AudioClip>("GrappleLoop"), "",
                     SoundType.Effect, Color.white, sublength: 0f)
             );
 
@@ -207,12 +207,12 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             //LoadSound("vent_travel", "Vent_Travel"); //BRUH, Mystman uses AudioClip
             sounds.Add(
                 "vent_travel",
-                ObjectCreators.CreateSoundObject(AssetsHelper.LoadAsset<AudioClip>("Vent_Travel"), "Adv_Sub_Vent_Air",
+                ObjectCreators.CreateSoundObject(AssetHelper.LoadAsset<AudioClip>("Vent_Travel"), "Adv_Sub_Vent_Air",
                     SoundType.Effect, Color.white)
             );
             sounds.Add(
                 "static",
-                ObjectCreators.CreateSoundObject(AssetsHelper.LoadAsset<AudioClip>("Static"), "",
+                ObjectCreators.CreateSoundObject(AssetHelper.LoadAsset<AudioClip>("Static"), "",
                     SoundType.Effect, Color.white)
             );
 
@@ -233,7 +233,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
             for (int i = 0; i < ElevatorAdditionsPatch.explosionSprites.Length; i++)
             {
-                ElevatorAdditionsPatch.explosionSprites[i] = AssetsHelper.LoadAsset<Sprite>($"Explostion_Sheet_{i + 1}");
+                ElevatorAdditionsPatch.explosionSprites[i] = AssetHelper.LoadAsset<Sprite>($"Explostion_Sheet_{i + 1}");
             }
 
             //QMarkSheet_0
@@ -375,10 +375,10 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
             spriteSheets.Add("adv_tip_screen_forward_static_sheet",
                 AssetLoader.SpritesFromSpritesheet(2, 1, 1f, Vector2.one * 0.5f,
-                AssetsHelper.TextureFromFile("Textures/UI/SwingingTipsScreen/adv_tip_screen_forward_static_sheet.png")));
+                AssetHelper.TextureFromFile("Textures/UI/SwingingTipsScreen/adv_tip_screen_forward_static_sheet.png")));
 
             spriteSheets.Add("adv_tips_screen", AssetLoader.SpritesFromSpritesheet(3, 2, 1f, Vector2.one * 0.5f,
-                AssetsHelper.TextureFromFile("Textures/UI/SwingingTipsScreen/adv_swinging_tip_screen_sheet.png")));
+                AssetHelper.TextureFromFile("Textures/UI/SwingingTipsScreen/adv_swinging_tip_screen_sheet.png")));
             spriteSheets["adv_tips_screen"] =
                 spriteSheets["adv_tips_screen"].Take(spriteSheets["adv_tips_screen"].Length - 1).ToArray();
             spriteSheets.Add("adv_tips_screen_reversed", spriteSheets["adv_tips_screen"].Reverse().ToArray());
@@ -600,9 +600,9 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                 SoundType.Voice, "");
 
             CreateMaterial("adv_good_machine", "zesty_machine",
-                AssetsHelper.TextureFromFile("Textures/VendingMachines/adv_good_stuffs_machine.png"));
+                AssetHelper.TextureFromFile("Textures/VendingMachines/adv_good_stuffs_machine.png"));
             CreateMaterial("adv_good_machine_out", "zesty_machine",
-                AssetsHelper.TextureFromFile("Textures/VendingMachines/adv_good_stuffs_machine_out.png"));
+                AssetHelper.TextureFromFile("Textures/VendingMachines/adv_good_stuffs_machine_out.png"));
 
             //Shader Graphs/Standard
             //Sprites/Default
@@ -611,7 +611,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
             sounds["adv_emergency"].color = Color.red;
 
-            SpriteRenderer advancedClassLamp = UnityEngine.Object.Instantiate(AssetsHelper.LoadAsset<Transform>("HangingLight"))
+            SpriteRenderer advancedClassLamp = UnityEngine.Object.Instantiate(AssetHelper.LoadAsset<Transform>("HangingLight"))
                 .GetComponentInChildren<SpriteRenderer>();
             advancedClassLamp.transform.parent.gameObject.AddComponent<RendererContainer>().renderers = new Renderer[]
             {
@@ -636,7 +636,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
         {
             if (!overridden)
             {
-                foreach (Principal principal in AssetsHelper.LoadAssets<Principal>())
+                foreach (Principal principal in AssetHelper.LoadAssets<Principal>())
                 {
                     ReflectionHelper.SetValue(principal, "ignorePlayerOnSpawn", true);
                 }
@@ -645,7 +645,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                 sounds["bal_game_over"].color = Color.green;
                 sounds["error_maybe"].soundKey = "Adv_Sub_Error_Maybe";
 
-                LevelAsset pitStop = AssetsHelper.LoadAsset<LevelAsset>("Pitstop");
+                LevelAsset pitStop = AssetHelper.LoadAsset<LevelAsset>("Pitstop");
                 RoomData hall = pitStop.rooms.Find(x => x.category == RoomCategory.Null);
 
                 if (!PitOverrides.AccelerationPlateDisabled)
@@ -653,21 +653,21 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                     hall.basicObjects.Add(
                         new BasicObjectData()
                         {
-                            prefab = ObjectsStorage.Triggers["no_plates_cooldown"].transform
+                            prefab = ObjectStorage.Triggers["no_plates_cooldown"].transform
                         }
                     );
 
                     hall.basicObjects.Add(
                         new BasicObjectData()
                         {
-                            prefab = ObjectsStorage.Triggers["pit_stop_overrides"].transform
+                            prefab = ObjectStorage.Triggers["pit_stop_overrides"].transform
                         }
                     );
 
                     hall.basicObjects.Add(
                         new BasicObjectData()
                         {
-                            prefab = ObjectsStorage.Objects["acceleration_plate"].transform,
+                            prefab = ObjectStorage.Objects["acceleration_plate"].transform,
                             position = new Vector3(335f, 0f, 35f)
                         }
                     );
@@ -687,9 +687,9 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                         wallTex = textures["adv_english_wall"],
                         ceilTex = textures["adv_english_ceiling"],
                         florTex = textures["adv_english_floor"],
-                        lightPre = AssetsHelper.LoadAsset<Transform>("HangingLight"),
-                        roomFunctionContainer = ObjectsStorage.RoomFunctionsContainers["EnglishClassTimerFunction"],
-                        color = ObjectsStorage.RoomColors["English"]
+                        lightPre = AssetHelper.LoadAsset<Transform>("HangingLight"),
+                        roomFunctionContainer = ObjectStorage.RoomFunctionsContainers["EnglishClassTimerFunction"],
+                        color = ObjectStorage.RoomColors["English"]
                     };
 
                     pitStop.rooms.Add(roomData);
@@ -699,7 +699,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                     roomData.basicObjects.Add(new BasicObjectData()
                     {
                         position = new Vector3(385, 0, 84),
-                        prefab = ObjectsStorage.Objects["symbol_machine"].transform
+                        prefab = ObjectStorage.Objects["symbol_machine"].transform
                     });
 
                     roomData.standardLightCells.Add(new IntVector2(39, 7));
@@ -714,42 +714,42 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
                     pitStop.windows.Add(new WindowData()
                     {
-                        window = AssetsHelper.LoadAsset<WindowObject>("WoodWindow"),
+                        window = AssetHelper.LoadAsset<WindowObject>("WoodWindow"),
                         position = new IntVector2(36, 5),
                         direction = Direction.East
                     });
 
                     pitStop.posters.Add(new PosterData()
                     {
-                        poster = ObjectsStorage.Posters.Find(x => x.name == "Adv_Poster_Extra_Points"),
+                        poster = ObjectStorage.Posters.Find(x => x.name == "Adv_Poster_Extra_Points"),
                         position = new IntVector2(36, 3),
                         direction = Direction.East
                     });
 
                     pitStop.posters.Add(new PosterData()
                     {
-                        poster = ObjectsStorage.Posters.Find(x => x.name == "Adv_Poster_Symbol_Machine"),
+                        poster = ObjectStorage.Posters.Find(x => x.name == "Adv_Poster_Symbol_Machine"),
                         position = new IntVector2(39, 4),
                         direction = Direction.East
                     });
 
-                    if (!AssetsHelper.ModInstalled(IntegrationManager.recommendedCharactersId))
+                    if (!AssetHelper.ModInstalled(IntegrationManager.recommendedCharactersId))
                     {
                         pitStop.posters.Add(new PosterData()
                         {
-                            poster = ObjectsStorage.Posters.Find(x => x.name == "Adv_Poster_Recommended_Characters_Ad"),
+                            poster = ObjectStorage.Posters.Find(x => x.name == "Adv_Poster_Recommended_Characters_Ad"),
                             position = new IntVector2(39, 5),
                             direction = Direction.East
                         });
                     }
 
-                    if (!(AssetsHelper.ModInstalled(IntegrationManager.carnivalPackId) ||
-                        AssetsHelper.ModInstalled(IntegrationManager.criminalPackId) ||
-                        AssetsHelper.ModInstalled(IntegrationManager.piratePackId)))
+                    if (!(AssetHelper.ModInstalled(IntegrationManager.carnivalPackId) ||
+                        AssetHelper.ModInstalled(IntegrationManager.criminalPackId) ||
+                        AssetHelper.ModInstalled(IntegrationManager.piratePackId)))
                     {
                         pitStop.posters.Add(new PosterData()
                         {
-                            poster = ObjectsStorage.Posters.Find(x => x.name == "Adv_Poster_Content_Packs_Ad"),
+                            poster = ObjectStorage.Posters.Find(x => x.name == "Adv_Poster_Content_Packs_Ad"),
                             position = new IntVector2(39, 6),
                             direction = Direction.East
                         });
@@ -759,7 +759,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
                     //HangingLight
                     pitStop.lights.Add(new LightSourceData()
                     {
-                        prefab = AssetsHelper.LoadAsset<Transform>("HangingLight"),
+                        prefab = AssetHelper.LoadAsset<Transform>("HangingLight"),
                         color = Color.white,
                         position = new IntVector2(38, 7),
                         strength = 10
@@ -767,7 +767,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
                     pitStop.lights.Add(new LightSourceData()
                     {
-                        prefab = AssetsHelper.LoadAsset<Transform>("HangingLight"),
+                        prefab = AssetHelper.LoadAsset<Transform>("HangingLight"),
                         color = Color.white,
                         position = new IntVector2(38, 4),
                         strength = 10
@@ -836,7 +836,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading: " + path);
 #endif
             if (string.IsNullOrEmpty(subKey)) subDuration = 0f;
-            SoundObject sound = ObjectCreators.CreateSoundObject(AssetsHelper.AudioFromFile("Audio/" + path), subKey, soundType, Color.white, subDuration);
+            SoundObject sound = ObjectCreators.CreateSoundObject(AssetHelper.AudioFromFile("Audio/" + path), subKey, soundType, Color.white, subDuration);
             sounds.Add(key, sound);
             return sound;
         }
@@ -858,9 +858,9 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 
             if (center != null)
             {
-                sprite = AssetsHelper.SpriteFromFile(path, pixelsPerUnit, center);
+                sprite = AssetHelper.SpriteFromFile(path, pixelsPerUnit, center);
             } else
-                sprite = AssetsHelper.SpriteFromFile(path, pixelsPerUnit, center);
+                sprite = AssetHelper.SpriteFromFile(path, pixelsPerUnit, center);
 
             sprites.Add(key, sprite);
         }
@@ -870,7 +870,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading: " + path);
 #endif
-            Texture2D texture = AssetsHelper.TextureFromFile("Textures/" + path);
+            Texture2D texture = AssetHelper.TextureFromFile("Textures/" + path);
             textures.Add(key, texture);
         }
 
@@ -879,7 +879,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
 #endif
-            GameObject _object = AssetsHelper.LoadAsset<GameObject>(name);
+            GameObject _object = AssetHelper.LoadAsset<GameObject>(name);
             gameObjects.Add(key, _object);
         }
 
@@ -888,7 +888,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
 #endif
-            Sprite sprite = AssetsHelper.LoadAsset<Sprite>(name);
+            Sprite sprite = AssetHelper.LoadAsset<Sprite>(name);
             sprites.Add(key, sprite, doNotUnload);
         }
 
@@ -897,7 +897,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
 #endif
-            Texture2D sprite = AssetsHelper.LoadAsset<Texture2D>(name);
+            Texture2D sprite = AssetHelper.LoadAsset<Texture2D>(name);
             textures.Add(key, sprite, doNotUnload);
         }
 
@@ -906,7 +906,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
 #endif
-            Material material = AssetsHelper.LoadAsset<Material>(name);
+            Material material = AssetHelper.LoadAsset<Material>(name);
             materials.Add(key, material, doNotUnload);
         }
 
@@ -915,7 +915,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
 #endif
-            Mesh material = AssetsHelper.LoadAsset<Mesh>(name);
+            Mesh material = AssetHelper.LoadAsset<Mesh>(name);
             meshes.Add(key, material, doNotUnload);
         }
 
@@ -924,7 +924,7 @@ namespace BaldisBasicsPlusAdvanced.Cache.AssetsManagement
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
 #endif
-            SoundObject sound = AssetsHelper.LoadAsset<SoundObject>(name);
+            SoundObject sound = AssetHelper.LoadAsset<SoundObject>(name);
             sounds.Add(key, sound, doNotUnload);
         }
     }

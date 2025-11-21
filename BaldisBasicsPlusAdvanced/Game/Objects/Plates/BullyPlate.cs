@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using UnityEngine;
@@ -28,7 +28,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             if (itm.CountItems() <= 0) return;
             itm.RemoveRandomItem();
             SetCooldown(150f);
-            audMan.PlayRandomAudio(AssetsStorage.bullyTakeouts);
+            audMan.PlayRandomAudio(AssetStorage.bullyTakeouts);
         }
 
         protected override bool IsPressable(Entity target)

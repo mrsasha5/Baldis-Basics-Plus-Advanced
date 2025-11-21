@@ -5,8 +5,8 @@ using static UnityEngine.UI.CanvasScaler;
 using UnityEngine.UI;
 using UnityEngine;
 using System.Collections;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
+using BaldisBasicsPlusAdvanced.Cache;
 
 namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 {
@@ -26,12 +26,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             entity.SetBlinded(true);
             if (owner == ControllerOwner.Player)
             {
-                canvas = ObjectsCreator.CreateCanvas(setGlobalCam: true, planeDistance: 2f);
+                canvas = ObjectCreator.CreateCanvas(setGlobalCam: true, planeDistance: 2f);
                 canvas.worldCamera = Singleton<CoreGameManager>.Instance.GetCamera(0).canvasCam;
                 CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
                 scaler.screenMatchMode = ScreenMatchMode.MatchWidthOrHeight;
 
-                image = UIHelpers.CreateImage(AssetsStorage.sprites["adv_white"], canvas.transform, Vector3.zero,
+                image = UIHelpers.CreateImage(AssetStorage.sprites["adv_white"], canvas.transform, Vector3.zero,
                     correctPosition: false);
                 image.ToCenter();
                 image.rectTransform.sizeDelta = new Vector2(480f, 360f);

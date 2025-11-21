@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Portals;
 using System;
@@ -32,7 +31,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                     }
                 }
 
-                MysteriousPortal portal = Instantiate(ObjectsStorage.Objects["mysterious_portal"].GetComponent<MysteriousPortal>());
+                MysteriousPortal portal = Instantiate(ObjectStorage.Objects["mysterious_portal"].GetComponent<MysteriousPortal>());
                 portal.transform.position = cell.TileTransform.position + Vector3.up * 5f;
                 portal.PostInitialize(pm.ec, true);
                 portal.SetStatic(true);
@@ -49,7 +48,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 return ReturnOnUse();
             } else
             {
-                pm.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["error_maybe"]);
+                pm.ec.GetAudMan().PlaySingle(AssetStorage.sounds["error_maybe"]);
                 Destroy(gameObject);
                 return false;
             }

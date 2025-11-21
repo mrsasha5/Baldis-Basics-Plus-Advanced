@@ -2,7 +2,6 @@
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using Rewired.UI.ControlMapper;
 using BaldisBasicsPlusAdvanced.SaveSystem.Managers;
 using BaldisBasicsPlusAdvanced.Cache;
@@ -34,14 +33,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             if (owner == ControllerOwner.Player)
             {
                 gauge = Singleton<CoreGameManager>.Instance.GetHud(0).gaugeManager
-                    .ActivateNewGauge(ObjectsStorage.ItemObjects["WindBlower"].itemSpriteSmall, time);
+                    .ActivateNewGauge(ObjectStorage.ItemObjects["WindBlower"].itemSpriteSmall, time);
             }
             baseTime = time;
         }
 
         public void CreateWind(int size, float speed)
         {
-            windObj = ObjectsCreator.CreateWindObject(size, speed, true);
+            windObj = ObjectCreator.CreateWindObject(size, speed, true);
             windObj.transform.SetParent(pm.transform, false);
 
             ReflectionHelper.SetValue(windObj.GetComponentInChildren<AudioManager>(), "disableSubtitles", true);
@@ -134,7 +133,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             base.OnPreDestroying();
             windObj.SetActivityState(false);
             GameObject.Destroy(windObj.gameObject);
-            ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_pah"]);
+            ec.GetAudMan().PlaySingle(AssetStorage.sounds["adv_pah"]);
             gauge?.Deactivate();
         }
     }

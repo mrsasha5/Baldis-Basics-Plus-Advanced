@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
@@ -89,9 +88,9 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
         {
             windowObjectPre = ObjectCreators.CreateWindowObject(
                 "Big Hole",
-                AssetsHelper.TextureFromFile("Textures/Windows/BigHole/adv_window_big_hole.png"),
-                AssetsHelper.TextureFromFile("Textures/Windows/BigHole/adv_window_big_hole.png"),
-                AssetsHelper.TextureFromFile("Textures/Windows/BigHole/adv_window_big_hole_mask.png")
+                AssetHelper.TextureFromFile("Textures/Windows/BigHole/adv_window_big_hole.png"),
+                AssetHelper.TextureFromFile("Textures/Windows/BigHole/adv_window_big_hole.png"),
+                AssetHelper.TextureFromFile("Textures/Windows/BigHole/adv_window_big_hole_mask.png")
             );
             windowObjectPre.windowPre = Instantiate(windowObjectPre.windowPre);
             windowObjectPre.windowPre.gameObject.ConvertToPrefab(true);
@@ -107,20 +106,20 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             pitchSpeed = 0.15f;
             destroyingWallTime = 2f;
             minMaxCooldown = new Vector2(30f, 60f);
-            audLaserStart = AssetsStorage.sounds["adv_laser_start"];
-            audLaserLoop = AssetsStorage.sounds["adv_laser_loop"];
-            audLaserEnd = AssetsStorage.sounds["adv_laser_end"];
+            audLaserStart = AssetStorage.sounds["adv_laser_start"];
+            audLaserLoop = AssetStorage.sounds["adv_laser_loop"];
+            audLaserEnd = AssetStorage.sounds["adv_laser_end"];
 
             animator.renderer = spriteRenderer[0];
             spriteRenderer[0].transform.localPosition = Vector3.zero;
 
             Sprite[] sprites =
-                AssetLoader.SpritesFromSpritesheet(4, 4, 25f, Vector2.one * 0.5f, AssetsStorage.textures["adv_criss_the_crystal"]);
+                AssetLoader.SpritesFromSpritesheet(4, 4, 25f, Vector2.one * 0.5f, AssetStorage.textures["adv_criss_the_crystal"]);
 
             Sprite[] crazySprites =
-                AssetLoader.SpritesFromSpritesheet(3, 3, 25f, Vector2.one * 0.5f, AssetsStorage.textures["adv_criss_the_crystal_crazy"]);
+                AssetLoader.SpritesFromSpritesheet(3, 3, 25f, Vector2.one * 0.5f, AssetStorage.textures["adv_criss_the_crystal_crazy"]);
 
-            gaugeIcon = AssetsHelper.SpriteFromFile("Textures/Gauges/adv_gauge_crystal_blindness.png");
+            gaugeIcon = AssetHelper.SpriteFromFile("Textures/Gauges/adv_gauge_crystal_blindness.png");
 
             Sprite[] turnsCrazySprites = new Sprite[4];
             Sprite[] crazyRunningSprites = new Sprite[6];
@@ -154,11 +153,11 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                 loopedShootingSprites[i] = sprites[i + 11];
             }
 
-            audWanderSounds = AssetsHelper.LoadSounds("Voices/Criss", "Criss_Wander", SoundType.Voice, Color.cyan)
+            audWanderSounds = AssetHelper.LoadSounds("Voices/Criss", "Criss_Wander", SoundType.Voice, Color.cyan)
                 .ToArray();
-            audAttackSounds = AssetsHelper.LoadSounds("Voices/Criss", "Criss_Attack", SoundType.Voice, Color.cyan)
+            audAttackSounds = AssetHelper.LoadSounds("Voices/Criss", "Criss_Attack", SoundType.Voice, Color.cyan)
                 .ToArray();
-            audAfterAttackSounds = AssetsHelper.LoadSounds("Voices/Criss", "Criss_AfterAttack", SoundType.Voice, Color.cyan)
+            audAfterAttackSounds = AssetHelper.LoadSounds("Voices/Criss", "Criss_AfterAttack", SoundType.Voice, Color.cyan)
                 .ToArray();
 
             spriteRenderer[0].sprite = walkingSprites[0];
@@ -284,14 +283,14 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                 laserRenderer.allowOcclusionWhenDynamic = false;
                 laserRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 laserRenderer.receiveShadows = false;
-                laserRenderer.material = new Material(AssetsStorage.materials["black_behind"]);
+                laserRenderer.material = new Material(AssetStorage.materials["black_behind"]);
                 laserRenderer.material.SetColor(Color.white);
 
                 collider = gameObject.AddComponent<BoxCollider>();
                 collider.isTrigger = true;
 
                 gameObject.SetRigidbody();
-                gameObject.layer = LayersHelper.collidableEntities;
+                gameObject.layer = LayerHelper.collidableEntities;
             }
 
             private void Update()

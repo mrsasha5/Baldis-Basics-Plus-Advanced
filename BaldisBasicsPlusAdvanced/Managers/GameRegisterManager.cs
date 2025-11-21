@@ -36,14 +36,12 @@ using BaldisBasicsPlusAdvanced.Compats;
 using MTM101BaldAPI.AssetTools;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
 using BaldisBasicsPlusAdvanced.Patches.Player;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Portals;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
-using BaldisBasicsPlusAdvanced.SerializableData.Rooms;
 using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
 using Newtonsoft.Json;
 using BaldisBasicsPlusAdvanced.Game.Activities;
@@ -68,7 +66,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
         public static void InitializeMidis()
         {
             FarmFieldTripManager.farmTripMusicKey =
-                AssetLoader.MidiFromFile(AssetsHelper.modPath + "Audio/Music/FieldTrips/Adv_BSideSkid_CornTime.mid",
+                AssetLoader.MidiFromFile(AssetHelper.modPath + "Audio/Music/FieldTrips/Adv_BSideSkid_CornTime.mid",
                     "Adv_BSideSkid_CornTime");
 
             if (IntegrationManager.IsActive<CustomMusicsIntegration>()) return;
@@ -83,7 +81,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             }
 
             foreach (string folderPath in 
-                Directory.GetDirectories(AssetsHelper.modPath + "Audio/Music/Floors"))
+                Directory.GetDirectories(AssetHelper.modPath + "Audio/Music/Floors"))
             {
                 string name = Path.GetFileName(folderPath);
 
@@ -119,7 +117,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 }
             }
 
-            foreach (string folderPath in Directory.GetDirectories(AssetsHelper.modPath + "Audio/Music/Floors/Compats"))
+            foreach (string folderPath in Directory.GetDirectories(AssetHelper.modPath + "Audio/Music/Floors/Compats"))
             {
                 LoadFrom(folderPath, Path.GetFileName(folderPath));
             }
@@ -146,16 +144,16 @@ namespace BaldisBasicsPlusAdvanced.Managers
         {
             const string fieldTripsModeName = "Mode_SpecialFieldTrips";
 
-            BinaryReader binaryReader = new BinaryReader(File.OpenRead(AssetsHelper.modPath + "Data/Levels/Farm.bpl"));
+            BinaryReader binaryReader = new BinaryReader(File.OpenRead(AssetHelper.modPath + "Data/Levels/Farm.bpl"));
             BaldiLevel level = BaldiLevel.Read(binaryReader);
 
             SceneObject farmScene = LevelImporter.CreateSceneObject(level);
             farmScene.name = "Farm";
             farmScene.levelTitle = "FRM";
             farmScene.usesMap = false;
-            farmScene.levelAsset.rooms[1].wallTex = AssetsHelper.LoadAsset<Texture2D>("Corn");
+            farmScene.levelAsset.rooms[1].wallTex = AssetHelper.LoadAsset<Texture2D>("Corn");
 
-            ObjectsStorage.SceneObjects.Add("Farm", farmScene);
+            ObjectStorage.SceneObjects.Add("Farm", farmScene);
 
             FarmFieldTripManager farmMan = new GameObject("FarmManager").AddComponent<FarmFieldTripManager>();
             farmMan.InitializePrefab(1);
@@ -163,7 +161,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             ReflectionHelper.SetValue<bool>(farmMan, "destroyOnLoad", true);
             ReflectionHelper.Static_SetValue<Singleton<BaseGameManager>>("m_Instance", null);
 
-            ObjectsStorage.SceneObjects["Farm"].manager = farmMan;
+            ObjectStorage.SceneObjects["Farm"].manager = farmMan;
 
             farmMan.beginPlayImmediately = true;
             farmMan.managerNameKey = fieldTripsModeName;
@@ -179,18 +177,18 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         #endregion
 
-        #region Cells textures
+        #region Cells Textures
 
         public static void InitializeCellTextures()
         {
             foreach (string path in 
-                Directory.GetFiles(AssetsHelper.modPath + "Textures/Cells", "*.png", SearchOption.AllDirectories))
+                Directory.GetFiles(AssetHelper.modPath + "Textures/Cells", "*.png", SearchOption.AllDirectories))
             {
                 CellTextureSerializableData data = CellTextureSerializableData.LoadFrom(path);
 
                 if (data != null)
                 {
-                    ObjectsStorage.CellTextureData.Add(data);
+                    ObjectStorage.CellTextureData.Add(data);
                 }
 
             }
@@ -202,24 +200,24 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeNPCs()
         {
-            PrefabsCreator.CreateNpc(
+            PrefabCreator.CreateNpc(
                 new NPCBuilder<CrissTheCrystal>(AdvancedCore.Instance.Info)
                 .SetName("Criss the Crystal")
                 .SetMetaName("Adv_NPC_CrissTheCrystal")
                 .SetEnum("CrissTheCrystal")
-                .SetPoster(AssetsStorage.textures["adv_poster_criss_the_crystal"], 
+                .SetPoster(AssetStorage.textures["adv_poster_criss_the_crystal"], 
                 "Adv_NPC_CrissTheCrystal", "Adv_NPC_CrissTheCrystal_Desc")
                 .AddLooker()
                 .AddMetaFlag(NPCFlags.StandardNoCollide)
-                .SetMetaTags(new string[] { TagsStorage.student })
+                .SetMetaTags(new string[] { TagStorage.student })
             )
                 .SetBannedFloors(1)
                 .SetWeight(2, 50)
                 .SetEndless(true)
                 .SetLevelTypes(LevelType.Schoolhouse);
 
-            ObjectsStorage.Posters.Add(ObjectsStorage.Npcs["CrissTheCrystal"].Poster);
-            ObjectsStorage.Npcs["CrissTheCrystal"].Poster.name = "Adv_Poster_Criss_The_Crystal";
+            ObjectStorage.Posters.Add(ObjectStorage.Npcs["CrissTheCrystal"].Poster);
+            ObjectStorage.Npcs["CrissTheCrystal"].Poster.name = "Adv_Poster_Criss_The_Crystal";
         }
 
         #endregion
@@ -228,7 +226,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeGameItems()
         {
-            PrefabsCreator.CreateItem<HammerItem>(
+            PrefabCreator.CreateItem<HammerItem>(
                 nameKey: "Adv_Item_Hammer",
                 descKey: "Adv_Item_Hammer_Desc",
                 enumName: "Hammer",
@@ -239,20 +237,20 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 flags: ItemFlags.None,
                 tags: new string[]
                 {
-                    TagsStorage.repairTool,
-                    TagsStorage.criminal_contraband
+                    TagStorage.repairTool,
+                    TagStorage.criminal_contraband
                 }
-                )
-                .SetSpawnsOnRooms(true)
+            );
+                /*.SetSpawnsOnRooms(true)
                 .SetSpawnsOnFieldTrips(true)
                 .SetSpawnsOnParty(true)
                 .SetSpawnsOnMysteryRooms(true)
                 .SetEndless(true)
                 .SetBannedFloors(1)
                 .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);*/
 
-            PrefabsCreator.CreateItem<WindBlowerItem>(
+            PrefabCreator.CreateItem<WindBlowerItem>(
                 nameKey: "Adv_Item_WindBlower",
                 descKey: "Adv_Item_WindBlower_Desc",
                 enumName: "WindBlower",
@@ -261,11 +259,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 generatorCost: 50,
                 price: 300,
                 flags: ItemFlags.None
-                )
-                .SetWeight(floor: 2, 75)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
+            );
+                /*.SetWeight(floor: 2, 75)
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);*/
 
-            PrefabsCreator.CreateItem<MysteriousTeleporterItem>(
+            PrefabCreator.CreateItem<MysteriousTeleporterItem>(
                 nameKey: "Adv_Item_MysteriousTeleporter",
                 descKey: "Adv_Item_MysteriousTeleporter_Desc",
                 enumName: "MysteriousTeleporter",
@@ -275,36 +273,18 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 500,
                 tags: new string[]
                 {
-                    TagsStorage.criminal_contraband
+                    TagStorage.criminal_contraband
                 },
                 flags: ItemFlags.CreatesEntity
-                )
-                .SetSpawnsOnParty(true)
+            );
+                /*.SetSpawnsOnParty(true)
                 .SetSpawnsOnMysteryRooms(true)
                 .SetEndless(true)
                 .SetBannedFloors(1)
                 .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
-
-            /*PrefabsCreator.CreateItem<InvisibilityPotionItem>(
-                nameKey: "Adv_Item_InvisibilityPotion",
-                descKey: "Adv_Item_InvisibilityPotion_Desc",
-                enumName: "InvisibilityPotion",
-                tags: new string[] { 
-                    TagsStorage.drink
-                },
-                smallSpriteFileName: "adv_invisibility_potion_small.png",
-                largeSpriteFileName: "adv_invisibility_potion_large.png",
-                generatorCost: 40,
-                price: 500,
-                flags: ItemFlags.None
-                )
-                .SetSpawnsOnFieldTrips(true)
-                .SetSpawnsOnParty(true)
-                .SetWeight(floor: 2, 50)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);*/
 
-            PrefabsCreator.CreateItem<IceBootsItem>(
+            PrefabCreator.CreateItem<IceBootsItem>(
                 nameKey: "Adv_Item_IceBoots",
                 descKey: "Adv_Item_IceBoots_Desc",
                 enumName: "IceBoots",
@@ -313,13 +293,13 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 generatorCost: 50,
                 price: 300,
                 flags: ItemFlags.Persists
-                )
-                .SetSpawnsOnFieldTrips(true)
+             );
+                /*.SetSpawnsOnFieldTrips(true)
                 .SetEndless(true)
                 .SetWeight(floor: 2, 75)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);*/
 
-            PrefabsCreator.CreateItem<PlaceableFanItem>(
+            PrefabCreator.CreateItem<PlaceableFanItem>(
                 nameKey: "Adv_Item_PlaceableFan",
                 descKey: "Adv_Item_PlaceableFan_Desc",
                 enumName: "PlaceableFan",
@@ -328,11 +308,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 largeSpriteFileName: "adv_placeable_fan_large.png",
                 generatorCost: 75,
                 price: 750
-                )
-                .SetWeight(floor: 2, 35)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);
+            );
+                /*.SetWeight(floor: 2, 35)
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);*/
 
-            PrefabsCreator.CreateItem<TeleportationBombItem>(
+            PrefabCreator.CreateItem<TeleportationBombItem>(
                 nameKey: "Adv_Item_TeleportationBomb",
                 descKey: "Adv_Item_TeleportationBomb_Desc",
                 enumName: "TeleportationBomb",
@@ -343,17 +323,17 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 500,
                 tags: new string[]
                 {
-                    TagsStorage.criminal_contraband
+                    TagStorage.criminal_contraband
                 }
-                )
-                .SetSpawnsOnFieldTrips(true)
+            );
+                /*.SetSpawnsOnFieldTrips(true)
                 .SetSpawnsOnParty(true)
                 .SetBannedFloors(1)
                 .SetEndless(true)
                 .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);*/
 
-            PrefabsCreator.CreateItem<MagicClockItem>(
+            PrefabCreator.CreateItem<MagicClockItem>(
                 nameKey: "Adv_Item_MagicClock",
                 descKey: "Adv_Item_MagicClock_Desc",
                 enumName: "MagicClock",
@@ -364,16 +344,16 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 750,
                 tags: new string[]
                 {
-                    TagsStorage.criminal_contraband
+                    TagStorage.criminal_contraband
                 }
-                )
-                .SetSpawnsOnFieldTrips(true)
+            );
+                /*.SetSpawnsOnFieldTrips(true)
                 .SetBannedFloors(1)
                 .SetEndless(true)
                 .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);*/
 
-            PrefabsCreator.CreateItem<InflatableBalloonItem>(
+            PrefabCreator.CreateItem<InflatableBalloonItem>(
                 nameKey: "Adv_Item_InflatableBalloon",
                 descKey: "Adv_Item_InflatableBalloon_Desc",
                 enumName: "InflatableBalloon",
@@ -382,13 +362,13 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 largeSpriteFileName: "adv_inflatable_balloon_large.png",
                 generatorCost: 75,
                 price: 300
-                )
-                .SetBannedFloors(1)
+            );
+                /*.SetBannedFloors(1)
                 .SetEndless(true)
                 .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);*/
 
-            PrefabsCreator.CreateItem<DoughItem>(
+            PrefabCreator.CreateItem<DoughItem>(
                 nameKey: "Adv_Item_Dough",
                 descKey: "Adv_Item_Dough_Desc",
                 enumName: "Dough",
@@ -397,13 +377,13 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 largeSpriteFileName: "adv_dough_large.png",
                 generatorCost: 25,
                 price: 300
-                )
-                .SetBannedFloors(1)
+            );
+                /*.SetBannedFloors(1)
                 .SetEndless(true)
                 .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse);
+                .SetLevelTypes(LevelType.Schoolhouse);*/
 
-            PrefabsCreator.CreateItem<MysteriousBusPassItem>(
+            PrefabCreator.CreateItem<MysteriousBusPassItem>(
                 nameKey: "Adv_Item_MysteriousBusPass",
                 descKey: "Adv_Item_MysteriousBusPass_Desc",
                 enumName: "MysteriousBusPass",
@@ -413,23 +393,23 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 generatorCost: 75,
                 price: 400,
                 tags: new string[] { 
-                    TagsStorage.forbiddenPresent 
+                    TagStorage.forbiddenPresent 
                 }
-                )
-                .SetSpawnsOnShop(false)
+            );
+                /*.SetSpawnsOnShop(false)
                 .SetBannedFloors(1, 3)
                 .SetWeight(floor: 2, 100)
-                .SetLevelTypes(LevelType.Schoolhouse);
+                .SetLevelTypes(LevelType.Schoolhouse);*/
         }
 
         public static void InitializeMultipleUsableItems()
         {
-            ItemObject bread2 = PrefabsCreator.CreateItem<BreadItem>(
+            ItemObject bread2 = PrefabCreator.CreateItem<BreadItem>(
                 nameKey: "Adv_Item_Bread",
                 descKey: "Adv_Item_Bread_Desc",
                 enumName: "Bread",
                 flags: ItemFlags.MultipleUse,
-                tags: new string[] { TagsStorage.food },
+                tags: new string[] { TagStorage.food },
                 smallSpriteFileName: "adv_bread_small.png",
                 largeSpriteFileName: "adv_bread_large.png",
                 generatorCost: 50,
@@ -442,12 +422,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .ConvertTo<ItemSpawningData>()
                 .ItemObject;
 
-            ItemObject bread1 = PrefabsCreator.CreateItem<BreadItem>(
+            ItemObject bread1 = PrefabCreator.CreateItem<BreadItem>(
                 nameKey: "Adv_Item_BreadPiece",
                 descKey: "Adv_Item_BreadPiece_Desc",
                 enumName: "Bread",
                 flags: ItemFlags.MultipleUse,
-                tags: new string[] { TagsStorage.food },
+                tags: new string[] { TagStorage.food },
                 smallSpriteFileName: "adv_piece_of_bread_small.png",
                 largeSpriteFileName: "adv_piece_of_bread_large.png",
                 generatorCost: 50,
@@ -458,12 +438,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .ConvertTo<ItemSpawningData>()
                 .ItemObject;
 
-            ItemObject rawChicken2 = PrefabsCreator.CreateItem<ChickenItem>(
+            ItemObject rawChicken2 = PrefabCreator.CreateItem<ChickenItem>(
                 nameKey: "Adv_Item_RawChickenLeg",
                 descKey: "Adv_Item_RawChickenLeg_Desc",
                 enumName: "RawChickenLeg",
                 flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
-                tags: new string[] { TagsStorage.food },
+                tags: new string[] { TagStorage.food },
                 smallSpriteFileName: "adv_raw_chicken_leg_small.png",
                 largeSpriteFileName: "adv_raw_chicken_leg_large.png",
                 generatorCost: 75,
@@ -476,12 +456,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .ConvertTo<ItemSpawningData>()
                 .ItemObject;
 
-            ItemObject rawChicken1 = PrefabsCreator.CreateItem<ChickenItem>(
+            ItemObject rawChicken1 = PrefabCreator.CreateItem<ChickenItem>(
                 nameKey: "Adv_Item_RawChickenLeg1",
                 descKey: "Adv_Item_RawChickenLeg_Desc",
                 enumName: "RawChickenLeg",
                 flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
-                tags: new string[] { TagsStorage.food },
+                tags: new string[] { TagStorage.food },
                 smallSpriteFileName: "adv_raw_chicken_leg_small.png",
                 largeSpriteFileName: "adv_raw_chicken_leg_large.png",
                 generatorCost: 75,
@@ -492,12 +472,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .ConvertTo<ItemSpawningData>()
                 .ItemObject;
 
-            ItemObject cookedChicken2 = PrefabsCreator.CreateItem<ChickenItem>(
+            ItemObject cookedChicken2 = PrefabCreator.CreateItem<ChickenItem>(
                 nameKey: "Adv_Item_CookedChickenLeg",
                 descKey: "Adv_Item_CookedChickenLeg_Desc",
                 enumName: "CookedChickenLeg",
                 flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
-                tags: new string[] { TagsStorage.food },
+                tags: new string[] { TagStorage.food },
                 smallSpriteFileName: "adv_cooked_chicken_leg_small.png",
                 largeSpriteFileName: "adv_cooked_chicken_leg_large.png",
                 generatorCost: 75,
@@ -512,12 +492,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .ConvertTo<ItemSpawningData>()
                 .ItemObject;
 
-            ItemObject cookedChicken1 = PrefabsCreator.CreateItem<ChickenItem>(
+            ItemObject cookedChicken1 = PrefabCreator.CreateItem<ChickenItem>(
                 nameKey: "Adv_Item_CookedChickenLeg1",
                 descKey: "Adv_Item_CookedChickenLeg_Desc",
                 enumName: "CookedChickenLeg",
                 flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
-                tags: new string[] { TagsStorage.food },
+                tags: new string[] { TagStorage.food },
                 smallSpriteFileName: "adv_cooked_chicken_leg_small.png",
                 largeSpriteFileName: "adv_cooked_chicken_leg_large.png",
                 generatorCost: 75,
@@ -529,7 +509,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .ConvertTo<ItemSpawningData>()
                 .ItemObject;
 
-            ItemObject boxingGlove2 = PrefabsCreator.CreateItem<BoxingGloveItem>(
+            ItemObject boxingGlove2 = PrefabCreator.CreateItem<BoxingGloveItem>(
                 nameKey: "Adv_Item_BoxingGlove",
                 descKey: "Adv_Item_BoxingGlove_Desc",
                 enumName: "BoxingGlove",
@@ -545,7 +525,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetSpawnsOnFieldTrips(true)
                 .ItemObject;
 
-            ItemObject boxingGlove1 = PrefabsCreator.CreateItem<BoxingGloveItem>(
+            ItemObject boxingGlove1 = PrefabCreator.CreateItem<BoxingGloveItem>(
                 nameKey: "Adv_Item_BoxingGlove1",
                 descKey: "Adv_Item_BoxingGlove_Desc",
                 enumName: "BoxingGlove",
@@ -560,7 +540,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .ConvertTo<ItemSpawningData>()
                 .ItemObject;
 
-            ItemObject portal2 = PrefabsCreator.CreateItem<PlaceablePortalItem>(
+            ItemObject portal2 = PrefabCreator.CreateItem<PlaceablePortalItem>(
                 nameKey: "Adv_Item_PlaceablePortal",
                 descKey: "Adv_Item_PlaceablePortal_Desc",
                 enumName: "PlaceablePortal",
@@ -579,7 +559,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .ConvertTo<ItemSpawningData>()
                 .ItemObject;
 
-            ItemObject portal1 = PrefabsCreator.CreateItem<PlaceablePortalItem>(
+            ItemObject portal1 = PrefabCreator.CreateItem<PlaceablePortalItem>(
                 nameKey: "Adv_Item_PlaceablePortal1",
                 descKey: "Adv_Item_PlaceablePortal_Desc",
                 enumName: "PlaceablePortal",
@@ -597,7 +577,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             //metas
             ((BaseMultipleUsableItem)boxingGlove2.item).Initialize(boxingGlove1);
             boxingGlove2.GetMeta().itemObjects = ((BaseMultipleUsableItem)boxingGlove2.item).AllVersions.AddItem(boxingGlove2).ToArray();
-            //boxingGlove1.AddMeta(boxingGlove2.GetMeta()); //for the 5.3.0.0 is not needed, because it is fixed.
 
             ((BaseMultipleUsableItem)portal2.item).Initialize(portal1);
             portal2.GetMeta().itemObjects = ((BaseMultipleUsableItem)portal2.item).AllVersions.AddItem(portal2).ToArray();
@@ -618,7 +597,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeRandomEvents()
         {
-            PrefabsCreator.CreateEvent<DisappearingCharactersEvent>(
+            PrefabCreator.CreateEvent<DisappearingCharactersEvent>(
                 name: "Event_DisappearingCharacters",
                 soundKey: "adv_bal_event_disappearing_characters",
                 enumName: "DisappearingCharacters",
@@ -631,7 +610,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory)
                 .SetBannedFloors(1, 3);
 
-            PrefabsCreator.CreateEvent<ColdSchoolEvent>(
+            PrefabCreator.CreateEvent<ColdSchoolEvent>(
                 name: "Event_ColdSchool",
                 soundKey: "adv_bal_event_cold_machine",
                 enumName: "ColdSchool",
@@ -644,7 +623,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetLevelTypes(LevelType.Schoolhouse)
                 .SetBannedFloors(1);
 
-            PrefabsCreator.CreateEvent<PortalChaosEvent>(
+            PrefabCreator.CreateEvent<PortalChaosEvent>(
                 name: "Event_PortalChaos",
                 enumName: "PortalChaos",
                 soundKey: "adv_bal_event_portals",
@@ -657,7 +636,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory)
                 .SetBannedFloors(1);
 
-            PrefabsCreator.CreateEvent<VotingEvent>(
+            PrefabCreator.CreateEvent<VotingEvent>(
                 name: "Event_Voting",
                 enumName: "Voting",
                 soundKey: "adv_bal_event_voting",
@@ -676,9 +655,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeVendingMachines()
         {
-            PrefabsCreator.CreateMultipleRequiredVendingMachine("GoodMachine",
+            PrefabCreator.CreateMultipleRequiredVendingMachine("GoodMachine",
                 ItemMetaStorage.Instance.FindByEnum(Items.Quarter).itemObjects[0], 2,
-                AssetsStorage.materials["adv_good_machine"], AssetsStorage.materials["adv_good_machine_out"], null,
+                AssetStorage.materials["adv_good_machine"], AssetStorage.materials["adv_good_machine_out"], null,
                 weight: 0,
                 new WeightedItemObject[] {
                 new WeightedItemObject()
@@ -711,14 +690,14 @@ namespace BaldisBasicsPlusAdvanced.Managers
         {
             //Rusty RotoHall Builder
             Structure_Rotohalls rotoHallBuilder = 
-                GameObject.Instantiate(AssetsHelper.LoadAsset<Structure_Rotohalls>("Rotohall_Structure"));
+                GameObject.Instantiate(AssetHelper.LoadAsset<Structure_Rotohalls>("Rotohall_Structure"));
             rotoHallBuilder.name = "Structure_RustyRotohall";
             rotoHallBuilder.gameObject.ConvertToPrefab(true);
 
             MeshRenderer rustyCornerCylinder = 
-                GameObject.Instantiate(AssetsHelper.LoadAsset<MeshRenderer>("CornerCylinder_Model"));
+                GameObject.Instantiate(AssetHelper.LoadAsset<MeshRenderer>("CornerCylinder_Model"));
             MeshRenderer rustyStraightCylinder =
-                GameObject.Instantiate(AssetsHelper.LoadAsset<MeshRenderer>("StraightCylinder_Model"));
+                GameObject.Instantiate(AssetHelper.LoadAsset<MeshRenderer>("StraightCylinder_Model"));
             rustyCornerCylinder.name = "RustyCornerCylinder_Model";
             rustyStraightCylinder.name = "RustyStraightCylinder_Model";
             rustyCornerCylinder.gameObject.ConvertToPrefab(true);
@@ -726,28 +705,28 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             Material[] materials = rustyCornerCylinder.materials;
 
-            materials[0].SetMainTexture(AssetsStorage.textures["adv_rusty_rotohall"]);
-            materials[1].SetMainTexture(AssetsStorage.textures["adv_rusty_rotohall_sign_left"]);
-            materials[2].SetMainTexture(AssetsStorage.textures["adv_rusty_rotohall_sign_right"]);
+            materials[0].SetMainTexture(AssetStorage.textures["adv_rusty_rotohall"]);
+            materials[1].SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_sign_left"]);
+            materials[2].SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_sign_right"]);
             rustyCornerCylinder.materials = materials;
 
             materials = rustyStraightCylinder.materials;
 
-            materials[0].SetMainTexture(AssetsStorage.textures["adv_rusty_rotohall"]);
-            materials[1].SetMainTexture(AssetsStorage.textures["adv_rusty_rotohall_sign_straight"]);
+            materials[0].SetMainTexture(AssetStorage.textures["adv_rusty_rotohall"]);
+            materials[1].SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_sign_straight"]);
             rustyStraightCylinder.materials = materials;
 
             Array.Find(rustyCornerCylinder.GetComponentsInChildren<MeshRenderer>(), x => x.name == "CylinderFloor_Model")
-                .material.SetMainTexture(AssetsStorage.textures["adv_rusty_rotohall_floor"]);
+                .material.SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_floor"]);
             Array.Find(rustyStraightCylinder.GetComponentsInChildren<MeshRenderer>(), x => x.name == "CylinderFloor_Model")
-                .material.SetMainTexture(AssetsStorage.textures["adv_rusty_rotohall_floor"]);
+                .material.SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_floor"]);
 
             ReflectionHelper.SetValue<RotoHall>(rotoHallBuilder, "rotoHallPre",
-                ObjectsStorage.Objects["rusty_rotohall"].GetComponent<RotoHall>());
+                ObjectStorage.Objects["rusty_rotohall"].GetComponent<RotoHall>());
             ReflectionHelper.SetValue<MeshRenderer>(rotoHallBuilder, "cornerCylinderPre", rustyCornerCylinder);
             ReflectionHelper.SetValue<MeshRenderer>(rotoHallBuilder, "straightCylinderPre", rustyStraightCylinder);
 
-            ObjectsStorage.StructureBuilders.Add("Structure_RustyRotohall", rotoHallBuilder);
+            ObjectStorage.StructureBuilders.Add("Structure_RustyRotohall", rotoHallBuilder);
 
             StructureBuilderSpawningData rotohallSpawningData = 
                 new StructureBuilderSpawningData("Structure_RustyRotohall", rotoHallBuilder);
@@ -762,10 +741,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetEndless(true)
                 .SetLevelTypes(LevelType.Schoolhouse);
 
-            ObjectsStorage.SpawningData.Add("builder_Structure_RustyRotohall", rotohallSpawningData);
+            ObjectStorage.SpawningData.Add("builder_Structure_RustyRotohall", rotohallSpawningData);
             //Builder ends
 
-            PrefabsCreator.CreateStructureBuilder<Structure_Pulley>("Structure_Pulley")
+            PrefabCreator.CreateStructureBuilder<Structure_Pulley>("Structure_Pulley")
                 .SetStructureParameters(floor: 2, new StructureParameters()
                 {
                     minMax = new IntVector2[] { new IntVector2(1, 2)},
@@ -775,7 +754,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetEndless(true)
                 .SetLevelTypes(LevelType.Schoolhouse);
 
-            PrefabsCreator.CreateStructureBuilder<Structure_AccelerationPlate>("Structure_AccelerationPlate")
+            PrefabCreator.CreateStructureBuilder<Structure_AccelerationPlate>("Structure_AccelerationPlate")
                 .SetStructureParameters(floor: 2, new StructureParameters()
                 {
                     minMax = new IntVector2[] { new IntVector2(2, 5), new IntVector2(0, 0) },
@@ -785,7 +764,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetEndless(true)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);
 
-            PrefabsCreator.CreateStructureBuilder<Structure_KitchenStove>("Structure_KitchenStove")
+            PrefabCreator.CreateStructureBuilder<Structure_KitchenStove>("Structure_KitchenStove")
                 .SetStructureParameters(floor: 2, new StructureParameters()
                 {
                     minMax = new IntVector2[] { new IntVector2(1, 2), new IntVector2(0, 0) },
@@ -795,7 +774,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetEndless(true)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);
 
-            PrefabsCreator.CreateStructureBuilder<Structure_GenericPlate>("Structure_GenericPlate")
+            PrefabCreator.CreateStructureBuilder<Structure_GenericPlate>("Structure_GenericPlate")
                 .SetStructureParameters(floor: 2, new StructureParameters()
                 {
                     minMax = new IntVector2[] { new IntVector2(2, 5), new IntVector2(0, 2) },
@@ -805,7 +784,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetEndless(true)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory, LevelType.Laboratory, LevelType.Maintenance);
 
-            PrefabsCreator.CreateStructureBuilder<Structure_Zipline>("Structure_Zipline")
+            PrefabCreator.CreateStructureBuilder<Structure_Zipline>("Structure_Zipline")
                 .SetStructureParameters(floor: 2, new StructureParameters()
                 {
                     minMax = new IntVector2[] { new IntVector2(1, 2)},
@@ -813,12 +792,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     {
                         new WeightedGameObject()
                         {
-                            selection = ObjectsStorage.Objects["zipline_hanger"],
+                            selection = ObjectStorage.Objects["zipline_hanger"],
                             weight = 100
                         },
                         new WeightedGameObject()
                         {
-                            selection = ObjectsStorage.Objects["zipline_black_hanger"],
+                            selection = ObjectStorage.Objects["zipline_black_hanger"],
                             weight = 75
                         }
                     }
@@ -828,7 +807,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetEndless(true)
                 .SetLevelTypes(LevelType.Schoolhouse);
 
-            PrefabsCreator.CreateStructureBuilder<Structure_NoisyPlate>("Structure_NoisyPlate")
+            PrefabCreator.CreateStructureBuilder<Structure_NoisyPlate>("Structure_NoisyPlate")
                 .SetStructureParameters(floor: 2, new StructureParameters()
                 {
                     minMax = new IntVector2[] { new IntVector2(2, 5) },
@@ -838,7 +817,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetEndless(true)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
 
-            PrefabsCreator.CreateStructureBuilder<Structure_GumDispenser>("Structure_GumDispenser")
+            PrefabCreator.CreateStructureBuilder<Structure_GumDispenser>("Structure_GumDispenser")
                 .SetStructureParameters(floor: 2, new StructureParameters()
                 {
                     minMax = new IntVector2[] { new IntVector2(1, 2) },
@@ -848,7 +827,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetEndless(true)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);
 
-            PrefabsCreator.CreateStructureBuilder<Structure_PlainPlate>("Structure_PlainPlate")
+            PrefabCreator.CreateStructureBuilder<Structure_PlainPlate>("Structure_PlainPlate")
                 .SetStructureParameters(floor: 2, new StructureParameters()
                 {
                     chance = new float[] { 0.25f },
@@ -866,19 +845,19 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeUi()
         {
-            PrefabsCreator.CreateOverlay("FrozenOverlay", AssetsStorage.sprites["adv_frozen_overlay"], false);
-            PrefabsCreator.CreateOverlay("ElephantOverlay", AssetsStorage.sprites["adv_elephant_overlay"], true);
-            PrefabsCreator.CreateOverlay("ShieldOverlay", AssetsStorage.sprites["adv_protected_overlay"], true);
+            PrefabCreator.CreateOverlay("FrozenOverlay", AssetStorage.sprites["adv_frozen_overlay"], false);
+            PrefabCreator.CreateOverlay("ElephantOverlay", AssetStorage.sprites["adv_elephant_overlay"], true);
+            PrefabCreator.CreateOverlay("ShieldOverlay", AssetStorage.sprites["adv_protected_overlay"], true);
 
             //Initializing Chalkboard Menu
-            Canvas canvas = ObjectsCreator.CreateCanvas(setGlobalCam: true);
+            Canvas canvas = ObjectCreator.CreateCanvas(setGlobalCam: true);
             canvas.name = "Chalkboard Menu";
 
             ChalkboardMenu chalkboardMenu = canvas.gameObject.AddComponent<ChalkboardMenu>();
 
             chalkboardMenu.canvas = canvas;
 
-            chalkboardMenu.chalkboard = UIHelpers.CreateImage(AssetsStorage.sprites["chalkboard_standard"], canvas.transform,
+            chalkboardMenu.chalkboard = UIHelpers.CreateImage(AssetStorage.sprites["chalkboard_standard"], canvas.transform,
                 Vector3.zero, correctPosition: false);
             chalkboardMenu.chalkboard.ToCenter();
 
@@ -902,8 +881,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
             info.color = Color.white;
             info.alignment = TextAlignmentOptions.Top;
 
-            StandardMenuButton exit = ObjectsCreator.CreateSpriteButton(AssetsStorage.sprites["adv_exit_transparent"], 
-                new Vector3(185, 140), chalkboardMenu.chalkboard.transform, AssetsStorage.sprites["adv_exit"]);
+            StandardMenuButton exit = ObjectCreator.CreateSpriteButton(AssetStorage.sprites["adv_exit_transparent"], 
+                new Vector3(185, 140), chalkboardMenu.chalkboard.transform, AssetStorage.sprites["adv_exit"]);
             exit.name = "exit";
 
             chalkboardMenu.buttons.Add(exit);
@@ -913,10 +892,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             canvas.SetCursorInitiator(setAutoInitiator: true);
 
-            ObjectsStorage.Objects.Add("chalkboard_menu", canvas.gameObject);
+            ObjectStorage.Objects.Add("chalkboard_menu", canvas.gameObject);
             //Chalkboard Menu ends
 
-            PrefabsCreator.CreateObjectPrefab<CreditsScreen>("Credits Screen", "credits_screen");
+            PrefabCreator.CreateObjectPrefab<CreditsScreen>("Credits Screen", "credits_screen");
             //PrefabsCreator.CreateObjectPrefab<UpdatesCenterMenu>("Updates Center", "updates_center");
         }
 
@@ -984,7 +963,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             new FieldTripData()
             {
                 sceneName = "Farm",
-                sceneObject = ObjectsStorage.SceneObjects["Farm"]
+                sceneObject = ObjectStorage.SceneObjects["Farm"]
             }
             .SetDefaultSkybox()
             .Register();
@@ -997,11 +976,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
         public static void InitializeObjects()
         {
             //Variables for everyone
-            MathMachine mathMachineComp = GameObject.Instantiate(AssetsHelper.LoadAsset<MathMachine>("MathMachine"));
+            MathMachine mathMachineComp = GameObject.Instantiate(AssetHelper.LoadAsset<MathMachine>("MathMachine"));
 
             //Cloning the Rotohall and making it as rusty
 
-            RotoHall rotoHall = GameObject.Instantiate(AssetsHelper.LoadAsset<RotoHall>("RotoHall_Base"));
+            RotoHall rotoHall = GameObject.Instantiate(AssetHelper.LoadAsset<RotoHall>("RotoHall_Base"));
             rotoHall.gameObject.ConvertToPrefab(true);
             rotoHall.name = "RustyRotoHall_Base";
 
@@ -1012,11 +991,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
             ReflectionHelper.SetValue<EnvironmentObject>(rustyRotoHall.GetComponent<EntitySpinner>(), "environmentObject", rustyRotoHall);
 
             ReflectionHelper.SetValue<float>(rustyRotoHall, "speed", 25f);
-            ReflectionHelper.SetValue<SoundObject>(rustyRotoHall, "audTurn", AssetsStorage.sounds["adv_turning_start"]);
+            ReflectionHelper.SetValue<SoundObject>(rustyRotoHall, "audTurn", AssetStorage.sounds["adv_turning_start"]);
 
-            rotoHall.GetComponent<MeshRenderer>().material.SetMainTexture(AssetsStorage.textures["adv_rusty_rotohall_blank"]);
+            rotoHall.GetComponent<MeshRenderer>().material.SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_blank"]);
 
-            ObjectsStorage.Objects.Add("rusty_rotohall", rustyRotoHall.gameObject);
+            ObjectStorage.Objects.Add("rusty_rotohall", rustyRotoHall.gameObject);
 
             //Advanced Math Machine
 
@@ -1024,7 +1003,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             while (true)
             {
-                if (advMathMachineIsCorner) mathMachineComp = GameObject.Instantiate(AssetsHelper.LoadAsset<MathMachine>("MathMachine_Corner"));
+                if (advMathMachineIsCorner) mathMachineComp = GameObject.Instantiate(AssetHelper.LoadAsset<MathMachine>("MathMachine_Corner"));
 
                 GameObject advancedMathMachineObj = mathMachineComp.gameObject;
                 advancedMathMachineObj.name = !advMathMachineIsCorner ? "AdvancedMathMachine" : "AdvancedMathMachineCorner";
@@ -1037,7 +1016,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 GameObject.Destroy(mathMachineComp);
 
                 advancedMathMachineObj.ConvertToPrefab(true);
-                ObjectsStorage.Objects.Add(!advMathMachineIsCorner ? "advanced_math_machine" : "advanced_math_machine_corner", advancedMathMachineObj);
+                ObjectStorage.Objects.Add(!advMathMachineIsCorner ? "advanced_math_machine" : "advanced_math_machine_corner", advancedMathMachineObj);
 
                 if (advMathMachineIsCorner) break;
                 advMathMachineIsCorner = true;
@@ -1045,78 +1024,78 @@ namespace BaldisBasicsPlusAdvanced.Managers
             
 
             //Zipline Hangers
-            PrefabsCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Hanger", "zipline_hanger");
-            PrefabsCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Black Hanger", "zipline_black_hanger", variant: 2);
+            PrefabCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Hanger", "zipline_hanger");
+            PrefabCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Black Hanger", "zipline_black_hanger", variant: 2);
 
             //Voting Ballot
-            PrefabsCreator.CreateObjectPrefab<VotingBallot>("Voting Ballot", "voting_ballot");
+            PrefabCreator.CreateObjectPrefab<VotingBallot>("Voting Ballot", "voting_ballot");
 
             //Pulley
-            PrefabsCreator.CreateObjectPrefab<Pulley>("Pulley", "pulley");
+            PrefabCreator.CreateObjectPrefab<Pulley>("Pulley", "pulley");
 
             //Gum Dispenser
-            PrefabsCreator.CreateObjectPrefab<GumDispenser>("Gum Dispenser", "gum_dispenser");
+            PrefabCreator.CreateObjectPrefab<GumDispenser>("Gum Dispenser", "gum_dispenser");
 
             //Mysterious portals
-            PrefabsCreator.CreateObjectPrefab<MysteriousPortal>("Mysterious Portal", "mysterious_portal");
-            PrefabsCreator.CreateObjectPrefab<CrazyMysteriousPortal>("Crazy Mysterious Portal", "crazy_mysterious_portal");
+            PrefabCreator.CreateObjectPrefab<MysteriousPortal>("Mysterious Portal", "mysterious_portal");
+            PrefabCreator.CreateObjectPrefab<CrazyMysteriousPortal>("Crazy Mysterious Portal", "crazy_mysterious_portal");
 
             //Plates
 
-            PrefabsCreator.CreatePlate<PressurePlate>("plate");
-            PrefabsCreator.CreatePlate<InvisibilityPlate>("invisibility_plate");
-            PrefabsCreator.CreatePlate<AccelerationPlate>("acceleration_plate");
+            PrefabCreator.CreatePlate<PressurePlate>("plate");
+            PrefabCreator.CreatePlate<InvisibilityPlate>("invisibility_plate");
+            PrefabCreator.CreatePlate<AccelerationPlate>("acceleration_plate");
 
-            PrefabsCreator.CreatePlate<NoisyPlate>("noisy_plate");
+            PrefabCreator.CreatePlate<NoisyPlate>("noisy_plate");
 
-            PrefabsCreator.CreatePlate<StealingPlate>("stealing_plate");
-            PrefabsCreator.CreatePlate<BullyPlate>("bully_plate");
-            PrefabsCreator.CreatePlate<PresentPlate>("present_plate");
-            PrefabsCreator.CreatePlate<SlowdownPlate>("slowdown_plate");
-            PrefabsCreator.CreatePlate<SugarPlate>("sugar_addiction_plate");
-            PrefabsCreator.CreatePlate<ProtectionPlate>("protection_plate");
-            PrefabsCreator.CreatePlate<TeleportationPlate>("teleportation_plate");
-            PrefabsCreator.CreatePlate<MysteriousPlate>("fake_plate");
+            PrefabCreator.CreatePlate<StealingPlate>("stealing_plate");
+            PrefabCreator.CreatePlate<BullyPlate>("bully_plate");
+            PrefabCreator.CreatePlate<PresentPlate>("present_plate");
+            PrefabCreator.CreatePlate<SlowdownPlate>("slowdown_plate");
+            PrefabCreator.CreatePlate<SugarPlate>("sugar_addiction_plate");
+            PrefabCreator.CreatePlate<ProtectionPlate>("protection_plate");
+            PrefabCreator.CreatePlate<TeleportationPlate>("teleportation_plate");
+            PrefabCreator.CreatePlate<MysteriousPlate>("fake_plate");
             //PrefabsCreator.CreatePlate<SafetyTrapdoor>("safety_trapdoor");
-            PrefabsCreator.CreatePlate<KitchenStove>("kitchen_stove");
-            PrefabsCreator.CreatePlate<JohnnyKitchenStove>("johnny_kitchen_stove");
+            PrefabCreator.CreatePlate<KitchenStove>("kitchen_stove");
+            PrefabCreator.CreatePlate<JohnnyKitchenStove>("johnny_kitchen_stove");
 
             //plates end
 
             //triggers
 
-            PrefabsCreator.CreateTrigger<NoPlatesCooldownTrigger>("no_plates_cooldown");
-            PrefabsCreator.CreateTrigger<PitStopOverridesTrigger>("pit_stop_overrides");
+            PrefabCreator.CreateTrigger<NoPlatesCooldownTrigger>("no_plates_cooldown");
+            PrefabCreator.CreateTrigger<PitStopOverridesTrigger>("pit_stop_overrides");
 
             //triggers end
 
             //spelling
 
-            PrefabsCreator.CreateObjectPrefab<SymbolMachine>("SymbolMachine", "symbol_machine");
+            PrefabCreator.CreateObjectPrefab<SymbolMachine>("SymbolMachine", "symbol_machine");
 
             string alphabet = "abcdefghijklmnopqrstuvwxyz";
             
             for (int i = 0; i < alphabet.Length; i++)
             {
                 ApiManager.CreateNewSpelloon(alphabet[i].ToString(),
-                    AssetsStorage.sprites["adv_balloon_" + alphabet[i]]);
+                    AssetStorage.sprites["adv_balloon_" + alphabet[i]]);
             }
             //spelling end
 
-            PrefabsCreator.CreateObjectPrefab<TeleportationHole>("Teleportation Bomb", "teleportation_bomb");
-            PrefabsCreator.CreateObjectPrefab<Reaper>("Farm Reaper", "farm_reaper");
-            PrefabsCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_flag");
-            PrefabsCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_points_flag", variant: 2);
+            PrefabCreator.CreateObjectPrefab<TeleportationHole>("Teleportation Bomb", "teleportation_bomb");
+            PrefabCreator.CreateObjectPrefab<Reaper>("Farm Reaper", "farm_reaper");
+            PrefabCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_flag");
+            PrefabCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_points_flag", variant: 2);
 
             //PrefabsCreator.CreateObjectPrefab<>("99", "99");
 
             GameObject cornSign = new GameObject("Corn Sign");
-            ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_corn_sign1"])
+            ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_corn_sign1"])
                 .transform.SetParent(cornSign.transform, false);
             cornSign.ConvertToPrefab(true);
-            ObjectsStorage.Objects.Add("farm_sign1", cornSign);
+            ObjectStorage.Objects.Add("farm_sign1", cornSign);
 
-            PrefabsCreator.CreateObjectPrefab<VotingCeilingScreen>("VotingScreen", "voting_screen");
+            PrefabCreator.CreateObjectPrefab<VotingCeilingScreen>("VotingScreen", "voting_screen");
         }
 
         #endregion
@@ -1126,13 +1105,13 @@ namespace BaldisBasicsPlusAdvanced.Managers
         public static void InitializeEntities()
         {
             //Mysterious Teleporter
-            PrefabsCreator.CreateObjectPrefab<MysteriousTeleporterProjectile>("Mysterious Teleporter", "mysterious_teleporter");
+            PrefabCreator.CreateObjectPrefab<MysteriousTeleporterProjectile>("Mysterious Teleporter", "mysterious_teleporter");
 
             //Anvil Projectile
-            PrefabsCreator.CreateObjectPrefab<AnvilProjectile>("Anvil Projectile", "anvil_projectile");
+            PrefabCreator.CreateObjectPrefab<AnvilProjectile>("Anvil Projectile", "anvil_projectile");
 
             //Own gum
-            Gum gumPre = AssetsHelper.LoadAsset<Gum>("Gum");
+            Gum gumPre = AssetHelper.LoadAsset<Gum>("Gum");
 
             Gum gumComp = GameObject.Instantiate(gumPre);
 
@@ -1150,54 +1129,54 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             GameObject.Destroy(gumComp);
 
-            ObjectsStorage.Objects.Add("gum", gumProj.gameObject);
+            ObjectStorage.Objects.Add("gum", gumProj.gameObject);
 
             //gum end
 
-            PrefabsCreator.CreateEntity<Fan>(new EntityBuilder()
+            PrefabCreator.CreateEntity<Fan>(new EntityBuilder()
                 .SetName("Fan")
                 .AddTrigger(1f)
-                .SetLayerCollisionMask(LayersHelper.entityCollisionMask)
+                .SetLayerCollisionMask(LayerHelper.entityCollisionMask)
                 .AddRenderbaseFunction(delegate (Entity entity)
                 {
-                    Transform fanBaseRenderer = ObjectsCreator.CreateSpriteRendererBase(null)
+                    Transform fanBaseRenderer = ObjectCreator.CreateSpriteRendererBase(null)
                     .transform.parent;
                     fanBaseRenderer.SetParent(entity.transform);
                     return fanBaseRenderer;
-                })).gameObject.layer = LayersHelper.clickableEntities;
+                })).gameObject.layer = LayerHelper.clickableEntities;
 
-            PrefabsCreator.CreateEntity<PlateFoodTrap>(new EntityBuilder()
+            PrefabCreator.CreateEntity<PlateFoodTrap>(new EntityBuilder()
                 .SetName("RawChichenGroundTrap")
                 .AddTrigger(1f)
-                .SetLayerCollisionMask(LayersHelper.entityCollisionMask)
+                .SetLayerCollisionMask(LayerHelper.entityCollisionMask)
                 .AddRenderbaseFunction(delegate (Entity entity)
                 {
-                    Transform fanBaseRenderer = ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["food_plate"])
+                    Transform fanBaseRenderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["food_plate"])
                     .transform.parent;
                     fanBaseRenderer.SetParent(entity.transform);
                     return fanBaseRenderer;
-                })).gameObject.layer = LayersHelper.clickableEntities;
+                })).gameObject.layer = LayerHelper.clickableEntities;
 
-            PrefabsCreator.CreateEntity<PlateFoodTrap>(new EntityBuilder()
+            PrefabCreator.CreateEntity<PlateFoodTrap>(new EntityBuilder()
                 .SetName("CookedChichenGroundTrap")
                 .AddTrigger(1f)
-                .SetLayerCollisionMask(LayersHelper.entityCollisionMask)
+                .SetLayerCollisionMask(LayerHelper.entityCollisionMask)
                 .AddRenderbaseFunction(delegate (Entity entity)
                 {
-                    Transform fanBaseRenderer = ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["food_plate"])
+                    Transform fanBaseRenderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["food_plate"])
                     .transform.parent;
                     fanBaseRenderer.SetParent(entity.transform);
                     return fanBaseRenderer;
                 }),
-                variant: 2).gameObject.layer = LayersHelper.clickableEntities;
+                variant: 2).gameObject.layer = LayerHelper.clickableEntities;
 
-            PrefabsCreator.CreateEntity<GroundDough>(new EntityBuilder()
+            PrefabCreator.CreateEntity<GroundDough>(new EntityBuilder()
                 .SetName("Dough")
                 .AddTrigger(1f)
-                .SetLayerCollisionMask(LayersHelper.entityCollisionMask)
+                .SetLayerCollisionMask(LayerHelper.entityCollisionMask)
                 .AddRenderbaseFunction(delegate (Entity entity)
                 {
-                    Transform fanBaseRenderer = ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_dough"])
+                    Transform fanBaseRenderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_dough"])
                     .transform.parent;
                     fanBaseRenderer.SetParent(entity.transform);
                     return fanBaseRenderer;
@@ -1219,16 +1198,16 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void CreateDoorMats()
         {
-            AssetsStorage.CreateDoorMats("adv_english_class", "adv_english_class_door");
-            AssetsStorage.CreateDoorMats("adv_school_council", "adv_school_council_door");
-            AssetsStorage.CreateDoorMats("adv_advanced_class", "adv_advanced_class_door");
+            AssetStorage.CreateDoorMats("adv_english_class", "adv_english_class_door");
+            AssetStorage.CreateDoorMats("adv_school_council", "adv_school_council_door");
+            AssetStorage.CreateDoorMats("adv_advanced_class", "adv_advanced_class_door");
 
-            PrefabsCreator.CreateDoorMatSet("EnglishDoorSet", AssetsStorage.materials["adv_english_class_open"],
-                AssetsStorage.materials["adv_english_class_closed"]);
-            PrefabsCreator.CreateDoorMatSet("SchoolCouncilDoorSet", AssetsStorage.materials["adv_school_council_open"],
-                AssetsStorage.materials["adv_school_council_closed"]);
-            PrefabsCreator.CreateDoorMatSet("AdvancedClassDoorSet", AssetsStorage.materials["adv_advanced_class_open"],
-                AssetsStorage.materials["adv_advanced_class_closed"]);
+            PrefabCreator.CreateDoorMatSet("EnglishDoorSet", AssetStorage.materials["adv_english_class_open"],
+                AssetStorage.materials["adv_english_class_closed"]);
+            PrefabCreator.CreateDoorMatSet("SchoolCouncilDoorSet", AssetStorage.materials["adv_school_council_open"],
+                AssetStorage.materials["adv_school_council_closed"]);
+            PrefabCreator.CreateDoorMatSet("AdvancedClassDoorSet", AssetStorage.materials["adv_advanced_class_open"],
+                AssetStorage.materials["adv_advanced_class_closed"]);
         }
 
         #endregion
@@ -1249,22 +1228,22 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         private static void InitializeRoomFunctions()
         {
-            PrefabsCreator.CreateFunctionContainerWithRoomFunction<EnglishClassTimerFunction>("EnglishClassTimerFunction");
-            PrefabsCreator.CreateFunctionContainerWithRoomFunction<CorruptedLightsFunction>("CorruptedLightsFunction");
-            PrefabsCreator.CreateFunctionContainerWithRoomFunction<SchoolCouncilFunction>("SchoolCouncilFunction");
+            PrefabCreator.CreateFunctionContainerWithRoomFunction<EnglishClassTimerFunction>("EnglishClassTimerFunction");
+            PrefabCreator.CreateFunctionContainerWithRoomFunction<CorruptedLightsFunction>("CorruptedLightsFunction");
+            PrefabCreator.CreateFunctionContainerWithRoomFunction<SchoolCouncilFunction>("SchoolCouncilFunction");
             RoomHelper.SetupRoomFunction<DisabledPowerOnGenerationFinishFunction>(
-                ObjectsStorage.RoomFunctionsContainers["SchoolCouncilFunction"]);
+                ObjectStorage.RoomFunctionsContainers["SchoolCouncilFunction"]);
         }
 
         private static void InitializeRoomGroups()
         {
-            PrefabsCreator.CreateRoomGroup("EnglishClass", minRooms: -6, maxRooms: 1)
+            PrefabCreator.CreateRoomGroup("EnglishClass", minRooms: -6, maxRooms: 1)
                 .SetBannedFloors(1)
                 .ConvertTo<RoomGroupSpawningData>()
                 .Group
-                .SetCeilingTex(AssetsStorage.textures["adv_english_ceiling"], 100)
-                .SetWallTex(AssetsStorage.textures["adv_english_wall"], 100)
-                .SetFloorTex(AssetsStorage.textures["adv_english_floor"], 100);
+                .SetCeilingTex(AssetStorage.textures["adv_english_ceiling"], 100)
+                .SetWallTex(AssetStorage.textures["adv_english_wall"], 100)
+                .SetFloorTex(AssetStorage.textures["adv_english_floor"], 100);
 
             EnumExtensions.ExtendEnum<RoomCategory>("SchoolCouncil");
         }
@@ -1272,12 +1251,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
         public static void InitializeRoomAssets()
         {
             foreach (string path in 
-                Directory.GetFiles(AssetsHelper.modPath + "Data/Rooms/Objects", "*.rbpl", SearchOption.AllDirectories))
+                Directory.GetFiles(AssetHelper.modPath + "Data/Rooms/Objects", "*.rbpl", SearchOption.AllDirectories))
             {
                 CustomRoomData roomData = CustomRoomData.RoomFromFile(path);
                 if (roomData == null) continue;
 
-                ObjectsStorage.CustomRoomData.Add(roomData);
+                ObjectStorage.CustomRoomData.Add(roomData);
             }
         }
 
@@ -1296,7 +1275,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PosterSerializableData.GetPosterFromFile("Textures/Posters/Adv_Poster_Extra_Points.png");
 
             foreach (string path in Directory.GetFiles(
-                AssetsHelper.modPath + "Textures/Posters/GenericPosters", "*.png", SearchOption.AllDirectories))
+                AssetHelper.modPath + "Textures/Posters/GenericPosters", "*.png", SearchOption.AllDirectories))
             {
                 string jsonPath = path.Replace(".png", ".json");
 
@@ -1305,7 +1284,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 PosterObject poster =
                     PosterSerializableData.GetPosterAndDataFromFile(path, overrideBasePath: true, out PosterSerializableData data);
 
-                ObjectsStorage.WeightedPosterObjects.Add(new WeightedPosterObject()
+                ObjectStorage.WeightedPosterObjects.Add(new WeightedPosterObject()
                 {
                     selection = poster,
                     weight = data.weight
@@ -1313,7 +1292,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             }
 
             foreach (string path in Directory.GetFiles(
-                AssetsHelper.modPath + "Textures/Posters/Faculties/", "*.png", SearchOption.AllDirectories))
+                AssetHelper.modPath + "Textures/Posters/Faculties/", "*.png", SearchOption.AllDirectories))
             {
                 PosterObject poster =
                     PosterSerializableData.GetPosterAndDataFromFile(path, overrideBasePath: true, out PosterSerializableData data);
@@ -1327,7 +1306,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void PostInitializePosters()
         {
-            RoomAsset[] rooms = Array.FindAll(AssetsHelper.LoadAssets<RoomAsset>(), x => x.category == RoomCategory.Faculty);
+            RoomAsset[] rooms = Array.FindAll(AssetHelper.LoadAssets<RoomAsset>(), x => x.category == RoomCategory.Faculty);
 
             for (int i = 0; i < rooms.Length; i++)
             {
@@ -1343,23 +1322,23 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void SetTags()
         {
-            SetTagsTo(new string[] { TagsStorage.firstPrizeImmunity },
+            SetTagsTo(new string[] { TagStorage.firstPrizeImmunity },
                 Character.Bully, Character.Sweep, Character.Prize);
 
-            SetTagsTo(new string[] { TagsStorage.coldSchoolEventImmunity },
+            SetTagsTo(new string[] { TagStorage.coldSchoolEventImmunity },
                 Character.Pomp, Character.Sweep, Character.Prize, Character.Chalkles);
 
-            SetTagsTo(new string[] { TagsStorage.narrowlyFunctional },
+            SetTagsTo(new string[] { TagStorage.narrowlyFunctional },
                 Items.BusPass, Items.lostItem0, Items.lostItem1, Items.lostItem2, Items.lostItem3,
                 Items.lostItem4, Items.lostItem5, Items.lostItem6, Items.lostItem7, Items.lostItem8, Items.lostItem9,
                 Items.CircleKey, Items.TriangleKey, Items.SquareKey, Items.PentagonKey, Items.HexagonKey, Items.WeirdKey);
-            SetTagsTo(new string[] { TagsStorage.perfectRate, TagsStorage.symbolMachinePotentialReward },
+            SetTagsTo(new string[] { TagStorage.perfectRate, TagStorage.symbolMachinePotentialReward },
                 Items.GrapplingHook, Items.Apple, Items.Bsoda, Items.Teleporter);
-            SetTagsTo(new string[] { TagsStorage.goodRate, TagsStorage.symbolMachinePotentialReward },
+            SetTagsTo(new string[] { TagStorage.goodRate, TagStorage.symbolMachinePotentialReward },
                 Items.PortalPoster, Items.NanaPeel, Items.Quarter, Items.ZestyBar, Items.DietBsoda);
-            SetTagsTo(new string[] { TagsStorage.normalRate, TagsStorage.symbolMachinePotentialReward },
+            SetTagsTo(new string[] { TagStorage.normalRate, TagStorage.symbolMachinePotentialReward },
                 Items.Nametag, Items.ChalkEraser, Items.DetentionKey);
-            SetTagsTo(new string[] { TagsStorage.commonRate, TagsStorage.symbolMachinePotentialReward },
+            SetTagsTo(new string[] { TagStorage.commonRate, TagStorage.symbolMachinePotentialReward },
                 Items.Scissors, Items.Tape, Items.PrincipalWhistle, Items.Wd40);
         }
 

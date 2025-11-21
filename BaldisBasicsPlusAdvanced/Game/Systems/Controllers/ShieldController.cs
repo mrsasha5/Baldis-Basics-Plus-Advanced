@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Overlay;
 using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
@@ -38,14 +37,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             if (owner == ControllerOwner.Player)
             {
                 gauge = Singleton<CoreGameManager>.Instance.GetHud(0).gaugeManager
-                    .ActivateNewGauge(AssetsStorage.sprites["adv_gauge_protection"], time);
+                    .ActivateNewGauge(AssetStorage.sprites["adv_gauge_protection"], time);
             }
             baseTime = time;
         }
 
         private void InitializeOverlay()
         {
-            overlayEffectsMan = GameObject.Instantiate(ObjectsStorage.Overlays["ShieldOverlay"].GetComponent<OverlayEffectsManager>());
+            overlayEffectsMan = GameObject.Instantiate(ObjectStorage.Overlays["ShieldOverlay"].GetComponent<OverlayEffectsManager>());
             overlayEffectsMan.QueueEffect<FadeInEffect>(fadeEffectsTime);
             overlayEffectsMan.SetAlpha(0f);
             overlayEffectsMan.SetCanvasCam();
@@ -65,7 +64,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 if (controllerSystem.CreateController(out BrokenRulerController controller))
                 {
                     SetToDestroy();
-                    ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_protected"]);
+                    ec.GetAudMan().PlaySingle(AssetStorage.sounds["adv_protected"]);
                     controller.Initialize(15f, true);
                 }
             }

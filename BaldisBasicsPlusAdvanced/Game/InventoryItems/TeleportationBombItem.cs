@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Adjusters;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using UnityEngine;
@@ -40,7 +39,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 .AddTrigger(1f)
                 .SetLayerCollisionMask((LayerMask)2113541)
                 .AddRigidbody()
-                .AddDefaultRenderBaseFunction(AssetsStorage.sprites["adv_teleportation_bomb"])
+                .AddDefaultRenderBaseFunction(AssetStorage.sprites["adv_teleportation_bomb"])
                 .Build();
 
             entity.SetGrounded(false);
@@ -67,7 +66,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                     height = endHeight;
                     ready = true;
                     entity.SetGrounded(value: true);
-                    audMan.PlaySingle(AssetsStorage.sounds["teleport"]);
+                    audMan.PlaySingle(AssetStorage.sounds["teleport"]);
                 }
 
                 entity.SetHeight(height);
@@ -79,7 +78,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
                 if (beginsInTime <= 0f)
                 {
-                    TeleportationHole bomb = Instantiate(ObjectsStorage.Objects["teleportation_bomb"].GetComponent<TeleportationHole>());
+                    TeleportationHole bomb = Instantiate(ObjectStorage.Objects["teleportation_bomb"].GetComponent<TeleportationHole>());
                     Vector3 pos = transform.position;
                     pos.y = 5f;
                     bomb.transform.position = pos;

@@ -19,42 +19,42 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             {
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["invisibility_plate"],
+                    selection = ObjectStorage.Objects["invisibility_plate"],
                     weight = 75
                 },
 		        new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["present_plate"],
+                    selection = ObjectStorage.Objects["present_plate"],
                     weight = 50
                 },
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["bully_plate"],
+                    selection = ObjectStorage.Objects["bully_plate"],
                     weight = 15
                 },
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["slowdown_plate"],
+                    selection = ObjectStorage.Objects["slowdown_plate"],
                     weight = 30
                 },
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["sugar_addiction_plate"],
+                    selection = ObjectStorage.Objects["sugar_addiction_plate"],
                     weight = 40
                 },
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["protection_plate"],
+                    selection = ObjectStorage.Objects["protection_plate"],
                     weight = 50
                 },
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["teleportation_plate"],
+                    selection = ObjectStorage.Objects["teleportation_plate"],
                     weight = 50
                 },
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["fake_plate"],
+                    selection = ObjectStorage.Objects["fake_plate"],
                     weight = 40
                 }
             };
@@ -63,27 +63,27 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             {
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["invisibility_plate"],
+                    selection = ObjectStorage.Objects["invisibility_plate"],
                     weight = 75
                 },
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["sugar_addiction_plate"],
+                    selection = ObjectStorage.Objects["sugar_addiction_plate"],
                     weight = 40
                 },
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["protection_plate"],
+                    selection = ObjectStorage.Objects["protection_plate"],
                     weight = 50
                 },
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["teleportation_plate"],
+                    selection = ObjectStorage.Objects["teleportation_plate"],
                     weight = 50
                 },
 		        new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["present_plate"],
+                    selection = ObjectStorage.Objects["present_plate"],
                     weight = 50
                 }
             };

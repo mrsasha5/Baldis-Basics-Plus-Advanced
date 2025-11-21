@@ -23,9 +23,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics
             base.OnAssetsPostLoad();
 
             MIDIHolder[] holders = 
-                MusicRegister.AddMIDIsFromDirectory(MidiDestiny.Schoolhouse, AssetsHelper.modPath + "Audio/Music/Floors");
+                MusicRegister.AddMIDIsFromDirectory(MidiDestiny.Schoolhouse, AssetHelper.modPath + "Audio/Music/Floors");
             holders = holders.AddRangeToArray(
-                MusicRegister.AddMIDIsFromDirectory(MidiDestiny.Schoolhouse, AssetsHelper.modPath + "Audio/Music/Floors/Compats"));
+                MusicRegister.AddMIDIsFromDirectory(MidiDestiny.Schoolhouse, AssetHelper.modPath + "Audio/Music/Floors/Compats"));
 
             for (int i = 0; i < holders.Length; i++)
             {

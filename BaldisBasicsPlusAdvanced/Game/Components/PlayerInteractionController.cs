@@ -45,12 +45,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Components
 
             if (playerEntitiesInteractionDisables < 0) playerEntitiesInteractionDisables = 0;
 
-            LayersHelper.SetIgnoreCollisionForPlayer(playerEntitiesInteractionDisables > 0);
+            LayerHelper.SetIgnoreCollisionForPlayer(playerEntitiesInteractionDisables > 0);
         }
 
         private void OnDestroy()
         {
-            LayersHelper.SetIgnoreCollisionForPlayer(false);
+            LayerHelper.SetIgnoreCollisionForPlayer(false);
         }
 
     }

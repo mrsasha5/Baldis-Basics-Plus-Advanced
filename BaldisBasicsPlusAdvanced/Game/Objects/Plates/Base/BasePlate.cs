@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -143,21 +143,21 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         public virtual void InitializePrefab(int variant)
         {
-            audCooldownEnds = AssetsStorage.sounds["bell"];
-            audPress = AssetsStorage.sounds["button_unpress"];
-            audUnpress = AssetsStorage.sounds["button_press"];
+            audCooldownEnds = AssetStorage.sounds["bell"];
+            audPress = AssetStorage.sounds["button_unpress"];
+            audUnpress = AssetStorage.sounds["button_press"];
 
             BoxCollider collider = gameObject.AddComponent<BoxCollider>();
             collider.size = new Vector3(10f, 10f, 10f);
             collider.isTrigger = true;
             collider.center = Vector3.up * 5f;
 
-            gameObject.layer = LayersHelper.ignoreRaycastB;
+            gameObject.layer = LayerHelper.ignoreRaycastB;
 
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
 
-            activatedMaterial = new Material(AssetsStorage.materials["belt"]);
-            deactivatedMaterial = new Material(AssetsStorage.materials["belt"]);
+            activatedMaterial = new Material(AssetStorage.materials["belt"]);
+            deactivatedMaterial = new Material(AssetStorage.materials["belt"]);
 
             disabledColorVal = 0.5f;
             activeColorVal = 1f;
@@ -212,7 +212,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         protected virtual void InitializeRenderer()
         {
-            MeshRenderer renderer = ObjectsCreator.CreateQuadRenderer();
+            MeshRenderer renderer = ObjectCreator.CreateQuadRenderer();
             renderer.transform.SetParent(gameObject.transform, false);
 
             Quaternion rotation = renderer.transform.rotation;
@@ -228,7 +228,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
             textBase.SetParent(gameObject.transform, true);
             textBase.localPosition = Vector3.up * 5f;
 
-            indicator = Instantiate((TextMeshPro)AssetsStorage.texts["total_display"], textBase);
+            indicator = Instantiate((TextMeshPro)AssetStorage.texts["total_display"], textBase);
             indicator.text = "";
             indicator.gameObject.SetActive(true);
             indicator.rectTransform.sizeDelta = new Vector2(10f, 4f);
@@ -241,8 +241,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         internal protected void SetTexturesByBaseName(string name)
         {
-            activatedMaterial.mainTexture = AssetsStorage.textures[name + "_activated"];
-            deactivatedMaterial.mainTexture = AssetsStorage.textures[name + "_deactivated"];
+            activatedMaterial.mainTexture = AssetStorage.textures[name + "_activated"];
+            deactivatedMaterial.mainTexture = AssetStorage.textures[name + "_deactivated"];
         }
 
         private void Update()

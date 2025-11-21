@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using System;
@@ -58,14 +58,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
 
         public virtual void InitializePrefab(int variant)
         {
-            audTeleport = AssetsStorage.sounds["teleport"];
+            audTeleport = AssetStorage.sounds["teleport"];
 
             collider = gameObject.AddComponent<BoxCollider>();
             collider.size = new Vector3(5f, 5f, 5f);
             collider.isTrigger = true;
             collider.enabled = false;
             
-            spriteRenderer = ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_portal"]);
+            spriteRenderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_portal"]);
             spriteRenderer.transform.parent.parent = gameObject.transform;
             spriteRenderer.transform.localPosition = Vector3.zero;
 
@@ -96,7 +96,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
             shape.radius = 15f;
 
             ParticleSystemRenderer renderer = particleSystem.GetComponent<ParticleSystemRenderer>();
-            renderer.material = AssetsStorage.materials["qmark_sheet"];
+            renderer.material = AssetStorage.materials["qmark_sheet"];
 
             anim.enabled = true; //not enabled
             anim.numTilesX = 4;
@@ -253,7 +253,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
             Color color = Color.white;
             float percent = 1f;
 
-            if (appearing) audMan.PlaySingle(AssetsStorage.sounds["adv_magical_appearing"]);
+            if (appearing) audMan.PlaySingle(AssetStorage.sounds["adv_magical_appearing"]);
 
             if (OptionsDataManager.ExtraSettings.GetValue<bool>("particles"))
             {
@@ -337,7 +337,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
         {
             if (openPortal && Connected)
             {
-                spriteRenderer.sprite = AssetsStorage.sprites["adv_portal_opened"];
+                spriteRenderer.sprite = AssetStorage.sprites["adv_portal_opened"];
                 activated = true;
                 audMan.PlaySingle(audTeleport);
                 collider.enabled = true;
@@ -346,7 +346,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
             else
             {
                 activated = false;
-                spriteRenderer.sprite = AssetsStorage.sprites["adv_portal"];
+                spriteRenderer.sprite = AssetStorage.sprites["adv_portal"];
                 collider.enabled = false;
             }
         }

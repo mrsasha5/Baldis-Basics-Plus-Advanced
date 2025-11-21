@@ -76,7 +76,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispe
             EditorController.Instance.HoldUndo();
 
             GumDispenserExchangeHandler handler = EditorController.Instance.CreateUI<GumDispenserExchangeHandler>(
-                "GumDispenserConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/GumDispenserConfig.json");
+                "GumDispenserConfig", AssetHelper.modPath + "Compats/LevelStudio/UI/GumDispenserConfig.json");
             handler.OnInitialized(this);
             handler.Refresh();
         }

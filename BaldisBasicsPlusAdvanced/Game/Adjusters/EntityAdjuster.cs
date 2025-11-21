@@ -105,7 +105,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Adjusters
                 transform.gameObject.layer = ent.gameObject.layer;
                 GameObject gameObject = new GameObject();
                 gameObject.transform.parent = transform.transform;
-                gameObject.layer = LayersHelper.billboard;
+                gameObject.layer = LayerHelper.billboard;
                 SpriteRenderer spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
                 spriteRenderer.material = new Material(ObjectCreators.SpriteMaterial);
                 spriteRenderer.name = "Sprite";
@@ -135,7 +135,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Adjusters
 
         public EntityAdjuster SetLayer(string layer)
         {
-            this.layer = LayersHelper.LayerFromName(layer);
+            this.layer = LayerHelper.LayerFromName(layer);
             return this;
         }
 

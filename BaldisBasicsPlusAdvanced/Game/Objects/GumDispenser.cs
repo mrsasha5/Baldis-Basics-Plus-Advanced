@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Projectiles;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
@@ -77,14 +76,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             {
                 uses--;
                 if (time <= 0f) time = cooldownTime;
-                GumProjectile gum = Object.Instantiate(ObjectsStorage.Objects["gum"].GetComponent<GumProjectile>());
+                GumProjectile gum = Object.Instantiate(ObjectStorage.Objects["gum"].GetComponent<GumProjectile>());
                 gum.Initialize(ec, transform.position + transform.forward * 2f, this);
                 gum.Reset();
                 gum.transform.forward = -transform.forward;
 
                 createdGums.Add(gum);
 
-                audMan.PlaySingle(AssetsStorage.sounds["spit"]);
+                audMan.PlaySingle(AssetStorage.sounds["spit"]);
 
                 if (animator != null)
                 {
@@ -127,11 +126,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             childObj.transform.rotation = rotation;
 
             renderer = childObj.AddComponent<MeshRenderer>();
-            renderer.material = new Material(AssetsStorage.materials["belt"]);
-            renderer.material.mainTexture = AssetsStorage.textures["adv_gum_dispenser"];
+            renderer.material = new Material(AssetStorage.materials["belt"]);
+            renderer.material.mainTexture = AssetStorage.textures["adv_gum_dispenser"];
 
             MeshFilter meshFilter = childObj.AddComponent<MeshFilter>();
-            meshFilter.mesh = AssetsStorage.meshes["quad"];
+            meshFilter.mesh = AssetStorage.meshes["quad"];
         }
 
         

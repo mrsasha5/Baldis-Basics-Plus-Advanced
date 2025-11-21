@@ -98,7 +98,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Pulley
         public void SettingsClicked()
         {
             PulleyExchangeHandler handler = EditorController.Instance.CreateUI<PulleyExchangeHandler>(
-                "PulleyConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/PulleyConfig.json");
+                "PulleyConfig", AssetHelper.modPath + "Compats/LevelStudio/UI/PulleyConfig.json");
             handler.OnInitialized(this);
             handler.Refresh();
         }

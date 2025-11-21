@@ -17,7 +17,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             {
                 new WeightedGameObject()
                 {
-                    selection = ObjectsStorage.Objects["plate"],
+                    selection = ObjectStorage.Objects["plate"],
                     weight = 100
                 }
             };

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BaldisBasicsPlusAdvanced.Generation.Data;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Helpers

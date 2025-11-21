@@ -12,7 +12,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems.Food
 
         public void InitializePrefab(int variant)
         {
-            dough = ObjectsStorage.Entities["Dough"].GetComponent<GroundDough>();
+            dough = ObjectStorage.Entities["Dough"].GetComponent<GroundDough>();
         }
 
         public override bool Use(PlayerManager pm)

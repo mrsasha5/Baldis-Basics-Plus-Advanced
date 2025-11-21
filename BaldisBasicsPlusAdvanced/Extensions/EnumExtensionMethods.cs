@@ -10,15 +10,15 @@ namespace BaldisBasicsPlusAdvanced.Extensions
             switch (rewardType)
             {
                 case RewardType.PerfectItem:
-                    return TagsStorage.perfectRate;
+                    return TagStorage.perfectRate;
                 case RewardType.GoodItem:
-                    return TagsStorage.goodRate;
+                    return TagStorage.goodRate;
                 case RewardType.NormalItem:
-                    return TagsStorage.normalRate;
+                    return TagStorage.normalRate;
                 case RewardType.CommonItem:
-                    return TagsStorage.commonRate;
+                    return TagStorage.commonRate;
                 default:
-                    return TagsStorage.noneRate;
+                    return TagStorage.noneRate;
             }
         }
     }

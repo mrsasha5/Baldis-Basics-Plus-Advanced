@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -67,15 +67,15 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs
         {
             transform.localScale = new Vector3(2f, 1f, 1f);
 
-            audShred = AssetsStorage.sounds["buzz_lose"];
-            audReap = AssetsStorage.sounds["adv_reaper_gotta_reap"];
+            audShred = AssetStorage.sounds["buzz_lose"];
+            audReap = AssetStorage.sounds["adv_reaper_gotta_reap"];
             speed = 5f;
             motorVolume = 1f;
             warmingSpeed = 0.1f;
             coolingSpeed = 0.01f;
             particlesRateOverDistance = 100;
 
-            renderer = ObjectsCreator.CreateSpriteRenderer(AssetsStorage.sprites["adv_reaper"], isBillboard: false);
+            renderer = ObjectCreator.CreateSpriteRenderer(AssetStorage.sprites["adv_reaper"], isBillboard: false);
             renderer.transform.SetParent(transform, false);
             renderer.transform.localPosition = Vector3.up * 95f;
 
@@ -89,18 +89,18 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs
             audMan = gameObject.AddComponent<AudioManager>();
             audMan.audioDevice = audSource;
 
-            motorAudMan = ObjectsCreator.CreateAudMan(Vector3.zero);
+            motorAudMan = ObjectCreator.CreateAudMan(Vector3.zero);
             motorAudMan.name = "Motor";
             motorAudMan.transform.SetParent(transform, false);
             motorAudMan.audioDevice.volume = 0f;
             motorAudMan.volumeModifier = 0f;
             ReflectionHelper.SetValue(motorAudMan, "soundOnStart", new SoundObject[]
             {
-                AssetsStorage.sounds["adv_motor_loop"]
+                AssetStorage.sounds["adv_motor_loop"]
             });
             ReflectionHelper.SetValue(motorAudMan, "loopOnStart", true);
 
-            buzzerAudMan = ObjectsCreator.CreateAudMan(Vector3.zero);
+            buzzerAudMan = ObjectCreator.CreateAudMan(Vector3.zero);
             buzzerAudMan.name = "Buzzer";
             buzzerAudMan.transform.SetParent(transform, false);
             buzzerAudMan.audioDevice.volume = 0.5f;
@@ -123,8 +123,8 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs
             particleSystem.transform.localPosition = Vector3.up * -5f;
 
             ParticleSystemRenderer particlesRenderer = particleSystem.GetComponent<ParticleSystemRenderer>();
-            particlesRenderer.material = AssetsHelper.LoadAsset<Material>("DustTest");
-            particlesRenderer.material.shader = AssetsStorage.graphsStandardShader;
+            particlesRenderer.material = AssetHelper.LoadAsset<Material>("DustTest");
+            particlesRenderer.material.shader = AssetStorage.graphsStandardShader;
             particlesRenderer.material.SetColor(Color.gray);
 
             MainModule main = particleSystem.main;

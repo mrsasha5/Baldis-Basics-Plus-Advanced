@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using BaldisBasicsPlusAdvanced.Game.Events;
@@ -92,15 +91,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
 
             renderers = new MeshRenderer[6];
 
-            sideMat = new Material(AssetsStorage.materials["belt"]);
-            signSideMat = new Material(AssetsStorage.materials["belt"]);
-            topMat = new Material(AssetsStorage.materials["belt"]);
-            topFulledMat = new Material(AssetsStorage.materials["belt"]);
+            sideMat = new Material(AssetStorage.materials["belt"]);
+            signSideMat = new Material(AssetStorage.materials["belt"]);
+            topMat = new Material(AssetStorage.materials["belt"]);
+            topFulledMat = new Material(AssetStorage.materials["belt"]);
 
-            sideMat.mainTexture = AssetsStorage.textures["adv_ballot_front"];
-            signSideMat.mainTexture = AssetsStorage.textures["adv_ballot_front_voting"];
-            topMat.mainTexture = AssetsStorage.textures["adv_ballot_empty_top"];
-            topFulledMat.mainTexture = AssetsStorage.textures["adv_ballot_top"];
+            sideMat.mainTexture = AssetStorage.textures["adv_ballot_front"];
+            signSideMat.mainTexture = AssetStorage.textures["adv_ballot_front_voting"];
+            topMat.mainTexture = AssetStorage.textures["adv_ballot_empty_top"];
+            topFulledMat.mainTexture = AssetStorage.textures["adv_ballot_top"];
 
             BoxCollider collider = gameObject.AddComponent<BoxCollider>();
             collider.size = new Vector3(15f, 10f, 15f);
@@ -115,7 +114,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
 
             transform.localScale = Vector3.one * 0.4f;
 
-            timer = ObjectsCreator.CreateBobTimerText(null);
+            timer = ObjectCreator.CreateBobTimerText(null);
             timer.transform.parent.transform.position = Vector3.up * 5.6f;
             timer.transform.parent.transform.parent = transform;
 
@@ -131,7 +130,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
         {
             List<WeightedCouncilTopic> potentialTopics = new List<WeightedCouncilTopic>();
 
-            foreach (List<WeightedCouncilTopic> topics in ObjectsStorage.Topics.Values)
+            foreach (List<WeightedCouncilTopic> topics in ObjectStorage.Topics.Values)
             {
                 foreach (WeightedCouncilTopic topic in topics)
                 {
@@ -215,7 +214,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
 
         private void InitializeMenu(int player)
         {
-            chalkboardMenu = Instantiate(ObjectsStorage.Objects["chalkboard_menu"].GetComponent<ChalkboardMenu>());
+            chalkboardMenu = Instantiate(ObjectStorage.Objects["chalkboard_menu"].GetComponent<ChalkboardMenu>());
             CoreManagerPausePatch.onPause += OnPause;
             CoreManagerPausePatch.onUnpause += OnUnpause;
 
@@ -274,7 +273,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
                 rejectText.GetComponent<RectTransform>().sizeDelta = buttonSize;
                 rejectText.alignment = TextAlignmentOptions.Top;
 
-                StandardMenuButton supportButton = ObjectsCreator.AddButtonProperties(supportText, buttonSize, true);
+                StandardMenuButton supportButton = ObjectCreator.AddButtonProperties(supportText, buttonSize, true);
 
                 supportButton.OnPress.AddListener(delegate ()
                 {
@@ -287,7 +286,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
                     DestroyMenu(player);
                 });
 
-                StandardMenuButton rejectButton = ObjectsCreator.AddButtonProperties(rejectText, buttonSize, true);
+                StandardMenuButton rejectButton = ObjectCreator.AddButtonProperties(rejectText, buttonSize, true);
 
                 rejectButton.OnPress.AddListener(delegate ()
                 {
@@ -368,7 +367,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
             }
 
             votes.Add(vote);
-            audMan.PlaySingle(AssetsStorage.sounds["adv_throwing_vote"]);
+            audMan.PlaySingle(AssetStorage.sounds["adv_throwing_vote"]);
 
             return true;
         }
@@ -457,7 +456,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
             renderers[index].material = mat;
 
             MeshFilter meshFilter = childObj.AddComponent<MeshFilter>();
-            meshFilter.mesh = AssetsStorage.meshes["quad"];
+            meshFilter.mesh = AssetStorage.meshes["quad"];
         }
 
         private class InteractionObject : MonoBehaviour, IClickable<int>, IPrefab

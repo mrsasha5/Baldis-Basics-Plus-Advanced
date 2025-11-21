@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BepInEx;
@@ -71,17 +71,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
             this.originalText = originalText;
 
-            audMan = ObjectsCreator.CreateAudMan(gameObject);
+            audMan = ObjectCreator.CreateAudMan(gameObject);
             audMan.ignoreListenerPause = true;
             audMan.useUnscaledPitch = true;
             ReflectionHelper.SetValue<bool>(audMan, "disableSubtitles", true);
 
             Image image =
-                UIHelpers.CreateImage(AssetsStorage.spriteSheets["adv_tips_screen"][0], transform, Vector3.zero, false);
+                UIHelpers.CreateImage(AssetStorage.spriteSheets["adv_tips_screen"][0], transform, Vector3.zero, false);
             image.rectTransform.localScale = new Vector3(1.105f, 1.105f, 1f);
 
             Image imageForward =
-                UIHelpers.CreateImage(AssetsStorage.sprites["adv_tip_screen_forward"], transform, Vector3.zero, false);
+                UIHelpers.CreateImage(AssetStorage.sprites["adv_tip_screen_forward"], transform, Vector3.zero, false);
             imageForward.rectTransform.localScale = image.rectTransform.localScale;
             imageForward.gameObject.AddComponent<Mask>();
             imageForward.gameObject.SetActive(false);
@@ -130,7 +130,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
         private void ShowTip()
         {
             tmp.enabled = true;
-            images[1].sprite = AssetsStorage.sprites["adv_tip_screen_forward"];
+            images[1].sprite = AssetStorage.sprites["adv_tip_screen_forward"];
         }
 
         private void PrepareHideTip()
@@ -146,7 +146,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
         private void OnStaticStart()
         {
-            audMan.QueueAudio(AssetsStorage.sounds["static"]);
+            audMan.QueueAudio(AssetStorage.sounds["static"]);
             audMan.SetLoop(true);
         }
 
@@ -158,13 +158,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
         public void Activate()
         {
             gameObject.SetActive(true);
-            QueueAnimation(images[0], AssetsStorage.spriteSheets["adv_tips_screen"], time: 0.75f, 
+            QueueAnimation(images[0], AssetStorage.spriteSheets["adv_tips_screen"], time: 0.75f, 
                 onAnimationEnd: delegate() { PrepareShowTip(); activated = true; });
         }
 
         public void Deactivate()
         {
-            QueueAnimation(images[0], AssetsStorage.spriteSheets["adv_tips_screen_reversed"], time: 0.75f,
+            QueueAnimation(images[0], AssetStorage.spriteSheets["adv_tips_screen_reversed"], time: 0.75f,
                 onAnimationStart: delegate () { PrepareHideTip(); activated = false; });
         }
 
@@ -238,7 +238,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
             onAnimationStart += OnStaticStart;
             onAnimationEnd += OnStaticEnd;
             staticAnimatation = RepeatableAnimator(
-                images[1], AssetsStorage.spriteSheets["adv_tip_screen_forward_static_sheet"],
+                images[1], AssetStorage.spriteSheets["adv_tip_screen_forward_static_sheet"],
                     time: 0.25f, speed: 10f, onAnimationStart, onAnimationEnd);
         }
 

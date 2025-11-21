@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -24,7 +23,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Pickups
 
         protected override void OnCreationPost()
         {
-            renderer.sprite = AssetsStorage.sprites["adv_expel_hammer"];
+            renderer.sprite = AssetStorage.sprites["adv_expel_hammer"];
             purchasable = !LevelDataManager.LevelData.hammerPurchased;
             SetSaleState(purchasable);
             desc = "Adv_Item_ExpelHammer_Desc";
@@ -38,7 +37,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Pickups
 
             if (Vector3.Distance(pm.transform.position, transform.position) > 20f)
             {
-                Singleton<BaseGameManager>.Instance.Ec.GetAudMan().PlaySingle(AssetsStorage.sounds["bal_break"]);
+                Singleton<BaseGameManager>.Instance.Ec.GetAudMan().PlaySingle(AssetStorage.sounds["bal_break"]);
                 DestroyMenu(0);
             }
         }
@@ -80,7 +79,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Pickups
         {
             int boughtHammerPrice = (int)(LevelDataManager.LevelData.boughtHammerPrice * 0.85f);
 
-            chalkboardMenu = Instantiate(ObjectsStorage.Objects["chalkboard_menu"].GetComponent<ChalkboardMenu>());
+            chalkboardMenu = Instantiate(ObjectStorage.Objects["chalkboard_menu"].GetComponent<ChalkboardMenu>());
 
             Destroy(CursorController.Instance.gameObject); //reinit cursor
 
@@ -105,7 +104,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Pickups
             agreeText.GetComponent<RectTransform>().sizeDelta = size;
             agreeText.alignment = TextAlignmentOptions.Top;
 
-            StandardMenuButton agreeButton = ObjectsCreator.AddButtonProperties(agreeText, size, true);
+            StandardMenuButton agreeButton = ObjectCreator.AddButtonProperties(agreeText, size, true);
 
             agreeButton.OnPress.AddListener(delegate ()
             {

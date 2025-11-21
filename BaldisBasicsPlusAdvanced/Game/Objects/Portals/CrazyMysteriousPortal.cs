@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Helpers;
 using UnityEngine;
 
@@ -28,14 +28,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
         {
             base.InitializePrefab(variant);
 
-            selfTeleportAudMan = ObjectsCreator.CreatePropagatedAudMan(Vector3.zero);
+            selfTeleportAudMan = ObjectCreator.CreatePropagatedAudMan(Vector3.zero);
             selfTeleportAudMan.transform.SetParent(transform, false);
 
             minMaxTime = new Vector2(10f, 30f);
 
-            audPortalStartsTeleporting = AssetsStorage.sounds["adv_portal_starts_teleport"];
-            audPortalTeleports = AssetsStorage.sounds["adv_portal_teleports"];
-            audBuzz = AssetsStorage.sounds["buzz_lose"];
+            audPortalStartsTeleporting = AssetStorage.sounds["adv_portal_starts_teleport"];
+            audPortalTeleports = AssetStorage.sounds["adv_portal_teleports"];
+            audBuzz = AssetStorage.sounds["buzz_lose"];
         }
 
         public void StartTimer()
@@ -88,7 +88,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
                 yield return null;
             }
 
-            AudioManager teleportAudMan = ObjectsCreator.CreatePropagatedAudMan(transform.position, true);
+            AudioManager teleportAudMan = ObjectCreator.CreatePropagatedAudMan(transform.position, true);
                 teleportAudMan.PlaySingle(audTeleport);
 
             transform.position = ec.RandomCell(includeOffLimits: false, includeWithObjects: false, useEntitySafeCell: true)

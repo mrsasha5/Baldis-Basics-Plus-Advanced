@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
@@ -63,14 +63,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
             Material[] materials = meshRenderer.materials;
 
-            materials[0] = new Material(AssetsStorage.materials["math_front_normal"]);
-            materials[1] = new Material(AssetsStorage.materials["math_side"]);
+            materials[0] = new Material(AssetStorage.materials["math_front_normal"]);
+            materials[1] = new Material(AssetStorage.materials["math_side"]);
             materials[2] = materials[1];
 
             materials[0].SetMainTexture(
-                AssetsHelper.TextureFromFile("Textures/Activities/AdvancedMathMachine/Adv_AdvancedMathMachine_Front.png"));
+                AssetHelper.TextureFromFile("Textures/Activities/AdvancedMathMachine/Adv_AdvancedMathMachine_Front.png"));
             materials[1].SetMainTexture(
-                AssetsHelper.TextureFromFile("Textures/Activities/AdvancedMathMachine/Adv_AdvancedMathMachine_Side.png"));
+                AssetHelper.TextureFromFile("Textures/Activities/AdvancedMathMachine/Adv_AdvancedMathMachine_Side.png"));
 
             meshRenderer.materials = materials;
 
@@ -82,10 +82,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                 new Material(ReflectionHelper.GetValue<Material>(this, "defaultMat")));
 
             ReflectionHelper.GetValue<Material>(this, "correctMat")
-                .SetMainTexture(AssetsHelper.TextureFromFile(
+                .SetMainTexture(AssetHelper.TextureFromFile(
                     "Textures/Activities/AdvancedMathMachine/Adv_AdvancedMathMachine_Front_Correct.png"));
             ReflectionHelper.GetValue<Material>(this, "incorrectMat")
-                .SetMainTexture(AssetsHelper.TextureFromFile(
+                .SetMainTexture(AssetHelper.TextureFromFile(
                     "Textures/Activities/AdvancedMathMachine/Adv_AdvancedMathMachine_Front_Wrong.png"));
             ReflectionHelper.GetValue<Material>(this, "defaultMat")
                 .SetMainTexture(materials[0].mainTexture);
@@ -115,17 +115,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             {
                 new WeightedSelection<SoundObject>()
                 {
-                    selection = AssetsStorage.sounds["adv_bal_great_job"],
+                    selection = AssetStorage.sounds["adv_bal_great_job"],
                     weight = 100
                 },
                 new WeightedSelection<SoundObject>()
                 {
-                    selection = AssetsStorage.sounds["adv_bal_fantastic"],
+                    selection = AssetStorage.sounds["adv_bal_fantastic"],
                     weight = 100
                 },
                 new WeightedSelection<SoundObject>()
                 {
-                    selection = AssetsStorage.sounds["adv_bal_incredible"],
+                    selection = AssetStorage.sounds["adv_bal_incredible"],
                     weight = 100
                 }
             };

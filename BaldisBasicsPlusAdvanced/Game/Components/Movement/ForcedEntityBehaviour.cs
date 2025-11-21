@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Helpers;
 using UnityEngine;
 
@@ -38,14 +38,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.Movement
             direction = raycastDirection;
             this.makesNoises = makesNoises;
 
-            audMan = ObjectsCreator.CreatePropagatedAudMan(entity.transform.position);
+            audMan = ObjectCreator.CreatePropagatedAudMan(entity.transform.position);
             
             if (entity is PlayerEntity)
             {
                 audMan.positional = false;
             }
             
-            audMan.QueueAudio(AssetsStorage.sounds["whoosh"]);
+            audMan.QueueAudio(AssetStorage.sounds["whoosh"]);
             audMan.SetLoop(true);
             audMan.transform.SetParent(entity.transform, true);
         }
@@ -60,7 +60,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.Movement
 
             if (entity.Velocity.magnitude >= slamMagnitude)
             {
-                if (Physics.Raycast(entity.transform.position, direction, out RaycastHit hit, slamDistance, LayersHelper.ignorableCollidableObjects))
+                if (Physics.Raycast(entity.transform.position, direction, out RaycastHit hit, slamDistance, LayerHelper.ignorableCollidableObjects))
                 {
                     if (hit.transform.tag == "Window" && hit.transform.TryGetComponent(out Window window) && !window.IsOpen)
                     {
@@ -68,7 +68,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.Movement
                     }
                 }
 
-                if (Physics.Raycast(entity.transform.position, direction, out RaycastHit _hit, slamDistance, LayersHelper.ignorableCollidableObjects, QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(entity.transform.position, direction, out RaycastHit _hit, slamDistance, LayerHelper.ignorableCollidableObjects, QueryTriggerInteraction.Ignore))
                 {
                     Bang();
                 }
@@ -93,7 +93,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.Movement
 
         private void PlayBang()
         {
-            ObjectsCreator.CreatePropagatedAudMan(transform.position, destroyWhenAudioEnds: true).PlaySingle(AssetsStorage.sounds["bang"]);
+            ObjectCreator.CreatePropagatedAudMan(transform.position, destroyWhenAudioEnds: true).PlaySingle(AssetStorage.sounds["bang"]);
             if (makesNoises) ec.MakeNoise(transform.position, 64); //like First Prize
         }
 

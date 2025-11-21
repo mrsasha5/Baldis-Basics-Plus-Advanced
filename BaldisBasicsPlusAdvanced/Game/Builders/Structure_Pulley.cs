@@ -26,7 +26,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
         public void InitializePrefab(int variant)
         {
-            pulleyPre = ObjectsStorage.Objects["pulley"].GetComponent<Pulley>();
+            pulleyPre = ObjectStorage.Objects["pulley"].GetComponent<Pulley>();
             offsetFromCenter = 2f;
             shapes = TileShapeMask.Corner | TileShapeMask.Straight | TileShapeMask.End | TileShapeMask.Single;
             coverage = CellCoverage.Center;
@@ -97,12 +97,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         {
             Pulley pulley = Instantiate(pulleyPre, ec.transform);
 
-            MeshRenderer backgroundRenderer = ObjectsCreator.CreateQuadRenderer();
+            MeshRenderer backgroundRenderer = ObjectCreator.CreateQuadRenderer();
             backgroundRenderer.name = "PulleyBackgroundRenderer";
             backgroundRenderer.transform.SetParent(cell.room.objectObject.transform, false);
             backgroundRenderer.transform.position = cell.CenterWorldPosition - Directions.ToVector3(dir) * 5f;
 
-            MeshRenderer meshRenderer = ObjectsCreator.CreateQuadRenderer();
+            MeshRenderer meshRenderer = ObjectCreator.CreateQuadRenderer();
             meshRenderer.name = "PulleyRenderer";
             meshRenderer.transform.SetParent(backgroundRenderer.transform.parent, false);
             meshRenderer.transform.localScale = new Vector3(3f, 3f, 1f);

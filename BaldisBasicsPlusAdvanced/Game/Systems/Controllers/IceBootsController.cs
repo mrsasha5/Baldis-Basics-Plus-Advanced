@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -76,7 +76,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 if (ReflEvent_IsPushable(npc))
                 {
                     entity.AddForce(new Force(forward, pushSpeed, pushAcceleration));
-                    ec.GetAudMan().PlaySingle(AssetsStorage.sounds["bang"]);
+                    ec.GetAudMan().PlaySingle(AssetStorage.sounds["bang"]);
                     ec.MakeNoise(entity.transform.position, 64); //like First Prize
                     ReflEvent_OnIceBootsHit(npc, pm);
                 }
@@ -96,7 +96,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 return;
             }
 
-            if (speed > minSpeedToBreak && Physics.Raycast(entity.transform.position, forward, out hit, distanceToBreak, LayersHelper.ignorableCollidableObjects))
+            if (speed > minSpeedToBreak && Physics.Raycast(entity.transform.position, forward, out hit, distanceToBreak, LayerHelper.ignorableCollidableObjects))
             {
                 //ray don't ignores any colliders
                 if (hit.transform.tag == "Window" && hit.transform.TryGetComponent(out Window window) && !window.IsOpen)
@@ -109,10 +109,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 }
             }
 
-            if (speed > minSpeedToBreak && Physics.Raycast(entity.transform.position, forward, out hit, distanceToBreak, LayersHelper.ignorableCollidableObjects, QueryTriggerInteraction.Ignore)
+            if (speed > minSpeedToBreak && Physics.Raycast(entity.transform.position, forward, out hit, distanceToBreak, LayerHelper.ignorableCollidableObjects, QueryTriggerInteraction.Ignore)
             && !hit.collider.isTrigger)
             {
-                BreakBoots(AssetsStorage.sounds["bang"]);
+                BreakBoots(AssetStorage.sounds["bang"]);
                 ec.MakeNoise(entity.transform.position, 64); //like First Prize
                 //return;
             }
@@ -144,7 +144,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                     entity.ExternalActivity.moveMods.Remove(zeroMoveMod);
                 }
 
-                if (soundToPlay == null) soundToPlay = AssetsStorage.sounds["bal_break"];
+                if (soundToPlay == null) soundToPlay = AssetStorage.sounds["bal_break"];
 
                 ec.GetAudMan().PlaySingle(soundToPlay);
                 entity.ExternalActivity.moveMods.Remove(moveMod);

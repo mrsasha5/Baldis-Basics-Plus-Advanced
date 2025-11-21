@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
@@ -22,7 +22,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         public override void InitializePrefab(int variant)
         {
             base.InitializePrefab(variant);
-            audProtection = AssetsStorage.sounds["adv_protection"];
+            audProtection = AssetStorage.sounds["adv_protection"];
         }
 
         protected override void SetValues(PlateData data)

@@ -90,7 +90,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private MysteriousPortal SpawnPortal(Vector3 position)
         {
             CrazyMysteriousPortal portal = 
-                Instantiate(ObjectsStorage.Objects["crazy_mysterious_portal"].GetComponent<CrazyMysteriousPortal>());
+                Instantiate(ObjectStorage.Objects["crazy_mysterious_portal"].GetComponent<CrazyMysteriousPortal>());
             portal.transform.position = position;
             portal.PostInitialize(ec, false);
             portal.StartTimer();

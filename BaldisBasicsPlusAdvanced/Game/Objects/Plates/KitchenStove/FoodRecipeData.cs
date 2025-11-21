@@ -22,7 +22,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         #region Values for poster
 
-        private static Texture2D posterTex = AssetsHelper.TextureFromFile("Textures/Posters/Adv_Poster_Recipe_Example.png");
+        private static Texture2D posterTex = AssetHelper.TextureFromFile("Textures/Posters/Adv_Poster_Recipe_Example.png");
 
         private static IntVector2[] posterRawFoodPositions = new IntVector2[]
                 { new IntVector2(23, -118), new IntVector2(61, -118),

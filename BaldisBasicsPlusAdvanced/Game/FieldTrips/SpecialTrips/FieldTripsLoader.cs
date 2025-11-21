@@ -62,7 +62,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips
         private static IEnumerator FieldTripLoader(FieldTripData data)
         {
             fieldTripLoadingScreen = UnityEngine.Object.Instantiate(
-                AssetsHelper.LoadAsset<Canvas>("FieldTripLoad"));
+                AssetHelper.LoadAsset<Canvas>("FieldTripLoad"));
             Singleton<GlobalCam>.Instance.FadeIn(UiTransition.Dither, 0.01666667f);
 
             PrevTimeScale = Time.timeScale;
@@ -149,11 +149,11 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips
             //LevelLoader
 
             ReflectionHelper.SetValue(gameInitializer, "ecPre",
-                AssetsHelper.LoadAsset<EnvironmentController>("Environment Controller"));
+                AssetHelper.LoadAsset<EnvironmentController>("Environment Controller"));
             ReflectionHelper.SetValue(gameInitializer, "generatorPre",
-                AssetsHelper.LoadAsset<LevelGenerator>("LevelGenerator"));
+                AssetHelper.LoadAsset<LevelGenerator>("LevelGenerator"));
             ReflectionHelper.SetValue(gameInitializer, "loaderPre",
-                AssetsHelper.LoadAsset<LevelLoader>("LevelLoader"));
+                AssetHelper.LoadAsset<LevelLoader>("LevelLoader"));
             ReflectionHelper.SetValue(gameInitializer, "sceneObject", data.sceneObject);
 
             gameObject.SetActive(true);
@@ -184,7 +184,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips
             if (showFieldTripScreen)
             {
                 fieldTripLoadingScreen = UnityEngine.Object.Instantiate(
-                AssetsHelper.LoadAsset<Canvas>("FieldTripLoad"));
+                AssetHelper.LoadAsset<Canvas>("FieldTripLoad"));
                 SceneManager.MoveGameObjectToScene(fieldTripLoadingScreen.gameObject, PrevScene);
             }
 

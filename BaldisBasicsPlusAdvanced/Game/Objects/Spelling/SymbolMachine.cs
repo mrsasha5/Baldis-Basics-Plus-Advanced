@@ -1,6 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
@@ -120,13 +119,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         public void InitializePrefab(int variant)
         {
-            audCorrect = AssetsStorage.sounds["activity_correct"];
-            audIncorrect = AssetsStorage.sounds["activity_incorrect"];
-            audBell = AssetsStorage.sounds["bell"];
-            audBeep = AssetsStorage.sounds["adv_beep"];
-            audReinit = AssetsStorage.sounds["adv_symbol_machine_reinit"];
+            audCorrect = AssetStorage.sounds["activity_correct"];
+            audIncorrect = AssetStorage.sounds["activity_incorrect"];
+            audBell = AssetStorage.sounds["bell"];
+            audBeep = AssetStorage.sounds["adv_beep"];
+            audReinit = AssetStorage.sounds["adv_symbol_machine_reinit"];
 
-            audMan = ObjectsCreator.CreateAudMan(Vector3.zero);
+            audMan = ObjectCreator.CreateAudMan(Vector3.zero);
             audMan.transform.SetParent(transform, false);
 
             texts = new List<TextMeshPro>();
@@ -138,16 +137,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             ReflectionHelper.SetValue<MonoBehaviour>(link, "link", this);
 
             model.AddComponent<MeshFilter>()
-                .mesh = AssetsHelper.LoadAsset<Mesh>("MathMachine_Final_Mesh");
+                .mesh = AssetHelper.LoadAsset<Mesh>("MathMachine_Final_Mesh");
             meshRenderer = model.AddComponent<MeshRenderer>();
 
             Material[] materials = new Material[3];
-            materials[0] = new Material(AssetsStorage.materials["math_front_normal"]);
-            materials[1] = new Material(AssetsStorage.materials["math_side"]);
+            materials[0] = new Material(AssetStorage.materials["math_front_normal"]);
+            materials[1] = new Material(AssetStorage.materials["math_side"]);
             materials[2] = materials[1];
 
-            materials[0].SetMainTexture(AssetsStorage.textures["adv_symbol_machine_face"]);
-            materials[1].SetMainTexture(AssetsStorage.textures["adv_symbol_machine_side"]);
+            materials[0].SetMainTexture(AssetStorage.textures["adv_symbol_machine_face"]);
+            materials[1].SetMainTexture(AssetStorage.textures["adv_symbol_machine_side"]);
 
             meshRenderer.materials = materials;
 
@@ -328,7 +327,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         private void GenerateProblem()
         {
-            if (ObjectsStorage.SymbolMachineWords.Count > 0)
+            if (ObjectStorage.SymbolMachineWords.Count > 0)
             {
                 List<string> words = ApiManager.GetAllSymbolMachineWords();
 
@@ -449,14 +448,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             RewardType[] itemTypes = new RewardType[] { RewardType.PerfectItem, RewardType.GoodItem, RewardType.NormalItem, RewardType.CommonItem };
             if (itemTypes.Contains(rewardType))
             {
-                string qualityTag = TagsStorage.noneRate;
+                string qualityTag = TagStorage.noneRate;
                 qualityTag = rewardType.ConvertToTag();
 
-                ItemMetaData[] metas = ItemMetaStorage.Instance.FindAll(x => x.tags.Contains(TagsStorage.symbolMachinePotentialReward) 
+                ItemMetaData[] metas = ItemMetaStorage.Instance.FindAll(x => x.tags.Contains(TagStorage.symbolMachinePotentialReward) 
                     && x.tags.Contains(qualityTag));
                 if (metas.Length > 0)
                 {
-                    reward = Instantiate(AssetsStorage.pickup, transform);
+                    reward = Instantiate(AssetStorage.pickup, transform);
                     reward.transform.localPosition = new Vector3(0f, 5f, -5f);
 
                     ItemObject item = metas[Random.Range(0, metas.Length)].value;
@@ -535,7 +534,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             _faceName = assetKey;
             Material[] materials = meshRenderer.materials;
 
-            materials[0].SetMainTexture(AssetsStorage.textures[assetKey]);
+            materials[0].SetMainTexture(AssetStorage.textures[assetKey]);
         }
 
         public void SetRewardType(RewardType rewardType, int symbolPrice)
@@ -589,7 +588,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         private Spelloon SpawnSpelloon(string symbol)
         {
-            Spelloon spelloon = Instantiate(ObjectsStorage.Spelloons["spelloon_" + symbol], transform.parent);
+            Spelloon spelloon = Instantiate(ObjectStorage.Spelloons["spelloon_" + symbol], transform.parent);
             spelloon.Initialize(spelloons.Count);
             spelloon.Floater.Initialize(room);
             spelloon.symbolMachine = this;
@@ -600,7 +599,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 
         private Spelloon SpawnSpelloon(string symbol, int listIndex)
         {
-            Spelloon spelloon = Instantiate(ObjectsStorage.Spelloons["spelloon_" + symbol], transform.parent);
+            Spelloon spelloon = Instantiate(ObjectStorage.Spelloons["spelloon_" + symbol], transform.parent);
             spelloon.Initialize(listIndex);
             spelloon.Floater.Initialize(room);
             spelloon.symbolMachine = this;

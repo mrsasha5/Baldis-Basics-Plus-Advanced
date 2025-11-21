@@ -2,8 +2,8 @@
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
+using BaldisBasicsPlusAdvanced.Cache;
 
 namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 {
@@ -125,7 +125,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
         private void OnUsed(PlayerManager pm)
         {
-            pm.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["hammer"]);
+            pm.ec.GetAudMan().PlaySingle(AssetStorage.sounds["hammer"]);
             pm.RuleBreak("Bullying", 1f);
             Destroy(gameObject);
         }

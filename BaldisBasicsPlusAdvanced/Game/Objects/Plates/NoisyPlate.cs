@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using System.Collections;
 using System.Collections.Generic;
@@ -41,7 +41,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         public override void InitializePrefab(int variant)
         {
             base.InitializePrefab(variant);
-            audAlarm = AssetsStorage.sounds["buzz_elv"]; //adv_emergency
+            audAlarm = AssetStorage.sounds["buzz_elv"]; //adv_emergency
 
             cooldown = 60f;
             generosity = 1;

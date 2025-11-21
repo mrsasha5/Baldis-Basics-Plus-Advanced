@@ -30,11 +30,11 @@ namespace BaldisBasicsPlusAdvanced.Patches.FieldTrips
         [HarmonyPrefix]
         private static bool OnStartFieldTrip(PlayerManager player, ref bool ___unlocked)
         {
-            if ((player.itm.Has(ObjectsStorage.ItemObjects["MysteriousBusPass"].itemType) && !___unlocked) || unlockedTrip)
+            if ((player.itm.Has(ObjectStorage.ItemObjects["MysteriousBusPass"].itemType) && !___unlocked) || unlockedTrip)
             {
                 if (!unlockedTrip)
                 {
-                    player.itm.Remove(ObjectsStorage.ItemObjects["MysteriousBusPass"].itemType);
+                    player.itm.Remove(ObjectStorage.ItemObjects["MysteriousBusPass"].itemType);
                     unlockedTrip = true;
                     ___unlocked = true;
                 }

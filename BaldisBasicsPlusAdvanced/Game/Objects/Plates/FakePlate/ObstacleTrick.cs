@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Helpers;
 using System.Collections;
 using UnityEngine;
@@ -33,7 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
         {
             base.OnPostInitialization();
             cell = Plate.Ec.CellFromPosition(transform.position);
-            renderer = ObjectsCreator.CreateSpriteRendererBase(AssetsStorage.sprites["adv_obstacle_trick"]);
+            renderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_obstacle_trick"]);
             renderer.transform.parent.SetParent(Plate.transform, false);
             renderer.transform.localPosition = Vector3.up * -5f;
             renderer.gameObject.SetActive(false);

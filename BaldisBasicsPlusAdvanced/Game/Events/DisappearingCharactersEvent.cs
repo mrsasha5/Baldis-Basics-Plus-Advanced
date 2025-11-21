@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI.Registers;
@@ -50,7 +49,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             if (npcs.Count == 0) yield break;
 
             float time = cooldown;
-            ObjectsCreator.AddChalkCloudEffect(npcs[0], effectTime, ec);
+            ObjectCreator.AddChalkCloudEffect(npcs[0], effectTime, ec);
             while (npcs.Count > 0)
             {
                 time -= Time.deltaTime * ec.EnvironmentTimeScale;
@@ -59,7 +58,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                     NPC npc = npcs[0];
                     if (npcs.Count > 1)
                     {
-                        ObjectsCreator.AddChalkCloudEffect(npcs[1], effectTime, ec);
+                        ObjectCreator.AddChalkCloudEffect(npcs[1], effectTime, ec);
                     }
                     Disappear(npc, true);
                     npcs.Remove(npc);
@@ -81,7 +80,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private List<NPC> GetAvailableNPCs()
         {
             List<NPC> npcs = ec.Npcs.FindAll(x => x.GetMeta() == null || 
-                !x.GetMeta().tags.Contains(TagsStorage.disappearingCharactersEventImmunity));
+                !x.GetMeta().tags.Contains(TagStorage.disappearingCharactersEventImmunity));
             npcs.Mix();
             return npcs;
         }
@@ -90,15 +89,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         {
             npc.GetComponent<Entity>().SetVisible(!hide);
 
-            AudioManager audMan = ObjectsCreator.CreatePropagatedAudMan(Vector3.zero, destroyWhenAudioEnds: true);
+            AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(Vector3.zero, destroyWhenAudioEnds: true);
             audMan.transform.SetParent(npc.transform, false);
             
             if (hide)
             {
-                audMan.PlaySingle(AssetsStorage.sounds["adv_disappearing"]);
+                audMan.PlaySingle(AssetStorage.sounds["adv_disappearing"]);
             } else
             {
-                audMan.PlaySingle(AssetsStorage.sounds["adv_appearing"]);
+                audMan.PlaySingle(AssetStorage.sounds["adv_appearing"]);
             }
         }
 

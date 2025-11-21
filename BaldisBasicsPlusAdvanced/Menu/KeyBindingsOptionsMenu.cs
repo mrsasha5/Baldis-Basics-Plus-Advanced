@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using BaldisBasicsPlusAdvanced.SaveSystem.Data;
@@ -58,11 +58,11 @@ namespace BaldisBasicsPlusAdvanced.Menu
                         moveableElements[i].position -= Vector3.up * distanceBetweenBindings;
                     }
                     clicks--;
-                }, AssetsStorage.sprites["menuArrow2"], "MoveUpUIButton", new Vector3(168f, 50f, 0f));
+                }, AssetStorage.sprites["menuArrow2"], "MoveUpUIButton", new Vector3(168f, 50f, 0f));
             arrowUpButton.transform.rotation = Quaternion.Euler(Vector3.forward * 270f);
             arrowUpButton.swapOnHigh = true;
-            arrowUpButton.highlightedSprite = AssetsStorage.sprites["menuArrow0"];
-            arrowUpButton.unhighlightedSprite = AssetsStorage.sprites["menuArrow2"];
+            arrowUpButton.highlightedSprite = AssetStorage.sprites["menuArrow0"];
+            arrowUpButton.unhighlightedSprite = AssetStorage.sprites["menuArrow2"];
 
             StandardMenuButton arrowDownButton =
                 CreateButton(delegate
@@ -73,11 +73,11 @@ namespace BaldisBasicsPlusAdvanced.Menu
                         moveableElements[i].position += Vector3.up * distanceBetweenBindings;
                     }
                     clicks++;
-                }, AssetsStorage.sprites["menuArrow2"], "MoveDownUIButton", new Vector3(168f, -130f, 0f));
+                }, AssetStorage.sprites["menuArrow2"], "MoveDownUIButton", new Vector3(168f, -130f, 0f));
             arrowDownButton.transform.rotation = Quaternion.Euler(Vector3.forward * 90f);
             arrowDownButton.swapOnHigh = true;
-            arrowDownButton.highlightedSprite = AssetsStorage.sprites["menuArrow0"];
-            arrowDownButton.unhighlightedSprite = AssetsStorage.sprites["menuArrow2"];
+            arrowDownButton.highlightedSprite = AssetStorage.sprites["menuArrow0"];
+            arrowDownButton.unhighlightedSprite = AssetStorage.sprites["menuArrow2"];
 
             //Bindings buttons and reset button
 
@@ -156,7 +156,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
                         
                     }
 
-                    GetComponentInParent<AudioManager>().PlaySingle(AssetsStorage.sounds["teleport"]);
+                    GetComponentInParent<AudioManager>().PlaySingle(AssetStorage.sounds["teleport"]);
                 }, "Reset", "Adv_Reset", new Vector3(130f, -162f, 0f),
                         BaldiFonts.ComicSans24, TextAlignmentOptions.TopRight, new Vector2(100f, 32f), Color.black);
             }
@@ -165,7 +165,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
         private void OnPressTextButton(StandardMenuButton keyButton, KeyBindingData data)
         {
-            keyButton.GetComponentInParent<AudioManager>().PlaySingle(AssetsStorage.sounds["error_maybe"]);
+            keyButton.GetComponentInParent<AudioManager>().PlaySingle(AssetStorage.sounds["error_maybe"]);
             if (!redColors.Contains(keyButton.text))
             {
                 redColors.Add(keyButton.text);
@@ -233,7 +233,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
             data.OverrideButton(pressed);
             KeyBindingsManager.RewriteBindings();
 
-            button.GetComponentInParent<AudioManager>().PlaySingle(AssetsStorage.sounds["slap"]);
+            button.GetComponentInParent<AudioManager>().PlaySingle(AssetStorage.sounds["slap"]);
 
             yield break;
         }

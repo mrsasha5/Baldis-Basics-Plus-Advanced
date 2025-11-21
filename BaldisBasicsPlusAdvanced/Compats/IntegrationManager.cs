@@ -1,5 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
-using BaldisBasicsPlusAdvanced.Extensions;
+﻿using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using HarmonyLib;
 using System;
@@ -9,10 +8,10 @@ using System.Reflection;
 
 namespace BaldisBasicsPlusAdvanced.Compats
 {
-
+#warning TODO: add special screen when any module breaks
     internal class IntegrationManager
     {
-        public static bool LevelLoaderInstalled => AssetsHelper.ModInstalled(levelLoaderId);
+        public static bool LevelLoaderInstalled => AssetHelper.ModInstalled(levelLoaderId);
 
         public const string levelLoaderId = "mtm101.rulerp.baldiplus.levelstudioloader";
 
@@ -47,7 +46,7 @@ namespace BaldisBasicsPlusAdvanced.Compats
 
             for (int i = 0; i < types.Count; i++)
             {
-                if (types[i] == null || !types[i].IsSubclassOf(typeof(CompatibilityModule)))
+                if (!types[i].IsSubclassOf(typeof(CompatibilityModule)))
                 {
                     types.RemoveAt(i);
                     i--;
@@ -96,7 +95,7 @@ namespace BaldisBasicsPlusAdvanced.Compats
             }
         }
 
-        internal static void InvokeOnAssetsLoadPost()
+        internal static void InvokeOnAssetsPosrLoad()
         {
             MethodInfo method = typeof(CompatibilityModule).GetMethod("OnAssetsPostLoad", AccessTools.all);
             for (int i = 0; i < modules.Count; i++)

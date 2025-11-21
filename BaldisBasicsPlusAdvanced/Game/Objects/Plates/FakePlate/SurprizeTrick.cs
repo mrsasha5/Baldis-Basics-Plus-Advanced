@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using System.Collections;
 using UnityEngine;
@@ -62,15 +62,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
                     EntityOverrider entityOverrider = new EntityOverrider();
                     if (npc.GetComponent<Entity>().Override(entityOverrider))
                     {
-                        npc.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_bal_surprize"]);
+                        npc.ec.GetAudMan().PlaySingle(AssetStorage.sounds["adv_bal_surprize"]);
                         npc.behaviorStateMachine.ChangeState(new Baldi_Praise(npc, (Baldi)npc,
                             npc.behaviorStateMachine.CurrentState, 2f)); //I didn't use native method cus I don't want audio
                         npc.GetComponent<Entity>().SoundTeleport(Plate.transform.position);
                         StartCoroutine(Teleport(npc.GetComponent<Entity>(), entityOverrider));
 
                         Plate.AudMan.FlushQueue(true);
-                        Plate.AudMan.QueueAudio(AssetsStorage.sounds["adv_suction_start"]);
-                        Plate.AudMan.QueueAudio(AssetsStorage.sounds["adv_suction_loop"]);
+                        Plate.AudMan.QueueAudio(AssetStorage.sounds["adv_suction_start"]);
+                        Plate.AudMan.QueueAudio(AssetStorage.sounds["adv_suction_loop"]);
                         Plate.AudMan.SetLoop(true);
 
                         return true;

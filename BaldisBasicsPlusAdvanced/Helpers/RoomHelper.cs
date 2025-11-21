@@ -16,7 +16,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static Material CreateMapMaterial(string name, Texture2D mapBg)
         {
-            Material mapMaterial = new Material(AssetsHelper.LoadAsset<Material>("MapTile_Standard"));
+            Material mapMaterial = new Material(AssetHelper.LoadAsset<Material>("MapTile_Standard"));
             mapMaterial.SetTexture("_MapBackground", mapBg);
             mapMaterial.shaderKeywords = new string[] { "_KEYMAPSHOWBACKGROUND_ON" };
             mapMaterial.name = name;

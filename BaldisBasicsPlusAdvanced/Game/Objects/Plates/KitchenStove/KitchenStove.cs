@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
@@ -113,9 +113,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             obstacle.carving = true; //Looks like it's useless because BB+ navigation behaves weirdly
             obstacle.enabled = false;
 
-            audBurningStart = AssetsStorage.sounds["adv_burning_start"];
-            audBurningLoop = AssetsStorage.sounds["adv_burning_loop"];
-            audBurningEnd = AssetsStorage.sounds["adv_pah"];
+            audBurningStart = AssetStorage.sounds["adv_burning_start"];
+            audBurningLoop = AssetStorage.sounds["adv_burning_loop"];
+            audBurningEnd = AssetStorage.sounds["adv_pah"];
 
             particleSystem = new GameObject("ParticleSystem").AddComponent<ParticleSystem>();
 
@@ -123,8 +123,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
             particleSystem.transform.localPosition = Vector3.up * -5f;
 
             ParticleSystemRenderer renderer = particleSystem.GetComponent<ParticleSystemRenderer>();
-            renderer.material = AssetsHelper.LoadAsset<Material>("DustTest");
-            renderer.material.shader = AssetsStorage.graphsStandardShader;
+            renderer.material = AssetHelper.LoadAsset<Material>("DustTest");
+            renderer.material.shader = AssetStorage.graphsStandardShader;
             renderer.material.SetColor(new Color(0.88f, 0.34f, 0.13f));
 
             MainModule main = particleSystem.main;
@@ -216,7 +216,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 NotificationManager.Instance.Queue(
                     string.Format("Adv_Notif_RecipesError".Localize(),
                         brokenRecipes, info.Metadata.GUID),
-                    AssetsStorage.sounds["elv_buzz"],
+                    AssetStorage.sounds["elv_buzz"],
                     time: 5f);
 
             return recipes;
@@ -262,7 +262,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             if (offset != null) position += (Vector3)offset;
 
-            Pickup _pickup = Instantiate(AssetsStorage.pickup, position, Quaternion.identity, transform);
+            Pickup _pickup = Instantiate(AssetStorage.pickup, position, Quaternion.identity, transform);
 
             //I hate current pickup code base
             PickupClickOverrider controllerPre = _pickup.gameObject.AddComponent<PickupClickOverrider>();
@@ -449,7 +449,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                     if (currentRecipe.Sound != null) audMan.PlaySingle(currentRecipe.Sound);
                 }
                 else
-                    audMan.PlaySingle(AssetsStorage.sounds["adv_magic_1"]);
+                    audMan.PlaySingle(AssetStorage.sounds["adv_magic_1"]);
 
                 currentRecipe.onKitchenStovePreDeactivating?.Invoke(this);
             }
@@ -614,7 +614,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         protected override void SetTextures()
         {
-            deactivatedMaterial.mainTexture = AssetsStorage.textures["adv_kitchen_stove"];
+            deactivatedMaterial.mainTexture = AssetStorage.textures["adv_kitchen_stove"];
         }
 
         private void DestroyPickup(Pickup pickup)
@@ -634,7 +634,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                 if (playerMan.itm.InventoryFull() && !stove.CurrentSetFitsWithAndWithout(playerMan.itm.items[playerMan.itm.selectedItem],
                     out FoodRecipeData _, pickup.item))
                 {
-                    Singleton<BaseGameManager>.Instance.Ec.GetAudMan().PlaySingle(AssetsStorage.sounds["error_maybe"]);
+                    Singleton<BaseGameManager>.Instance.Ec.GetAudMan().PlaySingle(AssetStorage.sounds["error_maybe"]);
                 } else
                 {
                     pickup.Clicked(player);
@@ -658,10 +658,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
                         stove.CreatePickup(selectedItem);
 
                         inventory.RemoveItem(inventory.selectedItem);
-                        stove.Ec.GetAudMan().PlaySingle(AssetsStorage.sounds["slap"]);
+                        stove.Ec.GetAudMan().PlaySingle(AssetStorage.sounds["slap"]);
                     } else
                     {
-                        stove.Ec.GetAudMan().PlaySingle(AssetsStorage.sounds["error_maybe"]);
+                        stove.Ec.GetAudMan().PlaySingle(AssetStorage.sounds["error_maybe"]);
                     }
                 }
             }

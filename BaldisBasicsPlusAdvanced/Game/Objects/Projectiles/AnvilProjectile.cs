@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using UnityEngine;
@@ -12,7 +12,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
         {
             base.SetEntityValues();
             SetEntityName("Anvil Projectile");
-            SetEntitySprite(AssetsStorage.sprites["adv_anvil_projectile"]);
+            SetEntitySprite(AssetStorage.sprites["adv_anvil_projectile"]);
             SetEntityTrigger(3f);
         }
 
@@ -26,8 +26,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
                     entity.Squish(10f);
                     //cus nobody shouldn't disable environment
                     entity.SetSpeedEffect(0.25f, 10f);
-                    ObjectsCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true)
-                        .PlaySingle(AssetsStorage.sounds["adv_metal_blow"]);
+                    ObjectCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true)
+                        .PlaySingle(AssetStorage.sounds["adv_metal_blow"]);
                 }
                 else if (other.transform.TryGetComponent(out Window window))
                 {
@@ -46,8 +46,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
         protected override void Destroy()
         {
             base.Destroy();
-            ObjectsCreator.CreatePropagatedAudMan(transform.position, destroyWhenAudioEnds: true)
-                .PlaySingle(AssetsStorage.sounds["adv_metal_blow"]);
+            ObjectCreator.CreatePropagatedAudMan(transform.position, destroyWhenAudioEnds: true)
+                .PlaySingle(AssetStorage.sounds["adv_metal_blow"]);
         }
 
     }

@@ -1,10 +1,11 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 using BaldisBasicsPlusAdvanced.Game.Activities;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
+using BaldisBasicsPlusAdvanced.Generation;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Managers;
 using BaldisBasicsPlusAdvanced.Menu;
@@ -36,7 +37,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "BB+ Advanced Edition";
 
-        public const string version = "0.3.2.2";
+        public const string version = "0.3.3";
 
         private static AdvancedCore instance;
 
@@ -58,18 +59,9 @@ namespace BaldisBasicsPlusAdvanced
 
             PrepareSettingsMenu();
             ModdedSaveGame.AddSaveHandler(LevelDataManager.Instance);
-            GeneratorManagement.Register(this, GenerationModType.Addend, GenerationPatchingManager.RegisterMainLevelData);
+            GeneratorManagement.Register(this, GenerationModType.Addend, GeneratorPatchingManager.RegisterMainLevelData);
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), LoadingEventOrder.Pre);
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModPostLoader(), LoadingEventOrder.Post);
-
-            if (Application.version == "0.12" || Application.version == "0.12.1")
-            {
-                MTM101BaldiDevAPI.AddWarningScreen(
-                    "Modification is not compatible with versions lower than 0.12.2 due of the updated Unity Engine. " +
-                    "Also it's highly recommended to use 0.12.2 because old versions" +
-                    " contain critical security issue.",
-                        fatal: true);
-            }
 
 #if BETA
             MTM101BaldiDevAPI.AddWarningScreen(
@@ -110,7 +102,7 @@ namespace BaldisBasicsPlusAdvanced
                 catch (Exception e)
                 {
                     Logging.LogWarning($"Exception occured on state: {assetsLoading.Current.ToString()}");
-                    ObjectsCreator.CauseCrash(e);
+                    ObjectCreator.CauseCrash(e);
                 }
                 yield return assetsLoading.Current;
             }
@@ -118,12 +110,12 @@ namespace BaldisBasicsPlusAdvanced
 
         private IEnumerator ModLoader()
         {
-            if (!Directory.Exists(AssetsHelper.modPath))
+            if (!Directory.Exists(AssetHelper.modPath))
             {
-                ObjectsCreator.CauseCrash(new Exception("Assets folder is missing!"));
+                ObjectCreator.CauseCrash(new Exception("Assets folder is missing!"));
             }
 
-            AssetsManagerCore.PreInitialize();
+            AssetManagerCore.PreInitialize();
 
             IEnumerator assetsLoading = OnAssetsPreLoad();
             bool move = true;
@@ -140,7 +132,7 @@ namespace BaldisBasicsPlusAdvanced
                         Logging.LogWarning($"Exception occured on state: {assetsLoading.Current.ToString()}");   
                     } else Logging.LogWarning($"Exception occured on null state!");
 
-                    ObjectsCreator.CauseCrash(e);
+                    ObjectCreator.CauseCrash(e);
 
                     //move = false;
                 }
@@ -161,9 +153,9 @@ namespace BaldisBasicsPlusAdvanced
 
             GameRegisterManager.PostInitializePosters();
 
-            yield return "Invoking OnAssetsLoadPost for modules...";
+            yield return "Invoking OnAssetsPostLoad for modules...";
 
-            IntegrationManager.InvokeOnAssetsLoadPost();
+            IntegrationManager.InvokeOnAssetsPosrLoad();
 
             if (ApiManager.onAssetsPostLoading != null)
             {
@@ -184,7 +176,7 @@ namespace BaldisBasicsPlusAdvanced
 
             NotificationManager.Notification notif = CheckAssetsMarker();
 
-            int count = 25;
+            int count = 26;
 
             if (notif != null) count++;
 
@@ -203,7 +195,7 @@ namespace BaldisBasicsPlusAdvanced
             harmony.PatchAllConditionals();
 
             yield return "Caching game assets...";
-            AssetsManagerCore.Initialize();
+            AssetManagerCore.Initialize();
             GameRegisterManager.CreateDoorMats();
             yield return "Initializing textures for cells...";
             GameRegisterManager.InitializeCellTextures();
@@ -239,7 +231,7 @@ namespace BaldisBasicsPlusAdvanced
             yield return "Initializing room assets...";
             GameRegisterManager.InitializeRoomAssets();
             yield return "Overriding game prefabs...";
-            AssetsStorage.OverrideAssetsProperties();
+            AssetStorage.OverrideAssetsProperties();
             yield return "Correcting patches...";
             GameRegisterManager.CorrectPatches();
             yield return "Initializing scene objects...";
@@ -248,6 +240,8 @@ namespace BaldisBasicsPlusAdvanced
             GameRegisterManager.InitializeTrips();
             yield return "Loading new MIDIs...";
             GameRegisterManager.InitializeMidis();
+            yield return "Defining generation...";
+            GenerationManager.DefineGeneration();
             yield return "Initializing integration modules...";
             IntegrationManager.Initialize();
 
@@ -270,23 +264,20 @@ namespace BaldisBasicsPlusAdvanced
             NotificationManager.Notification notif = null;
 
             string[] versionMarkers =
-                Directory.GetFiles(AssetsHelper.modPath, "*.ver", SearchOption.TopDirectoryOnly);
+                Directory.GetFiles(AssetHelper.modPath, "*.ver", SearchOption.TopDirectoryOnly);
 
             if (versionMarkers.Length > 1)
-                notif =
-                    NotificationManager.Instance.Queue("Adv_Notif_AssetsWarning", AssetsStorage.sounds["buzz_elv"], time: 0f);
+                notif = NotificationManager.Instance.Queue("Adv_Notif_AssetsWarning", AssetStorage.sounds["buzz_elv"], time: 0f);
             else if (versionMarkers.Length == 1)
             {
                 if (Path.GetFileNameWithoutExtension(versionMarkers[0]) != AdvancedCore.version)
                 {
-                    notif =
-                        NotificationManager.Instance.Queue("Adv_Notif_IncorrectAssetsWarning", AssetsStorage.sounds["buzz_elv"], time: 0f);
+                    notif = NotificationManager.Instance.Queue("Adv_Notif_IncorrectAssetsWarning", AssetStorage.sounds["buzz_elv"], time: 0f);
                 }
             }
             else
             {
-                notif =
-                    NotificationManager.Instance.Queue("Adv_Notif_UnknownAssetsVersion", AssetsStorage.sounds["buzz_elv"], time: 0f);
+                notif = NotificationManager.Instance.Queue("Adv_Notif_UnknownAssetsVersion", AssetStorage.sounds["buzz_elv"], time: 0f);
             }
             return notif;
         }

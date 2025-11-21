@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Managers;
 using MTM101BaldAPI.UI;
@@ -27,7 +27,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
         public void Initialize()
         {
-            canvas = ObjectsCreator.CreateCanvas(setGlobalCam: false);
+            canvas = ObjectCreator.CreateCanvas(setGlobalCam: false);
             canvas.transform.SetParent(transform);
 
             audMan = canvas.gameObject.AddComponent<AudioManager>();
@@ -89,7 +89,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
         private GameObject CreateNotification(string key)
         {
             Image imageBg = UIHelpers.CreateImage(
-                AssetsStorage.sprites["tooltip_bg"], canvas.transform, Vector3.zero, correctPosition: false);
+                AssetStorage.sprites["tooltip_bg"], canvas.transform, Vector3.zero, correctPosition: false);
             imageBg.type = Image.Type.Sliced;
             imageBg.rectTransform.anchoredPosition = Vector3.zero;
             imageBg.rectTransform.anchorMin = new Vector2(1f, 1f);

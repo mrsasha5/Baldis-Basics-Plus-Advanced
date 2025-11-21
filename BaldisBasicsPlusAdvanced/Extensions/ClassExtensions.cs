@@ -7,10 +7,10 @@ using UnityEngine.UI;
 using System.Reflection;
 using System;
 using BaldisBasicsPlusAdvanced.Game.Components.Movement;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using MTM101BaldAPI.UI;
 using System.Linq;
+using BaldisBasicsPlusAdvanced.Cache;
 
 namespace BaldisBasicsPlusAdvanced.Extensions
 {
@@ -95,7 +95,7 @@ namespace BaldisBasicsPlusAdvanced.Extensions
 
         public static bool IsEntity(this Collider collider)
         {
-            return collider.gameObject.layer == LayersHelper.standardEntities || collider.gameObject.layer == LayersHelper.clickableEntities;
+            return collider.gameObject.layer == LayerHelper.standardEntities || collider.gameObject.layer == LayerHelper.clickableEntities;
         }
 
         private static IEnumerator ShutAnimation(LockdownDoor door, float speed)
@@ -106,7 +106,7 @@ namespace BaldisBasicsPlusAdvanced.Extensions
             Collider collider = door.GetComponent<Collider>();
             MeshRenderer renderer = door.GetComponentInChildren<MeshRenderer>();
 
-            audMan.QueueAudio(AssetsStorage.sounds["lockdown_door"], playImmediately: true);
+            audMan.QueueAudio(AssetStorage.sounds["lockdown_door"], playImmediately: true);
             audMan.SetLoop(val: true);
 
             while (renderer.transform.position.y > 0f)
@@ -128,7 +128,7 @@ namespace BaldisBasicsPlusAdvanced.Extensions
             door.bTile.Mute(door.direction.GetOpposite(), block: true);
 
             audMan.FlushQueue(endCurrent: true);
-            audMan.PlaySingle(AssetsStorage.sounds["lock_door_stop"]);
+            audMan.PlaySingle(AssetStorage.sounds["lock_door_stop"]);
         }
 
         private static IEnumerator OpenAnimation(LockdownDoor door, float speed)
@@ -146,7 +146,7 @@ namespace BaldisBasicsPlusAdvanced.Extensions
 
             ReflectionHelper.SetValue(door, "moving", true);
 
-            audMan.QueueAudio(AssetsStorage.sounds["lockdown_door"], playImmediately: true);
+            audMan.QueueAudio(AssetStorage.sounds["lockdown_door"], playImmediately: true);
             audMan.SetLoop(val: true);
 
             while (renderer.transform.position.y < door.originalHeight)
@@ -164,7 +164,7 @@ namespace BaldisBasicsPlusAdvanced.Extensions
             collider.enabled = false;
             renderer.transform.position -= Vector3.up * (renderer.transform.position.y - door.originalHeight);
             audMan.FlushQueue(endCurrent: true);
-            audMan.PlaySingle(AssetsStorage.sounds["lock_door_stop"]);
+            audMan.PlaySingle(AssetStorage.sounds["lock_door_stop"]);
         }
 
         public static void Toggle(this LockdownDoor door, float speed, bool toggleEvenItMoves = false, bool? shut = null)
@@ -409,19 +409,19 @@ namespace BaldisBasicsPlusAdvanced.Extensions
         public static void SoundTeleport(this Entity entity, Vector3 pos)
         {
             //Old pos
-            AudioManager audMan = ObjectsCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
-            audMan.PlaySingle(AssetsStorage.sounds["teleport"]);
+            AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
+            audMan.PlaySingle(AssetStorage.sounds["teleport"]);
 
             entity.Teleport(pos);
 
             //Actual pos
-            AudioManager _audMan = ObjectsCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
-            _audMan.PlaySingle(AssetsStorage.sounds["teleport"]);
+            AudioManager _audMan = ObjectCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
+            _audMan.PlaySingle(AssetStorage.sounds["teleport"]);
         }
 
         public static SpriteRenderer RemoveBillboard(this SpriteRenderer renderer)
         {
-            renderer.material = new Material(AssetsStorage.materials["sprite_standard_no_billboard"]);
+            renderer.material = new Material(AssetStorage.materials["sprite_standard_no_billboard"]);
             return renderer;
         }
 

@@ -20,7 +20,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
             pos += forward * distance;
             MysteriousTeleporterProjectile projectile =
-                Instantiate(ObjectsStorage.Objects["mysterious_teleporter"].GetComponent<MysteriousTeleporterProjectile>());
+                Instantiate(ObjectStorage.Objects["mysterious_teleporter"].GetComponent<MysteriousTeleporterProjectile>());
             projectile.Initialize(pm.ec, pos, pm);
             projectile.SetFlying(true);
             projectile.transform.forward = forward;

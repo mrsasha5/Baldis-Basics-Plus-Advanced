@@ -20,7 +20,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Triggers
 
         protected void CreateRenderer(Sprite sprite)
         {
-            renderer = ObjectsCreator.CreateSpriteRendererBase(sprite);
+            renderer = ObjectCreator.CreateSpriteRendererBase(sprite);
             renderer.transform.SetParent(transform, false);
         }
 

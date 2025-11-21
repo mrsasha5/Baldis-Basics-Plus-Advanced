@@ -19,7 +19,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 
         public void SetValuesToStart(float chalkEffectTime, float beginsIn, float endsIn)
         {
-            if (chalkEffectTime != 0f) ObjectsCreator.AddChalkCloudEffect(entity.transform, chalkEffectTime, ec);
+            if (chalkEffectTime != 0f) ObjectCreator.AddChalkCloudEffect(entity.transform, chalkEffectTime, ec);
             entity.StartCoroutine(Effect(beginsIn, endsIn));
         }
 

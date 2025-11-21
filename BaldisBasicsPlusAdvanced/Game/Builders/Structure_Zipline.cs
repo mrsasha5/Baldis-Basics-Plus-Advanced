@@ -2,10 +2,10 @@
 using BaldisBasicsPlusAdvanced.Helpers;
 using System.Collections.Generic;
 using UnityEngine;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using MTM101BaldAPI;
 using System;
 using UnityEngine.Rendering;
+using BaldisBasicsPlusAdvanced.Cache;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
 {
@@ -39,8 +39,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             pillar.name = "CeilingPillar";
             pillar.transform.localScale = Vector3.one - Vector3.up * 0.25f;
             MeshRenderer renderer = pillar.GetComponent<MeshRenderer>();
-            renderer.material = new Material(AssetsStorage.materials["belt"]);
-            renderer.material.mainTexture = AssetsHelper.TextureFromFile("Textures/Objects/Adv_Zipline_Pillar.png");
+            renderer.material = new Material(AssetStorage.materials["belt"]);
+            renderer.material.mainTexture = AssetHelper.TextureFromFile("Textures/Objects/Adv_Zipline_Pillar.png");
             Destroy(pillar.GetComponent<Collider>());
 
             pillar.transform.SetParent(ceilingPillarPre.transform, false);
@@ -90,7 +90,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             lineRenderer.allowOcclusionWhenDynamic = false;
             lineRenderer.shadowCastingMode = ShadowCastingMode.Off;
             lineRenderer.receiveShadows = false;
-            lineRenderer.material = new Material(AssetsStorage.materials["black_behind"]);
+            lineRenderer.material = new Material(AssetStorage.materials["black_behind"]);
             return lineRenderer;
         }
 

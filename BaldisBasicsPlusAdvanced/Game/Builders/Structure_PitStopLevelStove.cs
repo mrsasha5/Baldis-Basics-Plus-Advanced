@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
@@ -27,15 +27,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
         public void InitializePrefab(int variant)
         {
-            buttonPre = AssetsStorage.gameButton;
-            standardNeonPosterPre = AssetsHelper.LoadAsset<PosterObject>("StoreNeon_4");
-            buttonInfoPosterPre = Instantiate(AssetsHelper.LoadAsset<PosterObject>("StoreNeon_4_wRestockBase"));
+            buttonPre = AssetStorage.gameButton;
+            standardNeonPosterPre = AssetHelper.LoadAsset<PosterObject>("StoreNeon_4");
+            buttonInfoPosterPre = Instantiate(AssetHelper.LoadAsset<PosterObject>("StoreNeon_4_wRestockBase"));
             buttonInfoPosterPre.name = "Adv_Poster_PIT_Stove_Button";
             buttonInfoPosterPre.textData[0].textKey = "Adv_PST_Cook_1";
             buttonInfoPosterPre.textData[1].textKey = "Adv_PST_Cook_2";
             buttonInfoPosterPre.textData[2].textKey = "50";
 
-            infoPosterPre = ObjectsStorage.Posters.Find(x => x.name == "Adv_Poster_Kitchen_Stove");
+            infoPosterPre = ObjectStorage.Posters.Find(x => x.name == "Adv_Poster_Kitchen_Stove");
         }
 
         public override void Load(List<StructureData> data)
@@ -59,7 +59,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             ec.BuildPoster(standardNeonPosterPre, ec.cells[29, 11], Direction.East);
             ec.BuildPoster(infoPosterPre, ec.cells[30, 11], Direction.West);
 
-            JohnnyKitchenStove stove = Instantiate(ObjectsStorage.Objects["johnny_kitchen_stove"].GetComponent<JohnnyKitchenStove>(), 
+            JohnnyKitchenStove stove = Instantiate(ObjectStorage.Objects["johnny_kitchen_stove"].GetComponent<JohnnyKitchenStove>(), 
                 ec.cells[28, 10].room.objectObject.transform);
 
             stove.transform.position = ec.cells[28, 10].FloorWorldPosition;

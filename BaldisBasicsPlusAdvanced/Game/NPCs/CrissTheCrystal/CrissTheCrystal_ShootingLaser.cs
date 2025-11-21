@@ -55,7 +55,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
                 if (npc.Navigator.Velocity.magnitude != 0f) break;
 
-                Physics.Raycast(npc.transform.position, laserDirection, out hit, float.PositiveInfinity, LayersHelper.gumCollisionMask, 
+                Physics.Raycast(npc.transform.position, laserDirection, out hit, float.PositiveInfinity, LayerHelper.gumCollisionMask, 
                     QueryTriggerInteraction.Ignore);
 
                 positions[0] = npc.transform.position - Vector3.up * 1f;

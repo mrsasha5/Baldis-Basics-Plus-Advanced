@@ -9,7 +9,7 @@ using PlusStudioLevelFormat;
 using PlusStudioLevelLoader;
 using UnityEngine;
 
-namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
+namespace BaldisBasicsPlusAdvanced.SerializableData
 {
     [JsonObject]
     public class CustomRoomData
@@ -81,7 +81,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
                 {
                     CustomRoomData data =
                     JsonConvert.DeserializeObject<CustomRoomData>(
-                        File.ReadAllText(AssetsHelper.modPath + "Data/Rooms/Patterns/" + inheritPaths[i]));
+                        File.ReadAllText(AssetHelper.modPath + "Data/Rooms/Patterns/" + inheritPaths[i]));
                     data.InheritProperties();
                     InheritFrom(data);
                 }
@@ -92,7 +92,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
         {
             if (!string.IsNullOrEmpty(functionContainerName))
             {
-                roomAsset.roomFunctionContainer = AssetsHelper.LoadAsset<RoomFunctionContainer>(functionContainerName);
+                roomAsset.roomFunctionContainer = AssetHelper.LoadAsset<RoomFunctionContainer>(functionContainerName);
             }
 
             if (minItemValue != null) roomAsset.minItemValue = (int)minItemValue;
@@ -101,12 +101,12 @@ namespace BaldisBasicsPlusAdvanced.SerializableData.Rooms
             if (offLimits != null) roomAsset.offLimits = (bool)offLimits;
 
             if (!string.IsNullOrEmpty(doorMatsName))
-                roomAsset.doorMats = Array.Find(ScriptableObject.FindObjectsOfType<StandardDoorMats>(),
+                roomAsset.doorMats = Array.Find(UnityEngine.Object.FindObjectsOfType<StandardDoorMats>(),
                 x => x.name == doorMatsName);
 
             if (!string.IsNullOrEmpty(lightPre))
             {
-                roomAsset.lightPre = AssetsHelper.LoadAsset<Transform>(lightPre);
+                roomAsset.lightPre = AssetHelper.LoadAsset<Transform>(lightPre);
             }
 
             roomAsset.category = EnumExtensions.GetFromExtendedName<RoomCategory>(categoryName);

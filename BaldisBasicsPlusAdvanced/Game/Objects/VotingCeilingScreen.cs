@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 using MTM101BaldAPI;
@@ -26,8 +26,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             cubeGameObject.transform.localScale = Vector3.one + Vector3.right * 7f;
 
             MeshRenderer renderer = cubeGameObject.GetComponent<MeshRenderer>();
-            renderer.material = new Material(AssetsStorage.materials["belt"]);
-            renderer.material.SetMainTexture(AssetsStorage.textures["white"]);
+            renderer.material = new Material(AssetStorage.materials["belt"]);
+            renderer.material.SetMainTexture(AssetStorage.textures["white"]);
             renderer.material.SetColor(Color.black);
 
             RectTransform rect1 = new GameObject().AddComponent<RectTransform>();

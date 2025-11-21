@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
+using BaldisBasicsPlusAdvanced.Cache;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects
 {
@@ -44,11 +44,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         {
             windMaxSize = windSize;
 
-            beltManager = Instantiate(AssetsStorage.windManager, new Vector3(0, 0, windSize / 2 * 10), Quaternion.identity);
+            beltManager = Instantiate(AssetStorage.windManager, new Vector3(0, 0, windSize / 2 * 10), Quaternion.identity);
             beltManager.name = "Adv_WindManager";
             beltManager.transform.SetParent(parent, false);
 
-            ReflectionHelper.SetValue<Material>(beltManager, "sourceMaterial", AssetsStorage.materials["wind"]);
+            ReflectionHelper.SetValue<Material>(beltManager, "sourceMaterial", AssetStorage.materials["wind"]);
             ReflectionHelper.SetValue<bool>(beltManager, "blockNavigation", false);
 
             beltManager.gameObject.SetActive(true);
@@ -75,7 +75,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             ReflectionHelper.SetValue<SoundObject[]>(audMan, "soundOnStart", new SoundObject[0]);
 
-            windGraphicsParent = Instantiate(AssetsStorage.windGraphicsParent, new Vector3(0, 0, 0), Quaternion.identity);
+            windGraphicsParent = Instantiate(AssetStorage.windGraphicsParent, new Vector3(0, 0, 0), Quaternion.identity);
             windGraphicsParent.transform.SetParent(beltManager.transform, true);
             windGraphicsParent.transform.localPosition = Vector3.zero;
 
@@ -128,7 +128,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             if (active)
             {
-                audMan.QueueAudio(AssetsStorage.sounds["blowing"]);
+                audMan.QueueAudio(AssetStorage.sounds["blowing"]);
                 audMan.SetLoop(val: true);
             } else if (audMan.audioDevice != null) //or else it will invoke null ref exception
             {

@@ -106,7 +106,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             Singleton<EditorController>.Instance.HoldUndo();
 
             ZiplineExchangeHandler handler = EditorController.Instance.CreateUI<ZiplineExchangeHandler>(
-                "ZiplineConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/ZiplineHangerConfig.json");
+                "ZiplineConfig", AssetHelper.modPath + "Compats/LevelStudio/UI/ZiplineHangerConfig.json");
             handler.OnInitialized(this);
             handler.Refresh();
         }

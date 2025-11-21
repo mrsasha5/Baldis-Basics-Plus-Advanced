@@ -1,5 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Objects.Pickups;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -48,7 +48,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
 
         private static T CreatePickup<T>(PriceTag tag, int price, Vector3 pos) where T : BasePickup
         {
-            Pickup pickupComp = GameObject.Instantiate(AssetsStorage.pickup, storeFunc.Room.objectObject.transform);
+            Pickup pickupComp = GameObject.Instantiate(AssetStorage.pickup, storeFunc.Room.objectObject.transform);
 
             T pickup = pickupComp.gameObject.AddComponent<T>();
             pickup.name = "Pickup";
@@ -135,7 +135,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
 
                 ytpCollected = price;
 
-                Singleton<CoreGameManager>.Instance.audMan.PlaySingle(AssetsStorage.sounds["ytp_pickup_0"]);
+                Singleton<CoreGameManager>.Instance.audMan.PlaySingle(AssetStorage.sounds["ytp_pickup_0"]);
 
                 Singleton<CoreGameManager>.Instance.AddPoints(-price, 0, true);
 

@@ -121,7 +121,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenS
         public void SettingsClicked()
         {
             KitchenStoveExchangeHandler handler = EditorController.Instance.CreateUI<KitchenStoveExchangeHandler>(
-                "KitchenStoveConfig", AssetsHelper.modPath + "Compats/LevelStudio/UI/KitchenStoveConfig.json");
+                "KitchenStoveConfig", AssetHelper.modPath + "Compats/LevelStudio/UI/KitchenStoveConfig.json");
             handler.OnInitialized(this);
             handler.Refresh();
         }

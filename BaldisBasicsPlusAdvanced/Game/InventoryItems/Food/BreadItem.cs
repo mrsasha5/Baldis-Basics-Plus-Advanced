@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using UnityEngine;
 
@@ -26,12 +25,12 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems.Food
 
             if (value > pm.plm.stamina) pm.plm.stamina = value;
 
-            pm.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["chip_crunch"]);
+            pm.ec.GetAudMan().PlaySingle(AssetStorage.sounds["chip_crunch"]);
 
             if (Random.value > 0.5f)
             {
-                pm.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["adv_boost"]);
-                pm.GetComponent<Entity>().SetSpeedEffect(speedModifier, 10f, ObjectsStorage.ItemObjects["Bread"].itemSpriteSmall);
+                pm.ec.GetAudMan().PlaySingle(AssetStorage.sounds["adv_boost"]);
+                pm.GetComponent<Entity>().SetSpeedEffect(speedModifier, 10f, ObjectStorage.ItemObjects["Bread"].itemSpriteSmall);
             }
 
             Destroy(gameObject);

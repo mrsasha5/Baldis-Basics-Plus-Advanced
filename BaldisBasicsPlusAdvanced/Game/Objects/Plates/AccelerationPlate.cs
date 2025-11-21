@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.Movement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
@@ -59,8 +59,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         public override void InitializePrefab(int variant)
         {
             base.InitializePrefab(variant);
-            audBoing = AssetsStorage.sounds["adv_boing"];
-            audRotate = AssetsHelper.LoadAsset<SoundObject>("ShrinkMachine_Door");
+            audBoing = AssetStorage.sounds["adv_boing"];
+            audRotate = AssetHelper.LoadAsset<SoundObject>("ShrinkMachine_Door");
         }
 
         protected override void SetValues(PlateData data)
@@ -173,8 +173,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             arrowDeactivatedMat = new Material(deactivatedMaterial);
             arrowActivatedMat = new Material(deactivatedMaterial);
 
-            arrowDeactivatedMat.mainTexture = AssetsStorage.textures["adv_acceleration_plate_deactivated_arrow"];
-            arrowActivatedMat.mainTexture = AssetsStorage.textures["adv_acceleration_plate_activated_arrow"];
+            arrowDeactivatedMat.mainTexture = AssetStorage.textures["adv_acceleration_plate_deactivated_arrow"];
+            arrowActivatedMat.mainTexture = AssetStorage.textures["adv_acceleration_plate_activated_arrow"];
 
             UpdateVisualPressedState(false, playSound: false);
         }

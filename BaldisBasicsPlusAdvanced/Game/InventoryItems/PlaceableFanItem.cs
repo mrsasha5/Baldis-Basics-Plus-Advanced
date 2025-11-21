@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using UnityEngine;
@@ -22,7 +21,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
             if (cell != null && !cell.Null && cell.AllCoverageFits(cover))
             { 
-                Fan fan = Instantiate(ObjectsStorage.Entities["Fan"]).GetComponent<Fan>();
+                Fan fan = Instantiate(ObjectStorage.Entities["Fan"]).GetComponent<Fan>();
 
                 GameCamera gameCamera = Singleton<CoreGameManager>.Instance.GetCamera(pm.playerNumber);
 
@@ -33,7 +32,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 return true;
             } else
             {
-                pm.ec.GetAudMan().PlaySingle(AssetsStorage.sounds["error_maybe"]);
+                pm.ec.GetAudMan().PlaySingle(AssetStorage.sounds["error_maybe"]);
                 Destroy(gameObject);
                 return false;
             }

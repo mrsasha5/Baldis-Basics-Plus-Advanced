@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
 using System;
@@ -44,7 +44,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
             standardSphereSize = 30f;
 
             openedMaterial = new Material(deactivatedMaterial);
-            openedMaterial.mainTexture = AssetsStorage.textures["adv_fake_plate_surprize"];
+            openedMaterial.mainTexture = AssetStorage.textures["adv_fake_plate_surprize"];
 
             GameObject checkerObj = new GameObject("EntityChecker");
             checker = checkerObj.AddComponent<MysteriousPlateEntityChecker>();
@@ -52,7 +52,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
 
             checkerObj.transform.SetParent(transform, false);
             checkerObj.transform.localPosition = new Vector3(0f, 5f, 0f);
-            checkerObj.layer = LayersHelper.ignoreRaycastB;
+            checkerObj.layer = LayerHelper.ignoreRaycastB;
 
             SphereCollider checkerCol = checkerObj.AddComponent<SphereCollider>();
             checkerCol.radius = standardSphereSize;
@@ -94,7 +94,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
             System.Random rng = new System.Random((int)
                 (transform.position.x + transform.position.y + transform.position.z)); //just depends on the position
 
-            BasePlate[] basePlates = Array.FindAll(AssetsHelper.LoadAssets<BasePlate>(), x => x.Data.allowsToCopyTextures);
+            BasePlate[] basePlates = Array.FindAll(AssetHelper.LoadAssets<BasePlate>(), x => x.Data.allowsToCopyTextures);
             int index = rng.Next(0, basePlates.Length);
 
             deactivatedMaterial = new Material(deactivatedMaterial);
@@ -123,14 +123,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
                 if (playAudio)
                 {
                     audMan.FlushQueue(true);
-                    audMan.QueueAudio(AssetsStorage.sounds["adv_suction_start"]);
-                    audMan.QueueAudio(AssetsStorage.sounds["adv_suction_loop"]);
+                    audMan.QueueAudio(AssetStorage.sounds["adv_suction_start"]);
+                    audMan.QueueAudio(AssetStorage.sounds["adv_suction_loop"]);
                     audMan.SetLoop(true);
                 }
             } else if (playAudio)
             {
                 audMan.FlushQueue(true);
-                audMan.QueueAudio(AssetsStorage.sounds["adv_suction_end"]);
+                audMan.QueueAudio(AssetStorage.sounds["adv_suction_end"]);
             }
 
             UpdateVisualPressedState(false, playPressingAudio);
@@ -273,7 +273,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate
 
                     _distance = Vector3.Distance(transform.position, entities[i].transform.position);
                     ray = new Ray(transform.position, entities[i].transform.position - transform.position);
-                    hits = Physics.RaycastAll(ray, _distance, LayersHelper.gumCollisionMask, QueryTriggerInteraction.Ignore);
+                    hits = Physics.RaycastAll(ray, _distance, LayerHelper.gumCollisionMask, QueryTriggerInteraction.Ignore);
                     hitTransforms.Clear();
                     _obstacleHit = false;
                     if (hits.Length != 0)

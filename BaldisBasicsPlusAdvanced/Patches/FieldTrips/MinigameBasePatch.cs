@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using HarmonyLib;
 using System.Collections;
 using UnityEngine;
@@ -15,7 +15,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.FieldTrips
         {
             Singleton<MusicManager>.Instance.StopMidi();
             Singleton<MusicManager>.Instance.SetSpeed(1f);
-            __instance.StartCoroutine(PlaySound(__instance.AudioManager, 2f, AssetsStorage.sounds["adv_mus_win"]));
+            __instance.StartCoroutine(PlaySound(__instance.AudioManager, 2f, AssetStorage.sounds["adv_mus_win"]));
         }
 
         [HarmonyPatch("Lose")]

@@ -1,5 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.NPCs.Behavior.States.Navigation;
 using BaldisBasicsPlusAdvanced.Game.Objects;
@@ -177,15 +176,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
             for (int i = 0; i < 8; i++)
             {
-                balloons[i] = AssetsHelper.LoadAsset<Balloon>($"Balloon_{i}");
+                balloons[i] = AssetHelper.LoadAsset<Balloon>($"Balloon_{i}");
             }
 
-            screenPre = ObjectsStorage.Objects["voting_screen"];
+            screenPre = ObjectStorage.Objects["voting_screen"];
         }
 
         public static void LoadRoomAssetsForAllPrefabs()
         {
-            foreach (VotingEvent votingEvent in AssetsHelper.LoadAssets<VotingEvent>())
+            foreach (VotingEvent votingEvent in AssetHelper.LoadAssets<VotingEvent>())
             {
                 votingEvent.LoadRoomAssets();
             }
@@ -195,7 +194,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         {
             List<WeightedRoomAsset> assets = new List<WeightedRoomAsset>();
 
-            foreach (string path in Directory.GetFiles(AssetsHelper.modPath + "Data/Rooms/Objects/Voting/",
+            foreach (string path in Directory.GetFiles(AssetHelper.modPath + "Data/Rooms/Objects/Voting/",
                 "*.rbpl", SearchOption.AllDirectories))
             {
                 BinaryReader reader = new BinaryReader(File.OpenRead(path));
@@ -211,7 +210,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                 };
 
                 weightedRoom.selection.maxItemValue = 30;
-                weightedRoom.selection.lightPre = AssetsHelper.LoadAsset<Transform>("HangingLight");
+                weightedRoom.selection.lightPre = AssetHelper.LoadAsset<Transform>("HangingLight");
 
                 assets.Add(weightedRoom);
             }
@@ -493,8 +492,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private void ShowVotes()
         {
             AudioManager audMan = ec.GetAudMan();
-            audMan.PlaySingle(AssetsStorage.sounds["event_notification"]);
-            audMan.PlaySingle(AssetsStorage.sounds["adv_bell"]);
+            audMan.PlaySingle(AssetStorage.sounds["event_notification"]);
+            audMan.PlaySingle(AssetStorage.sounds["adv_bell"]);
 
             InvokeTvEnumerator("Exclamation", 3f);
             InvokeTvEnumerator("Static", 0.5f);

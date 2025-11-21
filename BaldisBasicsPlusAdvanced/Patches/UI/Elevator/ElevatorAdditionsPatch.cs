@@ -1,6 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.API;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Cache.AssetsManagement;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -87,7 +86,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         private static int? lastSentLifes;
 
-        public static bool LoadTip => !(ObjectsStorage.TipKeys.Count == 0) &&
+        public static bool LoadTip => !(ObjectStorage.TipKeys.Count == 0) &&
                 (OptionsDataManager.ExtraSettings.GetValue<bool>("tips"));
 
         public static bool AnimationsEnabled => OptionsDataManager.ExtraSettings.GetValue<bool>("elevator_animations");
@@ -181,7 +180,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             if (currentLives > 3) currentLives = 3;
 
             if (tubesGlowImage != null) 
-                tubesGlowImage.sprite = AssetsStorage.sprites[$"adv_elv_tubes_glow_{currentLives}"];
+                tubesGlowImage.sprite = AssetStorage.sprites[$"adv_elv_tubes_glow_{currentLives}"];
 
             return !loseAnimationQueued;
         }
@@ -237,7 +236,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             if (glowNum > 3) glowNum = 3;
 
-            tubesGlowImage = UIHelpers.CreateImage(AssetsStorage.sprites[$"adv_elv_tubes_glow_{glowNum}"],
+            tubesGlowImage = UIHelpers.CreateImage(AssetStorage.sprites[$"adv_elv_tubes_glow_{glowNum}"],
                 parent: elvScreen.Canvas.transform, Vector3.zero, correctPosition: false);
 
             tubesGlowImage.transform.SetSiblingIndex(tubesImage.transform.GetSiblingIndex() + 1);
@@ -254,7 +253,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             if (glowNum > 3) glowNum = 3;
 
-            tubesButton = ObjectsCreator.CreateSpriteButton(AssetsStorage.sprites["transparent"],
+            tubesButton = ObjectCreator.CreateSpriteButton(AssetStorage.sprites["transparent"],
                 Vector3.right * 200f, elvScreen.Canvas.transform);
             tubesButton.name = "LivesCursorChecker";
             tubesButton.transform.SetSiblingIndex(tubesGlowImage.transform.GetSiblingIndex() + 1);
@@ -315,7 +314,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             for (int i = 0; i < masks.Length; i++)
             {
-                masks[i] = UIHelpers.CreateImage(AssetsStorage.sprites[$"adv_elv_tube_mask_{i + 1}"],
+                masks[i] = UIHelpers.CreateImage(AssetStorage.sprites[$"adv_elv_tube_mask_{i + 1}"],
                     elvScreen.Canvas.transform, Vector3.zero, correctPosition: false);
                 masks[i].name = $"TubeMask_{i + 1}";
                 masks[i].transform.SetSiblingIndex(tubesImage.transform.GetSiblingIndex() + 1);
@@ -338,7 +337,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             if (tubesButton != null) tubesButton.gameObject.SetActive(false);
             lifesAudio.volume = 1f;
-            lifesAudio.PlayOneShot(AssetsStorage.sounds["power_breaker_lights_on"].soundClip, 2f);
+            lifesAudio.PlayOneShot(AssetStorage.sounds["power_breaker_lights_on"].soundClip, 2f);
             elvScreen.StartCoroutine(NewLifesAnimator());
         }
 
@@ -374,7 +373,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             masks[lifes].gameObject.SetActive(true);
 
-            lifesAudio.clip = AssetsStorage.sounds["adv_turning_loop"].soundClip;
+            lifesAudio.clip = AssetStorage.sounds["adv_turning_loop"].soundClip;
             lifesAudio.loop = true;
             lifesAudio.Play();
 
@@ -402,7 +401,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             Image tubesImage = Array.Find(elvScreen.GetComponentsInChildren<Image>(), x => x.name == "Lives");
             Sprite[] lifeImages = ReflectionHelper.GetValue<Sprite[]>(elvScreen, "lifeImages");
 
-            Image chargeImage = UIHelpers.CreateImage(AssetsStorage.sprites["adv_white"],
+            Image chargeImage = UIHelpers.CreateImage(AssetStorage.sprites["adv_white"],
                 masks[index].transform, Vector3.zero, correctPosition: false);
             chargeImage.name = "TubeCharge";
             chargeImage.transform.localPosition = Vector3.up * startChargeHeights[index];
@@ -436,7 +435,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             lifesAudio.loop = false;
             lifesAudio.clip = null;
-            lifesAudio.PlayOneShot(AssetsStorage.sounds["adv_turning_end"].soundClip);
+            lifesAudio.PlayOneShot(AssetStorage.sounds["adv_turning_end"].soundClip);
 
             while (pos.y > endChargeHeights[index])
             {
@@ -456,7 +455,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             bool livesUpdated = false;
 
-            lifesAudio.PlayOneShot(AssetsStorage.sounds["explosion"].soundClip);
+            lifesAudio.PlayOneShot(AssetStorage.sounds["explosion"].soundClip);
 
             while (explosionAnimator.AnimationId != null)
             {
