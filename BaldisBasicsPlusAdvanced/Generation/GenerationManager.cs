@@ -11,13 +11,14 @@ namespace BaldisBasicsPlusAdvanced.Generation
 
         private static List<IStandardSpawnData> data = new List<IStandardSpawnData>();
 
+        public static List<IStandardSpawnData> Data => data;
+
         public static void DefineGeneration()
         {
 #warning Add weights for mystery room
             RegisterItem("Hammer")
                 .AddInRooms()
                 .AddInJohnnyStore()
-                .AddToMysteryRoomEvent()
                 .AddShopWeight(floor: 2, 50)
                 .AddWeight(floor: 2, 50)
                 .SetBannedFloors(1)
@@ -35,6 +36,8 @@ namespace BaldisBasicsPlusAdvanced.Generation
                 .AddInJohnnyStore()
                 .AddToMysteryRoomEvent()
                 .AddShopWeight(floor: 2, 50)
+                .AddMysteryRoomWeight(floor: 2, 50)
+                .AddPartyWeight(floor: 2, 50)
                 .AddWeight(floor: 2, 50)
                 .SetBannedFloors(1)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
@@ -60,6 +63,7 @@ namespace BaldisBasicsPlusAdvanced.Generation
                 .AddToMysteryRoomEvent()
                 .AddInJohnnyStore()
                 .AddShopWeight(floor: 2, 50)
+                .AddMysteryRoomWeight(floor: 2, 50)
                 .AddWeight(floor: 2, 50)
                 .SetBannedFloors(1)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
@@ -69,6 +73,7 @@ namespace BaldisBasicsPlusAdvanced.Generation
                 .AddToMysteryRoomEvent()
                 .AddInJohnnyStore()
                 .AddShopWeight(floor: 2, 50)
+                .AddMysteryRoomWeight(floor: 2, 50)
                 .AddWeight(floor: 2, 50)
                 .SetBannedFloors(1)
                 .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
@@ -87,6 +92,45 @@ namespace BaldisBasicsPlusAdvanced.Generation
                 .AddShopWeight(floor: 2, 50)
                 .AddWeight(floor: 2, 50)
                 .SetLevelTypes(LevelType.Schoolhouse);
+
+            RegisterItem("Bread")
+                .AddInRooms()
+                .AddInJohnnyStore()
+                .AddShopWeight(floor: 2, 50)
+                .AddWeight(floor: 2, 50)
+                .SetBannedFloors(1)
+                .SetLevelTypes(LevelType.Schoolhouse);
+
+            RegisterItem("RawChickenLeg")
+                .AddInRooms()
+                .AddInJohnnyStore()
+                .AddShopWeight(floor: 2, 40)
+                .AddWeight(floor: 2, 40)
+                .SetBannedFloors(1)
+                .SetLevelTypes(LevelType.Schoolhouse);
+
+            RegisterItem("CookedChickenLeg")
+                .AddInRooms()
+                .AddInJohnnyStore()
+                .AddShopWeight(floor: 2, 15)
+                .AddWeight(floor: 2, 15)
+                .SetBannedFloors(1)
+                .SetLevelTypes(LevelType.Schoolhouse);
+
+            RegisterItem("BoxingGlove")
+                .AddInRooms()
+                .AddInJohnnyStore()
+                .AddShopWeight(floor: 2, 35)
+                .AddWeight(floor: 2, 35)
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory, LevelType.Maintenance, LevelType.Factory);
+
+            RegisterItem("PlaceablePortal")
+                .AddInRooms()
+                .AddInJohnnyStore()
+                .AddShopWeight(floor: 2, 30)
+                .AddWeight(floor: 2, 30)
+                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory)
+                .SetBannedFloors(1);
 
 #warning TODO: reimplement its appearing
             RegisterItem("MysteriousBusPass")
@@ -158,6 +202,48 @@ namespace BaldisBasicsPlusAdvanced.Generation
             GenerationManager.data.Add(data);
 
             return data;
+        }
+
+        public static List<WeightedItemObject> GetMysteryRoomItems(int floor)
+        {
+            List<WeightedItemObject> items = new List<WeightedItemObject>();
+            foreach (IStandardSpawnData data in data)
+            {
+                if (data is ItemSpawnData itemData)
+                {
+                    int weight = itemData.GetMysteryRoomWeight(floor);
+                    if (weight != 0)
+                    {
+                        items.Add(new WeightedItemObject
+                        {
+                            selection = itemData.Instance,
+                            weight = weight
+                        });
+                    }
+                }
+            }
+            return items;
+        }
+
+        public static List<WeightedItemObject> GetPartyItems(int floor)
+        {
+            List<WeightedItemObject> items = new List<WeightedItemObject>();
+            foreach (IStandardSpawnData data in data)
+            {
+                if (data is ItemSpawnData itemData)
+                {
+                    int weight = itemData.GetPartyWeight(floor);
+                    if (weight != 0)
+                    {
+                        items.Add(new WeightedItemObject
+                        {
+                            selection = itemData.Instance,
+                            weight = weight
+                        });
+                    }
+                }
+            }
+            return items;
         }
 
     }

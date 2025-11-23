@@ -95,7 +95,7 @@ namespace BaldisBasicsPlusAdvanced.Compats
             }
         }
 
-        internal static void InvokeOnAssetsPosrLoad()
+        internal static void InvokeOnAssetsPostLoad()
         {
             MethodInfo method = typeof(CompatibilityModule).GetMethod("OnAssetsPostLoad", AccessTools.all);
             for (int i = 0; i < modules.Count; i++)

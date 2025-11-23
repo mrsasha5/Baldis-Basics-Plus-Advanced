@@ -47,7 +47,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
             return this;
         }
 
-        public int GetWeight(int floor, LevelType levelType)
+        public virtual int GetWeight(int floor, LevelType levelType)
         {
             if (Weights.Length == 0 || BannedFloors.Contains(floor) || !LevelTypes.Contains(levelType)) return 0;
 

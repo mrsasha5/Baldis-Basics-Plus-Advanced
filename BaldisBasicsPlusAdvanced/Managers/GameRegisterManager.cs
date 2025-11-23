@@ -241,14 +241,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     TagStorage.criminal_contraband
                 }
             );
-                /*.SetSpawnsOnRooms(true)
-                .SetSpawnsOnFieldTrips(true)
-                .SetSpawnsOnParty(true)
-                .SetSpawnsOnMysteryRooms(true)
-                .SetEndless(true)
-                .SetBannedFloors(1)
-                .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);*/
 
             PrefabCreator.CreateItem<WindBlowerItem>(
                 nameKey: "Adv_Item_WindBlower",
@@ -256,12 +248,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 enumName: "WindBlower",
                 smallSpriteFileName: "adv_wind_blower_small.png",
                 largeSpriteFileName: "adv_wind_blower_large.png",
-                generatorCost: 50,
+                generatorCost: 25,
                 price: 300,
                 flags: ItemFlags.None
             );
-                /*.SetWeight(floor: 2, 75)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);*/
 
             PrefabCreator.CreateItem<MysteriousTeleporterItem>(
                 nameKey: "Adv_Item_MysteriousTeleporter",
@@ -269,7 +259,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 enumName: "MysteriousTeleporter",
                 smallSpriteFileName: "adv_mysterious_teleporter_small.png",
                 largeSpriteFileName: "adv_mysterious_teleporter_large.png",
-                generatorCost: 60,
+                generatorCost: 40,
                 price: 500,
                 tags: new string[]
                 {
@@ -277,12 +267,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 },
                 flags: ItemFlags.CreatesEntity
             );
-                /*.SetSpawnsOnParty(true)
-                .SetSpawnsOnMysteryRooms(true)
-                .SetEndless(true)
-                .SetBannedFloors(1)
-                .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);*/
 
             PrefabCreator.CreateItem<IceBootsItem>(
                 nameKey: "Adv_Item_IceBoots",
@@ -294,10 +278,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 300,
                 flags: ItemFlags.Persists
              );
-                /*.SetSpawnsOnFieldTrips(true)
-                .SetEndless(true)
-                .SetWeight(floor: 2, 75)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);*/
 
             PrefabCreator.CreateItem<PlaceableFanItem>(
                 nameKey: "Adv_Item_PlaceableFan",
@@ -309,8 +289,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 generatorCost: 75,
                 price: 750
             );
-                /*.SetWeight(floor: 2, 35)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);*/
 
             PrefabCreator.CreateItem<TeleportationBombItem>(
                 nameKey: "Adv_Item_TeleportationBomb",
@@ -326,12 +304,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     TagStorage.criminal_contraband
                 }
             );
-                /*.SetSpawnsOnFieldTrips(true)
-                .SetSpawnsOnParty(true)
-                .SetBannedFloors(1)
-                .SetEndless(true)
-                .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);*/
 
             PrefabCreator.CreateItem<MagicClockItem>(
                 nameKey: "Adv_Item_MagicClock",
@@ -347,11 +319,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     TagStorage.criminal_contraband
                 }
             );
-                /*.SetSpawnsOnFieldTrips(true)
-                .SetBannedFloors(1)
-                .SetEndless(true)
-                .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);*/
 
             PrefabCreator.CreateItem<InflatableBalloonItem>(
                 nameKey: "Adv_Item_InflatableBalloon",
@@ -360,13 +327,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 flags: ItemFlags.None,
                 smallSpriteFileName: "adv_inflatable_balloon_small.png",
                 largeSpriteFileName: "adv_inflatable_balloon_large.png",
-                generatorCost: 75,
+                generatorCost: 50,
                 price: 300
             );
-                /*.SetBannedFloors(1)
-                .SetEndless(true)
-                .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);*/
 
             PrefabCreator.CreateItem<DoughItem>(
                 nameKey: "Adv_Item_Dough",
@@ -378,10 +341,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 generatorCost: 25,
                 price: 300
             );
-                /*.SetBannedFloors(1)
-                .SetEndless(true)
-                .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse);*/
 
             PrefabCreator.CreateItem<MysteriousBusPassItem>(
                 nameKey: "Adv_Item_MysteriousBusPass",
@@ -396,10 +355,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     TagStorage.forbiddenPresent 
                 }
             );
-                /*.SetSpawnsOnShop(false)
-                .SetBannedFloors(1, 3)
-                .SetWeight(floor: 2, 100)
-                .SetLevelTypes(LevelType.Schoolhouse);*/
         }
 
         public static void InitializeMultipleUsableItems()
@@ -412,15 +367,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 tags: new string[] { TagStorage.food },
                 smallSpriteFileName: "adv_bread_small.png",
                 largeSpriteFileName: "adv_bread_large.png",
-                generatorCost: 50,
+                generatorCost: 35,
                 price: 550
-                )
-                .SetBannedFloors(1)
-                .SetEndless(true)
-                .SetWeight(floor: 2, 50)
-                .SetLevelTypes(LevelType.Schoolhouse)
-                .ConvertTo<ItemSpawningData>()
-                .ItemObject;
+                ).ItemObject;
 
             ItemObject bread1 = PrefabCreator.CreateItem<BreadItem>(
                 nameKey: "Adv_Item_BreadPiece",
@@ -430,13 +379,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 tags: new string[] { TagStorage.food },
                 smallSpriteFileName: "adv_piece_of_bread_small.png",
                 largeSpriteFileName: "adv_piece_of_bread_large.png",
-                generatorCost: 50,
+                generatorCost: 35,
                 price: 550,
                 itemMeta: bread2.GetMeta()
-                )
-                .DoNotSpawn()
-                .ConvertTo<ItemSpawningData>()
-                .ItemObject;
+                ).ItemObject;
 
             ItemObject rawChicken2 = PrefabCreator.CreateItem<ChickenItem>(
                 nameKey: "Adv_Item_RawChickenLeg",
@@ -446,15 +392,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 tags: new string[] { TagStorage.food },
                 smallSpriteFileName: "adv_raw_chicken_leg_small.png",
                 largeSpriteFileName: "adv_raw_chicken_leg_large.png",
-                generatorCost: 75,
+                generatorCost: 30,
                 price: 500
-                )
-                .SetBannedFloors(1)
-                .SetEndless(true)
-                .SetWeight(floor: 2, 40)
-                .SetLevelTypes(LevelType.Schoolhouse)
-                .ConvertTo<ItemSpawningData>()
-                .ItemObject;
+                ).ItemObject;
 
             ItemObject rawChicken1 = PrefabCreator.CreateItem<ChickenItem>(
                 nameKey: "Adv_Item_RawChickenLeg1",
@@ -464,13 +404,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 tags: new string[] { TagStorage.food },
                 smallSpriteFileName: "adv_raw_chicken_leg_small.png",
                 largeSpriteFileName: "adv_raw_chicken_leg_large.png",
-                generatorCost: 75,
+                generatorCost: 30,
                 price: 500,
                 itemMeta: rawChicken2.GetMeta()
-                )
-                .DoNotSpawn()
-                .ConvertTo<ItemSpawningData>()
-                .ItemObject;
+                ).ItemObject;
 
             ItemObject cookedChicken2 = PrefabCreator.CreateItem<ChickenItem>(
                 nameKey: "Adv_Item_CookedChickenLeg",
@@ -484,12 +421,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 800,
                 variant: 2
                 )
-                .SetSpawnsOnShop(false)
-                .SetBannedFloors(1)
-                .SetEndless(true)
-                .SetWeight(floor: 2, 15)
-                .SetLevelTypes(LevelType.Schoolhouse)
-                .ConvertTo<ItemSpawningData>()
                 .ItemObject;
 
             ItemObject cookedChicken1 = PrefabCreator.CreateItem<ChickenItem>(
@@ -504,10 +435,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 800,
                 itemMeta: cookedChicken2.GetMeta(),
                 variant: 2
-                )
-                .DoNotSpawn()
-                .ConvertTo<ItemSpawningData>()
-                .ItemObject;
+                ).ItemObject;
 
             ItemObject boxingGlove2 = PrefabCreator.CreateItem<BoxingGloveItem>(
                 nameKey: "Adv_Item_BoxingGlove",
@@ -518,12 +446,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 generatorCost: 50,
                 price: 500,
                 flags: ItemFlags.MultipleUse
-                )
-                .SetWeight(floor: 2, 35)
-                .SetLevelTypes(LevelType.Schoolhouse)
-                .ConvertTo<ItemSpawningData>()
-                .SetSpawnsOnFieldTrips(true)
-                .ItemObject;
+                ).ItemObject;
 
             ItemObject boxingGlove1 = PrefabCreator.CreateItem<BoxingGloveItem>(
                 nameKey: "Adv_Item_BoxingGlove1",
@@ -535,10 +458,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 500,
                 flags: ItemFlags.MultipleUse,
                 itemMeta: boxingGlove2.GetMeta()
-                )
-                .DoNotSpawn()
-                .ConvertTo<ItemSpawningData>()
-                .ItemObject;
+                ).ItemObject;
 
             ItemObject portal2 = PrefabCreator.CreateItem<PlaceablePortalItem>(
                 nameKey: "Adv_Item_PlaceablePortal",
@@ -546,18 +466,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 enumName: "PlaceablePortal",
                 smallSpriteFileName: "adv_placeable_portal_small.png",
                 largeSpriteFileName: "adv_placeable_portal_large.png",
-                generatorCost: 60,
+                generatorCost: 30,
                 price: 750,
                 flags: ItemFlags.MultipleUse
-                )
-                .SetWeight(floor: 2, 30)
-                .ConvertTo<ItemSpawningData>()
-                .SetSpawnsOnFieldTrips(true)
-                .SetEndless(true)
-                .SetBannedFloors(1)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory)
-                .ConvertTo<ItemSpawningData>()
-                .ItemObject;
+                ).ItemObject;
 
             ItemObject portal1 = PrefabCreator.CreateItem<PlaceablePortalItem>(
                 nameKey: "Adv_Item_PlaceablePortal1",
@@ -565,16 +477,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 enumName: "PlaceablePortal",
                 smallSpriteFileName: "adv_placeable_portal_small.png",
                 largeSpriteFileName: "adv_placeable_portal_large.png",
-                generatorCost: 60,
+                generatorCost: 30,
                 price: 750,
                 flags: ItemFlags.MultipleUse,
                 itemMeta: portal2.GetMeta()
-                )
-                .DoNotSpawn()
-                .ConvertTo<ItemSpawningData>()
-                .ItemObject;
+                ).ItemObject;
 
-            //metas
             ((BaseMultipleUsableItem)boxingGlove2.item).Initialize(boxingGlove1);
             boxingGlove2.GetMeta().itemObjects = ((BaseMultipleUsableItem)boxingGlove2.item).AllVersions.AddItem(boxingGlove2).ToArray();
 

@@ -1,7 +1,6 @@
-﻿using BaldisBasicsPlusAdvanced.Helpers;
+﻿using System.Linq;
 using HarmonyLib;
 using MTM101BaldAPI;
-using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Generation.Data
 {
@@ -24,13 +23,19 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
 
         private WeightData[] mysteryRoomWeights = _weightDataArr;
 
-        public bool MysteryRoomEvent => mysteryRoomEvent;
+        private int[] bannedMysteryRoomFloors = _intArr;
 
-        public bool PartyEvent => partyEvent;
+        private int[] bannedPartyFloors = _intArr;
 
         public ItemSpawnData(ItemObject instance)
         {
             this.instance = instance;
+        }
+
+        public override int GetWeight(int floor, LevelType levelType)
+        {
+            if (!rooms) return 0;
+            return base.GetWeight(floor, levelType);
         }
 
         public ItemSpawnData AddShopWeight(int floor, int weight)
@@ -53,9 +58,23 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
 
         public int GetJohnnyStoreWeight(int floor)
         {
-            if (shopWeights.Length == 0) return 0;
+            if (!johnnyStore || shopWeights.Length == 0) return 0;
 
             return FindNearestWeightForFloor(shopWeights, floor);
+        }
+
+        public int GetMysteryRoomWeight(int floor)
+        {
+            if (!mysteryRoomEvent || mysteryRoomWeights.Length == 0 || bannedMysteryRoomFloors.Contains(floor)) return 0;
+
+            return FindNearestWeightForFloor(mysteryRoomWeights, floor);
+        }
+
+        public int GetPartyWeight(int floor)
+        {
+            if (!partyEvent || partyWeights.Length == 0 || bannedPartyFloors.Contains(floor)) return 0;
+
+            return FindNearestWeightForFloor(partyWeights, floor);
         }
 
         public ItemSpawnData ForceSpawn()
@@ -79,6 +98,18 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         public ItemSpawnData AddToMysteryRoomEvent()
         {
             mysteryRoomEvent = true;
+            return this;
+        }
+
+        public ItemSpawnData SetBannedMysteryRoomFloors(params int[] bannedFloors)
+        {
+            bannedMysteryRoomFloors = bannedFloors;
+            return this;
+        }
+
+        public ItemSpawnData SetBannedPartyFloors(params int[] bannedFloors)
+        {
+            bannedPartyFloors = bannedFloors;
             return this;
         }
 
@@ -106,17 +137,14 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
                     });
                 }
             }
-            if (johnnyStore)
+            int shopWeight = GetJohnnyStoreWeight(floor);
+            if (shopWeight != 0)
             {
-                int shopWeight = GetJohnnyStoreWeight(floor);
-                if (shopWeight != 0)
+                sceneObject.shopItems = sceneObject.shopItems.AddToArray(new WeightedItemObject()
                 {
-                    sceneObject.shopItems = sceneObject.shopItems.AddToArray(new WeightedItemObject()
-                    {
-                        selection = Instance,
-                        weight = shopWeight
-                    });
-                }
+                    selection = Instance,
+                    weight = shopWeight
+                });
             }
         }
 

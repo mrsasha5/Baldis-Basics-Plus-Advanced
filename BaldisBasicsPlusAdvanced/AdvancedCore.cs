@@ -3,7 +3,6 @@ using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
-using BaldisBasicsPlusAdvanced.Game.Activities;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using BaldisBasicsPlusAdvanced.Generation;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -22,7 +21,6 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.IO;
-using UnityEngine;
 using static BepInEx.BepInDependency;
 
 namespace BaldisBasicsPlusAdvanced
@@ -155,7 +153,7 @@ namespace BaldisBasicsPlusAdvanced
 
             yield return "Invoking OnAssetsPostLoad for modules...";
 
-            IntegrationManager.InvokeOnAssetsPosrLoad();
+            IntegrationManager.InvokeOnAssetsPostLoad();
 
             if (ApiManager.onAssetsPostLoading != null)
             {
