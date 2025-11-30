@@ -41,7 +41,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             return npc;
         }
 
-        public static T CreateItem<T>(string nameKey, string descKey, string enumName, 
+        public static ItemObject CreateItem<T>(string nameKey, string descKey, string enumName, 
             string smallSpriteFileName, string largeSpriteFileName, int generatorCost, int price,
             ItemFlags flags = ItemFlags.None, string[] tags = null, ItemMetaData itemMeta = null, int variant = 1) where T : Item
         {
@@ -80,7 +80,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
                 ObjectStorage.ItemObjects.Add(enumName, itemObject);
             }
 
-            return item;
+            return itemObject;
         }
 
         public static T CreateEvent<T>(string name, string soundKey, string enumName, float minTime, float maxTime,

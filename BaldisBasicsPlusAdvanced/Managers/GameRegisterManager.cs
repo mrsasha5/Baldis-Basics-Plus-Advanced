@@ -365,7 +365,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 largeSpriteFileName: "adv_bread_large.png",
                 generatorCost: 35,
                 price: 550
-                ).ItemObject;
+                );
 
             ItemObject bread1 = PrefabCreator.CreateItem<BreadItem>(
                 nameKey: "Adv_Item_BreadPiece",
@@ -378,7 +378,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 generatorCost: 35,
                 price: 550,
                 itemMeta: bread2.GetMeta()
-                ).ItemObject;
+                );
 
             ItemObject rawChicken2 = PrefabCreator.CreateItem<ChickenItem>(
                 nameKey: "Adv_Item_RawChickenLeg",
@@ -390,7 +390,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 largeSpriteFileName: "adv_raw_chicken_leg_large.png",
                 generatorCost: 30,
                 price: 500
-                ).ItemObject;
+                );
 
             ItemObject rawChicken1 = PrefabCreator.CreateItem<ChickenItem>(
                 nameKey: "Adv_Item_RawChickenLeg1",
@@ -403,7 +403,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 generatorCost: 30,
                 price: 500,
                 itemMeta: rawChicken2.GetMeta()
-                ).ItemObject;
+                );
 
             ItemObject cookedChicken2 = PrefabCreator.CreateItem<ChickenItem>(
                 nameKey: "Adv_Item_CookedChickenLeg",
@@ -416,8 +416,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 generatorCost: 75,
                 price: 800,
                 variant: 2
-                )
-                .ItemObject;
+                );
 
             ItemObject cookedChicken1 = PrefabCreator.CreateItem<ChickenItem>(
                 nameKey: "Adv_Item_CookedChickenLeg1",
@@ -431,7 +430,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 800,
                 itemMeta: cookedChicken2.GetMeta(),
                 variant: 2
-                ).ItemObject;
+                );
 
             ItemObject boxingGlove2 = PrefabCreator.CreateItem<BoxingGloveItem>(
                 nameKey: "Adv_Item_BoxingGlove",
@@ -442,7 +441,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 generatorCost: 50,
                 price: 500,
                 flags: ItemFlags.MultipleUse
-                ).ItemObject;
+                );
 
             ItemObject boxingGlove1 = PrefabCreator.CreateItem<BoxingGloveItem>(
                 nameKey: "Adv_Item_BoxingGlove1",
@@ -454,7 +453,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 500,
                 flags: ItemFlags.MultipleUse,
                 itemMeta: boxingGlove2.GetMeta()
-                ).ItemObject;
+                );
 
             ItemObject portal2 = PrefabCreator.CreateItem<PlaceablePortalItem>(
                 nameKey: "Adv_Item_PlaceablePortal",
@@ -465,7 +464,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 generatorCost: 30,
                 price: 750,
                 flags: ItemFlags.MultipleUse
-                ).ItemObject;
+                );
 
             ItemObject portal1 = PrefabCreator.CreateItem<PlaceablePortalItem>(
                 nameKey: "Adv_Item_PlaceablePortal1",
@@ -477,7 +476,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 750,
                 flags: ItemFlags.MultipleUse,
                 itemMeta: portal2.GetMeta()
-                ).ItemObject;
+                );
 
             ((BaseMultipleUsableItem)boxingGlove2.item).Initialize(boxingGlove1);
             boxingGlove2.GetMeta().itemObjects = ((BaseMultipleUsableItem)boxingGlove2.item).AllVersions.AddItem(boxingGlove2).ToArray();
