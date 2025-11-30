@@ -1,31 +1,103 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using MTM101BaldAPI;
+using MTM101BaldAPI.Registers;
+using Newtonsoft.Json;
 
 namespace BaldisBasicsPlusAdvanced.Generation.Data
 {
     internal class ItemSpawnData : BaseSpawnData<ItemObject>
     {
-
-        private bool mysteryRoomEvent;
-
-        private bool partyEvent;
-
-        private bool rooms;
-
+        [JsonProperty]
         private bool forcedSpawn;
+        
+        private WeightData[] shopWeights;
 
-        private bool johnnyStore;
+        private WeightData[] partyWeights;
 
-        private WeightData[] shopWeights = _weightDataArr;
+        private WeightData[] mysteryRoomWeights;
 
-        private WeightData[] partyWeights = _weightDataArr;
+        private int[] bannedMysteryRoomFloors;
 
-        private WeightData[] mysteryRoomWeights = _weightDataArr;
+        private int[] bannedPartyFloors;
 
-        private int[] bannedMysteryRoomFloors = _intArr;
+        //Enum, uses
+        [JsonProperty("reference")]
+        private KeyValuePair<string, int> Serialization_Item
+        {
+            set
+            {
+                ItemMetaData meta = FindInstance(value.Key);
+                instance = meta.itemObjects[value.Value - 1];
+            }
+        }
 
-        private int[] bannedPartyFloors = _intArr;
+        [JsonProperty("shopWeights")]
+        private WeightData[] ShopWeights
+        {
+            get
+            {
+                return shopWeights == null ? _weightDataArr : shopWeights;
+            }
+            set
+            {
+                shopWeights = value;
+            }
+        }
+
+        [JsonProperty("partyWeights")]
+        private WeightData[] PartyWeights
+        {
+            get
+            {
+                return partyWeights == null ? _weightDataArr : partyWeights;
+            }
+            set
+            {
+                partyWeights = value;
+            }
+        }
+
+        [JsonProperty("mysteryRoomWeights")]
+        private WeightData[] MysteryRoomWeights
+        {
+            get
+            {
+                return mysteryRoomWeights == null ? _weightDataArr : mysteryRoomWeights;
+            }
+            set
+            {
+                mysteryRoomWeights = value;
+            }
+        }
+        
+        [JsonProperty("bannedMysteryRoomFloors")]
+        private int[] BannedMysteryRoomFloors
+        {
+            get
+            {
+                return bannedMysteryRoomFloors == null ? _intArr : bannedMysteryRoomFloors;
+            }
+            set
+            {
+                bannedMysteryRoomFloors = value;
+            }
+        }
+
+        [JsonProperty("bannedPartyFloors")]
+        private int[] BannedPartyFloors
+        {
+            get
+            {
+                return bannedPartyFloors == null ? _intArr : bannedPartyFloors;
+            }
+            set
+            {
+                bannedPartyFloors = value;
+            }
+        }
 
         public ItemSpawnData(ItemObject instance)
         {
@@ -34,47 +106,46 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
 
         public override int GetWeight(int floor, LevelType levelType)
         {
-            if (!rooms) return 0;
             return base.GetWeight(floor, levelType);
         }
 
         public ItemSpawnData AddShopWeight(int floor, int weight)
         {
-            shopWeights = shopWeights.AddToArray(new WeightData(floor, weight));
+            ShopWeights = ShopWeights.AddToArray(new WeightData(floor, weight));
             return this;
         }
 
         public ItemSpawnData AddPartyWeight(int floor, int weight)
         {
-            partyWeights = partyWeights.AddToArray(new WeightData(floor, weight));
+            PartyWeights = PartyWeights.AddToArray(new WeightData(floor, weight));
             return this;
         }
 
         public ItemSpawnData AddMysteryRoomWeight(int floor, int weight)
         {
-            mysteryRoomWeights = mysteryRoomWeights.AddToArray(new WeightData(floor, weight));
+            MysteryRoomWeights = MysteryRoomWeights.AddToArray(new WeightData(floor, weight));
             return this;
         }
 
         public int GetJohnnyStoreWeight(int floor)
         {
-            if (!johnnyStore || shopWeights.Length == 0) return 0;
+            if (ShopWeights.Length == 0) return 0;
 
-            return FindNearestWeightForFloor(shopWeights, floor);
+            return FindNearestWeightForFloor(ShopWeights, floor);
         }
 
         public int GetMysteryRoomWeight(int floor)
         {
-            if (!mysteryRoomEvent || mysteryRoomWeights.Length == 0 || bannedMysteryRoomFloors.Contains(floor)) return 0;
+            if (MysteryRoomWeights.Length == 0 || BannedMysteryRoomFloors.Contains(floor)) return 0;
 
-            return FindNearestWeightForFloor(mysteryRoomWeights, floor);
+            return FindNearestWeightForFloor(MysteryRoomWeights, floor);
         }
 
         public int GetPartyWeight(int floor)
         {
-            if (!partyEvent || partyWeights.Length == 0 || bannedPartyFloors.Contains(floor)) return 0;
+            if (PartyWeights.Length == 0 || BannedPartyFloors.Contains(floor)) return 0;
 
-            return FindNearestWeightForFloor(partyWeights, floor);
+            return FindNearestWeightForFloor(PartyWeights, floor);
         }
 
         public ItemSpawnData ForceSpawn()
@@ -83,44 +154,23 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
             return this;
         }
 
-        public ItemSpawnData AddInRooms()
-        {
-            rooms = true;
-            return this;
-        }
-
-        public ItemSpawnData AddToPartyEvent()
-        {
-            partyEvent = true;
-            return this;
-        }
-
-        public ItemSpawnData AddToMysteryRoomEvent()
-        {
-            mysteryRoomEvent = true;
-            return this;
-        }
-
         public ItemSpawnData SetBannedMysteryRoomFloors(params int[] bannedFloors)
         {
-            bannedMysteryRoomFloors = bannedFloors;
+            BannedMysteryRoomFloors = bannedFloors;
             return this;
         }
 
         public ItemSpawnData SetBannedPartyFloors(params int[] bannedFloors)
         {
-            bannedPartyFloors = bannedFloors;
-            return this;
-        }
-
-        public ItemSpawnData AddInJohnnyStore()
-        {
-            johnnyStore = true;
+            BannedPartyFloors = bannedFloors;
             return this;
         }
 
         public override void Register(string name, int floor, SceneObject sceneObject, CustomLevelObject levelObject)
         {
+            if (Instance == null)
+                throw new Exception("Object reference is null!");
+
             int weight = GetWeight(floor, levelObject.type);
             if (weight != 0)
             {
@@ -146,6 +196,15 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
                     weight = shopWeight
                 });
             }
+        }
+
+        public static ItemMetaData FindInstance(string @enum)
+        {
+            ItemMetaData meta = 
+                ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>(@enum), AdvancedCore.Instance.Info);
+            if (meta == null) throw new Exception("Item metadata was not found!");
+            return meta;
+                
         }
 
     }

@@ -30,6 +30,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems.Food
             groundedChicken.Initialize(pm.ec, pm.transform.position,
                 Singleton<CoreGameManager>.Instance.GetCamera(pm.playerNumber).transform.forward);
             groundedChicken.AssignVisualWith(pm.itm.items[pm.itm.selectedItem]);
+            groundedChicken.Entity.CopyStatusEffects(pm.plm.Entity);
 
             Destroy(gameObject);
             return ReturnOnUse();

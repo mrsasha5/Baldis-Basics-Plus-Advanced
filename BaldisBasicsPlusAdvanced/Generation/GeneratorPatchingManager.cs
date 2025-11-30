@@ -64,52 +64,6 @@ namespace BaldisBasicsPlusAdvanced.Generation
                 if (cellTexData.types.Contains("Floor"))
                     levelObject.hallFloorTexs = levelObject.hallFloorTexs.AddToArray(weightedTex);
             }
-            
-
-            /*foreach (string itemName in ObjectStorage.ItemObjects.Keys)
-            {
-                ItemSpawningData itemSpawnData = (ItemSpawningData)ObjectStorage.SpawningData["item_" + itemName];
-
-                if (name == "END" && !itemSpawnData.EndlessMode) continue;
-
-                if (name != "END" && itemSpawnData.BannedFloors.Contains(floor)) continue;
-
-                if (!itemSpawnData.LevelTypes.Contains(levelObject.type)) continue;
-
-                if (itemSpawnData.SpawnsOnRooms)
-                {
-                    if (itemSpawnData.Forced)
-                    {
-                        levelObject.forcedItems.Add(itemSpawnData.ItemObject);
-                    } else
-                    {
-                        levelObject.potentialItems = levelObject.potentialItems.AddToArray(new WeightedItemObject()
-                        {
-                            selection = itemSpawnData.ItemObject,
-                            weight = itemSpawnData.GetWeight(floor)
-                        });
-                    }
-                }
-            }*/
-
-            foreach (string eventName in ObjectStorage.Events.Keys)
-            {
-                EventSpawningData spawningData = (EventSpawningData)ObjectStorage.SpawningData["random_event_" + eventName];
-
-                if (name == "END" && !spawningData.EndlessMode) continue;
-
-                if (name != "END" && spawningData.BannedFloors.Contains(floor)) continue;
-
-                if (spawningData.GetWeight(floor) <= 0) return; //don't count forced because there's no forced events in the base game
-
-                if (!spawningData.LevelTypes.Contains(levelObject.type)) continue;
-
-                levelObject.randomEvents.Add(new WeightedRandomEvent()
-                {
-                    selection = spawningData.RandomEvent,
-                    weight = spawningData.GetWeight(floor)
-                });
-            }
 
             foreach (string builderName in ObjectStorage.StructureBuilders.Keys)
             {
@@ -274,46 +228,6 @@ namespace BaldisBasicsPlusAdvanced.Generation
         {
             GenerationManager.RegisterSceneObjectData(name, floor, mainLevel); //New system (WiP)
             floor++;
-
-            /*foreach (string itemName in ObjectStorage.ItemObjects.Keys)
-            {
-                ItemSpawningData itemSpawnData = (ItemSpawningData)ObjectStorage.SpawningData["item_" + itemName];
-
-                if (itemSpawnData.BannedFloors.Contains(floor)) continue;
-
-                if (!itemSpawnData.SpawnsOnShop) continue;
-
-                if (itemSpawnData.SpawnsOnShop)
-                {
-                    mainLevel.shopItems = mainLevel.shopItems.AddToArray(new WeightedItemObject()
-                    {
-                        selection = itemSpawnData.ItemObject,
-                        weight = itemSpawnData.GetWeight(floor)
-                    });
-                }
-            }*/
-
-            foreach (string npcName in ObjectStorage.Npcs.Keys)
-            {
-                NPCSpawningData spawningData = (NPCSpawningData)ObjectStorage.SpawningData["npc_" + npcName];
-
-                if (name == "END" && !spawningData.EndlessMode) continue;
-
-                if (name != "END" && spawningData.BannedFloors.Contains(floor)) continue;
-
-                if (spawningData.Forced && floor == 1)
-                {
-                    mainLevel.forcedNpcs = mainLevel.forcedNpcs.AddToArray(spawningData.Npc);
-                }
-                else if (spawningData.GetWeight(floor) > 0)
-                {
-                    mainLevel.potentialNPCs.Add(new WeightedNPC()
-                    {
-                        selection = spawningData.Npc,
-                        weight = spawningData.GetWeight(floor)
-                    });
-                }
-            }
 
             if (name == "END") return;
 

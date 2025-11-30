@@ -44,6 +44,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
 
         public bool NpcIsLauncher => launcher is NPC;
 
+        public Entity Entity => entity;
+
         public void Initialize(EnvironmentController ec, Vector3 pos, object launcher)
         {
             this.ec = ec;

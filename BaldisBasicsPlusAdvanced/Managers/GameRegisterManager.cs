@@ -205,16 +205,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetName("Criss the Crystal")
                 .SetMetaName("Adv_NPC_CrissTheCrystal")
                 .SetEnum("CrissTheCrystal")
-                .SetPoster(AssetStorage.textures["adv_poster_criss_the_crystal"], 
+                .SetPoster(AssetStorage.textures["adv_poster_criss_the_crystal"],
                 "Adv_NPC_CrissTheCrystal", "Adv_NPC_CrissTheCrystal_Desc")
                 .AddLooker()
                 .AddMetaFlag(NPCFlags.StandardNoCollide)
                 .SetMetaTags(new string[] { TagStorage.student })
-            )
-                .SetBannedFloors(1)
-                .SetWeight(2, 50)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse);
+            );
 
             ObjectStorage.Posters.Add(ObjectStorage.Npcs["CrissTheCrystal"].Poster);
             ObjectStorage.Npcs["CrissTheCrystal"].Poster.name = "Adv_Poster_Criss_The_Crystal";
@@ -512,11 +508,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 minTime: 60f,
                 maxTime: 80f,
                 flags: RandomEventFlags.None
-                )
-                .SetWeight(floor: 2, 100)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory)
-                .SetBannedFloors(1, 3);
+            );
 
             PrefabCreator.CreateEvent<ColdSchoolEvent>(
                 name: "Event_ColdSchool",
@@ -525,11 +517,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 minTime: 60f,
                 maxTime: 90f,
                 flags: RandomEventFlags.None
-                )
-                .SetWeight(floor: 2, 75)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse)
-                .SetBannedFloors(1);
+            );
 
             PrefabCreator.CreateEvent<PortalChaosEvent>(
                 name: "Event_PortalChaos",
@@ -538,11 +526,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 minTime: 75f,
                 maxTime: 120f,
                 flags: RandomEventFlags.None
-                )
-                .SetWeight(floor: 2, 50)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory)
-                .SetBannedFloors(1);
+            );
 
             PrefabCreator.CreateEvent<VotingEvent>(
                 name: "Event_Voting",
@@ -550,11 +534,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 soundKey: "adv_bal_event_voting",
                 minTime: 100f,
                 maxTime: 100f,
-                flags: RandomEventFlags.CharacterSpecific | RandomEventFlags.RoomSpecific | RandomEventFlags.AffectsGenerator
-                )
-                .SetWeight(floor: 2, 75)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory, LevelType.Laboratory, LevelType.Maintenance)
-                .SetBannedFloors(1);
+                flags: RandomEventFlags.RoomSpecific | RandomEventFlags.AffectsGenerator
+            );
         }
 
         #endregion

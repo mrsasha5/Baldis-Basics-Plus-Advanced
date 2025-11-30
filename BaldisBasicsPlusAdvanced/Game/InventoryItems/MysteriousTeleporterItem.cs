@@ -11,7 +11,8 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
         public override bool Use(PlayerManager pm)
         {
-            Physics.Raycast(pm.transform.position, Singleton<CoreGameManager>.Instance.GetCamera(pm.playerNumber).transform.forward, out RaycastHit hit, float.PositiveInfinity, ~pm.gameObject.layer, QueryTriggerInteraction.Ignore);
+            Physics.Raycast(pm.transform.position, CoreGameManager.Instance.GetCamera(pm.playerNumber).transform.forward, 
+                out RaycastHit hit, float.PositiveInfinity, ~pm.gameObject.layer, QueryTriggerInteraction.Ignore);
 
             float distance = hit.distance > maxDistance ? maxDistance : hit.distance;
 
@@ -24,6 +25,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             projectile.Initialize(pm.ec, pos, pm);
             projectile.SetFlying(true);
             projectile.transform.forward = forward;
+            projectile.Entity.CopyStatusEffects(pm.plm.Entity);
 
             //ObjectsCreator.CreateProjectile<TeleporterProjectile>("Projectile", AssetsStorage.sprites["adv_mysterious_teleporter"], pos, pm.ec, forward, 1.5f);
             Destroy(gameObject);

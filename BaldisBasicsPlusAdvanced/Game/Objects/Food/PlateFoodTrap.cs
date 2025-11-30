@@ -49,6 +49,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
 
         private bool eaten;
 
+        public Entity Entity => entity;
+
         public void InitializePrefab(Entity entity, int variant)
         {
             audPlaceOnGround = AssetStorage.sounds["food_plate_drop"];
@@ -73,7 +75,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
             renderers[2] = ObjectCreator.CreateSpriteRenderer(AssetStorage.sprites["food_plate_cover"]);
 
             renderers[0].transform.parent.gameObject
-                .AddComponent<SortingGroup>(); //oh oh!!!! Finally, I can change the rendering priority without any layers conflicts!!
+                .AddComponent<SortingGroup>();
 
             renderers[0].sortingOrder = -2;
             renderers[1].sortingOrder = -1;

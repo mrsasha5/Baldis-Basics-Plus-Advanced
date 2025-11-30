@@ -13,25 +13,15 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 {
-    /// <summary>
-    /// Please do not try in one array to add more elements than "MaxFoodCount" from the KitchenStove property.
-    /// I just will cut the array.
-    /// </summary>
     public class FoodRecipeData
     {
-
-        #region Values for poster
-
         private static Texture2D posterTex = AssetHelper.TextureFromFile("Textures/Posters/Adv_Poster_Recipe_Example.png");
-
         private static IntVector2[] posterRawFoodPositions = new IntVector2[]
                 { new IntVector2(23, -118), new IntVector2(61, -118),
                     new IntVector2(23, -155), new IntVector2(61, -155) };
         private static IntVector2[] posterCookedFoodPositions = new IntVector2[]
             { new IntVector2(163, -118), new IntVector2(202, -118),
                     new IntVector2(163, -155), new IntVector2(202, -155) };
-
-        #endregion
 
         private SoundObject sound;
 
@@ -74,7 +64,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         /// <summary>
         /// Initialization of the class.
         /// </summary>
-        /// <param name="pluginInfo"></param>
+        /// <param name="pluginInfo">Plugins that adds this recipe.</param>
         public FoodRecipeData(PluginInfo pluginInfo)
         {
             this.pluginInfos.Add(pluginInfo);
@@ -83,7 +73,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         }
 
         /// <summary>
-        /// Sets raw items which are required to cook cooked ones!
+        /// Defines ingredients for this recipe.
         /// </summary>
         /// <param name="rawFood"></param>
         /// <returns></returns>
@@ -106,7 +96,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         }
 
         /// <summary>
-        /// Sets cooked items which player gets after cooking recipe!
+        /// Defines result items for this recipe.
         /// </summary>
         /// <param name="cookedFood"></param>
         /// <returns></returns>
@@ -130,8 +120,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         /// <summary>
         /// Adds delegate which will be invoked before starting cooking process.
-        /// Post is false: Invokes on KitchenStove.Activate()
-        /// Post is true: Invokes on KitchenStove.OnActivatingPost()
+        /// Post is false: invokes on KitchenStove.Activate()
+        /// Post is true: invokes on KitchenStove.OnActivatingPost()
         /// </summary>
         /// <param name="action"></param>
         /// <param name="post"></param>
@@ -145,8 +135,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
         /// <summary>
         /// Adds delegate which will be invoked on finishing cooking process.
-        /// Post is false: Invokes on KitchenStove.OnDeactivatingPre()
-        /// Post is true: Invokes on KitchenStove.OnDeactivatingPost()
+        /// Post is false: invokes on KitchenStove.OnDeactivatingPre()
+        /// Post is true: invokes on KitchenStove.OnDeactivatingPost()
         /// </summary>
         /// <param name="action"></param>
         /// <param name="post"></param>
@@ -159,7 +149,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         }
 
         /// <summary>
-        /// Overrides cooling time for that recipe! Johnny's Kitchen Stove ignores that!
+        /// Overrides cooling time for that recipe, Johnny's Kitchen Stove ignores that.
         /// </summary>
         /// <param name="coolingTime"></param>
         /// <returns></returns>
@@ -170,7 +160,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         }
 
         /// <summary>
-        /// Overrides cooking time for that recipe!
+        /// Overrides cooking time for that recipe.
         /// </summary>
         /// <param name="cookingTime"></param>
         /// <returns></returns>
@@ -181,7 +171,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         }
 
         /// <summary>
-        /// Overrides sound when recipe is cooked!
+        /// Overrides sound when this recipe is cooked.
         /// </summary>
         /// <param name="sound">If equals null then audio manager won't be playing anything!</param>
         /// <returns></returns>

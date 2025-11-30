@@ -92,7 +92,9 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
         {
             ec = pm.ec;
             entity.Initialize(pm.ec, pm.transform.position);
-            entity.AddForce(new Force(Singleton<CoreGameManager>.Instance.GetCamera(pm.playerNumber).transform.forward, throwSpeed, -throwSpeed));
+            entity.AddForce(new Force(Singleton<CoreGameManager>.Instance.GetCamera(pm.playerNumber).transform.forward, throwSpeed, 
+                -throwSpeed));
+            entity.CopyStatusEffects(pm.plm.Entity);
             return true;
         }
     }

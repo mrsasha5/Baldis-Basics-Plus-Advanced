@@ -89,6 +89,5 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
             return map.Ec.cells[_gridPosition.x, _gridPosition.z].room.type != RoomType.Hall 
                 && map.Ec.cells[_gridPosition.x, _gridPosition.z].room.functions.name != "CornFieldFunctionContainer(Clone)";
         }
-
     }
 }

@@ -107,7 +107,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             List<string> tipKeys = ApiManager.GetAllTips();
 
-            if (tipKeys.Count == 0) return "OHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNOOHNO!";
+            if (tipKeys.Count == 0) return "ERROR: 113";
 
             bool clearData = true;
             foreach (int val in tipUsesData.Values)
@@ -491,11 +491,11 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         private static void Debug_InitializeSwitchButton()
         {
-            if (ObjectsStorage.TipKeys.Count == 0) return;
+            if (ObjectStorage.TipKeys.Count == 0) return;
             debug_modIndex = 0;
             debug_tipIndex = 0;
 
-            KeyValuePair<PluginInfo, List<string>> pair = ObjectsStorage.TipKeys.ElementAt(debug_modIndex);
+            KeyValuePair<PluginInfo, List<string>> pair = ObjectStorage.TipKeys.ElementAt(debug_modIndex);
 
             TextMeshProUGUI pluginText = UIHelpers.CreateText<TextMeshProUGUI>(
                 BaldiFonts.ComicSans12,
@@ -510,11 +510,11 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             switchText.alignment = TextAlignmentOptions.Center;
 
             StandardMenuButton pluginButton =
-                ObjectsCreator.AddButtonProperties(pluginText, new Vector2(150f, 50f), underlineOnHighlight: true);
+                ObjectCreator.AddButtonProperties(pluginText, new Vector2(150f, 50f), underlineOnHighlight: true);
             pluginButton.OnPress.AddListener(() => Debug_SwitchPlugin(pluginText));
 
             StandardMenuButton switchButton =
-                ObjectsCreator.AddButtonProperties(switchText, new Vector2(150f, 50f), underlineOnHighlight: true);
+                ObjectCreator.AddButtonProperties(switchText, new Vector2(150f, 50f), underlineOnHighlight: true);
             switchButton.OnPress.AddListener(() => Debug_SwitchTip(switchText));
 
             pluginButton.transform.SetSiblingIndex(monitor.transform.GetSiblingIndex());
@@ -527,12 +527,12 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             debug_modIndex++;
             debug_tipIndex = 0;
-            if (debug_modIndex >= ObjectsStorage.TipKeys.Count)
+            if (debug_modIndex >= ObjectStorage.TipKeys.Count)
             {
                 debug_modIndex = 0;
             }
 
-            KeyValuePair<PluginInfo, List<string>> pair = ObjectsStorage.TipKeys.ElementAt(debug_modIndex);
+            KeyValuePair<PluginInfo, List<string>> pair = ObjectStorage.TipKeys.ElementAt(debug_modIndex);
 
             tmp.text = $"Chosen plugin:\n{pair.Key.Metadata.GUID}";
 
@@ -543,7 +543,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             debug_tipIndex++;
 
-            KeyValuePair<PluginInfo, List<string>> pair = ObjectsStorage.TipKeys.ElementAt(debug_modIndex);
+            KeyValuePair<PluginInfo, List<string>> pair = ObjectStorage.TipKeys.ElementAt(debug_modIndex);
 
             if (debug_tipIndex >= pair.Value.Count)
             {

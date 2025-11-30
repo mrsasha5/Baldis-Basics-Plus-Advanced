@@ -5,7 +5,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using MTM101BaldAPI.Registers;
 using BaldisBasicsPlusAdvanced.Game.Components;
-using BaldisBasicsPlusAdvanced.Game.Interfaces;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Cache;
 
@@ -44,6 +43,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         private bool broken;
 
         public bool Broken => broken;
+
+        public Entity Entity => entity;
 
         public void InitializePrefab(Entity entity, int variant)
         {

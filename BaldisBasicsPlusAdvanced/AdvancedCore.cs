@@ -239,7 +239,8 @@ namespace BaldisBasicsPlusAdvanced
             yield return "Loading new MIDIs...";
             GameRegisterManager.InitializeMidis();
             yield return "Defining generation...";
-            GenerationManager.DefineGeneration();
+            GenerationManager.LoadGenerationDataFromFiles();
+            GenerationManager.LoadHardcodedGenerationData();
             yield return "Initializing integration modules...";
             IntegrationManager.Initialize();
 

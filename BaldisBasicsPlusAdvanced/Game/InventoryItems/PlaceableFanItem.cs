@@ -27,6 +27,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
                 fan.Initialize(pm.ec, gameCamera.transform.position, gameCamera.transform.rotation, livingTime: 20f, turnOff: true);
                 fan.Clicked(0);
+                fan.Entity.CopyStatusEffects(pm.plm.Entity);
 
                 Destroy(gameObject);
                 return true;

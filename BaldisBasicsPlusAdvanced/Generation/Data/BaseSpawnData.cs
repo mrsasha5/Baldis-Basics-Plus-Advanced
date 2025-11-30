@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using BaldisBasicsPlusAdvanced.Helpers;
 using HarmonyLib;
 using MTM101BaldAPI;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Generation.Data
 {
+    [JsonObject(MemberSerialization.OptIn)]
     internal class BaseSpawnData<T> : ISpawnData<T>
     {
         internal static int[] _intArr = new int[0];
@@ -21,29 +23,74 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
 
         protected T instance;
 
-        public int[] BannedFloors => bannedFloors;
+        [JsonProperty("bannedFloors")]
+        public int[] BannedFloors
+        {
+            get
+            {
+                return bannedFloors;
+            }
+            protected set
+            {
+                bannedFloors = value;
+            }
+        }
 
-        public LevelType[] LevelTypes => levelTypes;
+        public LevelType[] LevelTypes
+        {
+            get
+            {
+                return levelTypes;
+            }
+            protected set
+            {
+                levelTypes = value;
+            }
+        }
 
-        public WeightData[] Weights => weights;
+        [JsonProperty("levelTypes")]
+        private string[] Serialization_LevelTypes
+        {
+            set
+            {
+                levelTypes = new LevelType[value.Length];
+                for (int i = 0; i < value.Length; i++)
+                {
+                    levelTypes[i] = EnumExtensions.GetFromExtendedName<LevelType>(value[i]);
+                }
+            }
+        }
+
+        [JsonProperty("weights")]
+        public WeightData[] Weights
+        {
+            get
+            {
+                return weights;
+            }
+            protected set
+            {
+                weights = value;
+            }
+        }
 
         public T Instance => instance;
 
         public IStandardSpawnData AddWeight(int floor, int weight)
         {
-            weights = weights.AddToArray(new WeightData(floor, weight));
+            Weights = Weights.AddToArray(new WeightData(floor, weight));
             return this;
         }
 
         public IStandardSpawnData SetBannedFloors(params int[] floors)
         {
-            bannedFloors = floors;
+            BannedFloors = floors;
             return this;
         }
 
         public IStandardSpawnData SetLevelTypes(params LevelType[] levelTypes)
         {
-            this.levelTypes = levelTypes;
+            this.LevelTypes = levelTypes;
             return this;
         }
 

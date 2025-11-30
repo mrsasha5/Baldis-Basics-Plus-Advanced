@@ -7,19 +7,14 @@ using System.Linq;
 using MTM101BaldAPI.ObjectCreation;
 using UnityEngine.UI;
 using BaldisBasicsPlusAdvanced.Game.Objects.SodaMachines;
-using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Overlay;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
     public class PrefabCreator
     {
-
-        private const string editorPath = "Compats/LevelStudio/Textures/";
-
         public static T CreateEntity<T>(EntityBuilder builder, int variant = 1) where T : MonoBehaviour, IEntityPrefab
         {
             Entity entity = builder.Build();
@@ -32,7 +27,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             return prefabComponent;
         }
 
-        public static NPCSpawningData CreateNpc<T>(NPCBuilder<T> builder, int variant = 1) where T : NPC
+        public static T CreateNpc<T>(NPCBuilder<T> builder, int variant = 1) where T : NPC
         {
             T npc = builder.Build();
 
@@ -42,15 +37,13 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             }
 
             ObjectStorage.Npcs.Add(npc.Character.ToStringExtended(), npc);
-            ObjectStorage.SpawningData.Add("npc_" + npc.Character.ToStringExtended(), 
-                new NPCSpawningData(npc.Character.ToStringExtended(), npc));
 
-            return (NPCSpawningData)ObjectStorage.SpawningData["npc_" + npc.Character.ToStringExtended()];
+            return npc;
         }
 
-        public static ItemSpawningData CreateItem<I>(string nameKey, string descKey, string enumName, 
+        public static T CreateItem<T>(string nameKey, string descKey, string enumName, 
             string smallSpriteFileName, string largeSpriteFileName, int generatorCost, int price,
-            ItemFlags flags = ItemFlags.None, string[] tags = null, ItemMetaData itemMeta = null, int variant = 1) where I : Item
+            ItemFlags flags = ItemFlags.None, string[] tags = null, ItemMetaData itemMeta = null, int variant = 1) where T : Item
         {
             Sprite smallSprite = AssetHelper.SpriteFromFile("Textures/Items/SmallSprites/" + smallSpriteFileName);
             Sprite largeSprite = AssetHelper.SpriteFromFile("Textures/Items/LargeSprites/" + largeSpriteFileName, 50f);
@@ -64,17 +57,9 @@ namespace BaldisBasicsPlusAdvanced.Helpers
                 .SetSprites(smallSprite, largeSprite)
                 .SetGeneratorCost(generatorCost)
                 .SetShopPrice(price)
-                .SetItemComponent<I>();
+                .SetItemComponent<T>();
 
             Items @enum = Items.None;
-            
-            try //for what? Just to avoid logs about enum duplicates.
-            {
-                @enum = EnumExtensions.GetFromExtendedName<Items>(enumName);
-            } catch
-            {
-                @enum = EnumExtensions.ExtendEnum<Items>(enumName);
-            }
             
             itemBuilder.SetEnum(@enum);
 
@@ -83,25 +68,22 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
             ItemObject itemObject = itemBuilder.Build();
 
-            I item = (I)itemObject.item;
+            T item = (T)itemObject.item;
 
             if (item is IPrefab)
             {
                 ((IPrefab)item).InitializePrefab(variant);
             }
 
-            ItemSpawningData spawnData = new ItemSpawningData(enumName, itemObject);
-
             if (isGenericItem)
             {
                 ObjectStorage.ItemObjects.Add(enumName, itemObject);
-                ObjectStorage.SpawningData.Add("item_" + enumName, spawnData);
             }
 
-            return spawnData;
+            return item;
         }
 
-        public static EventSpawningData CreateEvent<T>(string name, string soundKey, string enumName, float minTime, float maxTime,
+        public static T CreateEvent<T>(string name, string soundKey, string enumName, float minTime, float maxTime,
             RandomEventFlags flags, int variant = 1) where T : RandomEvent
         {
             T randomEvent = new RandomEventBuilder<T>(AdvancedCore.Instance.Info)
@@ -115,10 +97,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             if (randomEvent is IPrefab) ((IPrefab)randomEvent).InitializePrefab(variant);
 
             ObjectStorage.Events.Add(enumName, randomEvent);
-
-            EventSpawningData spawningData = new EventSpawningData(enumName, randomEvent);
-            ObjectStorage.SpawningData.Add("random_event_" + enumName, spawningData);
-            return spawningData;
+            return randomEvent;
 
         }
 
