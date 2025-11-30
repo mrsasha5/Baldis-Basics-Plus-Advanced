@@ -35,7 +35,6 @@ using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Compats;
 using MTM101BaldAPI.AssetTools;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
-using BaldisBasicsPlusAdvanced.Patches.Player;
 using BaldisBasicsPlusAdvanced.Game.Objects.Portals;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs;
@@ -43,17 +42,10 @@ using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
-using Newtonsoft.Json;
 using BaldisBasicsPlusAdvanced.Game.Activities;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 using PlusStudioLevelFormat;
 using PlusStudioLevelLoader;
-using System.Reflection;
-using BepInEx.Bootstrap;
-using BepInEx;
-using BaldisBasicsPlusAdvanced.Game;
 using BaldisBasicsPlusAdvanced.Extensions;
-using MTM101BaldAPI.Reflection;
 #endregion
 
 namespace BaldisBasicsPlusAdvanced.Managers
@@ -236,7 +228,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     TagStorage.repairTool,
                     TagStorage.criminal_contraband
                 }
-            );
+            ).overrideDisabled = true;
 
             PrefabCreator.CreateItem<WindBlowerItem>(
                 nameKey: "Adv_Item_WindBlower",
@@ -1069,15 +1061,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     fanBaseRenderer.SetParent(entity.transform);
                     return fanBaseRenderer;
                 }));
-        }
-
-        #endregion
-
-        #region Internal Patches Corrections
-
-        public static void CorrectPatches()
-        {
-            ItemManagerPatch.items.Add(EnumExtensions.GetFromExtendedName<Items>("Hammer"));
         }
 
         #endregion

@@ -75,7 +75,7 @@ namespace BaldisBasicsPlusAdvanced
 
             MTM101BaldiDevAPI.AddWarningScreen(
                 "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
-                "If you are not a beta tester... " +
+                "If you didn't get this build officially... " +
                 "Please note that as a NON-BETA TESTER YOU WILL NOT RECEIVE FEEDBACK IN CASE OF A BROKEN GAME. " +
                 "You can close game until it will be launched fully.",
                 false);
@@ -174,7 +174,7 @@ namespace BaldisBasicsPlusAdvanced
 
             NotificationManager.Notification notif = CheckAssetsMarker();
 
-            int count = 26;
+            int count = 25;
 
             if (notif != null) count++;
 
@@ -230,8 +230,6 @@ namespace BaldisBasicsPlusAdvanced
             GameRegisterManager.InitializeRoomAssets();
             yield return "Overriding game prefabs...";
             AssetStorage.OverrideAssetsProperties();
-            yield return "Correcting patches...";
-            GameRegisterManager.CorrectPatches();
             yield return "Initializing scene objects...";
             GameRegisterManager.InitializeSceneObjects();
             yield return "Initializing trips...";

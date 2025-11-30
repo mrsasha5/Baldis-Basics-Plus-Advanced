@@ -54,14 +54,11 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
             ItemBuilder itemBuilder = new ItemBuilder(AdvancedCore.Instance.Info)
                 .SetNameAndDescription(nameKey, descKey)
+                .SetEnum(enumName)
                 .SetSprites(smallSprite, largeSprite)
                 .SetGeneratorCost(generatorCost)
                 .SetShopPrice(price)
                 .SetItemComponent<T>();
-
-            Items @enum = Items.None;
-            
-            itemBuilder.SetEnum(@enum);
 
             if (itemMeta == null) itemBuilder.SetMeta(flags, tags);
             else itemBuilder.SetMeta(itemMeta);
