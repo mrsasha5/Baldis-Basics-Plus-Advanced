@@ -186,7 +186,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             return spawningData;
         }
 
-        public static StructureBuilderSpawningData CreateStructureBuilder<T>(string name, int variant = 1) where T : StructureBuilder
+        public static T CreateStructureBuilder<T>(string name, int variant = 1) where T : StructureBuilder
         {
             GameObject gm = new GameObject(name);
             gm.ConvertToPrefab(true);
@@ -196,11 +196,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
             ObjectStorage.StructureBuilders.Add(name, builder);
 
-            StructureBuilderSpawningData spawningData = new StructureBuilderSpawningData(name, builder);
-
-            ObjectStorage.SpawningData.Add("builder_" + name, spawningData);
-
-            return spawningData;
+            return builder;
         }
 
         public static GameObject CreateOverlay(string name, Sprite sprite, bool setActive)
@@ -271,37 +267,35 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             ObjectStorage.RoomFunctionsContainers.Add(name, container);
         }
 
-        public static RoomGroupSpawningData CreateRoomGroup(string name, int minRooms, int maxRooms, string lightName = "FluorescentLight")
+        public static RoomGroup CreateRoomGroup(string name, int minRooms, int maxRooms, string lightName = "FluorescentLight")
         {
-            EnumExtensions.ExtendEnum<RoomCategory>(name);
-            ObjectStorage.RoomGroups.Add(name,
-                new RoomGroup()
-                {
-                    name = name,
-                    minRooms = minRooms,
-                    maxRooms = maxRooms,
-                    ceilingTexture = new WeightedTexture2D[] {
+            RoomGroup group = new RoomGroup()
+            {
+                name = name,
+                minRooms = minRooms,
+                maxRooms = maxRooms,
+                ceilingTexture = new WeightedTexture2D[] {
                         new WeightedTexture2D()
                         {
                             selection = AssetStorage.textures["regular_ceiling"],
                             weight = 100
                         }
                     },
-                    wallTexture = new WeightedTexture2D[] {
+                wallTexture = new WeightedTexture2D[] {
                         new WeightedTexture2D()
                         {
                             selection = AssetStorage.textures["regular_wall"],
                             weight = 100
                         }
                     },
-                    floorTexture = new WeightedTexture2D[] {
+                floorTexture = new WeightedTexture2D[] {
                         new WeightedTexture2D()
                         {
                             selection = AssetStorage.textures["carpet"],
                             weight = 100
                         }
                     },
-                    light = new WeightedTransform[]
+                light = new WeightedTransform[]
                     {
                         new WeightedTransform()
                         {
@@ -309,12 +303,12 @@ namespace BaldisBasicsPlusAdvanced.Helpers
                             weight = 100
                         }
                     }
-                });
+            };
 
-            RoomGroupSpawningData spawnData = new RoomGroupSpawningData(name, ObjectStorage.RoomGroups.Values.Last());
-            ObjectStorage.SpawningData.Add("room_group_" + name, spawnData);
+            EnumExtensions.ExtendEnum<RoomCategory>(name);
+            ObjectStorage.RoomGroups.Add(name, group);
 
-            return spawnData;
+            return group;
         }
 
         public static void CreateDoorMatSet(string name, Material openMat, Material closedMat)

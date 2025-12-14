@@ -32,6 +32,14 @@ namespace BaldisBasicsPlusAdvanced.Generation
             {
                 data.Add(JsonConvert.DeserializeObject<NpcSpawnData>(File.ReadAllText(path)));
             }
+            foreach (string path in Directory.GetFiles(basePath + "RoomGroups"))
+            {
+                data.Add(JsonConvert.DeserializeObject<RoomGroupSpawnData>(File.ReadAllText(path)));
+            }
+            foreach (string path in Directory.GetFiles(basePath + "Structures"))
+            {
+                data.Add(JsonConvert.DeserializeObject<StructureBuilderSpawnData>(File.ReadAllText(path)));
+            }
         }
 
         public static void LoadHardcodedGenerationData()

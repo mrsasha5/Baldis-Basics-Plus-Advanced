@@ -65,39 +65,6 @@ namespace BaldisBasicsPlusAdvanced.Generation
                     levelObject.hallFloorTexs = levelObject.hallFloorTexs.AddToArray(weightedTex);
             }
 
-            foreach (string builderName in ObjectStorage.StructureBuilders.Keys)
-            {
-                StructureBuilderSpawningData spawningData = (StructureBuilderSpawningData)ObjectStorage.SpawningData["builder_" + builderName];
-
-                if (name == "END" && !spawningData.EndlessMode) continue;
-
-                if (name != "END" && spawningData.BannedFloors.Contains(floor)) continue;
-
-                if (spawningData.GetWeight(floor) <= 0 && !spawningData.Forced) continue;
-
-                if (!spawningData.LevelTypes.Contains(levelObject.type)) continue;
-
-                if (spawningData.Forced)
-                {
-                    levelObject.forcedStructures = levelObject.forcedStructures.AddToArray(new StructureWithParameters()
-                    {
-                        prefab = spawningData.StructureBuilder,
-                        parameters = spawningData.GetStructureParameters(floor)
-                    });
-                } else
-                {
-                    levelObject.potentialStructures = levelObject.potentialStructures.AddToArray(new WeightedStructureWithParameters()
-                    {
-                        selection = new StructureWithParameters()
-                        {
-                            prefab = spawningData.StructureBuilder,
-                            parameters = spawningData.GetStructureParameters(floor)
-                        },
-                        weight = spawningData.GetWeight(floor)
-                    });
-                }
-            }
-
             foreach (BaseSpawningData data in ObjectStorage.SpawningData.Values) 
             {
                 if (data is StructureBuilderExtensionsSpawningData)
@@ -133,28 +100,6 @@ namespace BaldisBasicsPlusAdvanced.Generation
             foreach (WeightedPosterObject weightedPosterObject in ObjectStorage.WeightedPosterObjects)
             {
                 levelObject.posters = levelObject.posters.AddToArray(weightedPosterObject);
-            }
-
-            foreach (string group in ObjectStorage.RoomGroups.Keys)
-            {
-                BaseSpawningData spawningData = ObjectStorage.SpawningData["room_group_" + group];
-
-                if (name == "END" && !spawningData.EndlessMode) continue;
-
-                if (name != "END" && spawningData.BannedFloors.Contains(floor)) continue;
-
-                RoomGroup groupToClone = ObjectStorage.RoomGroups[group];
-
-                RoomGroup roomGroup = new RoomGroup();
-                roomGroup.name = groupToClone.name;
-                roomGroup.minRooms = groupToClone.minRooms;
-                roomGroup.maxRooms = groupToClone.maxRooms;
-                roomGroup.ceilingTexture = groupToClone.ceilingTexture;
-                roomGroup.wallTexture = groupToClone.wallTexture;
-                roomGroup.floorTexture = groupToClone.floorTexture;
-                roomGroup.light = groupToClone.light;
-
-                levelObject.roomGroup = levelObject.roomGroup.AddToArray(roomGroup);
             }
 
             foreach (CustomRoomData roomData in ObjectStorage.CustomRoomData)

@@ -36,21 +36,20 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
             if (Instance == null)
                 throw new Exception("Object reference is null!");
 
+            if (forced && standardData.IsFloorIncluded(floor, levelObject.type))
+            {
+                levelObject.forcedNpcs = levelObject.forcedNpcs.AddToArray(Instance);
+                return;
+            }
+
             int weight = GetWeight(floor, levelObject.type);
             if (weight != 0)
             {
-                if (forced)
+                sceneObject.potentialNPCs.Add(new WeightedNPC()
                 {
-                    levelObject.forcedNpcs = levelObject.forcedNpcs.AddToArray(Instance);
-                }
-                else
-                {
-                    sceneObject.potentialNPCs.Add(new WeightedNPC()
-                    {
-                        selection = Instance,
-                        weight = weight
-                    });
-                }
+                    selection = Instance,
+                    weight = weight
+                });
             }
         }
 

@@ -2,7 +2,6 @@
 using MTM101BaldAPI.Components.Animation;
 using System.Collections;
 using UnityEngine;
-using System.Collections.Generic;
 using MTM101BaldAPI.Registers;
 using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Extensions;

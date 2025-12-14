@@ -607,116 +607,16 @@ namespace BaldisBasicsPlusAdvanced.Managers
             ReflectionHelper.SetValue<MeshRenderer>(rotoHallBuilder, "straightCylinderPre", rustyStraightCylinder);
 
             ObjectStorage.StructureBuilders.Add("Structure_RustyRotohall", rotoHallBuilder);
-
-            StructureBuilderSpawningData rotohallSpawningData = 
-                new StructureBuilderSpawningData("Structure_RustyRotohall", rotoHallBuilder);
-
-            rotohallSpawningData
-                .SetStructureParameters(floor: 2, new StructureParameters()
-                {
-                    minMax = new IntVector2[] { new IntVector2(1, 2), new IntVector2(0, 12) },
-                })
-                .SetBannedFloors(1)
-                .SetWeight(floor: 2, 75)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse);
-
-            ObjectStorage.SpawningData.Add("builder_Structure_RustyRotohall", rotohallSpawningData);
             //Builder ends
 
-            PrefabCreator.CreateStructureBuilder<Structure_Pulley>("Structure_Pulley")
-                .SetStructureParameters(floor: 2, new StructureParameters()
-                {
-                    minMax = new IntVector2[] { new IntVector2(1, 2)},
-                })
-                .SetBannedFloors(1)
-                .SetWeight(floor: 2, 75)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse);
-
-            PrefabCreator.CreateStructureBuilder<Structure_AccelerationPlate>("Structure_AccelerationPlate")
-                .SetStructureParameters(floor: 2, new StructureParameters()
-                {
-                    minMax = new IntVector2[] { new IntVector2(2, 5), new IntVector2(0, 0) },
-                })
-                .SetBannedFloors(1)
-                .SetWeight(floor: 2, 75)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);
-
-            PrefabCreator.CreateStructureBuilder<Structure_KitchenStove>("Structure_KitchenStove")
-                .SetStructureParameters(floor: 2, new StructureParameters()
-                {
-                    minMax = new IntVector2[] { new IntVector2(1, 2), new IntVector2(0, 0) },
-                })
-                .SetBannedFloors(1)
-                .SetWeight(2, 100)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);
-
-            PrefabCreator.CreateStructureBuilder<Structure_GenericPlate>("Structure_GenericPlate")
-                .SetStructureParameters(floor: 2, new StructureParameters()
-                {
-                    minMax = new IntVector2[] { new IntVector2(2, 5), new IntVector2(0, 2) },
-                })
-                .SetBannedFloors(1)
-                .SetWeight(floor: 2, 75)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory, LevelType.Laboratory, LevelType.Maintenance);
-
-            PrefabCreator.CreateStructureBuilder<Structure_Zipline>("Structure_Zipline")
-                .SetStructureParameters(floor: 2, new StructureParameters()
-                {
-                    minMax = new IntVector2[] { new IntVector2(1, 2)},
-                    prefab = new WeightedGameObject[]
-                    {
-                        new WeightedGameObject()
-                        {
-                            selection = ObjectStorage.Objects["zipline_hanger"],
-                            weight = 100
-                        },
-                        new WeightedGameObject()
-                        {
-                            selection = ObjectStorage.Objects["zipline_black_hanger"],
-                            weight = 75
-                        }
-                    }
-                })
-                .SetBannedFloors(1)
-                .SetWeight(floor: 2, 100)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse);
-
-            PrefabCreator.CreateStructureBuilder<Structure_NoisyPlate>("Structure_NoisyPlate")
-                .SetStructureParameters(floor: 2, new StructureParameters()
-                {
-                    minMax = new IntVector2[] { new IntVector2(2, 5) },
-                })
-                .SetBannedFloors(1)
-                .SetWeight(floor: 2, 50)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Laboratory);
-
-            PrefabCreator.CreateStructureBuilder<Structure_GumDispenser>("Structure_GumDispenser")
-                .SetStructureParameters(floor: 2, new StructureParameters()
-                {
-                    minMax = new IntVector2[] { new IntVector2(1, 2) },
-                })
-                .SetBannedFloors(1)
-                .SetWeight(floor: 2, 75)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);
-
-            PrefabCreator.CreateStructureBuilder<Structure_PlainPlate>("Structure_PlainPlate")
-                .SetStructureParameters(floor: 2, new StructureParameters()
-                {
-                    chance = new float[] { 0.25f },
-                    minMax = new IntVector2[] { new IntVector2(1, 2), new IntVector2(0, 0) },
-                })
-                .SetBannedFloors(1)
-                .SetForced(true)
-                .SetEndless(true)
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Factory);
+            PrefabCreator.CreateStructureBuilder<Structure_Pulley>("Structure_Pulley");
+            PrefabCreator.CreateStructureBuilder<Structure_AccelerationPlate>("Structure_AccelerationPlate");
+            PrefabCreator.CreateStructureBuilder<Structure_KitchenStove>("Structure_KitchenStove");
+            PrefabCreator.CreateStructureBuilder<Structure_GenericPlate>("Structure_GenericPlate");
+            PrefabCreator.CreateStructureBuilder<Structure_Zipline>("Structure_Zipline");
+            PrefabCreator.CreateStructureBuilder<Structure_NoisyPlate>("Structure_NoisyPlate");
+            PrefabCreator.CreateStructureBuilder<Structure_GumDispenser>("Structure_GumDispenser");
+            PrefabCreator.CreateStructureBuilder<Structure_PlainPlate>("Structure_PlainPlate");
         }
 
         #endregion
@@ -1109,13 +1009,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
         private static void InitializeRoomGroups()
         {
             PrefabCreator.CreateRoomGroup("EnglishClass", minRooms: -6, maxRooms: 1)
-                .SetBannedFloors(1)
-                .ConvertTo<RoomGroupSpawningData>()
-                .Group
                 .SetCeilingTex(AssetStorage.textures["adv_english_ceiling"], 100)
                 .SetWallTex(AssetStorage.textures["adv_english_wall"], 100)
                 .SetFloorTex(AssetStorage.textures["adv_english_floor"], 100);
-
             EnumExtensions.ExtendEnum<RoomCategory>("SchoolCouncil");
         }
 

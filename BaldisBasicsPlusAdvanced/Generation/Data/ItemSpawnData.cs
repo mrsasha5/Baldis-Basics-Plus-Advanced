@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using MTM101BaldAPI;
@@ -11,7 +10,10 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
     internal class ItemSpawnData : BaseSpawnData<ItemObject>
     {
         [JsonProperty]
-        private bool forcedSpawn;
+        private bool forced;
+
+        [JsonProperty]
+        private int uses = 1;
         
         private WeightData[] shopWeights;
 
@@ -25,12 +27,12 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
 
         //Enum, uses
         [JsonProperty("reference")]
-        private KeyValuePair<string, int> Serialization_Item
+        private string Serialization_Item
         {
             set
             {
-                ItemMetaData meta = FindInstance(value.Key);
-                instance = meta.itemObjects[value.Value - 1];
+                ItemMetaData meta = FindInstance(value);
+                instance = meta.itemObjects[uses - 1];
             }
         }
 
@@ -39,7 +41,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         {
             get
             {
-                return shopWeights == null ? _weightDataArr : shopWeights;
+                return shopWeights == null ? StandardGenerationData._weightDataArr : shopWeights;
             }
             set
             {
@@ -52,7 +54,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         {
             get
             {
-                return partyWeights == null ? _weightDataArr : partyWeights;
+                return partyWeights == null ? StandardGenerationData._weightDataArr : partyWeights;
             }
             set
             {
@@ -65,7 +67,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         {
             get
             {
-                return mysteryRoomWeights == null ? _weightDataArr : mysteryRoomWeights;
+                return mysteryRoomWeights == null ? StandardGenerationData._weightDataArr : mysteryRoomWeights;
             }
             set
             {
@@ -78,7 +80,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         {
             get
             {
-                return bannedMysteryRoomFloors == null ? _intArr : bannedMysteryRoomFloors;
+                return bannedMysteryRoomFloors == null ? StandardGenerationData._intArr : bannedMysteryRoomFloors;
             }
             set
             {
@@ -91,7 +93,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         {
             get
             {
-                return bannedPartyFloors == null ? _intArr : bannedPartyFloors;
+                return bannedPartyFloors == null ? StandardGenerationData._intArr : bannedPartyFloors;
             }
             set
             {
@@ -102,11 +104,6 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         public ItemSpawnData(ItemObject instance)
         {
             this.instance = instance;
-        }
-
-        public override int GetWeight(int floor, LevelType levelType)
-        {
-            return base.GetWeight(floor, levelType);
         }
 
         public ItemSpawnData AddShopWeight(int floor, int weight)
@@ -131,26 +128,26 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         {
             if (ShopWeights.Length == 0) return 0;
 
-            return FindNearestWeightForFloor(ShopWeights, floor);
+            return WeightData.FindNearestWeightForFloor(ShopWeights, floor);
         }
 
         public int GetMysteryRoomWeight(int floor)
         {
             if (MysteryRoomWeights.Length == 0 || BannedMysteryRoomFloors.Contains(floor)) return 0;
 
-            return FindNearestWeightForFloor(MysteryRoomWeights, floor);
+            return WeightData.FindNearestWeightForFloor(MysteryRoomWeights, floor);
         }
 
         public int GetPartyWeight(int floor)
         {
             if (PartyWeights.Length == 0 || BannedPartyFloors.Contains(floor)) return 0;
 
-            return FindNearestWeightForFloor(PartyWeights, floor);
+            return WeightData.FindNearestWeightForFloor(PartyWeights, floor);
         }
 
         public ItemSpawnData ForceSpawn()
         {
-            forcedSpawn = true;
+            forced = true;
             return this;
         }
 
@@ -172,20 +169,17 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
                 throw new Exception("Object reference is null!");
 
             int weight = GetWeight(floor, levelObject.type);
-            if (weight != 0)
+            if (forced)
             {
-                if (forcedSpawn)
+                levelObject.forcedItems.Add(Instance);
+            }
+            else if (weight != 0)
+            {
+                levelObject.potentialItems = levelObject.potentialItems.AddToArray(new WeightedItemObject()
                 {
-                    levelObject.forcedItems.Add(Instance);
-                }
-                else
-                {
-                    levelObject.potentialItems = levelObject.potentialItems.AddToArray(new WeightedItemObject()
-                    {
-                        selection = Instance,
-                        weight = weight
-                    });
-                }
+                    selection = Instance,
+                    weight = weight
+                });
             }
             int shopWeight = GetJohnnyStoreWeight(floor);
             if (shopWeight != 0)

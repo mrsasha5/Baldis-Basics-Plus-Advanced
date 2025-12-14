@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using MTM101BaldAPI;
@@ -9,30 +8,29 @@ using UnityEngine;
 namespace BaldisBasicsPlusAdvanced.Generation.Data
 {
     [JsonObject(MemberSerialization.OptIn)]
-    internal class BaseSpawnData<T> : ISpawnData<T>
+    internal struct StandardGenerationData
     {
-        internal static int[] _intArr = new int[0];
-        internal static LevelType[] _levelTypeArr = new LevelType[0];
-        internal static WeightData[] _weightDataArr = new WeightData[0];
+        public static int[] _intArr = new int[0];
+        public static LevelType[] _levelTypeArr = new LevelType[0];
+        public static WeightData[] _weightDataArr = new WeightData[0];
 
-        protected int[] bannedFloors = _intArr;
+        private int[] floors;
 
-        protected LevelType[] levelTypes = _levelTypeArr;
+        private LevelType[] levelTypes;
 
-        protected WeightData[] weights = _weightDataArr;
-
-        protected T instance;
+        private WeightData[] weights;
 
         [JsonProperty("bannedFloors")]
         public int[] BannedFloors
         {
             get
             {
-                return bannedFloors;
+                if (floors == null) return _intArr;
+                return floors;
             }
-            protected set
+            set
             {
-                bannedFloors = value;
+                floors = value;
             }
         }
 
@@ -40,9 +38,10 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         {
             get
             {
+                if (levelTypes == null) return _levelTypeArr;
                 return levelTypes;
             }
-            protected set
+            set
             {
                 levelTypes = value;
             }
@@ -66,37 +65,23 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         {
             get
             {
+                if (weights == null) return _weightDataArr;
                 return weights;
             }
-            protected set
+            set
             {
                 weights = value;
             }
         }
 
-        public T Instance => instance;
-
-        public IStandardSpawnData AddWeight(int floor, int weight)
+        public bool IsFloorIncluded(int floor, LevelType levelType)
         {
-            Weights = Weights.AddToArray(new WeightData(floor, weight));
-            return this;
+            return !BannedFloors.Contains(floor) && LevelTypes.Contains(levelType);
         }
 
-        public IStandardSpawnData SetBannedFloors(params int[] floors)
+        public int GetWeight(int floor, LevelType levelType)
         {
-            BannedFloors = floors;
-            return this;
-        }
-
-        public IStandardSpawnData SetLevelTypes(params LevelType[] levelTypes)
-        {
-            this.LevelTypes = levelTypes;
-            return this;
-        }
-
-        public virtual int GetWeight(int floor, LevelType levelType)
-        {
-            if (Weights.Length == 0 || BannedFloors.Contains(floor) || !LevelTypes.Contains(levelType)) return 0;
+            if (Weights.Length == 0 || !IsFloorIncluded(floor, levelType)) return 0;
 
             for (int i = 0; i < Weights.Length; i++)
             {
@@ -106,16 +91,81 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
                 }
             }
 
-            return FindNearestWeightForFloor(Weights, floor);
+            return WeightData.FindNearestWeightForFloor(Weights, floor);
+        }
+    }
+
+    internal interface ISpawnData<T> : IStandardSpawnData
+    {
+        T Instance { get; }
+    }
+
+    internal interface IStandardSpawnData
+    {
+        int GetWeight(int floor, LevelType levelType);
+        IStandardSpawnData SetBannedFloors(params int[] floors);
+        IStandardSpawnData SetLevelTypes(params LevelType[] levelTypes);
+        IStandardSpawnData AddWeight(int floor, int weight);
+        void Register(string name, int floor, SceneObject sceneObject, CustomLevelObject levelObject);
+    }
+
+    [JsonObject(MemberSerialization.OptIn)]
+    internal class BaseSpawnData<T> : ISpawnData<T>
+    {
+        protected StandardGenerationData standardData;
+
+        protected T instance;
+
+        public T Instance => instance;
+
+        public IStandardSpawnData AddWeight(int floor, int weight)
+        {
+            standardData.Weights = standardData.Weights.AddToArray(new WeightData(floor, weight));
+            return this;
+        }
+
+        public IStandardSpawnData SetBannedFloors(params int[] floors)
+        {
+            standardData.BannedFloors = floors;
+            return this;
+        }
+
+        public IStandardSpawnData SetLevelTypes(params LevelType[] levelTypes)
+        {
+            standardData.LevelTypes = levelTypes;
+            return this;
+        }
+
+        public virtual int GetWeight(int floor, LevelType levelType)
+        {
+            return standardData.GetWeight(floor, levelType);
         }
 
         public virtual void Register(string name, int floor, SceneObject sceneObject, CustomLevelObject levelObject)
         {
             throw new NotImplementedException();
         }
+    }
 
-        protected int FindNearestWeightForFloor(WeightData[] values, int floor)
+    [JsonObject(MemberSerialization.OptIn)]
+    internal struct WeightData
+    {
+        [JsonProperty]
+        public int floor;
+
+        [JsonProperty]
+        public int weight;
+
+        public WeightData(int floor, int weight)
         {
+            this.floor = floor;
+            this.weight = weight;
+        }
+
+        public static int FindNearestWeightForFloor(WeightData[] values, int floor)
+        {
+            if (values.Length == 0) return 0;
+
             int difference = Mathf.Abs(values[0].floor - floor);
             int nearestFloorIndex = 0;
 
