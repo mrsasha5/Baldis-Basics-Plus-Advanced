@@ -1,6 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
-using BaldisBasicsPlusAdvanced.Game.Components.Movement;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
 using System;
@@ -165,10 +164,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 
             InitializeRenderer();
 
-            meshRenderers[1].sortingOrder = 1;
-            gameObject.AddComponent<SortingGroup>();
-
-            //meshRenderers[1].transform.localPosition += Vector3.up * 0.001f;
+            meshRenderers[1].transform.localPosition += Vector3.up * 0.001f;
 
             arrowDeactivatedMat = new Material(deactivatedMaterial);
             arrowActivatedMat = new Material(deactivatedMaterial);

@@ -282,7 +282,7 @@ namespace BaldisBasicsPlusAdvanced.API
             Spelloon spelloon = mathNumComp.gameObject.AddComponent<Spelloon>();
             spelloon.name = "Spelloon_" + symbol;
             spelloon.InitializePrefab(1);
-            spelloon.InitializePrefabPost(symbol, sprite);
+            spelloon.PostInitializePrefab(symbol, sprite);
 
             SymbolMachine[] machines = AssetHelper.LoadAssets<SymbolMachine>();
 

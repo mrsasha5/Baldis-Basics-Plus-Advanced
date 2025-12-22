@@ -31,8 +31,8 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs
         [SerializeField]
         private SoundObject audShred;
 
-        [SerializeField]
-        private ParticleSystem particleSystem;
+        //[SerializeField]
+        //private ParticleSystem particleSystem;
 
         [SerializeField]
         private float motorVolume;
@@ -118,7 +118,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs
 
             trapObj.AddComponent<CubeTrap>().reaper = this;
 
-            particleSystem = new GameObject("ParticleSystem").AddComponent<ParticleSystem>();
+            /*particleSystem = new GameObject("ParticleSystem").AddComponent<ParticleSystem>();
             particleSystem.transform.SetParent(transform);
             particleSystem.transform.localPosition = Vector3.up * -5f;
 
@@ -146,7 +146,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs
             VelocityOverLifetimeModule velocityOverLifetime = particleSystem.velocityOverLifetime;
             velocityOverLifetime.enabled = true;
             velocityOverLifetime.y = 24f;
-            velocityOverLifetime.radialMultiplier = 1.5f;
+            velocityOverLifetime.radialMultiplier = 1.5f;*/
 
             trapObj.transform.localScale = new Vector3(250f, 25f, 20f);
         }
@@ -209,16 +209,16 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs
                 spriteColor.b = spriteWarmValue;
                 renderer.color = spriteColor;
 
-                EmissionModule emission = particleSystem.emission;
-                emission.rateOverDistance = particlesRateOverDistance * (1f - spriteWarmValue);
+                //EmissionModule emission = particleSystem.emission;
+                //emission.rateOverDistance = particlesRateOverDistance * (1f - spriteWarmValue);
             }
             else
             {
-                if (particleSystem.emission.enabled)
+                /*if (particleSystem.emission.enabled)
                 {
                     EmissionModule emission = particleSystem.emission;
                     emission.enabled = false;
-                }
+                }*/
                 spriteWarmValue = Mathf.Clamp01(spriteWarmValue + coolingSpeed * Time.deltaTime * ec.NpcTimeScale);
                 spriteColor.g = spriteWarmValue;
                 spriteColor.b = spriteWarmValue;
@@ -230,11 +230,11 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs
         {
             if (other.CompareTag("Wall"))
             {
-                if (!particleSystem.emission.enabled)
+                /*if (!particleSystem.emission.enabled)
                 {
                     EmissionModule emission = particleSystem.emission;
                     emission.enabled = true;
-                }
+                }*/
 
                 keepWarmTime = 3f;
                 Cell cell = ec.CellFromPosition(other.transform.parent.position);

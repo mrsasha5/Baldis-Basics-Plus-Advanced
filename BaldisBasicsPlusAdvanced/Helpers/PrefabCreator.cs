@@ -11,6 +11,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Overlay;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
+using BaldisBasicsPlusAdvanced.Game.Objects;
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
     public class PrefabCreator
@@ -243,6 +244,19 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             ObjectStorage.Triggers.Add(name, trigger);
 
             return trigger;
+        }
+
+        public static T CreateBalloonPrefab<T>(string name, string keyName, int variant = 1) where T : BaseBalloonBehaviour
+        {
+            GameObject obj = GameObject.Instantiate(AssetStorage.gameObjects["math_num_0"]);
+            obj.name = name;
+            GameObject.Destroy(obj.GetComponent<MathMachineNumber>());
+            obj.ConvertToPrefab(true);
+
+            T prefabComponent = obj.AddComponent<T>();
+            prefabComponent.InitializePrefab(variant);
+            ObjectStorage.Objects.Add(keyName, obj);
+            return prefabComponent;
         }
 
         public static T CreateObjectPrefab<T>(string name, string keyName, int variant = 1) where T : MonoBehaviour, IPrefab

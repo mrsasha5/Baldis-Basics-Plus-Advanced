@@ -11,7 +11,6 @@ using UnityEngine;
 namespace BaldisBasicsPlusAdvanced.Cache
 {
     //I should do something with this thing in the future
-    //And generation too
     internal class ObjectStorage
     {
 

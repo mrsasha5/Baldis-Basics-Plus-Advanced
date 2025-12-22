@@ -30,7 +30,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         public static SoundObject SoundObjectFromFile(
             string path, string subtitle, SoundType type, Color color, float sublength = -1f)
         {
-            return ObjectCreators.CreateSoundObject(AudioFromFile(path), subtitle, type, color, sublength = -1f);
+            return ObjectCreators.CreateSoundObject(AudioFromFile(path), subtitle, type, color, sublength);
         }
 
         public static bool ModInstalled(string mod)

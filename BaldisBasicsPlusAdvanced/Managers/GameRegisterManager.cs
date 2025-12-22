@@ -867,7 +867,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_flag");
             PrefabCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_points_flag", variant: 2);
 
-            //PrefabsCreator.CreateObjectPrefab<>("99", "99");
+            PrefabCreator.CreateObjectPrefab<PairsComparator>("PairsComparator", "pairs_comparator");
 
             GameObject cornSign = new GameObject("Corn Sign");
             ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_corn_sign1"])

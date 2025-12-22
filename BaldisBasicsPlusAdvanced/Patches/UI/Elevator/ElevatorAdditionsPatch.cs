@@ -337,7 +337,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         {
             if (tubesButton != null) tubesButton.gameObject.SetActive(false);
             lifesAudio.volume = 1f;
-            lifesAudio.PlayOneShot(AssetStorage.sounds["power_breaker_lights_on"].soundClip, 2f);
+            lifesAudio.PlayOneShot(AssetStorage.sounds["power_breaker_lights_on"].soundClip, 1f);
             elvScreen.StartCoroutine(NewLifesAnimator());
         }
 

@@ -171,6 +171,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
             LoadSound("grapple_clang", "GrappleClang");
             LoadSound("banana_slip", "Nana_Slip");
             LoadSound("banana_sput", "Nana_Sput");
+            LoadSound("balloon_reveal", "MatchBalloon_Revealed");
             //LoadSound("grapple_loop", "GrappleLoop");
 
             sounds.Add(
@@ -630,7 +631,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
 #endregion
 
-        #region Assets' overriding
+        #region Assets' Overriding
 
         public static void OverrideAssetsProperties()
         {

@@ -1,7 +1,26 @@
-﻿namespace BaldisBasicsPlusAdvanced.Extensions
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+namespace BaldisBasicsPlusAdvanced.Extensions
 {
     public static class PrimitiveTypeExtensions
     {
+        public static T GetRandomElement<T>(this List<T> list)
+        {
+            int index = Random.Range(0, list.Count);
+            T element = list[index];
+
+            return element;
+        }
+
+        public static T GetRandomElementAndRemove<T>(this List<T> list)
+        {
+            int index = Random.Range(0, list.Count);
+            T element = list[index];
+            list.Remove(element);
+
+            return element;
+        }
 
         public static bool ToBool(this int value)
         {

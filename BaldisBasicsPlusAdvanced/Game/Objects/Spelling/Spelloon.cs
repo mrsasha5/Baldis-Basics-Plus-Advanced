@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 {
-
+#warning Become a part of BaseBalloonBehaviour in the future
     public class Spelloon : MonoBehaviour, IClickable<int>, IPrefab
     {
         public SymbolMachine symbolMachine;
@@ -64,7 +64,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             explosionPre = AssetHelper.LoadAsset<GameObject>("QuickPop");
         }
 
-        public void InitializePrefabPost(string symbol, Sprite sprite)
+        public void PostInitializePrefab(string symbol, Sprite sprite)
         {
             value = symbol;
             GetComponentInChildren<SpriteRenderer>().sprite = sprite;

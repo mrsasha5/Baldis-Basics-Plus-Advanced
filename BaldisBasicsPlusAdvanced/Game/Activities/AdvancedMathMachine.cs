@@ -131,7 +131,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             };
         }
 
-        void IClickable<int>.Clicked(int player) {
+        /*void IClickable<int>.Clicked(int player) {
             Clicked(player);
             if (isCorrectlySolved)
             {
@@ -153,7 +153,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                     .PlaySingle(WeightedSelection<SoundObject>.RandomSelection(praiseSounds));
                 isCorrectlySolved = false;
             }
-        }
+        }*/
 
 
         public override void Completed(int player, bool correct)

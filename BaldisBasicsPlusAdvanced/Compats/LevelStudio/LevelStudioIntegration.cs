@@ -11,6 +11,7 @@ using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
 using BaldisBasicsPlusAdvanced.Extensions;
+using BaldisBasicsPlusAdvanced.Game.Activities;
 using BaldisBasicsPlusAdvanced.Game.Builders;
 using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Game.Objects;
@@ -22,9 +23,7 @@ using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
 using PlusStudioLevelFormat;
-using PlusStudioLevelLoader;
 using UnityEngine;
-using static Mono.Security.X509.X520;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 {
@@ -322,6 +321,42 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             EditorInterface.AddObjectVisual("adv_voting_ceiling_screen", ObjectStorage.Objects["voting_screen"], true);
             GameObject.Destroy(ObjectStorage.Objects["voting_screen"].GetComponent<Collider>());
 
+            //Pairs comparator
+            PairsComparator pairsCompPre = ObjectStorage.Objects["pairs_comparator"].GetComponent<PairsComparator>();
+            Sprite pairBalloonSpr = AssetHelper.LoadAsset<Sprite>("ExclamationPointBalloon");
+
+            BoxCollider pairsComparatorCollider = 
+                EditorInterface.AddActivityVisual("adv_pairs_comparator", ObjectStorage.Objects["pairs_comparator"])
+                    .AddComponent<BoxCollider>();
+            pairsComparatorCollider.size = new Vector3(10f, 2f, 10f);
+            pairsComparatorCollider.center = Vector3.up * -5f;
+            GameObject.Destroy(pairsComparatorCollider.GetComponent<SphereCollider>());
+
+            int counter = pairsCompPre.balloonAmmount / 2;
+            float angle = 360f / pairsCompPre.balloonAmmount;
+            float currentAngle = 0f;
+
+            while (counter > 0)
+            {
+                SpriteRenderer renderer1 = ObjectCreator.CreateSpriteRenderer(pairBalloonSpr);
+                SpriteRenderer renderer2 = ObjectCreator.CreateSpriteRenderer(pairBalloonSpr);
+                renderer1.transform.parent = renderer2.transform.parent = pairsComparatorCollider.transform;
+
+                renderer1.transform.position =
+                    new Vector3(pairsComparatorCollider.transform.position.x + pairsCompPre.spawnRadius * 
+                        Mathf.Cos(Mathf.Deg2Rad * currentAngle), 0f,
+                            pairsComparatorCollider.transform.position.z + pairsCompPre.spawnRadius * 
+                                Mathf.Sin(Mathf.Deg2Rad * currentAngle));
+                renderer2.transform.position =
+                    new Vector3(pairsComparatorCollider.transform.position.x - pairsCompPre.spawnRadius * 
+                        Mathf.Cos(Mathf.Deg2Rad * currentAngle), 0f,
+                            pairsComparatorCollider.transform.position.z - pairsCompPre.spawnRadius * 
+                            Mathf.Sin(Mathf.Deg2Rad * currentAngle));
+                currentAngle -= angle;
+                counter--;
+            }
+
+            //Advanced MMs
             GameObject advancedMMVisual = 
                 EditorInterface.AddActivityVisual("adv_advanced_math_machine", ObjectStorage.Objects["advanced_math_machine"]);
             BoxCollider mmCollider = ObjectStorage.Objects["advanced_math_machine"].transform.Find("Model").GetComponent<BoxCollider>();
@@ -439,6 +474,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new ActivityTool("adv_advanced_math_machine", AssetStorage.sprites["adv_editor_advanced_math_machine"], 0f));
             EditorInterfaceModes.AddToolToCategory(mode, "activities",
                 new ActivityTool("adv_advanced_math_machine_corner", AssetStorage.sprites["adv_editor_advanced_math_machine_corner"], 0f));
+
+            EditorInterfaceModes.AddToolToCategory(mode, "activities",
+                new ActivityTool("adv_pairs_comparator", null, 5f));
 
             EditorInterfaceModes.AddToolToCategory(mode, "objects",
                 new ObjectTool("adv_voting_ceiling_screen",

@@ -187,6 +187,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 ObjectStorage.Objects["advanced_math_machine"].GetComponent<AdvancedMathMachine>());
             LevelLoaderPlugin.Instance.activityAliases.Add("adv_advanced_math_machine_corner",
                 ObjectStorage.Objects["advanced_math_machine_corner"].GetComponent<AdvancedMathMachine>());
+            LevelLoaderPlugin.Instance.activityAliases.Add("adv_pairs_comparator", 
+                ObjectStorage.Objects["pairs_comparator"].GetComponent<PairsComparator>());
         }
 
         private static void InitializeRoomSettings()
