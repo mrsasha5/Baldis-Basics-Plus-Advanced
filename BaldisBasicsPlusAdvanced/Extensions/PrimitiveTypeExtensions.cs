@@ -5,7 +5,7 @@ namespace BaldisBasicsPlusAdvanced.Extensions
 {
     public static class PrimitiveTypeExtensions
     {
-        public static T GetRandomElement<T>(this List<T> list)
+        public static T GetRandomElement<T>(this IList<T> list)
         {
             int index = Random.Range(0, list.Count);
             T element = list[index];
@@ -13,7 +13,7 @@ namespace BaldisBasicsPlusAdvanced.Extensions
             return element;
         }
 
-        public static T GetRandomElementAndRemove<T>(this List<T> list)
+        public static T GetRandomElementAndRemove<T>(this IList<T> list)
         {
             int index = Random.Range(0, list.Count);
             T element = list[index];

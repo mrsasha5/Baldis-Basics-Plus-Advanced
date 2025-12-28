@@ -125,7 +125,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
             //DisabledCover
             if (setDisabledCover) {
-                GameObject obj = Instantiate(AssetHelper.LoadAsset<GameObject>("DisabledCover"));
+                GameObject obj = Instantiate(AssetHelper.LoadAssets<GameObject>("DisabledCover")[1]);
                 ReflectionHelper.SetValue(toggle, "disableCover", obj);
                 obj.transform.SetParent(toggle.transform, false);
                 obj.GetComponent<RectTransform>().sizeDelta = new Vector2(100f, 48f);

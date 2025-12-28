@@ -25,8 +25,8 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
 
         private int[] bannedPartyFloors;
 
-        //Enum, uses
-        [JsonProperty("reference")]
+        //Giving less priority for it due of the "uses" field which may load early
+        [JsonProperty("reference", Order = 1)]
         private string Serialization_Item
         {
             set

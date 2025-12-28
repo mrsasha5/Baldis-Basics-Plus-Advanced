@@ -328,7 +328,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             BoxCollider pairsComparatorCollider = 
                 EditorInterface.AddActivityVisual("adv_pairs_comparator", ObjectStorage.Objects["pairs_comparator"])
                     .AddComponent<BoxCollider>();
-            pairsComparatorCollider.size = new Vector3(10f, 2f, 10f);
+            pairsComparatorCollider.size = new Vector3(20f, 2f, 20f);
             pairsComparatorCollider.center = Vector3.up * -5f;
             GameObject.Destroy(pairsComparatorCollider.GetComponent<SphereCollider>());
 

@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Helpers;
-using Rewired;
+using MTM101BaldAPI;
+using MTM101BaldAPI.Reflection;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Activities
@@ -19,6 +20,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         public float rotationAngle;
 
         public bool locked;
+    }
+
+    [Serializable]
+    public struct PotentialPairBalloonData
+    {
+        public Sprite sprite;
+
+        public int value;
     }
 
     public class PairsComparator : Activity, IPrefab, IClickable<int>
@@ -42,16 +51,25 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         private SphereCollider collider;
 
         [SerializeField]
-        private MeshRenderer[] renderers;
+        private Transform arrow;
+
+        [SerializeField]
+        private MeshRenderer hologram;
 
         [SerializeField]
         private SpriteRenderer pulleyRenderer;
 
         [SerializeField]
-        private PairBalloon[] balloonPre;
+        private PairBalloon balloonPre;
+
+        [SerializeField]
+        private PotentialPairBalloonData[] values;
 
         [SerializeField]
         private AudioManager motorMan;
+
+        [SerializeField]
+        private int wrongNoiseVal;
 
         [SerializeField]
         private float pulleySpriteOffset;
@@ -79,19 +97,39 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
         private bool pulling;
 
+        public bool TrulyCompleted => completed;
+
+        public bool IsPlayingAnimations => switching || pulling;
+
+        public bool Powered => powered;
+
         public void InitializePrefab(int variant)
         {
+            audWind =
+                AssetHelper.SoundObjectFromFile(
+                    "Audio/Sounds/Adv_Long_Wind.wav", "", SoundType.Effect, Color.white, sublength: 0f);
+            audWindEnd =
+                AssetHelper.SoundObjectFromFile(
+                    "Audio/Sounds/Adv_Long_Wind_End.wav", "", SoundType.Effect, Color.white, sublength: 0f);
             audCorrect = AssetStorage.sounds["activity_correct"];
             audIncorrect = AssetStorage.sounds["activity_incorrect"];
             audPull = AssetHelper.LoadAsset<SoundObject>("BalloonBuster_Pulley");
+            audRespawn = AssetHelper.LoadAsset<SoundObject>("NoteRespawn");
             baldiPause = 5f;
             balloonAmmount = 8;
             spawnRadius = 20f;
             rotationAnimationSpeed = 2000f;
-            balloonPopRate = 0.25f;
+            wrongNoiseVal = 126;
+            balloonPopRate = 0.15f;
             balloonPopDelay = 3f;
             pulleySpriteOffset = 4f;
-            renderers = new MeshRenderer[2];
+
+            SphereCollider endlessCollider = new GameObject("Trigger").AddComponent<SphereCollider>();
+            endlessCollider.transform.SetParent(transform, false);
+            endlessCollider.isTrigger = true;
+            endlessCollider.radius = 100f;
+            endlessCollider.gameObject.layer = LayerHelper.ignoreRaycast;
+            trigger = endlessCollider.gameObject.AddComponent<ColliderGroup>();
 
             Sprite sprite = AssetHelper.SpriteFromFile("Textures/Objects/BluePulley.png", 22f);
 
@@ -103,57 +141,79 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             pulleyRenderer.name = "Pulley";
             pulleyRenderer.transform.localPosition = Vector3.up * pulleySpriteOffset;
 
-            renderers[0] = ObjectCreator.CreateQuadRenderer();
-            renderers[0].transform.localScale = new Vector3(20f, 20f, 1f);
+            Transform billboardBase = new GameObject("Billboard").AddComponent<BillboardUpdater>().transform;
+            billboardBase.transform.SetParent(transform, false);
+            hologram = ObjectCreator.CreateQuadRenderer();
+            hologram.transform.localScale = new Vector3(15f, 15f, 1f);
+            hologram.name = "Hologram";
+            hologram.transform.SetParent(billboardBase, false);
+            hologram.transform.localPosition = Vector3.up * -4.65f + Vector3.forward * 0.2f;
+            hologram.material.mainTexture = AssetHelper.LoadAsset<Texture2D>("BalloonBuster_Hologram");
+
+            Renderer[] renderers = new Renderer[2];
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                renderers[i] = ObjectCreator.CreateQuadRenderer();
+                renderers[i].transform.localScale = new Vector3(20f, 20f, 1f);
+                renderers[i].transform.SetParent(transform, false);
+                renderers[i].transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
+            }
+
             renderers[0].material.mainTexture = 
                 AssetHelper.TextureFromFile("Textures/Activities/PairsComparator/PairsComparator_Base.png");
-            renderers[0].transform.SetParent(transform, false);
-
-            renderers[1] = ObjectCreator.CreateQuadRenderer();
-            renderers[1].transform.localScale = renderers[0].transform.localScale;
             renderers[1].material.mainTexture =
                 AssetHelper.TextureFromFile("Textures/Activities/PairsComparator/PairsComparator_Arrow.png");
-            renderers[1].transform.SetParent(transform, false);
 
             renderers[0].transform.localPosition = Vector3.up * -5f;
-            renderers[1].transform.localPosition = Vector3.up * -4.9f;
-            renderers[0].transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
-            renderers[1].transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
+            renderers[1].transform.localPosition = Vector3.up * -4.95f;
 
-            audWind = 
-                AssetHelper.SoundObjectFromFile(
-                    "Audio/Sounds/Adv_Long_Wind.wav", "", SoundType.Effect, Color.white, sublength: 0f);
-            audWindEnd =
-                AssetHelper.SoundObjectFromFile(
-                    "Audio/Sounds/Adv_Long_Wind_End.wav", "", SoundType.Effect, Color.white, sublength: 0f);
+            arrow = renderers[1].transform;
+
+            bonusQSignSpriteRenderer = Instantiate(AssetHelper.LoadAsset<SpriteRenderer>("BonusQSign"));
+            bonusQSignSpriteRenderer.transform.SetParent(transform, false);
+            bonusQSignSpriteRenderer.transform.localPosition = Vector3.up * -4.9f;
+            bonusQSignSpriteRenderer.transform.localScale = new Vector3(2f, 2f, 1f);
+            bonusQSignSpriteRenderer.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
+            bonusQSign = bonusQSignSpriteRenderer.GetComponent<Animator>();
 
             collider = gameObject.AddComponent<SphereCollider>();
             collider.isTrigger = true;
             collider.radius = 5f;
 
-            balloonPre = new PairBalloon[10];
+            balloonPre = PrefabCreator.CreateBalloonPrefab<PairBalloon>($"PairBalloon_0", $"pair_balloon_0");
 
-            if (variant == 1)
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    Sprite spr = AssetHelper.LoadAsset<Sprite>($"NumBall_{i}");
-                    PairBalloon balloon = PrefabCreator.CreateBalloonPrefab<PairBalloon>($"PairBalloon_{i}", $"pair_balloon_{i}");
-                    balloon.Renderer.sprite = spr;
-                    balloon.value = i;
-                }                
-            }
+            Sprite[] sprites = AssetHelper.LoadAssets<Sprite>();
+
+            values = new PotentialPairBalloonData[10];
 
             for (int i = 0; i < 10; i++)
             {
-                balloonPre[i] = ObjectStorage.Objects[$"pair_balloon_{i}"].GetComponent<PairBalloon>();
+                values[i].sprite = Array.Find(sprites, x => x.name == $"NumBall_{i}");
+                values[i].value = i;
+                if (values[i].sprite == null)
+                    throw new Exception("Numballoon sprite is null!");
             }
         }
 
         private void Start()
         {
+            SpawnBalloons();
             ReInit();
             room.ec.AddActivity(this);
+        }
+
+        public override void SetPower(bool val)
+        {
+            base.SetPower(val);
+            hologram.gameObject.SetActive(val);
+        }
+
+        public override void SetBonusMode(bool val)
+        {
+            base.SetBonusMode(val);
+            if (val)
+                ReInit();
         }
 
         public override void Completed(int player, bool correct)
@@ -161,21 +221,68 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             base.Completed(player, correct);
 
             collider.enabled = false;
+            if (!correct)
+            {
+                hologram.material.SetColor(Color.red);
+            }
+
             StartCoroutine(BalloonPopper());
         }
 
         public override void ReInit()
         {
             base.ReInit();
+
+            List<PotentialPairBalloonData> _values = new List<PotentialPairBalloonData>(values);
+            List<int> usedSums = new List<int>();
+
+            int counter = balloonAmmount / 2;
+
+            while (counter > 0)
+            {
+                PotentialPairBalloonData val1 = _values.GetRandomElementAndRemove();
+                PotentialPairBalloonData val2 = _values.GetRandomElementAndRemove();
+
+                while (_values.Count > 0 && usedSums.Contains(val1.value + val2.value))
+                {
+                    val2 = _values.GetRandomElementAndRemove();
+                }
+                usedSums.Add(val1.value + val2.value);
+
+                PairsComparatorData data = balloonData[counter - 1];
+                data.locked = false;
+                data.totalValue = val1.value + val2.value;
+                data.balloon.Renderer.sprite = val1.sprite;
+                data.balloon.ConnectedBalloon.Renderer.sprite = val2.sprite;
+                data.balloon.value = val1.value;
+                data.balloon.ConnectedBalloon.value = val2.value;
+                data.balloon.Reset();
+                data.balloon.ConnectedBalloon.Reset();
+                data.balloon.ReInit();
+                data.balloon.ConnectedBalloon.ReInit();
+
+                balloonData[counter - 1] = data;
+                counter--;
+            }
+
+            hologram.material.SetColor(Color.white);
+
             collider.enabled = true;
-            SpawnBalloons();
             notebook.transform.position = transform.position;
             notebook.gameObject.SetActive(value: false);
+
+            balloonData[chosenPair].balloon.HideClick(true);
+            balloonData[chosenPair].balloon.ConnectedBalloon.HideClick(true);
         }
 
         public void SelectPair(PairBalloon balloon)
         {
-            if (ClickableHidden()) return;
+            if (balloonData[chosenPair].balloon != null)
+            {
+                balloonData[chosenPair].balloon.HideClick(false);
+                balloonData[chosenPair].balloon.ConnectedBalloon.HideClick(false);
+            }
+
             for (int i = 0; i < balloonData.Count; i++)
             {
                 if (balloonData[i].balloon == balloon || balloonData[i].balloon.ConnectedBalloon == balloon)
@@ -183,6 +290,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                     if (balloonData[i].locked || chosenPair == i) break;
 
                     chosenPair = i;
+                    balloonData[chosenPair].balloon.HideClick(true);
+                    balloonData[chosenPair].balloon.ConnectedBalloon.HideClick(true);
                     switching = true;
                     StartCoroutine(Switcher());
                     break;
@@ -190,75 +299,31 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             }
         }
 
-        private IEnumerator Switcher()
-        {
-            motorMan.QueueAudio(audWind);
-
-            Vector3 rotation = renderers[1].transform.rotation.eulerAngles;
-
-            float timer = audWind.soundClip.length;
-
-            while (timer > 0f)
-            {
-                timer -= Time.deltaTime * room.ec.EnvironmentTimeScale;
-                rotation.y += Time.deltaTime * room.ec.EnvironmentTimeScale * rotationAnimationSpeed;
-                renderers[1].transform.rotation = Quaternion.Euler(rotation);
-                yield return null;
-            }
-
-            motorMan.FlushQueue(true);
-            motorMan.PlaySingle(audWindEnd);
-
-            rotation.y = balloonData[chosenPair].rotationAngle;
-            renderers[1].transform.rotation = Quaternion.Euler(rotation);
-
-            balloonData[chosenPair].balloon.AnimateSelection();
-            balloonData[chosenPair].balloon.ConnectedBalloon.AnimateSelection();
-
-            switching = false;
-        }
-
         private void SpawnBalloons()
         {
             balloonData = new List<PairsComparatorData>();
-
             float angle = 360f / balloonAmmount;
             int counter = balloonAmmount / 2;
-
-            List<int> usedSums = new List<int>();
-
             float currentAngle = 0f;
 
             while (counter > 0)
             {
-                List<PairBalloon> _balloons = balloonPre.ToList();
-
-                PairBalloon pre1 = _balloons.GetRandomElementAndRemove();
-                PairBalloon pre2 = _balloons.GetRandomElementAndRemove();
-
-                while (_balloons.Count > 0 && usedSums.Contains(pre1.value + pre2.value))
-                {
-                    pre2 = _balloons.GetRandomElementAndRemove();
-                }
-                usedSums.Add(pre1.value + pre2.value);
-
-                PairBalloon balloon1 = Instantiate(pre1, room.transform);
-                PairBalloon balloon2 = Instantiate(pre2, room.transform);
+                PairBalloon balloon1 = Instantiate(balloonPre, transform);
+                PairBalloon balloon2 = Instantiate(balloonPre, transform);
 
                 balloon1.Initialize(this);
                 balloon2.Initialize(this);
                 balloon2.Connect(balloon1);
-                balloon1.transform.position = 
-                    new Vector3(transform.position.x + spawnRadius * Mathf.Cos(Mathf.Deg2Rad * currentAngle), 5f,
-                        transform.position.z + spawnRadius * Mathf.Sin(Mathf.Deg2Rad * currentAngle));
-                balloon2.transform.position =
-                    new Vector3(transform.position.x - spawnRadius * Mathf.Cos(Mathf.Deg2Rad * currentAngle), 5f,
-                        transform.position.z - spawnRadius * Mathf.Sin(Mathf.Deg2Rad * currentAngle));
+                balloon1.transform.localPosition =
+                    new Vector3(spawnRadius * Mathf.Cos(Mathf.Deg2Rad * currentAngle), 0f, 
+                        spawnRadius * Mathf.Sin(Mathf.Deg2Rad * currentAngle));
+                balloon2.transform.localPosition =
+                    new Vector3(-spawnRadius * Mathf.Cos(Mathf.Deg2Rad * currentAngle), 0f, 
+                        -spawnRadius * Mathf.Sin(Mathf.Deg2Rad * currentAngle));
 
                 balloonData.Add(new PairsComparatorData()
                 {
                     balloon = balloon1,
-                    totalValue = balloon1.value + balloon2.value,
                     rotationAngle = Mathf.Abs(currentAngle)
                 });
 
@@ -270,7 +335,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         public void Clicked(int player)
         {
             PairsComparatorData chosenPair = balloonData[this.chosenPair];
-            if (!ClickableHidden() && chosenPair.balloon != null)
+            if (!ClickableHidden())
             {
                 bool isUnusedDataFound = false;
                 bool correct = true;
@@ -297,6 +362,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         private IEnumerator ActionCompleter(int player, bool correct, bool finalAction, float delay)
         {
             PairsComparatorData chosenPair = balloonData[this.chosenPair];
+            chosenPair.locked = true;
+            balloonData[this.chosenPair] = chosenPair;
 
             while (delay > 0f)
             {
@@ -304,11 +371,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                 yield return null;
             }
 
+            chosenPair.balloon.Reveal(correct);
+            chosenPair.balloon.ConnectedBalloon.Reveal(correct);
+
+            while (chosenPair.balloon.Revealing)
+            {
+                yield return null;
+            }
+
             if (correct)
             {
-                chosenPair.locked = true;
-                balloonData[this.chosenPair] = chosenPair;
-
                 audMan.PlaySingle(audCorrect);
                 if (finalAction)
                 {
@@ -324,15 +396,40 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             }
             else
             {
-                chosenPair.locked = true;
-                balloonData[this.chosenPair] = chosenPair;
+                BaseGameManager.Instance.AngerBaldi(1f);
+                room.ec.MakeNoise(transform.position, wrongNoiseVal);
                 audMan.PlaySingle(audIncorrect);
                 Completed(player, false);
                 room.functions.OnActivityCompletion();
             }
+        }
 
-            chosenPair.balloon.Reveal(correct);
-            chosenPair.balloon.ConnectedBalloon.Reveal(correct);
+        private IEnumerator Switcher()
+        {
+            motorMan.QueueAudio(audWind);
+
+            Vector3 rotation = arrow.rotation.eulerAngles;
+
+            float timer = audWind.soundClip.length;
+
+            while (timer > 0f)
+            {
+                timer -= Time.deltaTime * room.ec.EnvironmentTimeScale;
+                rotation.y += Time.deltaTime * room.ec.EnvironmentTimeScale * rotationAnimationSpeed;
+                arrow.rotation = Quaternion.Euler(rotation);
+                yield return null;
+            }
+
+            motorMan.FlushQueue(true);
+            motorMan.PlaySingle(audWindEnd);
+
+            rotation.y = balloonData[chosenPair].rotationAngle + transform.rotation.eulerAngles.y;
+            arrow.rotation = Quaternion.Euler(rotation);
+
+            balloonData[chosenPair].balloon.AnimateSelection();
+            balloonData[chosenPair].balloon.ConnectedBalloon.AnimateSelection();
+
+            switching = false;
         }
 
         //Hardcoded recreation
@@ -354,7 +451,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                 yield return null;
             }
 
-            time = 0.1f;
+            time = 0.05f;
 
             while (time > 0f)
             {
@@ -365,21 +462,27 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             initialTime = 0.25f;
             time = initialTime;
 
+            float multiplier = 1f;
+
             while (time > 0f)
             {
-                time -= Time.deltaTime * room.ec.EnvironmentTimeScale;
+                time -= Time.deltaTime * room.ec.EnvironmentTimeScale * multiplier;
+                multiplier += Time.deltaTime * 5f;
                 if (time < 0f) time = 0f;
                 pos.y = pulleySpriteOffset - 1f - 1f * (1f - time / initialTime);
                 pulleyRenderer.transform.localPosition = pos;
                 yield return null;
             }
 
-            initialTime = 0.5f;
+            initialTime = 0.75f;
             time = initialTime;
+
+            multiplier = 1f;
 
             while (time > 0f)
             {
-                time -= Time.deltaTime * room.ec.EnvironmentTimeScale;
+                time -= Time.deltaTime * room.ec.EnvironmentTimeScale * multiplier;
+                multiplier += Time.deltaTime * room.ec.EnvironmentTimeScale * 10f;
                 if (time < 0f) time = 0f;
                 pos.y = pulleySpriteOffset - 2f * (time / initialTime);
                 pulleyRenderer.transform.localPosition = pos;
@@ -392,11 +495,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         private IEnumerator BalloonPopper()
         {
             List<PairBalloon> balloons = new List<PairBalloon>();
-            while (balloonData.Count > 0)
+            for (int i = 0; i < balloonData.Count; i++) 
             {
-                balloons.Add(balloonData[0].balloon);
-                balloons.Add(balloonData[0].balloon.ConnectedBalloon);
-                balloonData.RemoveAt(0);
+                balloons.Add(balloonData[i].balloon);
+                balloons.Add(balloonData[i].balloon.ConnectedBalloon);
             }
 
             float initialDelay = balloonPopDelay;
@@ -425,7 +527,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
         public bool ClickableHidden()
         {
-            return completed || switching || pulling;
+            PairsComparatorData chosenPair = balloonData[this.chosenPair];
+            return completed || !powered || IsPlayingAnimations || chosenPair.balloon == null || chosenPair.locked;
         }
 
         public bool ClickableRequiresNormalHeight()
@@ -464,6 +567,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
         private bool revealed;
 
+        private bool clickHidden;
+
         public int value;
 
         public PairBalloon ConnectedBalloon => connectedInstance;
@@ -477,6 +582,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
             audMan = ObjectCreator.CreatePropagatedAudMan(gameObject);
             offsetAnimationEnabled = false;
+            destroyOnPop = false;
+
+            entity.ReflectionSetVariable("persistent", true);
+        }
+
+        public void Reset()
+        {
+            revealed = false;
+            clickHidden = false;
         }
 
         public void Initialize(PairsComparator comparator)
@@ -484,6 +598,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             this.comparator = comparator;
             floater.Initialize(comparator.room);
         }
+
+        public void HideClick(bool state) => clickHidden = state;
 
         public void Connect(PairBalloon balloon)
         {
@@ -528,12 +644,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         public override void Clicked(int player)
         {
             base.Clicked(player);
-            comparator.SelectPair(this);
+            if (!ClickableHidden())
+                comparator.SelectPair(this);
         }
 
         public override bool ClickableHidden()
         {
-            return base.ClickableHidden() || revealed;
+            return base.ClickableHidden() || clickHidden || revealed || !comparator.Powered || 
+                comparator.IsPlayingAnimations || comparator.TrulyCompleted;
         }
     }
 }

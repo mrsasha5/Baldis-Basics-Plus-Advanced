@@ -12,6 +12,7 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Overlay;
 using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Game.Objects;
+using BaldisBasicsPlusAdvanced.Extensions;
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
     public class PrefabCreator
@@ -268,6 +269,35 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             prefabComponent.InitializePrefab(variant);
             ObjectStorage.Objects.Add(keyName, obj);
             return prefabComponent;
+        }
+
+        public static RoomFunctionContainer CreateClassFunctionContainer(string name, string posterName, string activityTitle, 
+            string activityDesc, int titleHeight = 0, int descHeight = 0)
+        {
+            RoomFunctionContainer container =
+                GameObject.Instantiate(AssetHelper.LoadAsset<RoomFunctionContainer>("ClassRoomFunction_MathMachine"));
+            container.gameObject.ConvertToPrefab(true);
+            container.name = name;
+
+            ChalkboardBuilderFunction chkBuilder = container.GetComponents<ChalkboardBuilderFunction>()[1];
+            PosterObject compassPoster = ScriptableObject.Instantiate(chkBuilder.GetChalkboard());
+            compassPoster.name = posterName;
+            compassPoster.textData[0].textKey = activityTitle;
+            compassPoster.textData[1].textKey = activityDesc;
+
+            IntVector2 pos1 = compassPoster.textData[0].position;
+            IntVector2 pos2 = compassPoster.textData[1].position;
+            pos1.z = titleHeight;
+            pos2.z = descHeight;
+
+            compassPoster.textData[0].position = pos1;
+            compassPoster.textData[1].position = pos2;
+
+            compassPoster.textData[1].textKey = activityDesc;
+            chkBuilder.SetChalkboard(compassPoster);
+
+            ObjectStorage.Posters.Add(compassPoster);
+            return container;
         }
 
         public static void CreateFunctionContainerWithRoomFunction<T>(string name, int variant = 1) where T : RoomFunction, new()

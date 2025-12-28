@@ -11,6 +11,7 @@ using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using MTM101BaldAPI.UI;
 using System.Linq;
 using BaldisBasicsPlusAdvanced.Cache;
+using MTM101BaldAPI.Reflection;
 
 namespace BaldisBasicsPlusAdvanced.Extensions
 {
@@ -23,6 +24,19 @@ namespace BaldisBasicsPlusAdvanced.Extensions
             270,
             360
         };
+
+        public static PosterObject SetChalkboard(this ChalkboardBuilderFunction func, PosterObject poster)
+        {
+            WeightedPosterObject[] chalkBoards = new WeightedPosterObject[1];
+            chalkBoards[0] = new WeightedPosterObject() { selection = poster, weight = 100 };
+            func.ReflectionSetVariable("chalkBoards", chalkBoards);
+            return poster;
+        }
+
+        public static PosterObject GetChalkboard(this ChalkboardBuilderFunction func)
+        {
+            return ((WeightedPosterObject[])func.ReflectionGetVariable("chalkBoards"))[0].selection;
+        }
 
         public static Rigidbody SetRigidbody(this GameObject gameObject)
         {

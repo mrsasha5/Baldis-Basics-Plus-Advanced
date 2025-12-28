@@ -29,6 +29,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         [SerializeField]
         protected bool offsetAnimationEnabled;
 
+        [SerializeField]
+        protected bool destroyOnPop;
+
         protected Vector3 spriteHeldPosition = Vector3.up * -4f + Vector3.forward * 4f;
 
         protected Vector3 spriteInitPosition = Vector3.zero;
@@ -43,14 +46,23 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         protected bool popping;
 
+        protected bool revealing;
+
+        protected bool unrevealing;
+
         public SpriteRenderer Renderer => spriteRenderer;
 
         public Balloon Floater => floater;
+
+        public bool Revealing => revealing;
+
+        public bool Unrevealing => unrevealing;
 
         public virtual void InitializePrefab(int variant)
         {
             balloonAnimationSpeedMult = 4f;
             offsetAnimationEnabled = true;
+            destroyOnPop = true;
 
             audReveal = AssetStorage.sounds["balloon_reveal"];
             floater = GetComponent<Balloon>();
@@ -115,28 +127,29 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         public void ReInit()
         {
             trackingPlayer = false;
-            floater.Entity.SetTrigger(value: true);
-            currentOffset = -2f;
+            currentOffset = 0f;
             spriteRenderer.transform.localPosition = spriteInitPosition + Vector3.up * currentOffset;
-        }
 
-        public void Disable()
-        {
-            entity.Enable(val: false);
+            floater.Entity.Enable(val: true);
+            floater.Entity.SetTrigger(value: true);
+            floater.Entity.SetActive(value: true);
         }
 
         public void Pop()
         {
             if (!popping)
             {
+                popping = true;
                 if (trackingPlayer)
                 {
                     OnDropped();
                 }
 
-                popping = true;
+                floater.Entity.Enable(val: false);
+                floater.Entity.SetActive(value: false);
                 Instantiate(explosionPre).transform.position = transform.position;
-                Destroy(gameObject);
+                if (destroyOnPop)
+                    Destroy(gameObject);
             }
         }
 
@@ -168,11 +181,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         protected void PlayRevealAnimation(Sprite newSprite)
         {
+            revealing = true;
             StartCoroutine(Revealer(newSprite));
         }
 
         protected void PlayUnrevealAnimation(Sprite newSprite)
         {
+            unrevealing = true;
             StartCoroutine(Unrevealer(newSprite));
         }
 
@@ -200,6 +215,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             scale3 = 1f;
             _scale.y = scale3;
             spriteRenderer.transform.localScale = _scale;
+
+            revealing = false;
         }
 
         private IEnumerator Unrevealer(Sprite newSprite)
@@ -226,6 +243,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             scale3 = 1f;
             _scale.y = scale3;
             spriteRenderer.transform.localScale = _scale;
+
+            unrevealing = true;
         }
 
         public virtual void ClickableSighted(int player)

@@ -53,7 +53,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         private StructureParameters LoadParametersFromSerializedData(int floor)
         {
             if (parameters == null || parameters.Length == 0) return null;
-            StructureParametersData nearestParams = default;
+            StructureParametersData nearestParams = parameters[0];
             for (int i = 0; i < parameters.Length; i++)
             {
                 if (Mathf.Abs(parameters[i].floor - floor) < Mathf.Abs(nearestParams.floor - floor))

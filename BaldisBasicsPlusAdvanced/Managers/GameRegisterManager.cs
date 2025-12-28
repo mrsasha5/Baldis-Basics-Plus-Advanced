@@ -993,7 +993,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
         public static void InitializeRoomBasics()
         {
             InitializeRoomGroups();
-
             InitializeRoomFunctions();
         }
 
@@ -1004,6 +1003,10 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabCreator.CreateFunctionContainerWithRoomFunction<SchoolCouncilFunction>("SchoolCouncilFunction");
             RoomHelper.SetupRoomFunction<DisabledPowerOnGenerationFinishFunction>(
                 ObjectStorage.RoomFunctionsContainers["SchoolCouncilFunction"]);
+
+            PrefabCreator.CreateClassFunctionContainer(
+                "ClassRoomFunction_CompassComparator", "Adv_Poster_Compass_Comparator", "Adv_PST_CompassComparator_Title", 
+                    "Adv_PST_CompassComparator_Desc", 174, 78);
         }
 
         private static void InitializeRoomGroups()
