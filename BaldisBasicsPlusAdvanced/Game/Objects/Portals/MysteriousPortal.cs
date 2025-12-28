@@ -1,4 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Game.Activities;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using System;
@@ -164,8 +165,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
         {
             if (activated && !used && Connected)
             {
-                //Probably I need to do some system to check objects which shouldn't be teleported
-                if (other.TryGetComponent(out MathMachineNumber _) || other.TryGetComponent(out MatchActivityBalloon _))
+                //Probably I need to implement some system for checking objects that shouldn't be teleported
+                if (other.TryGetComponent(out MathMachineNumber _) || other.TryGetComponent(out MatchActivityBalloon _) ||
+                     other.TryGetComponent(out PairBalloon _))
                 {
                     return;
                 }

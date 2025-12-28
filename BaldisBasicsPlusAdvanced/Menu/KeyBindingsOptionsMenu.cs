@@ -46,8 +46,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
             keyCodes = (KeyCode[])Enum.GetValues(typeof(KeyCode)); //Unity why I should do that???? Are you joking Unity's devs?????
 
             Image background = CreateImage(null, "ButtonsBackground", Vector3.up * -40f + Vector3.left * 12f, new Vector2(325f, 195f));
-            //background.color = Color.yellow; //for tests
-            background.gameObject.AddComponent<Mask>();
+            background.gameObject.AddComponent<Mask>().showMaskGraphic = false;
 
             StandardMenuButton arrowUpButton =
                 CreateButton(delegate

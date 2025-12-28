@@ -84,6 +84,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         private float rotationAnimationSpeed;
 
         [SerializeField]
+        private int pointsPerPair;
+
+        [SerializeField]
+        private int finalPoints;
+
+        [SerializeField]
         internal float spawnRadius;
 
         [SerializeField]
@@ -123,6 +129,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             balloonPopRate = 0.15f;
             balloonPopDelay = 3f;
             pulleySpriteOffset = 4f;
+            pointsPerPair = 10;
+            finalPoints = 20;
 
             SphereCollider endlessCollider = new GameObject("Trigger").AddComponent<SphereCollider>();
             endlessCollider.transform.SetParent(transform, false);
@@ -243,11 +251,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                 PotentialPairBalloonData val1 = _values.GetRandomElementAndRemove();
                 PotentialPairBalloonData val2 = _values.GetRandomElementAndRemove();
 
-                while (_values.Count > 0 && usedSums.Contains(val1.value + val2.value))
+                while (_values.Count > 0)
                 {
+                    if (!usedSums.Contains(val1.value + val2.value))
+                    {
+                        usedSums.Add(val1.value + val2.value);
+                        break;
+                    }
                     val2 = _values.GetRandomElementAndRemove();
                 }
-                usedSums.Add(val1.value + val2.value);
 
                 PairsComparatorData data = balloonData[counter - 1];
                 data.locked = false;
@@ -386,10 +398,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                 {
                     Completed(player, true);
                     room.functions.OnActivityCompletion();
+                    if (finalPoints != 0)
+                        CoreGameManager.Instance.AddPoints(finalPoints, 0, true);
                 }
                 else
                 {
                     room.functions.OnActivityProgress();
+                    if (pointsPerPair != 0)
+                        CoreGameManager.Instance.AddPoints(pointsPerPair, 0, true);
                 }
 
                 BaseGameManager.Instance.PleaseBaldi(baldiPause, rewardSticker: true);

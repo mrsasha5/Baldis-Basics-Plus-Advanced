@@ -98,7 +98,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             guid = GUID;
             priority = 127;
             versionInfo = new VersionInfo(this)
-                .SetMinVersion("1.4.1.0", exceptCurrent: false);
+                .SetMinVersion("1.5.0.0", exceptCurrent: false);
 
             CreateConfigValue("Level Studio",
                 "Adds support for Level Studio like new objects, structures and other content which can be used on your levels!");
@@ -118,6 +118,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             InitializeVisuals();
             InitializeStructureLocs();
+            InitializeItemsInStoreSettings();
             InitializeTextureContainers();
             EditorInterfaceModes.AddModeCallback(InitializeTools);
         }
@@ -131,6 +132,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             LevelStudioPlugin.Instance.structureTypes.Add("adv_kitchen_stove", typeof(KitchenStoveStructureLocation));
             LevelStudioPlugin.Instance.structureTypes.Add("adv_acceleration_plate", typeof(AccelerationPlateStructureLocation));
             LevelStudioPlugin.Instance.structureTypes.Add("adv_pulley", typeof(PulleyStructureLocation));
+        }
+
+        private static void InitializeItemsInStoreSettings()
+        {
+            foreach (string objectName in ObjectStorage.ItemObjects.Keys)
+            {
+                LevelStudioPlugin.Instance.selectableShopItems.Add("adv_" + objectName);
+            }
         }
 
         private static void InitializeVisuals()
