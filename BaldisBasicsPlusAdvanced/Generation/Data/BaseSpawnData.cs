@@ -95,42 +95,34 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         }
     }
 
-    internal interface ISpawnData<T> : IStandardSpawnData
-    {
-        T Instance { get; }
-    }
-
-    internal interface IStandardSpawnData
+    /*internal interface IStandardSpawnData
     {
         int GetWeight(int floor, LevelType levelType);
         IStandardSpawnData SetBannedFloors(params int[] floors);
         IStandardSpawnData SetLevelTypes(params LevelType[] levelTypes);
         IStandardSpawnData AddWeight(int floor, int weight);
         void Register(string name, int floor, SceneObject sceneObject, CustomLevelObject levelObject);
-    }
+    }*/
 
     [JsonObject(MemberSerialization.OptIn)]
-    internal class BaseSpawnData<T> : ISpawnData<T>
+    internal class BaseSpawnData
     {
+        [JsonProperty]
         protected StandardGenerationData standardData;
 
-        protected T instance;
-
-        public T Instance => instance;
-
-        public IStandardSpawnData AddWeight(int floor, int weight)
+        public BaseSpawnData AddWeight(int floor, int weight)
         {
             standardData.Weights = standardData.Weights.AddToArray(new WeightData(floor, weight));
             return this;
         }
 
-        public IStandardSpawnData SetBannedFloors(params int[] floors)
+        public BaseSpawnData SetBannedFloors(params int[] floors)
         {
             standardData.BannedFloors = floors;
             return this;
         }
 
-        public IStandardSpawnData SetLevelTypes(params LevelType[] levelTypes)
+        public BaseSpawnData SetLevelTypes(params LevelType[] levelTypes)
         {
             standardData.LevelTypes = levelTypes;
             return this;

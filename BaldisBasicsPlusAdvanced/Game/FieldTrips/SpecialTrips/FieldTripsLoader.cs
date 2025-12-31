@@ -171,8 +171,10 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips
 
         public static void CloseFieldTrip(bool showFieldTripScreen)
         {
-            Singleton<CoreGameManager>.Instance.StartCoroutine(CloseTrip(showFieldTripScreen));
+            CoreGameManager.Instance.StartCoroutine(CloseTrip(showFieldTripScreen));
         }
+
+        public static void DestroyTripSceneAsync() => SceneManager.UnloadSceneAsync(fieldTripScene);
 
         private static IEnumerator CloseTrip(bool showFieldTripScreen)
         {
@@ -294,6 +296,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips
 
         private static void ResetAllValues()
         {
+            onGameLoadedBack = null;
             PrevDijkstra = null;
             PrevGameMan = null;
             PrevEc = null;

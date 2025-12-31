@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using BaldisBasicsPlusAdvanced.Game.Objects.SodaMachines;
 using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
 using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
-using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using BepInEx;
@@ -26,11 +24,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         private static List<CellTextureSerializableData> cellTextureData = new List<CellTextureSerializableData>();
 
-        private static Dictionary<string, BaseSpawningData> spawningData = new Dictionary<string, BaseSpawningData>();
-
         public static List<CellTextureSerializableData> CellTextureData => cellTextureData;
-
-        public static Dictionary<string, BaseSpawningData> SpawningData => spawningData;
 
         private static List<CustomRoomData> customRoomData = new List<CustomRoomData>();
 
@@ -66,8 +60,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         private static Dictionary<string, StructureBuilder> structureBuilders = new Dictionary<string, StructureBuilder>();
 
-        private static Dictionary<string, SodaMachine> sodaMachines = new Dictionary<string, SodaMachine>();
-
         private static Dictionary<string, Canvas> overlays = new Dictionary<string, Canvas>();
 
         private static Dictionary<string, GameObject> objects = new Dictionary<string, GameObject>();
@@ -93,8 +85,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
         public static Dictionary<string, RandomEvent> Events => events;
 
         public static Dictionary<string, StructureBuilder> StructureBuilders => structureBuilders;
-
-        public static Dictionary<string, SodaMachine> SodaMachines => sodaMachines;
 
         public static Dictionary<string, Canvas> Overlays => overlays;
 

@@ -13,7 +13,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 {
     public struct PairsComparatorData
     {
-        public PairBalloon balloon;
+        public CompassBalloon balloon;
 
         public int totalValue;
 
@@ -53,14 +53,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         [SerializeField]
         private Transform arrow;
 
-        [SerializeField]
-        private MeshRenderer hologram;
+        //[SerializeField]
+        //private MeshRenderer hologram;
 
         [SerializeField]
         private SpriteRenderer pulleyRenderer;
 
         [SerializeField]
-        private PairBalloon balloonPre;
+        private CompassBalloon balloonPre;
 
         [SerializeField]
         private PotentialPairBalloonData[] values;
@@ -149,14 +149,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             pulleyRenderer.name = "Pulley";
             pulleyRenderer.transform.localPosition = Vector3.up * pulleySpriteOffset;
 
-            Transform billboardBase = new GameObject("Billboard").AddComponent<BillboardUpdater>().transform;
+            /*Transform billboardBase = new GameObject("Billboard").AddComponent<BillboardUpdater>().transform;
             billboardBase.transform.SetParent(transform, false);
             hologram = ObjectCreator.CreateQuadRenderer();
             hologram.transform.localScale = new Vector3(15f, 15f, 1f);
             hologram.name = "Hologram";
             hologram.transform.SetParent(billboardBase, false);
             hologram.transform.localPosition = Vector3.up * -4.65f + Vector3.forward * 0.2f;
-            hologram.material.mainTexture = AssetHelper.LoadAsset<Texture2D>("BalloonBuster_Hologram");
+            hologram.material.mainTexture = AssetHelper.LoadAsset<Texture2D>("BalloonBuster_Hologram");*/
 
             Renderer[] renderers = new Renderer[2];
 
@@ -189,7 +189,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             collider.isTrigger = true;
             collider.radius = 5f;
 
-            balloonPre = PrefabCreator.CreateBalloonPrefab<PairBalloon>($"PairBalloon_0", $"pair_balloon_0");
+            balloonPre = PrefabCreator.CreateBalloonPrefab<CompassBalloon>($"PairBalloon_0", $"pair_balloon_0");
 
             Sprite[] sprites = AssetHelper.LoadAssets<Sprite>();
 
@@ -214,7 +214,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         public override void SetPower(bool val)
         {
             base.SetPower(val);
-            hologram.gameObject.SetActive(val);
+            //hologram.gameObject.SetActive(val);
         }
 
         public override void SetBonusMode(bool val)
@@ -229,11 +229,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             base.Completed(player, correct);
 
             collider.enabled = false;
-            if (!correct)
+            /*if (!correct)
             {
                 hologram.material.SetColor(Color.red);
-            }
-
+            }*/
             StartCoroutine(BalloonPopper());
         }
 
@@ -241,24 +240,24 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         {
             base.ReInit();
 
-            List<PotentialPairBalloonData> _values = new List<PotentialPairBalloonData>(values);
             List<int> usedSums = new List<int>();
 
             int counter = balloonAmmount / 2;
 
             while (counter > 0)
             {
+                List<PotentialPairBalloonData> _values = new List<PotentialPairBalloonData>(values);
                 PotentialPairBalloonData val1 = _values.GetRandomElementAndRemove();
-                PotentialPairBalloonData val2 = _values.GetRandomElementAndRemove();
+                PotentialPairBalloonData val2 = default;
 
                 while (_values.Count > 0)
                 {
+                    val2 = _values.GetRandomElementAndRemove();
                     if (!usedSums.Contains(val1.value + val2.value))
                     {
                         usedSums.Add(val1.value + val2.value);
                         break;
                     }
-                    val2 = _values.GetRandomElementAndRemove();
                 }
 
                 PairsComparatorData data = balloonData[counter - 1];
@@ -277,7 +276,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                 counter--;
             }
 
-            hologram.material.SetColor(Color.white);
+            //hologram.material.SetColor(Color.white);
 
             collider.enabled = true;
             notebook.transform.position = transform.position;
@@ -287,7 +286,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             balloonData[chosenPair].balloon.ConnectedBalloon.HideClick(true);
         }
 
-        public void SelectPair(PairBalloon balloon)
+        public void SelectPair(CompassBalloon balloon)
         {
             if (balloonData[chosenPair].balloon != null)
             {
@@ -320,8 +319,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
             while (counter > 0)
             {
-                PairBalloon balloon1 = Instantiate(balloonPre, transform);
-                PairBalloon balloon2 = Instantiate(balloonPre, transform);
+                CompassBalloon balloon1 = Instantiate(balloonPre, transform);
+                CompassBalloon balloon2 = Instantiate(balloonPre, transform);
 
                 balloon1.Initialize(this);
                 balloon2.Initialize(this);
@@ -510,7 +509,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
         private IEnumerator BalloonPopper()
         {
-            List<PairBalloon> balloons = new List<PairBalloon>();
+            List<CompassBalloon> balloons = new List<CompassBalloon>();
             for (int i = 0; i < balloonData.Count; i++) 
             {
                 balloons.Add(balloonData[i].balloon);
@@ -563,7 +562,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         }
     }
 
-    public class PairBalloon : BaseBalloonBehaviour
+    public class CompassBalloon : BaseBalloonBehaviour
     {
         [SerializeField]
         private SoundObject audSelected;
@@ -579,7 +578,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
         private PairsComparator comparator;
 
-        private PairBalloon connectedInstance;
+        private CompassBalloon connectedInstance;
 
         private bool revealed;
 
@@ -587,7 +586,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
         public int value;
 
-        public PairBalloon ConnectedBalloon => connectedInstance;
+        public CompassBalloon ConnectedBalloon => connectedInstance;
 
         public override void InitializePrefab(int variant)
         {
@@ -605,6 +604,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
         public void Reset()
         {
+            Renderer.color = Color.white;
             revealed = false;
             clickHidden = false;
         }
@@ -617,7 +617,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
         public void HideClick(bool state) => clickHidden = state;
 
-        public void Connect(PairBalloon balloon)
+        public void Connect(CompassBalloon balloon)
         {
             connectedInstance = balloon;
             balloon.connectedInstance = this;

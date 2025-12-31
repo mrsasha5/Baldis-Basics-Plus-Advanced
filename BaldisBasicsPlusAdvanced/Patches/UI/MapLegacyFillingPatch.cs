@@ -84,10 +84,10 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
         private static bool CanFillAllTiles()
         {
             _gridPosition = (IntVector2)_gridPosField.GetValue(map);
-            //IntVector2.GetGridPosition(map.targets[0].transform.position);
 
-            return map.Ec.cells[_gridPosition.x, _gridPosition.z].room.type != RoomType.Hall 
-                && map.Ec.cells[_gridPosition.x, _gridPosition.z].room.functions.name != "CornFieldFunctionContainer(Clone)";
+            return map.Ec.cells[_gridPosition.x, _gridPosition.z].room.type != RoomType.Hall &&
+                 (map.Ec.cells[_gridPosition.x, _gridPosition.z].room.functions == null || 
+                    map.Ec.cells[_gridPosition.x, _gridPosition.z].room.functions.name != "CornFieldFunctionContainer(Clone)");
         }
     }
 }

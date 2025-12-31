@@ -5,8 +5,10 @@ using Newtonsoft.Json;
 
 namespace BaldisBasicsPlusAdvanced.Generation.Data
 {
-    internal class RandomEventSpawnData : BaseSpawnData<RandomEvent>
+    internal class RandomEventSpawnData : BaseSpawnData
     {
+        private RandomEvent instance;
+
         [JsonProperty("reference")]
         private string Serialization_RandomEvent
         {
@@ -23,7 +25,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
 
         public override void Register(string name, int floor, SceneObject sceneObject, CustomLevelObject levelObject)
         {
-            if (Instance == null)
+            if (instance == null)
                 throw new Exception("Object reference is null!");
 
             int weight = GetWeight(floor, levelObject.type);
@@ -31,7 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
             {
                 levelObject.randomEvents.Add(new WeightedRandomEvent()
                 {
-                    selection = Instance,
+                    selection = instance,
                     weight = weight
                 });
             }

@@ -165,7 +165,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         public void PostInitialization()
         {
             if (!hasInfinityUses)
-                uses = new System.Random(CoreGameManager.Instance.Seed()).Next(minMaxUses.x, minMaxUses.z + 1);
+                uses = new System.Random(CoreGameManager.Instance.Seed() + CoreGameManager.Instance.sceneObject.levelNo).Next(minMaxUses.x, minMaxUses.z + 1);
         }
 
         private void Update()

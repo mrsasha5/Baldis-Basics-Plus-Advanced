@@ -11,7 +11,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips
 
         public static void InitializeRng()
         {
-            rng = new System.Random(CoreGameManager.Instance.Seed());
+            rng = new System.Random(CoreGameManager.Instance.Seed() + CoreGameManager.Instance.sceneObject.levelNo);
         }
 
         public static void ResetRng() => rng = null;

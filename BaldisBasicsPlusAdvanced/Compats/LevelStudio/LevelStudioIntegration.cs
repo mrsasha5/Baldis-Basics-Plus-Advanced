@@ -17,12 +17,15 @@ using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
+using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Reflection;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
+using PlusLevelStudio.Ingame;
 using PlusStudioLevelFormat;
+using PlusStudioLevelLoader;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
@@ -117,13 +120,13 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 "Compats/LevelStudio/Language/English/", Language.English);
 
             InitializeVisuals();
-            InitializeStructureLocs();
+            InitializeStructures();
             InitializeItemsInStoreSettings();
             InitializeTextureContainers();
             EditorInterfaceModes.AddModeCallback(InitializeTools);
         }
 
-        private static void InitializeStructureLocs()
+        private static void InitializeStructures()
         {
             LevelStudioPlugin.Instance.structureTypes.Add("adv_zipline", typeof(ZiplineStructureLocation));
             LevelStudioPlugin.Instance.structureTypes.Add("adv_gum_dispenser", typeof(GumDispenserStructureLocation));
@@ -302,12 +305,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #region Generic Object Visuals
 
-            /*foreach (string name in ObjectsStorage.SodaMachines.Keys)
-            {
-                EditorInterface.AddObjectVisual("adv_" + name, ObjectsStorage.SodaMachines[name].gameObject, true);
-            }*/
-
-            EditorInterface.AddObjectVisual("adv_good_machine", ObjectStorage.SodaMachines["GoodMachine"].gameObject, true);
+            EditorInterface.AddObjectVisual("adv_good_machine", ObjectStorage.Objects["GoodMachine"], true);
 
             foreach (string name in ObjectStorage.Objects.Keys)
             {
@@ -450,9 +448,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new ObjectTool("adv_good_machine", 
                     AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Objects/adv_editor_GoodMachine.png")));
 
-            //Plates are supposed to be used in some premades, so they still exist as objects in Level Studio as well
+            //Stuff for rooms
             if (mode.id == "rooms")
             {
+                EditorInterfaceModes.AddToolToCategory(mode, "rooms",
+                    new RoomTool("adv_class_compass_comparator", LevelStudioPlugin.Instance.uiAssetMan.Get<Sprite>("Tools/room_class")));
+
                 foreach (string name in ObjectStorage.Objects.Keys)
                 {
                     if (ObjectStorage.Objects[name].TryGetComponent(out BasePlate plate))
@@ -483,9 +484,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new ActivityTool("adv_advanced_math_machine", AssetStorage.sprites["adv_editor_advanced_math_machine"], 0f));
             EditorInterfaceModes.AddToolToCategory(mode, "activities",
                 new ActivityTool("adv_advanced_math_machine_corner", AssetStorage.sprites["adv_editor_advanced_math_machine_corner"], 0f));
-
             EditorInterfaceModes.AddToolToCategory(mode, "activities",
-                new ActivityTool("adv_pairs_comparator", null, 5f));
+                new ActivityTool("adv_pairs_comparator", 
+                AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Activities/adv_editor_compass_comparator.png"), 5f));
 
             EditorInterfaceModes.AddToolToCategory(mode, "objects",
                 new ObjectTool("adv_voting_ceiling_screen",
@@ -531,7 +532,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             EditorInterfaceModes.AddToolToCategory(mode, "structures", 
                 new KitchenStoveTool("adv_kitchen_stove", "kitchen_stove",
                     AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_stove.png")));
-
             EditorInterfaceModes.AddToolToCategory(mode, "structures",
                 new PulleyTool("adv_pulley", "pulley",
                     AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Structures/adv_editor_pulley.png")));

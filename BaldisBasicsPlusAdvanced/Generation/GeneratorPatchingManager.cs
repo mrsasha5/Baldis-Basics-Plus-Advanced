@@ -2,18 +2,16 @@
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
-using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using HarmonyLib;
 using MTM101BaldAPI;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace BaldisBasicsPlusAdvanced.Generation
 {
-    //Migrating gradually into the new system
+    //Legacy class
     internal class GeneratorPatchingManager
     {
 
@@ -63,38 +61,6 @@ namespace BaldisBasicsPlusAdvanced.Generation
 
                 if (cellTexData.types.Contains("Floor"))
                     levelObject.hallFloorTexs = levelObject.hallFloorTexs.AddToArray(weightedTex);
-            }
-
-            foreach (BaseSpawningData data in ObjectStorage.SpawningData.Values) 
-            {
-                if (data is StructureBuilderExtensionsSpawningData)
-                {
-                    StructureBuilderExtensionsSpawningData spawningData = (StructureBuilderExtensionsSpawningData)data;
-
-                    if (name == "END" && !spawningData.EndlessMode) continue;
-
-                    if (name != "END" && spawningData.BannedFloors.Contains(floor)) continue;
-
-                    if (!data.LevelTypes.Contains(levelObject.type)) continue;
-
-                    StructureParameters structureParametersData = spawningData.GetStructureParameters(floor);
-
-                    StructureWithParameters parameters = null;
-
-                    if (spawningData.Forced)
-                        parameters = Array.Find(levelObject.forcedStructures, x => x.prefab == spawningData.StructureBuilder);
-                    else parameters = Array.Find(levelObject.potentialStructures, x => x.selection.prefab == spawningData.StructureBuilder)
-                            ?.selection;
-
-                    if (parameters != null) {
-                        if (structureParametersData.chance != null) parameters.parameters.chance =
-                            parameters.parameters.chance.AddRangeToArray(structureParametersData.chance);
-                        if (structureParametersData.prefab != null) parameters.parameters.prefab =
-                            parameters.parameters.prefab.AddRangeToArray(structureParametersData.prefab);
-                        if (structureParametersData.minMax != null) parameters.parameters.minMax =
-                            parameters.parameters.minMax.AddRangeToArray(structureParametersData.minMax);
-                    }
-                }
             }
 
             foreach (WeightedPosterObject weightedPosterObject in ObjectStorage.WeightedPosterObjects)

@@ -17,6 +17,8 @@ namespace BaldisBasicsPlusAdvanced.Menu
     {
         private Dictionary<string, MenuToggle> synchronizatedToggles = new Dictionary<string, MenuToggle>();
 
+        internal static GameObject disableCover;
+
         public override void Build()
         {
             bool gameInitialized = Singleton<BaseGameManager>.Instance != null;
@@ -125,7 +127,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
             //DisabledCover
             if (setDisabledCover) {
-                GameObject obj = Instantiate(AssetHelper.LoadAssets<GameObject>("DisabledCover")[1]);
+                GameObject obj = Instantiate(disableCover);
                 ReflectionHelper.SetValue(toggle, "disableCover", obj);
                 obj.transform.SetParent(toggle.transform, false);
                 obj.GetComponent<RectTransform>().sizeDelta = new Vector2(100f, 48f);

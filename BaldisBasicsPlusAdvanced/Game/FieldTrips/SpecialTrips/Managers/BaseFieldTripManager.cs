@@ -5,6 +5,15 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Managers
 {
     public class BaseFieldTripManager : BaseGameManager
     {
+        private void OnDestroy()
+        {
+            VirtualOnDestroy();
+        }
+
+        protected virtual void VirtualOnDestroy()
+        {
+            
+        }
 
         protected virtual void CloseFieldTrip(bool showFieldTripScreen = true)
         {

@@ -7,15 +7,18 @@ using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects;
 using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Managers;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Managers;
+using BaldisBasicsPlusAdvanced.Patches.GameManager;
 using MTM101BaldAPI.Registers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
 {
+#warning TODO: add signs in Level Studio and destroy temp quick solution
     public class FarmFieldTripManager : BaseFieldTripManager, IPrefab
     {
         [SerializeField]
@@ -51,6 +54,9 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
         [SerializeField]
         private float timePerCell;
 
+        [SerializeField]
+        private Sprite[] sprites;
+
         public static string farmTripMusicKey;
 
         private bool flagIsReached;
@@ -78,7 +84,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
             }
             if (!flagIsReached)
                 FieldTripsLoader.onGameLoadedBack += 
-                    () => FieldTripsLoader.PrevEc.GetAudMan().PlaySingle(AssetStorage.sounds["bal_game_over"]);
+                    () => FieldTripsLoader.PrevEc.GetAudMan().PlaySingle(AssetStorage.sounds["bal_game_over"], 1.5f);
             gauge?.Deactivate();
             //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(1, 1f);
             //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(5, 1f);
@@ -96,6 +102,16 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
             minMaxItems = new IntVector2(5, 12);
             signShapes = TileShapeMask.Corner | TileShapeMask.End;
             itemShapes = TileShapeMask.End;
+
+            string[] paths = Directory.GetFiles(AssetHelper.modPath + "Textures/Objects/Signs");
+            sprites = new Sprite[paths.Length];
+
+            //Quick solution for accelerating release
+            //Should be updated in the future
+            for (int i = 0; i < paths.Length; i++)
+            {
+                sprites[i] = AssetHelper.SpriteFromFile(paths[i], 25f, overrideBasePath: true);
+            }
 
             signs = new WeightedGameObject[]
             {
@@ -146,7 +162,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
                     room.functions.RemoveFunction(staminaBoost);
                 }
 
-                rng = new System.Random(Singleton<CoreGameManager>.Instance.Seed());
+                rng = new System.Random(CoreGameManager.Instance.Seed() + CoreGameManager.Instance.sceneObject.levelNo);
                 AudioListener.pause = true;
                 PropagatedAudioManager.paused = true;
                 firstInit = false;
@@ -354,6 +370,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
             //MusicManager.Instance.MidiPlayer.MPTK_ChannelVolumeSet(6, 0f);
 
             Singleton<MusicManager>.Instance.PlayMidi(farmTripMusicKey, loop: true);
+            CoreGameManager.Instance.disablePause = true;
         }
 
         public override void CollectNotebooks(int count)
@@ -536,8 +553,11 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
             while (signsCounter > 0 && cells.Count > 0)
             {
                 Cell cell = cells[rng.Next(0, cells.Count)];
-                Instantiate(WeightedGameObject.ControlledRandomSelection(signs, rng))
-                    .transform.position = cell.CenterWorldPosition;
+                GameObject sign = Instantiate(WeightedGameObject.ControlledRandomSelection(signs, rng));
+                sign.transform.position = cell.CenterWorldPosition;
+
+                sign.GetComponentInChildren<SpriteRenderer>().sprite = sprites.GetRandomElement();
+
                 cell.HardCoverEntirely();
                 cells.Remove(cell);
                 signsCounter--;

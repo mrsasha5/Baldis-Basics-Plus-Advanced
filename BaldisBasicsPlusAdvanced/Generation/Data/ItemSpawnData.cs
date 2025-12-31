@@ -7,13 +7,15 @@ using Newtonsoft.Json;
 
 namespace BaldisBasicsPlusAdvanced.Generation.Data
 {
-    internal class ItemSpawnData : BaseSpawnData<ItemObject>
+    internal class ItemSpawnData : BaseSpawnData
     {
         [JsonProperty]
         private bool forced;
 
         [JsonProperty]
         private int uses = 1;
+
+        private ItemObject instance;
         
         private WeightData[] shopWeights;
 
@@ -101,6 +103,8 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
             }
         }
 
+        public ItemObject Instance => instance;
+
         public ItemSpawnData(ItemObject instance)
         {
             this.instance = instance;
@@ -165,19 +169,19 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
 
         public override void Register(string name, int floor, SceneObject sceneObject, CustomLevelObject levelObject)
         {
-            if (Instance == null)
+            if (instance == null)
                 throw new Exception("Object reference is null!");
 
             int weight = GetWeight(floor, levelObject.type);
             if (forced)
             {
-                levelObject.forcedItems.Add(Instance);
+                levelObject.forcedItems.Add(instance);
             }
             else if (weight != 0)
             {
                 levelObject.potentialItems = levelObject.potentialItems.AddToArray(new WeightedItemObject()
                 {
-                    selection = Instance,
+                    selection = instance,
                     weight = weight
                 });
             }
@@ -186,7 +190,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
             {
                 sceneObject.shopItems = sceneObject.shopItems.AddToArray(new WeightedItemObject()
                 {
-                    selection = Instance,
+                    selection = instance,
                     weight = shopWeight
                 });
             }

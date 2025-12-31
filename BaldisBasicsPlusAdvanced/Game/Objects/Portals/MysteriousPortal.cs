@@ -167,7 +167,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
             {
                 //Probably I need to implement some system for checking objects that shouldn't be teleported
                 if (other.TryGetComponent(out MathMachineNumber _) || other.TryGetComponent(out MatchActivityBalloon _) ||
-                     other.TryGetComponent(out PairBalloon _))
+                     other.TryGetComponent(out CompassBalloon _))
                 {
                     return;
                 }

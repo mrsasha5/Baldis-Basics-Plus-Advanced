@@ -1,6 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Cache;
-using HarmonyLib;
-using BaldisBasicsPlusAdvanced.Game.Spawning;
+﻿using HarmonyLib;
 using BaldisBasicsPlusAdvanced.Generation;
 
 namespace BaldisBasicsPlusAdvanced.Patches.Items

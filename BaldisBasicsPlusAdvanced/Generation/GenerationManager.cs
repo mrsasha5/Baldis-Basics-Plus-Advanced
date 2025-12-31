@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Generation.Data;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
@@ -13,33 +14,26 @@ namespace BaldisBasicsPlusAdvanced.Generation
     internal class GenerationManager
     {
 
-        private static List<IStandardSpawnData> data = new List<IStandardSpawnData>();
+        private static List<BaseSpawnData> data = new List<BaseSpawnData>();
 
-        public static List<IStandardSpawnData> Data => data;
+        public static List<BaseSpawnData> Data => data;
+
+        private static void LoadData<T>(string folder) where T : BaseSpawnData
+        {
+            foreach (string path in Directory.GetFiles(AssetHelper.modPath + "Data/Generation/" + folder))
+            {
+                data.Add(JsonConvert.DeserializeObject<T>(File.ReadAllText(path)));
+            }
+        }
 
         public static void LoadGenerationDataFromFiles()
         {
-            string basePath = AssetHelper.modPath + "Data/Generation/";
-            foreach (string path in Directory.GetFiles(basePath + "Items"))
-            {
-                data.Add(JsonConvert.DeserializeObject<ItemSpawnData>(File.ReadAllText(path)));
-            }
-            foreach (string path in Directory.GetFiles(basePath + "RandomEvents"))
-            {
-                data.Add(JsonConvert.DeserializeObject<RandomEventSpawnData>(File.ReadAllText(path)));
-            }
-            foreach (string path in Directory.GetFiles(basePath + "Npcs"))
-            {
-                data.Add(JsonConvert.DeserializeObject<NpcSpawnData>(File.ReadAllText(path)));
-            }
-            foreach (string path in Directory.GetFiles(basePath + "RoomGroups"))
-            {
-                data.Add(JsonConvert.DeserializeObject<RoomGroupSpawnData>(File.ReadAllText(path)));
-            }
-            foreach (string path in Directory.GetFiles(basePath + "Structures"))
-            {
-                data.Add(JsonConvert.DeserializeObject<StructureBuilderSpawnData>(File.ReadAllText(path)));
-            }
+            LoadData<ItemSpawnData>("Items");
+            LoadData<RandomEventSpawnData>("RandomEvents");
+            LoadData<NpcSpawnData>("Npcs");
+            LoadData<RoomGroupSpawnData>("RoomGroups");
+            LoadData<StructureBuilderSpawnData>("Structures");
+            LoadData<StructureBuilderExtensionSpawnData>("StructureExtensions");
         }
 
         public static void LoadHardcodedGenerationData()
@@ -48,7 +42,7 @@ namespace BaldisBasicsPlusAdvanced.Generation
 
         public static void RegisterLevelObjectData(string name, int floor, SceneObject sceneObject, CustomLevelObject levelObject)
         {
-            foreach (IStandardSpawnData spawnData in data)
+            foreach (BaseSpawnData spawnData in data)
             {
                 spawnData.Register(name, floor, sceneObject, levelObject);
             }
@@ -103,7 +97,7 @@ namespace BaldisBasicsPlusAdvanced.Generation
         public static List<WeightedItemObject> GetMysteryRoomItems(int floor)
         {
             List<WeightedItemObject> items = new List<WeightedItemObject>();
-            foreach (IStandardSpawnData data in data)
+            foreach (BaseSpawnData data in data)
             {
                 if (data is ItemSpawnData itemData)
                 {
@@ -124,7 +118,7 @@ namespace BaldisBasicsPlusAdvanced.Generation
         public static List<WeightedItemObject> GetPartyItems(int floor)
         {
             List<WeightedItemObject> items = new List<WeightedItemObject>();
-            foreach (IStandardSpawnData data in data)
+            foreach (BaseSpawnData data in data)
             {
                 if (data is ItemSpawnData itemData)
                 {

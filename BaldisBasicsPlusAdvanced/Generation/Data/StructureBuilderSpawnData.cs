@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Helpers;
 using HarmonyLib;
 using MTM101BaldAPI;
 using Newtonsoft.Json;
@@ -7,13 +9,15 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Generation.Data
 {
-    internal class StructureBuilderSpawnData : BaseSpawnData<StructureBuilder>
+    internal class StructureBuilderSpawnData : BaseSpawnData
     {
         [JsonProperty]
         private StructureParametersData[] parameters;
 
         [JsonProperty]
         private bool forced;
+
+        private StructureBuilder instance;
 
         [JsonProperty("reference")]
         private string Serialization_Reference
@@ -27,13 +31,12 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
         public override void Register(string name, int floor, SceneObject sceneObject, CustomLevelObject levelObject)
         {
             int weight = GetWeight(floor, levelObject.type);
-
             if (forced)
             {
                 levelObject.forcedStructures = levelObject.forcedStructures.AddToArray(new StructureWithParameters()
                 {
-                    prefab = Instance,
-                    parameters = LoadParametersFromSerializedData(floor)
+                    prefab = instance,
+                    parameters = StructureParametersData.Deserialize(parameters, floor)
                 });
             }
             else if (weight != 0)
@@ -42,15 +45,78 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
                 {
                     selection = new StructureWithParameters()
                     {
-                        prefab = Instance,
-                        parameters = LoadParametersFromSerializedData(floor)
+                        prefab = instance,
+                        parameters = StructureParametersData.Deserialize(parameters, floor)
                     },
                     weight = weight
                 });
             }
         }
 
-        private StructureParameters LoadParametersFromSerializedData(int floor)
+    }
+
+    internal class StructureBuilderExtensionSpawnData : BaseSpawnData
+    {
+        private StructureBuilder builder;
+
+        [JsonProperty("parameters")]
+        private StructureParametersData[] instance;
+
+        [JsonProperty]
+        private bool isStructureInForcedList;
+
+        [JsonProperty("structure")]
+        private string Serialization_Builder
+        {
+            set
+            {
+                if (value == "cached_weighted")
+                {
+                    builder = AssetStorage.weightedPlacer;
+                    return;
+                }
+                else if (value == "cached_individual")
+                {
+                    builder = AssetStorage.individualPlacer;
+                    return;
+                }
+                builder = AssetHelper.LoadAsset<StructureBuilder>(value);
+            }
+        }
+
+        public override void Register(string name, int floor, SceneObject sceneObject, CustomLevelObject levelObject)
+        {
+            StructureParameters structureParametersData = StructureParametersData.Deserialize(instance, floor);
+            StructureWithParameters parameters = null;
+
+            if (isStructureInForcedList)
+                parameters = Array.Find(levelObject.forcedStructures, x => x.prefab == builder);
+            else
+                parameters = Array.Find(levelObject.potentialStructures, x => x.selection.prefab == builder)?.selection;
+
+            if (parameters != null)
+            {
+                if (structureParametersData.chance != null) parameters.parameters.chance =
+                    parameters.parameters.chance.AddRangeToArray(structureParametersData.chance);
+                if (structureParametersData.prefab != null) parameters.parameters.prefab =
+                    parameters.parameters.prefab.AddRangeToArray(structureParametersData.prefab);
+                if (structureParametersData.minMax != null) parameters.parameters.minMax =
+                    parameters.parameters.minMax.AddRangeToArray(structureParametersData.minMax);
+            }
+        }
+    }
+
+    internal struct StructureParametersData
+    {
+        public int floor;
+
+        public WeightedPrefabData[] prefab;
+
+        public IntVector2[] minMax;
+
+        public float[] chance;
+
+        public static StructureParameters Deserialize(StructureParametersData[] parameters, int floor)
         {
             if (parameters == null || parameters.Length == 0) return null;
             StructureParametersData nearestParams = parameters[0];
@@ -86,17 +152,6 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
 
             return _parameters;
         }
-    }
-
-    internal struct StructureParametersData
-    {
-        public int floor;
-
-        public WeightedPrefabData[] prefab;
-
-        public IntVector2[] minMax;
-
-        public float[] chance;
     }
 
     internal struct WeightedPrefabData

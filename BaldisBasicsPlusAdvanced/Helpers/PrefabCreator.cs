@@ -3,14 +3,12 @@ using BaldisBasicsPlusAdvanced.Game;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI;
 using UnityEngine;
-using System.Linq;
 using MTM101BaldAPI.ObjectCreation;
 using UnityEngine.UI;
 using BaldisBasicsPlusAdvanced.Game.Objects.SodaMachines;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Overlay;
-using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Extensions;
 namespace BaldisBasicsPlusAdvanced.Helpers
@@ -100,8 +98,8 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         }
 
-        public static StructureBuilderExtensionsSpawningData CreateVendingMachine(
-            string name, ItemObject requiredItem, Material face, Material faceOut, ItemObject item, int weight,
+        public static SodaMachine CreateVendingMachine(
+            string name, ItemObject requiredItem, Material face, Material faceOut, ItemObject item,
             WeightedItemObject[] potentialItems = null)
         {
             SodaMachine sodaMachine = UnityEngine.Object.Instantiate(AssetHelper.LoadAsset<SodaMachine>("ZestyMachine"));
@@ -120,32 +118,14 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
             if (potentialItems != null) ReflectionHelper.SetValue<WeightedItemObject[]>(sodaMachine, "potentialItems", potentialItems);
 
-            ObjectStorage.SodaMachines.Add(name, sodaMachine);
+            ObjectStorage.Objects.Add(name, sodaMachine.gameObject);
 
-            StructureBuilderExtensionsSpawningData spawningData = new StructureBuilderExtensionsSpawningData("structure_patch_"
-                + AssetStorage.weightedPlacer.name + sodaMachine.name, AssetStorage.weightedPlacer);
-
-            spawningData.SetStructureParameters(2, new StructureParameters()
-            {
-                prefab = new WeightedGameObject[]
-                {
-                    new WeightedGameObject()
-                    {
-                        selection = sodaMachine.gameObject,
-                        weight = weight
-                    }
-                }
-            });
-
-            ObjectStorage.SpawningData.Add("structure_patch_"
-                + AssetStorage.weightedPlacer.name + sodaMachine.name, spawningData);
-
-            return spawningData;
+            return sodaMachine;
         }
 
-        public static StructureBuilderExtensionsSpawningData CreateMultipleRequiredVendingMachine(
+        public static MultipleRequiredItemsSodaMachine CreateMultipleRequiredVendingMachine(
             string name, ItemObject requiredItem, int requitedAmmount, Material face, Material faceOut, 
-            ItemObject item, int weight, WeightedItemObject[] potentialItems = null)
+            ItemObject item, WeightedItemObject[] potentialItems = null)
         {
             MultipleRequiredItemsSodaMachine sodaMachine = UnityEngine.Object.Instantiate(AssetHelper.LoadAsset<SodaMachine>("ZestyMachine"))
                 .gameObject.SwapComponent<SodaMachine, MultipleRequiredItemsSodaMachine>();
@@ -165,27 +145,9 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
             if (potentialItems != null) ReflectionHelper.SetValue<WeightedItemObject[]>(sodaMachine, "potentialItems", potentialItems);
             
-            ObjectStorage.SodaMachines.Add(name, sodaMachine);
+            ObjectStorage.Objects.Add(name, sodaMachine.gameObject);
 
-            StructureBuilderExtensionsSpawningData spawningData = new StructureBuilderExtensionsSpawningData("structure_patch_"
-                + AssetStorage.weightedPlacer.name + sodaMachine.name, AssetStorage.weightedPlacer);
-
-            spawningData.SetStructureParameters(2, new StructureParameters()
-            {
-                prefab = new WeightedGameObject[]
-                {
-                    new WeightedGameObject()
-                    {
-                        selection = sodaMachine.gameObject,
-                        weight = weight
-                    }
-                }
-            });
-
-            ObjectStorage.SpawningData.Add("structure_patch_"
-                + AssetStorage.weightedPlacer.name + sodaMachine.name, spawningData);
-
-            return spawningData;
+            return sodaMachine;
         }
 
         public static T CreateStructureBuilder<T>(string name, int variant = 1) where T : StructureBuilder

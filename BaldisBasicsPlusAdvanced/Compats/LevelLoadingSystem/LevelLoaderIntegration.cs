@@ -37,8 +37,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 LevelLoaderPlugin.Instance.basicObjects.Add(key, ObjectsStorage.SodaMachines[vendingMachineName].gameObject);
             }*/
 
-            LevelLoaderPlugin.Instance.basicObjects.Add("adv_good_machine", 
-                ObjectStorage.SodaMachines["GoodMachine"].gameObject);
+            LevelLoaderPlugin.Instance.basicObjects.Add("adv_good_machine", ObjectStorage.Objects["GoodMachine"]);
 
             foreach (string name in ObjectStorage.Objects.Keys)
             {
@@ -200,7 +199,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 Array.Find(UnityEngine.Object.FindObjectsOfType<StandardDoorMats>(),
                     x => x.name == "EnglishDoorSet"),
                 mapMaterial: RoomHelper.CreateMapMaterial("EnglishClassMapBG", AssetStorage.textures["adv_english_class_bg"])
-                ));
+                )
+            );
 
             LevelLoaderPlugin.Instance.roomSettings.Add("adv_english_class_timer", new RoomSettings(
                 EnumExtensions.GetFromExtendedName<RoomCategory>("EnglishClass"),
@@ -209,7 +209,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 Array.Find(UnityEngine.Object.FindObjectsOfType<StandardDoorMats>(),
                     x => x.name == "EnglishDoorSet"),
                 mapMaterial: RoomHelper.CreateMapMaterial("EnglishClassMapBG", AssetStorage.textures["adv_english_class_bg"])
-                ));
+                )
+            );
 
             LevelLoaderPlugin.Instance.roomSettings.Add("adv_school_council_class", new RoomSettings(
                 EnumExtensions.GetFromExtendedName<RoomCategory>("SchoolCouncil"),
@@ -218,7 +219,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 Array.Find(UnityEngine.Object.FindObjectsOfType<StandardDoorMats>(),
                     x => x.name == "SchoolCouncilDoorSet"),
                 mapMaterial: RoomHelper.CreateMapMaterial("SchoolCouncilMapBG", AssetStorage.textures["adv_school_council_bg"])
-                ));
+                )
+            );
 
             LevelLoaderPlugin.Instance.roomSettings.Add("adv_advanced_class", new RoomSettings(
                 RoomCategory.Class,
@@ -227,15 +229,28 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 Array.Find(UnityEngine.Object.FindObjectsOfType<StandardDoorMats>(),
                     x => x.name == "AdvancedClassDoorSet"),
                 mapMaterial: RoomHelper.CreateMapMaterial("AdvancedClassMapBG", AssetStorage.textures["adv_advanced_class_bg"])
-                ));
+                )
+            );
 
             LevelLoaderPlugin.Instance.roomSettings.Add("adv_corn_field", new RoomSettings(
                 RoomCategory.Special,
                 RoomType.Room,
                 ObjectStorage.RoomColors["CornField"],
                 AssetHelper.LoadAsset<StandardDoorMats>("ClassDoorSet")
-                ));
+                )
+            );
 
+            LevelLoaderPlugin.Instance.roomSettings.Add("adv_class_compass_comparator", new RoomSettings(
+                LevelLoaderPlugin.Instance.roomSettings["class"].category,
+                LevelLoaderPlugin.Instance.roomSettings["class"].type,
+                LevelLoaderPlugin.Instance.roomSettings["class"].color,
+                LevelLoaderPlugin.Instance.roomSettings["class"].doorMat,
+                LevelLoaderPlugin.Instance.roomSettings["class"].mapMaterial
+                )
+            );
+
+            LevelLoaderPlugin.Instance.roomSettings["adv_class_compass_comparator"].container =
+                AssetHelper.LoadAsset<RoomFunctionContainer>("ClassRoomFunction_CompassComparator");
             LevelLoaderPlugin.Instance.roomSettings["adv_advanced_class"].container =
                 AssetHelper.LoadAsset<RoomFunctionContainer>("ClassRoomFunction");
 

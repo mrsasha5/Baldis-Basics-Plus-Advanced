@@ -6,10 +6,12 @@ using Newtonsoft.Json;
 
 namespace BaldisBasicsPlusAdvanced.Generation.Data
 {
-    internal class NpcSpawnData : BaseSpawnData<NPC>
+    internal class NpcSpawnData : BaseSpawnData
     {
         [JsonProperty]
         private bool forced;
+
+        private NPC instance;
 
         [JsonProperty("reference")]
         private string Serialization_Npc
@@ -33,12 +35,12 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
 
         public override void Register(string name, int floor, SceneObject sceneObject, CustomLevelObject levelObject)
         {
-            if (Instance == null)
+            if (instance == null)
                 throw new Exception("Object reference is null!");
 
             if (forced && standardData.IsFloorIncluded(floor, levelObject.type))
             {
-                levelObject.forcedNpcs = levelObject.forcedNpcs.AddToArray(Instance);
+                levelObject.forcedNpcs = levelObject.forcedNpcs.AddToArray(instance);
                 return;
             }
 
@@ -47,7 +49,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
             {
                 sceneObject.potentialNPCs.Add(new WeightedNPC()
                 {
-                    selection = Instance,
+                    selection = instance,
                     weight = weight
                 });
             }

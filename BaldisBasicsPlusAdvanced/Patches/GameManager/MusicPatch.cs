@@ -48,7 +48,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameManager
                     .FlushQueue(true);
                 MusicManager.Instance.PlayMidi(
                     musicNames[__instance.levelObject.type][
-                        new System.Random(Singleton<CoreGameManager>.Instance.Seed())
+                        new System.Random(CoreGameManager.Instance.Seed() + CoreGameManager.Instance.sceneObject.levelNo)
                         .Next(0, musicNames[__instance.levelObject.type].Count)], loop: true);
                 MusicManager.Instance.SetLoop(val: true);
             }

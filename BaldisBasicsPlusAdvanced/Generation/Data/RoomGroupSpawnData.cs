@@ -5,8 +5,10 @@ using Newtonsoft.Json;
 
 namespace BaldisBasicsPlusAdvanced.Generation.Data
 {
-    internal class RoomGroupSpawnData : BaseSpawnData<RoomGroup>
+    internal class RoomGroupSpawnData : BaseSpawnData
     {
+        private RoomGroup instance;
+
         [JsonProperty("reference")]
         private string Serialization_Reference
         {

@@ -4,6 +4,7 @@ using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Builders;
 using BaldisBasicsPlusAdvanced.Helpers;
+using BaldisBasicsPlusAdvanced.Menu;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using MTM101BaldAPI;
@@ -135,6 +136,8 @@ namespace BaldisBasicsPlusAdvanced.Cache
             Stopwatch sw = new Stopwatch();
             sw.Start();
 #endif
+
+            ExtraOptionsMenu.disableCover = AssetHelper.LoadAssets<GameObject>("DisabledCover")[1];
 
             graphsStandardShader = Shader.Find("Shader Graphs/Standard");
             genericBaldi = AssetHelper.LoadAsset<Baldi>("Baldi_Main1");

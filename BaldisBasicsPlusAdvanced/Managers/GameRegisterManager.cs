@@ -28,7 +28,6 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Voting;
 using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
-using BaldisBasicsPlusAdvanced.Game.Spawning;
 using BaldisBasicsPlusAdvanced.Game.Objects.Food;
 using BaldisBasicsPlusAdvanced.Game.InventoryItems.Food;
 using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
@@ -538,7 +537,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabCreator.CreateMultipleRequiredVendingMachine("GoodMachine",
                 ItemMetaStorage.Instance.FindByEnum(Items.Quarter).itemObjects[0], 2,
                 AssetStorage.materials["adv_good_machine"], AssetStorage.materials["adv_good_machine_out"], null,
-                weight: 0,
                 new WeightedItemObject[] {
                 new WeightedItemObject()
                 {
@@ -555,11 +553,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                     weight = 25,
                     selection = ItemMetaStorage.Instance.FindByEnum(Items.GrapplingHook).itemObjects.Last()
                 },
-            })
-                .SetLevelTypes(LevelType.Schoolhouse, LevelType.Maintenance, LevelType.Factory)
-                .SetForced(true)
-                .SetWeight(2, 50)
-                .SetWeight(3, 75);
+            });
         }
 
         #endregion
