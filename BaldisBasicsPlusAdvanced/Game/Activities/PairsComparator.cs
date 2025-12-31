@@ -90,6 +90,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         private int finalPoints;
 
         [SerializeField]
+        private int bonusPointsPerPair;
+
+        [SerializeField]
+        private int bonusFinalPoints;
+
+        [SerializeField]
         internal float spawnRadius;
 
         [SerializeField]
@@ -131,6 +137,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             pulleySpriteOffset = 4f;
             pointsPerPair = 10;
             finalPoints = 20;
+            bonusPointsPerPair = 20;
+            bonusFinalPoints = 40;
 
             SphereCollider endlessCollider = new GameObject("Trigger").AddComponent<SphereCollider>();
             endlessCollider.transform.SetParent(transform, false);
@@ -397,14 +405,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                 {
                     Completed(player, true);
                     room.functions.OnActivityCompletion();
-                    if (finalPoints != 0)
-                        CoreGameManager.Instance.AddPoints(finalPoints, 0, true);
+                    CoreGameManager.Instance.AddPoints(bonusMode ? bonusFinalPoints : finalPoints, 0, true);
                 }
                 else
                 {
                     room.functions.OnActivityProgress();
-                    if (pointsPerPair != 0)
-                        CoreGameManager.Instance.AddPoints(pointsPerPair, 0, true);
+                    CoreGameManager.Instance.AddPoints(bonusMode ? bonusPointsPerPair : pointsPerPair, 0, true);
                 }
 
                 BaseGameManager.Instance.PleaseBaldi(baldiPause, rewardSticker: true);

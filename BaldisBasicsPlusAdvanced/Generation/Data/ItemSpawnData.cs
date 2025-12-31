@@ -4,6 +4,7 @@ using HarmonyLib;
 using MTM101BaldAPI;
 using MTM101BaldAPI.Registers;
 using Newtonsoft.Json;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace BaldisBasicsPlusAdvanced.Generation.Data
 {
@@ -27,8 +28,10 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
 
         private int[] bannedPartyFloors;
 
-        //Giving less priority for it due of the "uses" field which may load early
-        [JsonProperty("reference", Order = 1)]
+        [JsonProperty("reference")]
+        private string itemEnum = "";
+
+        /*[JsonProperty("reference")]
         private string Serialization_Item
         {
             set
@@ -36,7 +39,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
                 ItemMetaData meta = FindInstance(value);
                 instance = meta.itemObjects[uses - 1];
             }
-        }
+        }*/
 
         [JsonProperty("shopWeights")]
         private WeightData[] ShopWeights
@@ -103,7 +106,15 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
             }
         }
 
-        public ItemObject Instance => instance;
+        public ItemObject Instance
+        {
+            get
+            {
+                if (instance != null) return instance;
+                ItemMetaData meta = FindInstance(itemEnum);
+                return meta.itemObjects[uses - 1];
+            }
+        }
 
         public ItemSpawnData(ItemObject instance)
         {
@@ -169,19 +180,19 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
 
         public override void Register(string name, int floor, SceneObject sceneObject, CustomLevelObject levelObject)
         {
-            if (instance == null)
+            if (Instance == null)
                 throw new Exception("Object reference is null!");
 
             int weight = GetWeight(floor, levelObject.type);
             if (forced)
             {
-                levelObject.forcedItems.Add(instance);
+                levelObject.forcedItems.Add(Instance);
             }
             else if (weight != 0)
             {
                 levelObject.potentialItems = levelObject.potentialItems.AddToArray(new WeightedItemObject()
                 {
-                    selection = instance,
+                    selection = Instance,
                     weight = weight
                 });
             }
@@ -190,7 +201,7 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
             {
                 sceneObject.shopItems = sceneObject.shopItems.AddToArray(new WeightedItemObject()
                 {
-                    selection = instance,
+                    selection = Instance,
                     weight = shopWeight
                 });
             }
