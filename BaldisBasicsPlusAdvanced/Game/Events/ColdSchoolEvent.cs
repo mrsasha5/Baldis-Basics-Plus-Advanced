@@ -144,7 +144,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         {
             if (controlledNpcs.ContainsKey(npc)) return;
 
-            NPCControllerSystem controllerSystem = npc.GetControllerSystem();
+            NpcControllerSystem controllerSystem = npc.GetControllerSystem();
             controllerSystem.CreateController(out FrozennessController frozennessController);
             frozennessController.SetInfinityLivingTime();
             controlledNpcs.Add(npc, frozennessController);

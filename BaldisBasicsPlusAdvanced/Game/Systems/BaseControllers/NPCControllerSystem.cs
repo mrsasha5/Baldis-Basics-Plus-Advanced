@@ -1,13 +1,8 @@
 ﻿using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
-using BaldisBasicsPlusAdvanced.Patches;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 {
-    public class NPCControllerSystem : BaseControllerSystem
+    public class NpcControllerSystem : BaseControllerSystem
     {
         private NPC npc;
 

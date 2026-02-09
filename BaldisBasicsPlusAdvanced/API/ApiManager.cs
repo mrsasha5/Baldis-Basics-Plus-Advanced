@@ -18,6 +18,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.API
 {
+    // This thing will be refactoried someday
     public static class ApiManager
     {
         internal static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("BB+ Advanced Edition API");

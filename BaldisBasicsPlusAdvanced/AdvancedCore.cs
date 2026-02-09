@@ -37,7 +37,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "BB+ Advanced Edition";
 
-        public const string version = "0.3.3";
+        public const string version = "0.3.3.1";
 
         private static AdvancedCore instance;
 
@@ -266,17 +266,22 @@ namespace BaldisBasicsPlusAdvanced
                 Directory.GetFiles(AssetHelper.modPath, "*.ver", SearchOption.TopDirectoryOnly);
 
             if (versionMarkers.Length > 1)
+            {
                 notif = NotificationManager.Instance.Queue("Adv_Notif_AssetsWarning", AssetStorage.sounds["buzz_elv"], time: 0f);
+                Logging.LogWarning("Assets merging is detected.");
+            }
             else if (versionMarkers.Length == 1)
             {
                 if (Path.GetFileNameWithoutExtension(versionMarkers[0]) != AdvancedCore.version)
                 {
                     notif = NotificationManager.Instance.Queue("Adv_Notif_IncorrectAssetsWarning", AssetStorage.sounds["buzz_elv"], time: 0f);
+                    Logging.LogWarning("Installed assets version not equals plugin version.");
                 }
             }
             else
             {
                 notif = NotificationManager.Instance.Queue("Adv_Notif_UnknownAssetsVersion", AssetStorage.sounds["buzz_elv"], time: 0f);
+                Logging.LogWarning("Assets version marker is not found.");
             }
             return notif;
         }

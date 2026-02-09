@@ -59,7 +59,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 && !(baldi.behaviorStateMachine.currentState is Baldi_Chase_Broken)
                 && !(baldi.behaviorStateMachine.currentState is Baldi_Praise)
                 && !ReflectionHelper.GetValue<bool>(baldi, "breakRuler")
-                && other.TryGetComponent(out NPCControllerSystem controllerSystem))
+                && other.TryGetComponent(out NpcControllerSystem controllerSystem))
             {
                 if (controllerSystem.CreateController(out BrokenRulerController controller))
                 {

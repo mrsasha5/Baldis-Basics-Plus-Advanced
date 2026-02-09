@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate;
+﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations;
 using PlusLevelStudio.Editor;
 using UnityEngine;
 

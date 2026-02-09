@@ -856,7 +856,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             }
             //spelling end
 
-            PrefabCreator.CreateObjectPrefab<TeleportationHole>("Teleportation Bomb", "teleportation_bomb");
+            PrefabCreator.CreateObjectPrefab<TeleportationHole>("Teleportation Hole", "teleportation_hole");
             PrefabCreator.CreateObjectPrefab<Reaper>("Farm Reaper", "farm_reaper");
             PrefabCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_flag");
             PrefabCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_points_flag", variant: 2);

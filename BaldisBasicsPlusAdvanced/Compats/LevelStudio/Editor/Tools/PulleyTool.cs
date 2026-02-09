@@ -1,4 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Pulley;
+﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
 using UnityEngine;

@@ -8,7 +8,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
     //1 min/max - for room plates (not forced value)
     public class BaseStructure_Plate : StructureBuilder, IPrefab
     {
-
         [SerializeField]
         protected TileShapeMask tileShapes;
 
@@ -66,7 +65,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         protected virtual List<Cell> GetCells()
         {
             List<Cell> tilesOfShape = ec.mainHall.GetTilesOfShape(tileShapes, coverageToFit, includeOpenTiles);
-
             return tilesOfShape;
         }
 
@@ -88,7 +86,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         public virtual void Build(LevelBuilder lb, System.Random rng, bool roomCells)
         {
             List<Cell> ignoredCells = new List<Cell>();
-
             List<Cell> cellsToAvoid = new List<Cell>();
 
             foreach (BasePlate plate in FindObjectsOfType<BasePlate>())
@@ -97,10 +94,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             }
 
             List<Cell> cells = roomCells ? GetRoomCells() : GetCells();
-
             int num = roomCells ? rng.Next(parameters.minMax[1].x, parameters.minMax[1].z + 1) :
                                     rng.Next(parameters.minMax[0].x, parameters.minMax[0].z + 1);
-
             int i = 0;
 
             for (; i < num; i++)
@@ -126,9 +121,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 if (!ignored)
                 {
                     RandomlyBuildPrefab(cells[index], rng, roomCells);
-
                     cellsToAvoid.Add(cells[index]);
-
                     cells.RemoveAt(index);
                 }
                 else
@@ -145,9 +138,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 }
 
                 int index = rng.Next(0, ignoredCells.Count);
-
                 RandomlyBuildPrefab(ignoredCells[index], rng, roomCells);
-
                 ignoredCells.RemoveAt(index);
             }
         }
@@ -160,7 +151,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 if (includeRooms) Build(lb, lb.controlledRNG, roomCells: true);
                 generatedPlates.Clear();
             }
-
         }
 
         public virtual BasePlate BuildPrefab(BasePlate platePre, Cell cell, Direction dir)

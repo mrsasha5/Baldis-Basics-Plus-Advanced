@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.UI;
 using TMPro;

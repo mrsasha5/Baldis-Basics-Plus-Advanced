@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.AccelerationPlate;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GenericPlate;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.GumDispenser;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.KitchenStove;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.NoisyFacultyPlate;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Pulley;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
 using BaldisBasicsPlusAdvanced.Extensions;
@@ -17,22 +11,18 @@ using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
-using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Reflection;
 using PlusLevelStudio;
 using PlusLevelStudio.Editor;
 using PlusLevelStudio.Editor.Tools;
-using PlusLevelStudio.Ingame;
 using PlusStudioLevelFormat;
-using PlusStudioLevelLoader;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 {
     internal class LevelStudioIntegration : CompatibilityModule
     {
-
         public const string GUID = "mtm101.rulerp.baldiplus.levelstudio";
 
         internal const string standardMsg_StructureVersionException = 
@@ -571,6 +561,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new TextureContainer("adv_advanced_class_floor", "adv_advanced_class_wall", "adv_advanced_class_ceiling"));
             LevelStudioPlugin.Instance.defaultRoomTextures.Add("adv_corn_field", 
                 new TextureContainer("adv_corn_floor", "adv_corn_wall", "None"));
+            LevelStudioPlugin.Instance.defaultRoomTextures.Add("adv_class_compass_comparator",
+                LevelStudioPlugin.Instance.defaultRoomTextures["class"]);
         }
 
         public static void LoadEditorAssets()

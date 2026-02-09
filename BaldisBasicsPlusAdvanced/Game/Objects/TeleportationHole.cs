@@ -3,13 +3,9 @@ using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.InventoryItems;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using UnityEngine;
-using UnityEngine.Android;
 using static UnityEngine.ParticleSystem;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects
@@ -34,9 +30,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         [SerializeField]
         private float pitchMultiplier;
 
-        //private float centerForceOffset = 0f; //2f - whirlpool
+        [SerializeField]
+        private float maxForce;
 
-        private float maxForce = 40f; //18f - whirlpool
+        [SerializeField]
+        private float particleDestroyDistance;
+
+        private Particle[] _particles = new Particle[0];
 
         private EnvironmentController ec;
 
@@ -68,6 +68,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         {
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
             pitchMultiplier = 0.15f;
+            maxForce = 60f;
+            particleDestroyDistance = 0.5f;
 
             GameObject childObj = new GameObject("AudMan");
             childObj.transform.SetParent(transform, false);
@@ -99,29 +101,34 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             EmissionModule emission = particleSystem.emission;
             ShapeModule shape = particleSystem.shape;
             TextureSheetAnimationModule anim = particleSystem.textureSheetAnimation;
+            CollisionModule collision = particleSystem.collision;
 
             main.loop = false;
-            main.startLifetime = 1.5f;
+            main.duration = 2f;
+            main.maxParticles = 5000;
+            main.startLifetime = 5f;
             main.startSpeed = 30f;
             main.startSize = 0.7f;
             main.simulationSpace = ParticleSystemSimulationSpace.World;
             main.scalingMode = ParticleSystemScalingMode.Hierarchy;
             main.playOnAwake = false; 
             main.startColor = Color.white;
-
             emission.rateOverTime = 0f;
             emission.SetBursts(new Burst[] {
-                    new Burst(0f, 200f)
+                    new Burst(0f, 50, 100, 20, 0.1f)
                 }
             );
-
             shape.shapeType = ParticleSystemShapeType.Sphere;
             shape.radius = 0f;
+            collision.enabled = true;
+            collision.type = ParticleSystemCollisionType.World;
 
             ParticleSystemRenderer renderer = particleSystem.GetComponent<ParticleSystemRenderer>();
             renderer.material = AssetStorage.materials["qmark_sheet"];
 
-            anim.enabled = true; //not enabled
+            anim.enabled = true;
+            anim.frameOverTime = 0f;
+            anim.startFrame = new MinMaxCurve(0f, 5f);
             anim.numTilesX = 4;
             anim.numTilesY = 2;
             return particleSystem;
@@ -134,16 +141,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             ShapeModule shape = particleSystem.shape;
 
             float time = 1f;
-
             main.loop = true;
-            
             main.startSpeed = -1f * sphereCollider.radius / time;
-            main.startLifetime = sphereCollider.radius / main.startSpeed.constant * -1f;
             main.startSize = 0.7f;
-
             emission.rateOverTime = 300f;
             emission.SetBursts(new Burst[0]);
-
             shape.shapeType = ParticleSystemShapeType.Sphere;
             shape.radius = sphereCollider.radius;
         }
@@ -166,8 +168,21 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         private void Update()
         {
-            if (time > 0f) time -= Time.deltaTime * ec.EnvironmentTimeScale;
+            if (_particles == null || _particles.Length < particleSystems[1].main.maxParticles)
+                _particles = new Particle[particleSystems[1].main.maxParticles];
 
+            int aliveParticles = particleSystems[1].GetParticles(_particles);
+            for (int i = 0; i < aliveParticles; i++)
+            {
+                //Debug.LogWarning($"{_particles[i].position.ToString()} {transform.position.ToString()} Distance: {Vector3.Distance(_particles[i].position, transform.position)}");
+                if (Vector3.Distance(_particles[i].position, transform.position) <= particleDestroyDistance)
+                {
+                    _particles[i].remainingLifetime = 0f;
+                }
+            }
+            particleSystems[1].SetParticles(_particles, aliveParticles);
+
+            if (time > 0f) time -= Time.deltaTime * ec.EnvironmentTimeScale;
             if (audMan.audioDevice.loop)
                 audMan.pitchModifier += Time.deltaTime * ec.EnvironmentTimeScale * pitchMultiplier;
             else audMan.pitchModifier = 1f;
@@ -182,24 +197,21 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                     i--;
                     continue;
                 }
-
                 _distance = Vector3.Distance(base.transform.position, entities[i].transform.position);
                 ray = new Ray(base.transform.position, entities[i].transform.position - base.transform.position);
                 hits = Physics.RaycastAll(ray, _distance, LayerHelper.gumCollisionMask, QueryTriggerInteraction.Ignore);
                 hitTransforms.Clear();
                 _obstacleHit = false;
+
                 if (hits.Length != 0)
                 {
                     _obstacleHit = true;
                 }
                 obstacleHits[i] = _obstacleHit;
-
                 if (!_obstacleHit)
                 {
-                    //_direction = base.transform.position + base.transform.forward * centerForceOffset - entities[i].transform.position;
                     _direction = base.transform.position + - entities[i].transform.position;
                     _direction.y = 0f;
-                    //_distance = Vector3.Distance(base.transform.position + base.transform.forward * centerForceOffset + Vector3.up * 5f, entities[i].transform.position);
                     _distance = Vector3.Distance(base.transform.position + Vector3.up * 5f, entities[i].transform.position);
                     _force = (sphereCollider.radius - Mathf.Min(_distance, sphereCollider.radius)) / sphereCollider.radius * maxForce * ec.EnvironmentTimeScale;
                     if (_force * Time.deltaTime > _distance)
@@ -215,14 +227,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                     {
                         entities[i].RandomTeleport();
                     }
-                    
                 }
                 else
                 {
                     moveMods[i].movementAddend = Vector3.zero;
                 }
             }
-
             if (time < 0f && !ended)
             {
                 ended = true;
@@ -238,10 +248,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                     } else
                     {
                         entities[i].ExternalActivity.moveMods.Remove(moveMods[i]);
-
-                        if (!obstacleHits[i])
-                            entities[i].RandomTeleport();
-
                         entities.RemoveAt(i);
                         moveMods.RemoveAt(i);
                         obstacleHits.RemoveAt(i);
@@ -249,15 +255,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
                         continue;
                     }
                 }
-
-                childObj.transform.localPosition = Vector3.zero; //normalize explosion pos
-                particleSystems[0].Play(); //EXPLOSION!!1!
-
-                //particleSystems[1].Stop();
-                Destroy(particleSystems[1]);
-                Destroy(GetComponent<ParticleSystemRenderer>());
+                particleSystems[1].Stop();
                 Destroy(gameObject, 5f);
-
                 audMan.FlushQueue(true);
                 audMan.QueueAudio(AssetStorage.sounds["adv_activation_end"]);
             }

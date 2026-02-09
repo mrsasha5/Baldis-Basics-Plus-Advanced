@@ -68,7 +68,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 NPC npc = other.GetComponent<NPC>();
                 if (ReflEvent_IsFreezable(npc))
                 {
-                    NPCControllerSystem controllerSystem = npc.GetControllerSystem();
+                    NpcControllerSystem controllerSystem = npc.GetControllerSystem();
                     controllerSystem.CreateController(out FrozennessController frozennessController);
                     frozennessController.SetTime(10f);
                 }

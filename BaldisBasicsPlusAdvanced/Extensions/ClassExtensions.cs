@@ -449,9 +449,9 @@ namespace BaldisBasicsPlusAdvanced.Extensions
             return pm.GetComponent<PlayerControllerSystem>();
         }
 
-        public static NPCControllerSystem GetControllerSystem(this NPC npc)
+        public static NpcControllerSystem GetControllerSystem(this NPC npc)
         {
-            return npc.GetComponent<NPCControllerSystem>();
+            return npc.GetComponent<NpcControllerSystem>();
         }
 
         public static int CountItems(this ItemManager itm)

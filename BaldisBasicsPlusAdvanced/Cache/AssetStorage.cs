@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using static Mono.Security.X509.X520;
 
 namespace BaldisBasicsPlusAdvanced.Cache
 {
@@ -230,7 +231,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
             LoadSprite("grappling_hook", "GrapplingHookSprite");
             LoadSprite("chalkboard_standard", "ChalkBoardStandard");
             LoadSprite("about_notif", "AboutNotif");
-            LoadSprite("balloon_orange", "BalloonBuster_Balloons_Sheet_3"); //Orange
+            LoadSprite("balloon_orange", "BalloonBuster_Balloons_Sheet_3");
             LoadSprite("plant", "Plant");
             LoadSprite("food_plate_cover", "Cover_Sprite");
             LoadSprite("food_plate", "Plate_Sprite");
@@ -248,7 +249,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
                 LoadSprite("exclamation_point_sheet" + i, "ExclamationPoint_Sheet_" + i);
             }*/
 
-            LoadTexture("white", "WhiteTexture"); //huh?
+            LoadTexture("white", "WhiteTexture");
             //LoadTexture("white", "UnityWhite"); 
             LoadTexture("qmark_sheet", "QMarkSheet");
             LoadTexture("regular_wall", "Wall");

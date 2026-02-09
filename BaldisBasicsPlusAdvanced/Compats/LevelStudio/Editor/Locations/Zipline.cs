@@ -1,18 +1,130 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.ConstrainedExecution;
+﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.UI;
+using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Builders;
-using PlusLevelStudio;
+using BaldisBasicsPlusAdvanced.Game.Objects;
+using BaldisBasicsPlusAdvanced.Helpers;
 using PlusLevelStudio.Editor;
 using PlusStudioLevelFormat;
+using PlusStudioLevelLoader;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 
-namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
+namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations
 {
+    internal class ZiplinePointLocation : PointLocation
+    {
+        public string prefabForBuilder;
+
+        public ushort uses;
+
+        public ushort percentageDistanceToBreak = 50;
+
+        // Not serializable fields
+        private bool destroyed;
+
+        private GameObject hangerVisual;
+
+        private ZiplinePointLocation connectedPoint;
+
+        public ZiplineStructureLocation owner;
+
+        public LineRenderer renderer;
+
+        public void Compile(StructureInfo info)
+        {
+            info.data.Add(new StructureDataInfo()
+            {
+                prefab = prefabForBuilder,
+                position = position.ToData(), // I am writing this way because
+                                              // extension methods from Loader
+                                              // and Studio are conflicting and when
+                                              // I am using PlusStudioLevelLoader namespace
+                                              // I cannot use .ToInt() for ByteVector2
+                                              // anymore.
+                direction = PlusDirection.North,
+                data = EncodeData()
+            });
+        }
+
+        private int EncodeData()
+        {
+            int num = 0;
+            num |= uses;
+            num = num << 16;
+            num |= percentageDistanceToBreak;
+            return num;
+        }
+
+        public void ReadData(BinaryReader reader, StringCompressor compressor)
+        {
+            prefabForBuilder = compressor.ReadStoredString(reader);
+            position = reader.ReadByteVector2().ToInt();
+
+            uses = reader.ReadUInt16();
+            percentageDistanceToBreak = reader.ReadUInt16();
+        }
+
+        public void WriteData(BinaryWriter writer, StringCompressor compressor)
+        {
+            compressor.WriteStoredString(writer, prefabForBuilder);
+            writer.Write(position.ToByte());
+
+            writer.Write(uses);
+            writer.Write(percentageDistanceToBreak);
+        }
+
+        public void LoadDefaults()
+        {
+            ZiplineHanger hangerPrefab =
+                LevelLoaderPlugin.Instance.structureAliases[owner.type].prefabAliases[prefabForBuilder].GetComponent<ZiplineHanger>();
+
+            uses = (ushort)hangerPrefab.MinMaxUses.z;
+        }
+
+        public void ConnectTo(ZiplinePointLocation loc)
+        {
+            connectedPoint = loc;
+            loc.connectedPoint = this;
+
+            ZiplineHanger hangerPrefab =
+                LevelLoaderPlugin.Instance.structureAliases[owner.type].prefabAliases[prefabForBuilder].GetComponent<ZiplineHanger>();
+
+            Vector3 pos = position.GetVector3FromCellPosition();
+            Vector3 endPos = loc.position.GetVector3FromCellPosition();
+
+            hangerVisual = Object.Instantiate(LevelStudioIntegration.GetVisualPrefab(owner.type, prefabForBuilder));
+            hangerVisual.transform.position = pos + hangerPrefab.Offset * (endPos - pos).normalized + Vector3.up * 5f;
+            hangerVisual.GetComponent<EditorSettingsableComponent>().OnSettingsClicked = OnSettingsClicked;
+            hangerVisual.GetComponent<EditorDeletableObject>().toDelete = this;
+        }
+
+        private void OnSettingsClicked()
+        {
+            Singleton<EditorController>.Instance.HoldUndo();
+
+            ZiplineExchangeHandler handler = EditorController.Instance.CreateUI<ZiplineExchangeHandler>(
+                "ZiplineConfig", AssetHelper.modPath + "Compats/LevelStudio/UI/ZiplineHangerConfig.json");
+            handler.OnInitialized(this);
+            handler.Refresh();
+        }
+
+        public override void CleanupVisual(GameObject visualObject)
+        {
+            base.CleanupVisual(visualObject);
+            destroyed = true;
+            owner.locations.Remove(this);
+
+            if (hangerVisual != null) Object.Destroy(hangerVisual.gameObject);
+            if (renderer != null) Object.Destroy(renderer.gameObject);
+            if (connectedPoint != null && !connectedPoint.destroyed) EditorController.Instance.RemoveVisual(connectedPoint);
+        }
+    }
+
     internal class ZiplineStructureLocation : StructureLocation
     {
-
         public const byte formatVersion = 0;
 
         public List<ZiplinePointLocation> locations = new List<ZiplinePointLocation>();
@@ -44,24 +156,23 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
             locations.Add(loc);
 
-            Structure_Zipline builderPre = 
+            Structure_Zipline builderPre =
                 (Structure_Zipline)PlusStudioLevelLoader.LevelLoaderPlugin.Instance.structureAliases[type].structure;
 
             if (locations.Count % 2 == 0)
             {
                 loc.renderer = locations[locations.Count - 2].renderer;
-                builderPre.UpdateRenderer(loc.renderer, 
-                    locations[locations.Count - 2].position.ToWorld(),
-                    locations[locations.Count - 1].position.ToWorld());
+                builderPre.UpdateRenderer(loc.renderer,
+                    PlusLevelStudio.EditorExtensions.ToWorld(locations[locations.Count - 2].position),
+                    PlusLevelStudio.EditorExtensions.ToWorld(locations[locations.Count - 1].position));
             }
             else
             {
                 loc.renderer = builderPre.GetLineRenderer();
             }
-            
+
             return loc;
         }
-
 
         private bool OnDeleteLocation(EditorLevelData level, PointLocation loc)
         {
@@ -71,7 +182,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
 
         public override void CleanupVisual(GameObject visualObject)
         {
-            
+
         }
 
         public override StructureInfo Compile(EditorLevelData data, BaldiLevel level)
@@ -108,12 +219,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
             for (int i = 0; i < locations.Count; i++)
             {
                 EditorController.Instance.UpdateVisual(locations[i]);
-
                 if (i % 2 != 0)
                 {
                     builderPre.UpdateRenderer(locations[i].renderer,
-                        locations[i - 1].position.ToWorld(),
-                            locations[i].position.ToWorld());
+                        PlusLevelStudio.EditorExtensions.ToWorld(locations[i - 1].position),
+                            PlusLevelStudio.EditorExtensions.ToWorld(locations[i].position));
                 }
             }
         }
@@ -139,7 +249,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
                     else i--;
                 }
             }
-
             return true;
         }
 
@@ -156,7 +265,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
                 CreateNewChild(data, "", default, disableChecks: true)
                     .ReadData(reader, compressor);
             }
-
             for (int i = 0; i < locations.Count; i += 2)
             {
                 locations[i].ConnectTo(locations[i + 1]);
@@ -177,6 +285,5 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline
         {
             compressor.AddStrings(locations.Select((x) => x.prefabForBuilder));
         }
-
     }
 }

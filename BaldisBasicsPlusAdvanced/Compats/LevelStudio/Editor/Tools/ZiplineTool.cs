@@ -1,13 +1,11 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
+﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations;
 using PlusLevelStudio.Editor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
 {
     public class ZiplineTool : EditorTool
     {
-
         private string type;
 
         private string hangerPre;
@@ -17,7 +15,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
         public override string id => $"structure_{type}_{hangerPre}";
 
         private ZiplinePointLocation notConnectedPoint;
-
 
         public ZiplineTool(string type, string hangerPre, Sprite sprite)
         {
@@ -101,7 +98,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
                 notConnectedPoint = newPointLoc;
                 notConnectedPoint.LoadDefaults();
             }
-
             EditorController.Instance.AddVisual(newPointLoc);
 
             return structLoc.locations.Count % 2 == 0;
@@ -111,6 +107,5 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools
         {
             return false;
         }
-
     }
 }

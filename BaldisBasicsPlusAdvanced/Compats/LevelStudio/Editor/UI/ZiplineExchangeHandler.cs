@@ -1,6 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations.Zipline;
+﻿using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations;
 using PlusLevelStudio.Editor;
-using PlusLevelStudio.UI;
 using TMPro;
 using UnityEngine;
 

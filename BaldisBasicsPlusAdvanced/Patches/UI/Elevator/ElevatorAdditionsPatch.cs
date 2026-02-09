@@ -4,15 +4,12 @@ using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
-using BepInEx;
 using HarmonyLib;
 using MTM101BaldAPI.Components.Animation;
 using MTM101BaldAPI.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,17 +19,14 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
     [HarmonyPatch(typeof(ElevatorScreen))]
     internal class ElevatorAdditionsPatch
     {
-
         private class UnityEventsTracker : MonoBehaviour
         {
-
             private void OnDestroy()
             {
                 loseAnimationQueued = false;
                 tubesUpdateRequired = false;
                 lastSentLifes = null;
             }
-
         }
 
         public static ElevatorScreen elvScreen;
@@ -106,8 +100,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         public static string GetRandomTip()
         {
             List<string> tipKeys = ApiManager.GetAllTips();
-
-            if (tipKeys.Count == 0) return "ERROR: 113";
+            if (tipKeys.Count == 0) return "Tips are not found.";
 
             bool clearData = true;
             foreach (int val in tipUsesData.Values)
@@ -189,7 +182,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
         [HarmonyPostfix]
         private static void OnPressed(ref bool ___readyToStart)
         {
-            if (___readyToStart) monitor.Deactivate();
+            if (___readyToStart) monitor?.Deactivate();
         }
 
         [HarmonyPatch("Start")]
@@ -470,6 +463,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             explosionAnimator.gameObject.SetActive(false);
             tubesImage.sprite = lifeImages[index];
             masks[index].gameObject.SetActive(false);
+            GameObject.Destroy(chargeImage.gameObject);
 
             while (timeBeforeUpdateTubes > 0f)
             {

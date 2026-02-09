@@ -8,7 +8,7 @@ using HarmonyLib;
 namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics.Patches
 {
     [HarmonyPatch(typeof(BoomBox))]
-    [ConditionalPatchIntegrableMod(typeof(CustomMusicsIntegration))]
+    [ConditionalPatchMod(typeof(CustomMusicsIntegration))]
     internal class BoomBoxButtonPatch
     {
 

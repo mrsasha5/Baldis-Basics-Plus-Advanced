@@ -1,11 +1,44 @@
 ﻿using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 {
+    public class PressurePlateButtonComponent : GameButtonBase, IClickable<int>
+    {
+        private bool on;
+
+        public override void Set(bool val)
+        {
+            base.Set(val);
+            this.on = val;
+        }
+
+        protected override void Pressed(int playerNumber)
+        {
+            base.Pressed(playerNumber);
+            foreach (IButtonReceiver receiver in buttonReceivers)
+            {
+                receiver.ButtonPressed(!on);
+            }
+        }
+
+        bool IClickable<int>.ClickableHidden()
+        {
+            return true;
+        }
+    }
+
     public class PressurePlate : BasePlate
     {
-        private List<IButtonReceiver> buttonReceivers = new List<IButtonReceiver>();
+        [SerializeField]
+        private PressurePlateButtonComponent button;
+
+        public override void InitializePrefab(int variant)
+        {
+            base.InitializePrefab(variant);
+            button = gameObject.AddComponent<PressurePlateButtonComponent>();
+        }
 
         /*protected override void SetValues(PlateData plateData)
         {
@@ -16,15 +49,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 
         public virtual void ConnectTo(List<IButtonReceiver> receivers)
         {
-            buttonReceivers = receivers;
+            button.SetUp(receivers.ToArray());
         }
 
         protected virtual void ActivateReceivers()
         {
-            for (int i = 0; i < buttonReceivers.Count; i++)
-            {
-                buttonReceivers[i]?.ButtonPressed(true);
-            }
+            button.Clicked(0);
         }
 
         protected override void SetTextures()
@@ -37,6 +67,5 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             base.VirtualOnPress();
             ActivateReceivers();
         }
-
     }
 }

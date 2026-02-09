@@ -41,15 +41,10 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 .AddRigidbody()
                 .AddDefaultRenderBaseFunction(AssetStorage.sprites["adv_teleportation_bomb"])
                 .Build();
-
             entity.SetGrounded(false);
-
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
-
             capsuleCollider = GetComponent<CapsuleCollider>();
-
             capsuleCollider.height = 5f;
-
             beginsInTime = 3f;
         }
 
@@ -78,7 +73,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
                 if (beginsInTime <= 0f)
                 {
-                    TeleportationHole bomb = Instantiate(ObjectStorage.Objects["teleportation_bomb"].GetComponent<TeleportationHole>());
+                    TeleportationHole bomb = Instantiate(ObjectStorage.Objects["teleportation_hole"].GetComponent<TeleportationHole>());
                     Vector3 pos = transform.position;
                     pos.y = 5f;
                     bomb.transform.position = pos;
