@@ -93,7 +93,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
 
         public void InitializePrefab(int variant)
         {
-            reaperIconGauge = AssetHelper.SpriteFromFile("Textures/Gauges/adv_gauge_reaper.png");
+            reaperIconGauge = AssetStorage.sprites["Gauge_Reaper"];
             baldiPre = AssetStorage.genericBaldi;
             reaperPre = ObjectStorage.Objects["farm_reaper"].GetComponent<Reaper>();
             reaperBaseTime = 30f;
@@ -299,7 +299,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm
         {
             List<ItemObject> items = new List<ItemObject>();
 
-            foreach (ItemMetaData meta in ItemMetaStorage.Instance.FindAll(x => x.tags.Contains(TagStorage.perfectRate)))
+            foreach (ItemMetaData meta in ItemMetaStorage.Instance.FindAll(x => x.tags.Contains(TagStorage.PERFECT_RATE)))
             {
                 if (!items.Contains(meta.value))
                 {

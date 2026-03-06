@@ -3,8 +3,6 @@ using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Overlay;
 using BaldisBasicsPlusAdvanced.Game.Systems.BaseControllers;
 using BaldisBasicsPlusAdvanced.Helpers;
-using System;
-using System.ComponentModel;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
@@ -37,7 +35,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             if (owner == ControllerOwner.Player)
             {
                 gauge = Singleton<CoreGameManager>.Instance.GetHud(0).gaugeManager
-                    .ActivateNewGauge(AssetStorage.sprites["adv_gauge_protection"], time);
+                    .ActivateNewGauge(AssetStorage.sprites["Gauge_Protection"], time);
             }
             baseTime = time;
         }

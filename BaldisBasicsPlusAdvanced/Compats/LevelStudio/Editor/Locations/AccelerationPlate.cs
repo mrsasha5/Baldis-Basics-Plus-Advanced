@@ -412,7 +412,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations
             byte ver = reader.ReadByte();
 
             if (ver > formatVersion)
-                throw new Exception(LevelStudioIntegration.standardMsg_StructureVersionException);
+                throw new Exception(LevelStudioIntegration.STANDARD_MSG_STRUCT_VER_VIOLATION);
 
             int count = reader.ReadInt32();
 

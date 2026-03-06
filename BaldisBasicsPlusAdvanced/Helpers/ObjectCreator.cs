@@ -297,16 +297,14 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static void CauseCrash(Exception e)
         {
-            if (AssetStorage.weirdErrorSound != null)
+            /*if (AssetStorage.weirdErrorSound != null)
             {
                 AudioClip clip = AssetHelper.LoadAsset<AudioClip>("WeirdError");
                 GameObject gm = new GameObject("99");
                 AudioSource audDevice = gm.AddComponent<AudioSource>();
                 audDevice.PlayOneShot(AssetStorage.weirdErrorSound);
-            }
-
+            }*/
             GlobalCam.Instance.Transition(UiTransition.Dither, 0.01666667f);
-
             MTM101BaldiDevAPI.CauseCrash(AdvancedCore.Instance.Info, e);
         }
     }

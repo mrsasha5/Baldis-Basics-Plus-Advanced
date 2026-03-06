@@ -14,7 +14,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameManager
 
         public static Action onUnpause;
 
-        [HarmonyPatch("Start")] //Game itself doesn't use Boom()...
+        [HarmonyPatch("Start")] // Game itself doesn't use Boom()...
         [HarmonyPostfix]
         private static void OnStart()
         {

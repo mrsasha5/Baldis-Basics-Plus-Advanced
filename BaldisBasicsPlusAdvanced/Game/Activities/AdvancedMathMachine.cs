@@ -1,9 +1,11 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
+using HarmonyLib;
 using MTM101BaldAPI;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 
@@ -50,14 +52,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         [SerializeField]
         private int maxAnswer;
 
-        [SerializeField]
-        private WeightedSelection<SoundObject>[] praiseSounds;
-
-        private bool isCorrectlySolved;
+        private static FieldInfo _signText = AccessTools.Field(typeof(MathMachine), "signText");
+        private static FieldInfo _val1Text = AccessTools.Field(typeof(MathMachine), "val1Text");
+        private static FieldInfo _val2Text = AccessTools.Field(typeof(MathMachine), "val2Text");
+        private static FieldInfo _answerText = AccessTools.Field(typeof(MathMachine), "answerText");
+        private static FieldInfo _answer = AccessTools.Field(typeof(MathMachine), "answer"); 
+        private static FieldInfo _addition = AccessTools.Field(typeof(MathMachine), "addition");
 
         public void InitializePrefab(int variant)
         {
-            ReflectionHelper.SetValue<MonoBehaviour>(GetComponentInChildren<ClickableLink>(), "link", this);
+            GetComponentInChildren<ClickableLink>().ReflectionSetValue("link", this);
 
             MeshRenderer meshRenderer = GetComponentInChildren<MeshRenderer>();
 
@@ -67,28 +71,18 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             materials[1] = new Material(AssetStorage.materials["math_side"]);
             materials[2] = materials[1];
 
-            materials[0].SetMainTexture(
-                AssetHelper.TextureFromFile("Textures/Activities/AdvancedMathMachine/Adv_AdvancedMathMachine_Front.png"));
-            materials[1].SetMainTexture(
-                AssetHelper.TextureFromFile("Textures/Activities/AdvancedMathMachine/Adv_AdvancedMathMachine_Side.png"));
+            materials[0].SetMainTexture(AssetStorage.textures["AMM_Front"]);
+            materials[1].SetMainTexture(AssetStorage.textures["AMM_Side"]);
 
             meshRenderer.materials = materials;
 
-            ReflectionHelper.SetValue(this, "correctMat",
-                new Material(ReflectionHelper.GetValue<Material>(this, "correctMat")));
-            ReflectionHelper.SetValue(this, "incorrectMat",
-                new Material(ReflectionHelper.GetValue<Material>(this, "incorrectMat")));
-            ReflectionHelper.SetValue(this, "defaultMat",
-                new Material(ReflectionHelper.GetValue<Material>(this, "defaultMat")));
-
-            ReflectionHelper.GetValue<Material>(this, "correctMat")
-                .SetMainTexture(AssetHelper.TextureFromFile(
-                    "Textures/Activities/AdvancedMathMachine/Adv_AdvancedMathMachine_Front_Correct.png"));
-            ReflectionHelper.GetValue<Material>(this, "incorrectMat")
-                .SetMainTexture(AssetHelper.TextureFromFile(
-                    "Textures/Activities/AdvancedMathMachine/Adv_AdvancedMathMachine_Front_Wrong.png"));
-            ReflectionHelper.GetValue<Material>(this, "defaultMat")
-                .SetMainTexture(materials[0].mainTexture);
+            // Initializing new materials (to do not affect original ones) & applying new textures 
+            this.ReflectionSetValue("correctMat", new Material(this.ReflectionGetValue<Material>("correctMat")));
+            this.ReflectionSetValue("incorrectMat", new Material(this.ReflectionGetValue<Material>("incorrectMat")));
+            this.ReflectionSetValue("defaultMat", new Material(this.ReflectionGetValue<Material>("defaultMat")));
+            this.ReflectionGetValue<Material>("correctMat").SetMainTexture(AssetStorage.textures["AMM_Front_Correct"]);
+            this.ReflectionGetValue<Material>("incorrectMat").SetMainTexture(AssetStorage.textures["AMM_Front_Wrong"]);
+            this.ReflectionGetValue<Material>("defaultMat").SetMainTexture(materials[0].mainTexture);
 
             minDivVal1 = 0;
             maxDivVal1 = 9;
@@ -109,65 +103,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
             maxAnswer = 9;
 
-            baldiPause = 7f; //Thanks Mystman that you made it as field, not something more hardcoded
-
-            praiseSounds = new WeightedSelection<SoundObject>[]
-            {
-                new WeightedSelection<SoundObject>()
-                {
-                    selection = AssetStorage.sounds["adv_bal_great_job"],
-                    weight = 100
-                },
-                new WeightedSelection<SoundObject>()
-                {
-                    selection = AssetStorage.sounds["adv_bal_fantastic"],
-                    weight = 100
-                },
-                new WeightedSelection<SoundObject>()
-                {
-                    selection = AssetStorage.sounds["adv_bal_incredible"],
-                    weight = 100
-                }
-            };
-        }
-
-        /*void IClickable<int>.Clicked(int player) {
-            Clicked(player);
-            if (isCorrectlySolved)
-            {
-                bool baldiFound = false;
-                foreach (NPC npc in room.ec.Npcs)
-                {
-                    if (npc.Character == Character.Baldi)
-                    {
-                        Baldi baldi = npc.GetComponent<Baldi>();
-                        if (baldi.behaviorStateMachine.currentState is Baldi_Praise)
-                        {
-                            ReflectionHelper.GetValue<AudioManager>(baldi, "audMan")
-                                .FlushQueue(true); //Baldi shouldn't talk as propagated audio man
-                            baldiFound = true;
-                        }
-                    }
-                }
-                if (baldiFound) room.ec.GetAudMan()
-                    .PlaySingle(WeightedSelection<SoundObject>.RandomSelection(praiseSounds));
-                isCorrectlySolved = false;
-            }
-        }*/
-
-
-        public override void Completed(int player, bool correct)
-        {
-            base.Completed(player, correct);
-            isCorrectlySolved = correct;
+            baldiPause = 7f;
         }
 
         internal void GenerateProblem()
         {
-            TMP_Text signText = ReflectionHelper.GetValue<TMP_Text>(this, "signText");
-            TMP_Text val1Text = ReflectionHelper.GetValue<TMP_Text>(this, "val1Text");
-            TMP_Text val2Text = ReflectionHelper.GetValue<TMP_Text>(this, "val2Text");
-            TMP_Text answerText = ReflectionHelper.GetValue<TMP_Text>(this, "answerText");
+            TMP_Text signText = _signText.GetValue<TMP_Text>(this);
+            TMP_Text val1Text = _val1Text.GetValue<TMP_Text>(this);
+            TMP_Text val2Text = _val2Text.GetValue<TMP_Text>(this);
+            TMP_Text answerText = _answerText.GetValue<TMP_Text>(this);
 
             answerText.text = "?";
 
@@ -184,7 +128,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                     signText.text = "/";
 
                     val1 = UnityEngine.Random.Range(minDivVal1, maxDivVal1 + 1);
-
                     val2 = UnityEngine.Random.Range(minDivVal2, maxDivVal2 + 1);
 
                     if (val1 % val2 != 0)
@@ -216,12 +159,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                     signText.text = "×";
 
                     val1 = UnityEngine.Random.Range(minMulVal1, maxMulVal1 + 1);
-
                     val2 = UnityEngine.Random.Range(minMulVal2, maxMulVal2 + 1);
 
                     if (val1 * val2 > maxAnswer)
                     {
                         List<int> potentialNumbers = new List<int>();
+
                         for (int n = minMulVal2; n < maxMulVal2 + 1; n++)
                         {
                             potentialNumbers.Add(n);
@@ -249,7 +192,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                     signText.text = "^";
 
                     val1 = UnityEngine.Random.Range(minExponentBase, maxExponentBase + 1);
-
                     val2 = UnityEngine.Random.Range(minExponent, maxExponent + 1);
 
                     List<int> potentialExponents = new List<int>();
@@ -263,16 +205,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                         val1 = potentialExponents[UnityEngine.Random.Range(0, potentialExponents.Count)];
 
                     answer = (int)Math.Pow(val1, val2);
-
                     break;
             }
 
             val1Text.text = val1.ToString();
             val2Text.text = val2.ToString();
 
-            ReflectionHelper.SetValue(this, "answer", answer);
-            ReflectionHelper.SetValue(this, "addition", false);
+            _answer.SetValue(this, answer);
+            _addition.SetValue(this, false);
         }
-
     }
 }

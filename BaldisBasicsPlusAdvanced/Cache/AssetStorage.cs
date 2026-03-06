@@ -6,24 +6,19 @@ using BaldisBasicsPlusAdvanced.Game.Builders;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Menu;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
-using BaldisBasicsPlusAdvanced.SerializableData;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
-using MTM101BaldAPI.UI;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using static Mono.Security.X509.X520;
 
 namespace BaldisBasicsPlusAdvanced.Cache
 {
-
     internal class AssetStorage
     {
-
         public class AssetDictionary<T>
         {
             private Dictionary<string, T> instances = new Dictionary<string, T>();
@@ -276,16 +271,12 @@ namespace BaldisBasicsPlusAdvanced.Cache
             LoadMaterial("black_behind", "BlackBehind");
 
             LoadGameObject("math_num_0", "MathNum_0");
-            //LoadGameObject("line_renderer_hook", "LineRenderer");
-            //LoadGameObject("cracks_hook", "Cracks");
-
-            //mod assets
 
             if (IntegrationManager.IsActive<LevelStudioIntegration>()) LevelStudioIntegration.LoadEditorAssets();
                 
-            LoadModTexture("adv_criss_the_crystal", "Npcs/CrissTheCrystal/adv_criss_the_crystal.png");
-            LoadModTexture("adv_criss_the_crystal_crazy", "Npcs/CrissTheCrystal/adv_criss_the_crystal_crazy.png");
-            LoadModTexture("adv_poster_criss_the_crystal", "Npcs/CrissTheCrystal/adv_poster_criss_the_crystal.png");
+            LoadModTexture("CrissTheCrystal_Sheet", "Npcs/CrissTheCrystal_Sheet.png");
+            LoadModTexture("CrissTheCrystal_Crazy_Sheet", "Npcs/CrissTheCrystal_Crazy_Sheet.png");
+            LoadModTexture("Poster_CrissTheCrystal", "Npcs/Poster_CrissTheCrystal.png");
 
             //ROOMS AND POSTERS
             LoadModTexture("adv_poster_recipe_example", "Posters/Adv_Poster_Recipe_Example.png");
@@ -371,10 +362,34 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
             LoadModTexture("adv_gum_dispenser", "Objects/GumDispenser/adv_gum_dispenser.png");
 
+            LoadModTexture("AMM_Front", "Activities/AMM_Front.png");
+            LoadModTexture("AMM_Front_Correct", "Activities/AMM_Front_Correct.png");
+            LoadModTexture("AMM_Front_Wrong", "Activities/AMM_Front_Wrong.png");
+            LoadModTexture("AMM_Side", "Activities/AMM_Side.png");
+            LoadModTexture("PairsComparator_Base", "Activities/PairsComparator_Base.png");
+            LoadModTexture("PairsComparator_Arrow", "Activities/PairsComparator_Arrow.png");
+
             for (int i = 0; i < 5; i++)
             {
                 LoadModTexture("adv_pulley_base" + (i + 1), $"Objects/Pulley/adv_pulley_base{i + 1}.png");
             }
+
+            foreach (string path in Directory.GetFiles(AssetHelper.modPath + "Textures/Items"))
+            {
+                string name = Path.GetFileNameWithoutExtension(path);
+                LoadModSprite(name, $"Textures/Items/{name}{Path.GetExtension(path)}", path.EndsWith("_Large") ? 1f : 50f);
+            }
+
+            LoadModSprite("PairsComparator_WallSign_Right", "Textures/Activities/PairsComparator_WallSign_Right.png", 35f, new Vector2(0.999f, 0.5f));
+            LoadModSprite("PairsComparator_WallSign_Left", "Textures/Activities/PairsComparator_WallSign_Left.png", 35f, new Vector2(0.001f, 0.5f));
+            LoadModSprite("AMM_WallSign_Right", "Textures/Activities/AMM_WallSign_Right.png", 35f, new Vector2(0.999f, 0.5f));
+            LoadModSprite("AMM_WallSign_Left", "Textures/Activities/AMM_WallSign_Left.png", 35f, new Vector2(0.001f, 0.5f));
+
+            LoadModSprite("Gauge_CrystalBlindness", "Textures/Gauges/Gauge_CrystalBlindness.png");
+            LoadModSprite("Gauge_SugarAddiction", "Textures/Gauges/Gauge_SugarAddiction.png");
+            LoadModSprite("Gauge_Slowness", "Textures/Gauges/Gauge_Slowness.png");
+            LoadModSprite("Gauge_Reaper", "Textures/Gauges/Gauge_Reaper.png");
+            LoadModSprite("Gauge_Protection", "Textures/Gauges/Gauge_Protection.png");
 
             LoadModSprite("adv_tip_screen_forward", "Textures/UI/SwingingTipsScreen/adv_tip_screen_forward.png");
 
@@ -396,15 +411,10 @@ namespace BaldisBasicsPlusAdvanced.Cache
                 LoadModSprite($"adv_elv_tube_mask_{i}", $"Textures/UI/Elevator/Tubes/Elv_Tube_Mask_{i}.png");
             }
 
-            LoadModSprite("adv_gauge_protection", "Textures/Gauges/adv_gauge_protection.png");
-
             LoadModSprite("adv_obstacle_trick", "Textures/Objects/Plates/FakePlate/adv_obstacle_trick.png", 20f);
             LoadModSprite("adv_boxing_glove_trick", "Textures/Objects/Plates/FakePlate/adv_boxing_glove_trick.png", 20f);
             LoadModSprite("adv_exit", "Textures/UI/Buttons/adv_button_exit.png");
             LoadModSprite("adv_exit_transparent", "Textures/UI/Buttons/adv_button_exit_transparent.png");
-
-            LoadModSprite("adv_mysterious_teleporter", "Textures/Items/LargeSprites/adv_mysterious_teleporter_large.png", 50f);
-            LoadModSprite("adv_teleportation_bomb", "Textures/Items/LargeSprites/adv_teleportation_bomb_large.png", 50f);
 
             //Projectiles!!1!
             LoadModSprite("adv_anvil_projectile", "Textures/Objects/Projectiles/adv_anvil_projectile.png", 25f);
@@ -412,14 +422,11 @@ namespace BaldisBasicsPlusAdvanced.Cache
             LoadModSprite("adv_frozen_overlay", "Textures/UI/adv_frozen_overlay.png");
             LoadModSprite("adv_protected_overlay", "Textures/UI/adv_protected_overlay.png");
 
-            LoadModSprite("adv_frozen_enemy", "Textures/Npcs/adv_frozen_enemy.png", 20f);
+            LoadModSprite("Frozen_Enemy", "Textures/Npcs/Frozen_Enemy.png", 20f);
             LoadModSprite("adv_portal", "Textures/Objects/MysteriousPortal/adv_portal.png", 15f);
             LoadModSprite("adv_portal_opened", "Textures/Objects/MysteriousPortal/adv_portal_opened.png", 15f);
             LoadModSprite("adv_elephant_overlay", "Textures/UI/adv_elephant_overlay.png");
-            LoadModSprite("adv_expel_hammer", "Textures/Items/adv_the_hammer_of_force.png", 40f);
             LoadModSprite("adv_arrows", "Textures/UI/adv_arrows.png", 70f);
-
-            LoadModSprite("adv_dough", "Textures/Items/LargeSprites/adv_dough_large.png", 50f);
 
             //Lamps!!!
             LoadModSprite("adv_advanced_class_lamp", "Textures/Rooms/AdvancedClass/Adv_Advanced_Class_Lamp.png", 50f);
@@ -431,7 +438,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
                 LoadModSprite("adv_balloon_" + symbol, "Textures/Objects/Spelloons/adv_balloon_" + symbol + ".png", 30f);
             }
 
-            LoadModSprite("adv_reaper", "Textures/Npcs/GottaReap/adv_reaper.png", 1.5f);
+            LoadModSprite("Reaper", "Textures/Npcs/Reaper.png", 1.5f);
             LoadModSprite("adv_farm_flag", "Textures/Objects/Flags/adv_farm_flag.png", 5f, new Vector2(0.08f, 0.88f));
             LoadModSprite("adv_corn_sign1", "Textures/Objects/Signs/adv_corn_sign1.png", 25f);
 

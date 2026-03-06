@@ -18,7 +18,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         {
             base.InitializePrefab(variant);
             audBoost = AssetStorage.sounds["adv_boost"];
-            gaugeIcon = AssetHelper.SpriteFromFile("Textures/Gauges/adv_gauge_sugar_addiction.png");
+            gaugeIcon = AssetStorage.sprites["Gauge_SugarAddiction"];
         }
 
         protected override void SetTextures()

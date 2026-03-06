@@ -20,10 +20,10 @@ namespace BaldisBasicsPlusAdvanced.Patches.Characters
             {
                 NPCMetadata meta = other.GetComponent<NPC>().GetMeta();
 
-                if (meta == null || meta.tags.Contains(TagStorage.firstPrizeImmunity))
+                if (meta == null || meta.tags.Contains(TagStorage.FIRST_PRIZE_IMMUNITY))
                     return;
 
-                ___moveModsMan.AddMoveMod(other.transform);
+                ___moveModsMan.AddMoveMod(other.transform, 0);
                 other.transform.position = __instance.Npc.gameObject.transform.position 
                     + __instance.Npc.gameObject.transform.forward * 4f;
                 
@@ -39,7 +39,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Characters
             {
                 NPCMetadata meta = other.GetComponent<NPC>().GetMeta();
 
-                if (meta == null || meta.tags.Contains(TagStorage.firstPrizeImmunity))
+                if (meta == null || meta.tags.Contains(TagStorage.FIRST_PRIZE_IMMUNITY))
                     return;
 
                 ___moveModsMan.Remove(other.transform);

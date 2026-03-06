@@ -22,6 +22,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using UnityEngine;
 using static BepInEx.BepInDependency;
 
@@ -37,7 +38,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "BB+ Advanced Edition";
 
-        public const string version = "0.3.3.1";
+        public const string version = "0.3.4";
 
         private static AdvancedCore instance;
 
@@ -133,10 +134,7 @@ namespace BaldisBasicsPlusAdvanced
                     } else Logging.LogWarning($"Exception occured on null state!");
 
                     ObjectCreator.CauseCrash(e);
-
-                    //move = false;
                 }
-
                 yield return assetsLoading.Current;
             }
         }
@@ -146,15 +144,10 @@ namespace BaldisBasicsPlusAdvanced
             yield return 3;
 
             yield return "Initializing new MIDIs...";
-
             GameRegisterManager.PostInitializeMidis();
-
             yield return "Initializing posters...";
-
             GameRegisterManager.PostInitializePosters();
-
             yield return "Invoking OnAssetsPostLoad for modules...";
-
             IntegrationManager.InvokeOnAssetsPostLoad();
 
             if (ApiManager.onAssetsPostLoading != null)

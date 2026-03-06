@@ -40,6 +40,9 @@
     <Reference Include="BBPlusCustomMusics">
       <HintPath>..\Dependencies\BBPlusCustomMusics.dll</HintPath>
     </Reference>
+    <Reference Include="BBPRewiredCompat">
+      <HintPath>..\Dependencies\BBPRewiredCompat.dll</HintPath>
+    </Reference>
     <Reference Include="BepInEx">
       <HintPath>..\Dependencies\BepInEx.dll</HintPath>
     </Reference>

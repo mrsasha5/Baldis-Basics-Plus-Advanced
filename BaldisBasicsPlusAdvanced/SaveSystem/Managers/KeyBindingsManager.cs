@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BaldisBasicsPlusAdvanced.Compats;
+using BaldisBasicsPlusAdvanced.Compats.RewiredCustomManager;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.SaveSystem.Data;
 using UnityEngine;
 
@@ -14,6 +17,18 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Managers
         private static Dictionary<string, KeyBindingData> keyBindings = new Dictionary<string, KeyBindingData>();
 
         public static Dictionary<string, KeyBindingData> Keys => keyBindings;
+
+        public static bool GetKey(string key, bool down)
+        {
+            if (RewiredPlusIntegration.Instance != null)
+            {
+                return InputManager.Instance.GetDigitalInput($"{AdvancedCore.modId}:{key}", down);
+            }
+            else
+            {
+                return down ? Input.GetKeyDown(Keys[key].Button) : Input.GetKey(Keys[key].Button);
+            }
+        }
 
         public static void Load()
         {
@@ -80,6 +95,8 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Managers
             {
                 keyBindings[id].OverrideButton(key);
             }
+            if (IntegrationManager.IsActive<RewiredPlusIntegration>())
+                RewiredPlusIntegration.AddButtonBind(id, locName.Localize(), key);
         }
 
     }

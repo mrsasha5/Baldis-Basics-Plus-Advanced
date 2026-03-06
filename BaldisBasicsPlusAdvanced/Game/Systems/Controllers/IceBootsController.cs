@@ -66,20 +66,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             if (other.tag == "NPC" && other.TryGetComponent(out Entity entity))
             {
                 NPC npc = other.GetComponent<NPC>();
-                if (ReflEvent_IsFreezable(npc))
-                {
-                    NpcControllerSystem controllerSystem = npc.GetControllerSystem();
-                    controllerSystem.CreateController(out FrozennessController frozennessController);
-                    frozennessController.SetTime(10f);
-                }
+                NpcControllerSystem controllerSystem = npc.GetControllerSystem();
+                controllerSystem.CreateController(out FrozennessController frozennessController);
+                frozennessController.SetTime(10f);
 
-                if (ReflEvent_IsPushable(npc))
-                {
-                    entity.AddForce(new Force(forward, pushSpeed, pushAcceleration));
-                    ec.GetAudMan().PlaySingle(AssetStorage.sounds["bang"]);
-                    ec.MakeNoise(entity.transform.position, 64); //like First Prize
-                    ReflEvent_OnIceBootsHit(npc, pm);
-                }
+                entity.AddForce(new Force(forward, pushSpeed, pushAcceleration));
+                ec.GetAudMan().PlaySingle(AssetStorage.sounds["bang"]);
+                ec.MakeNoise(entity.transform.position, 64);
             }
         }
 
@@ -96,25 +89,20 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 return;
             }
 
-            if (speed > minSpeedToBreak && Physics.Raycast(entity.transform.position, forward, out hit, distanceToBreak, LayerHelper.ignorableCollidableObjects))
+            if (speed > minSpeedToBreak && Physics.Raycast(entity.transform.position, forward, out hit, distanceToBreak, 
+                LayerHelper.ignorableCollidableObjects))
             {
-                //ray don't ignores any colliders
                 if (hit.transform.tag == "Window" && hit.transform.TryGetComponent(out Window window) && !window.IsOpen)
                 {
-                    if (ReflEvent_IsPushable(window))
-                    {
-                        window.Break(true);
-                        ReflEvent_OnIceBootsHit(window, pm);
-                    }
+                    window.Break(true);
                 }
             }
 
-            if (speed > minSpeedToBreak && Physics.Raycast(entity.transform.position, forward, out hit, distanceToBreak, LayerHelper.ignorableCollidableObjects, QueryTriggerInteraction.Ignore)
-            && !hit.collider.isTrigger)
+            if (speed > minSpeedToBreak && Physics.Raycast(entity.transform.position, forward, out hit, distanceToBreak, 
+                LayerHelper.ignorableCollidableObjects, QueryTriggerInteraction.Ignore) && !hit.collider.isTrigger)
             {
                 BreakBoots(AssetStorage.sounds["bang"]);
-                ec.MakeNoise(entity.transform.position, 64); //like First Prize
-                //return;
+                ec.MakeNoise(entity.transform.position, 64);
             }
 
         }
@@ -148,7 +136,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 
                 ec.GetAudMan().PlaySingle(soundToPlay);
                 entity.ExternalActivity.moveMods.Remove(moveMod);
-
                 broken = true;
             }
         }
@@ -158,24 +145,5 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             base.SetToDestroy();
             BreakBoots();
         }
-
-        private void ReflEvent_OnIceBootsHit(object @object, PlayerManager pm)
-        {
-            ReflectionHelper.NoCache_UseMethod(@object, "Adv_OnIceBootsHit", pm);
-        }
-
-        private bool ReflEvent_IsFreezable(object @object)
-        {
-            object isFreezable = ReflectionHelper.NoCache_UseMethod(@object, "Adv_IsFreezable");
-            return isFreezable == null || ((bool)isFreezable);
-        }
-
-
-        private bool ReflEvent_IsPushable(object @object)
-        {
-            object isPushable = ReflectionHelper.NoCache_UseMethod(@object, "Adv_IsPushable");
-            return isPushable == null || ((bool)isPushable);
-        }
-
     }
 }

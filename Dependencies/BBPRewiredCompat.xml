@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BBPRewiredCompat</name>
+    </assembly>
+    <members>
+        <member name="M:BBPRewiredCompat.RewiredPlusManager.CreateNewInput(System.String,System.String,BBPRewiredCompat.RewiredPlusManager.InputBehaviorID,BBPRewiredCompat.RewiredPlusManager.InputMapCategory,UnityEngine.KeyCode,System.Int32,System.Int32)">
+            <summary>
+            Creates a brand new button Rewired input.
+            </summary>
+            <param name="name">The object-like name of this input</param>
+            <param name="descriptionName">The localization-like name of this input</param>
+            <param name="behaviorID">The behavior ID for this input<para>Already defined ids are 0 (default) and 1 (snap, which all base game inputs uses)</para></param>
+            <param name="categoryID">The category ID for this input</param>
+            <param name="key">The default input for this key</param>
+            <param name="joystickElementId">The default input id for this joystick input</param>
+            <param name="mouseElementId">The default input id for this mouse input</param>
+            <returns></returns>
+        </member>
+        <member name="M:BBPRewiredCompat.RewiredPlusManager.CreateNewInput(System.String,System.String,BBPRewiredCompat.RewiredPlusManager.InputBehaviorID,BBPRewiredCompat.RewiredPlusManager.InputMapCategory,System.Nullable{System.ValueTuple{UnityEngine.KeyCode,UnityEngine.KeyCode,UnityEngine.KeyCode,UnityEngine.KeyCode}},System.Nullable{System.ValueTuple{System.Int32,System.Int32,System.Int32,System.Int32}},System.Nullable{System.ValueTuple{System.Int32,System.Int32,System.Int32,System.Int32}})">
+            <summary>
+            Creates a brand new axis Rewired input.
+            </summary>
+            <param name="name">The object-like name of this input</param>
+            <param name="descriptionName">The localization-like name of this input</param>
+            <param name="behaviorID">The behavior ID for this input<para>Already defined ids are 0 (default) and 1 (snap, which all base game inputs uses)</para></param>
+            <param name="categoryID">The category ID for this input</param>
+            <param name="key">The default inputs for this key<para>As in order: PosX, NegX, PosY, NegY</para></param>
+            <param name="joystickElementId">The default inputs id for this joystick input<para>As in order: PosX, NegX, PosY, NegY</para></param>
+            <param name="mouseElementId">The default inputs id for this mouse input<para>As in order: PosX, NegX, PosY, NegY</para></param>
+            <returns></returns>
+        </member>
+        <member name="M:BBPRewiredCompat.RewiredPlusManager.GetInputID(System.String)">
+            <summary>
+            Grabs the input ID for this custom input
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BBPRewiredCompat.RewiredPlusManager.CreateNewCategory(System.String,System.String,BBPRewiredCompat.RewiredPlusManager.InputMapPage)">
+            <summary>
+            Creates a brand new category to an existing Rewired Mapper Page
+            </summary>
+            <param name="name">The object-like name of this category</param>
+            <param name="descriptionName">The localization-like name of this category</param>
+            <param name="page">The existing page where this mapping category goes to</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

@@ -38,7 +38,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
                         /*entrance.GetComponentInChildren<MeshRenderer>().
                             transform.localRotation = Quaternion.Euler(0f, 0f, 0f);*/
 
-                        GameObject.Destroy(entrance.gameObject.GetComponentInChildren<AdvancedEntityPull>().gameObject);
+                        GameObject.Destroy(entrance.gameObject.GetComponentInChildren<CustomEntityPull>().gameObject);
                     }
                 }
             }
@@ -66,7 +66,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
                     entrance.GetComponentInChildren<MeshRenderer>().
                         transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
 
-                    AdvancedEntityPull pull = new GameObject("EntityPull").AddComponent<AdvancedEntityPull>();
+                    CustomEntityPull pull = new GameObject("EntityPull").AddComponent<CustomEntityPull>();
                     pull.Initialize(ec);
                     pull.transform.SetParent(entrance.gameObject.transform, false);
                     pull.maxForce = 40f;

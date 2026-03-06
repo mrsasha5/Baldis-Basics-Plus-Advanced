@@ -59,7 +59,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         public override void PostOpenCalcGenerate(LevelGenerator lg, System.Random rng)
         {
             base.PostOpenCalcGenerate(lg, rng);
-            if (includeHalls) Build(lg, rng, roomCells: false);
+            if (includeHalls)
+            {
+                AdvancedCore.Logging.LogDebug($"{name} is building plates on PostOpenCalcGenerate(LevelGenerator, System.Random) in the halls.");
+                Build(lg, rng, roomCells: false);
+                AdvancedCore.Logging.LogDebug($"{name} is finished.");
+            }
         }
 
         protected virtual List<Cell> GetCells()
@@ -148,7 +153,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             base.OnGenerationFinished(lb);
             if (lb is LevelGenerator)
             {
-                if (includeRooms) Build(lb, lb.controlledRNG, roomCells: true);
+                if (includeRooms)
+                {
+                    AdvancedCore.Logging.LogDebug($"{name} is building plates on OnGenerationFinished(LevelBuilder) in the rooms.");
+                    Build(lb, lb.controlledRNG, roomCells: true);
+                    AdvancedCore.Logging.LogDebug($"{name} is finished!");
+                }
                 generatedPlates.Clear();
             }
         }
@@ -156,13 +166,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         public virtual BasePlate BuildPrefab(BasePlate platePre, Cell cell, Direction dir)
         {
             BasePlate plate = Instantiate(platePre, cell.room.objectObject.transform);
-
             plate.transform.position = cell.FloorWorldPosition;
             plate.transform.rotation = dir.ToRotation();
 
             cell.HardCover(plateCoverage);
             generatedPlates.Add(plate);
 
+            AdvancedCore.Logging.LogDebug($"{name} is placing {platePre.name} at {cell.position.ToString()} with {dir.ToString()} direction in the room {cell.room.name}.");
             return plate;
         }
 

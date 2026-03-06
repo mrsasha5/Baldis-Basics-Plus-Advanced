@@ -45,7 +45,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             }
 
             ItemMetaData[] metas = ItemMetaStorage.Instance.FindAll(x => x.id != Items.None && x.flags != ItemFlags.InstantUse && 
-                !x.tags.Contains(TagStorage.forbiddenPresent) && !x.tags.Contains(TagStorage.narrowlyFunctional));
+                !x.tags.Contains(TagStorage.FORBIDDEN_PRESENT) && !x.tags.Contains(TagStorage.NARROWLY_FUNCTIONAL));
 
             if (metas.Length > 0)
             {

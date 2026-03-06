@@ -281,12 +281,10 @@ namespace BaldisBasicsPlusAdvanced.Extensions
         public static void CopyAllValuesTo<T>(this T @object, T target)
         {
             FieldInfo[] originalFields = @object.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
             for (int i = 0; i < originalFields.Length; i++)
             {
                 ReflectionHelper.SetValue(target, originalFields[i].Name, ReflectionHelper.GetValue(@object, originalFields[i].Name));
             }
-
         }
 
         public static RoomGroup SetCeilingTex(this RoomGroup group, Texture2D tex, int weight)

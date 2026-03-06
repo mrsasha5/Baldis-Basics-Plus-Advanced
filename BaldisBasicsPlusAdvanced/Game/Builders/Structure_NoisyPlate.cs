@@ -57,6 +57,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         public override void OnGenerationFinished(LevelBuilder lb)
         {
             if (!(lb is LevelGenerator)) return;
+            AdvancedCore.Logging.LogDebug($"{name} is building plates on OnGenerationFinished(LevelBuilder) in the rooms.");
             System.Random rng = lb.controlledRNG;
             int faculties = rng.Next(parameters.minMax[0].x, parameters.minMax[0].z + 1);
 
@@ -72,20 +73,19 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 BuildInRoom(room, platePre, ignoreCoverage: false);
             }
             generatedPlates.Clear();
+            AdvancedCore.Logging.LogDebug($"{name} is finished.");
         }
 
         public List<NoisyPlate> BuildInRoom(RoomController room, NoisyPlate prefab, bool ignoreCoverage)
         {
             List<NoisyPlate> facultyPlates = new List<NoisyPlate>();
             List<Cell> usedCells = new List<Cell>();
-
+            AdvancedCore.Logging.LogDebug($"{name} is trying to build plates in {room.name}.");
             for (int i = 0; i < room.doors.Count; i++)
             {
                 if (!usedCells.Contains(room.doors[i].aTile) &&
                     (ignoreCoverage || room.doors[i].aTile.HardCoverageFits(CellCoverage.Down)))
                 {
-                    if (room.doors[i].aTile.doorDirs == null || room.doors[i].aTile.doorDirs.Count == 0)
-                        AdvancedCore.Logging.LogFatal("No door directions in aTile!");
                     facultyPlates.Add((NoisyPlate)BuildPrefab(prefab, room.doors[i].aTile, room.doors[i].aTile.doorDirs[0].GetOpposite()));
                     usedCells.Add(room.doors[i].aTile);
                 }

@@ -124,7 +124,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             elvScreen = __instance;
 
-            expelImage = UIHelpers.CreateImage(AssetStorage.sprites["adv_expel_hammer"], __instance.Canvas.transform,
+            expelImage = UIHelpers.CreateImage(AssetStorage.sprites["ExpelHammer"], __instance.Canvas.transform,
                 Vector3.zero, correctPosition: false);
             expelImage.name = "Expel Button";
             expelImage.ToCenter();
@@ -144,9 +144,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
             StandardMenuButton expelButton = expelImage.gameObject.AddComponent<StandardMenuButton>();
             expelButton.image = expelImage;
-            expelButton.heldSprite = AssetStorage.sprites["adv_expel_hammer"];
-            expelButton.unhighlightedSprite = AssetStorage.sprites["adv_expel_hammer"]; //on cursor enter
-            expelButton.highlightedSprite = AssetStorage.sprites["adv_expel_hammer"];
+            expelButton.heldSprite = AssetStorage.sprites["ExpelHammer"];
+            expelButton.unhighlightedSprite = AssetStorage.sprites["ExpelHammer"]; //on cursor enter
+            expelButton.highlightedSprite = AssetStorage.sprites["ExpelHammer"];
             expelButton.swapOnHold = true; //on press
             expelButton.swapOnHigh = true; //on high
 
@@ -480,13 +480,11 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
                 LevelGenerationParameters ld = BaseGameManager.Instance.levelObject;
 
-                if (meta.tags.Contains(TagStorage.expelHammerImmunity) || meta.tags.Contains(TagStorage.faculty) ||
-                    meta.tags.Contains(TagStorage.teacher)) continue;
+                if (meta.tags.Contains(TagStorage.EXPEL_HAMMER_IMMUNITY) || meta.tags.Contains(TagStorage.FACULTY) ||
+                    meta.tags.Contains(TagStorage.TEACHER)) continue;
 
                 //forced npcs and potential baldis
-                if (!meta.tags.Contains(TagStorage.expelHammerWeakness) &&
-                    (ld.forcedNpcs.Contains(npc) || Array.Find(ld.potentialBaldis,
-                        x => x.selection.Character == npc.Character) != null)) continue;
+                if (!meta.tags.Contains(TagStorage.EXPEL_HAMMER_WEAKNESS) && ld.forcedNpcs.Contains(npc)) continue;
 
                 if (LevelDataManager.LevelData.bannedCharacters.Contains(npc.Character)) continue;
 

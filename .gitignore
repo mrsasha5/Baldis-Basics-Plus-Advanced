@@ -23,10 +23,12 @@
 !/Dependencies/MonoMod.Utils.dll
 !/Dependencies/MonoMod.Utils.xml
 
-# API
+# APIs
 !/Dependencies/MTM101BaldAPI.dll
 !/Dependencies/MTM101BaldAPI.xml
 !/Dependencies/Newtonsoft.Json.dll
+!/Dependencies/BBPRewiredCompat.dll
+!/Dependencies/BBPRewiredCompat.xml
 
 # Level Studio Dependencies
 !/Dependencies/PlusStudioLevelLoader.dll

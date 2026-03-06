@@ -75,7 +75,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs
             coolingSpeed = 0.01f;
             particlesRateOverDistance = 100;
 
-            renderer = ObjectCreator.CreateSpriteRenderer(AssetStorage.sprites["adv_reaper"], isBillboard: false);
+            renderer = ObjectCreator.CreateSpriteRenderer(AssetStorage.sprites["Reaper"], isBillboard: false);
             renderer.transform.SetParent(transform, false);
             renderer.transform.localPosition = Vector3.up * 95f;
 

@@ -213,8 +213,6 @@ namespace BaldisBasicsPlusAdvanced.Generation.Data
                 ItemMetaStorage.Instance.FindByEnumFromMod(EnumExtensions.GetFromExtendedName<Items>(@enum), AdvancedCore.Instance.Info);
             if (meta == null) throw new Exception("Item metadata was not found!");
             return meta;
-                
         }
-
     }
 }

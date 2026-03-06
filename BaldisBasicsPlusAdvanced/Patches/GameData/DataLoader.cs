@@ -8,6 +8,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameData
     internal class DataLoader
     {
         [HarmonyPatch("Load")]
+        [HarmonyPriority(Priority.HigherThanNormal)] // For fixing loading key bindings using Rewired Custom Manager
         [HarmonyPostfix]
         private static void OnLoad()
         {

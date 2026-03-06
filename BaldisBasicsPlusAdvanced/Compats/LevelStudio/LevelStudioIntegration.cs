@@ -24,8 +24,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
     internal class LevelStudioIntegration : CompatibilityModule
     {
         public const string GUID = "mtm101.rulerp.baldiplus.levelstudio";
-
-        internal const string standardMsg_StructureVersionException = 
+        internal const string STANDARD_MSG_STRUCT_VER_VIOLATION = 
             "Incompatible structure format: saved maps on new format version can't be loaded on previous ones.";
 
         private static List<StructureBuilderPrefabReference> visualPrefabs;

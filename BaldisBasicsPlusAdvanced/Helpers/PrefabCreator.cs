@@ -42,12 +42,9 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         }
 
         public static ItemObject CreateItem<T>(string nameKey, string descKey, string enumName, 
-            string smallSpriteFileName, string largeSpriteFileName, int generatorCost, int price,
+            string smallSpriteKey, string largeSpriteKey, int generatorCost, int price,
             ItemFlags flags = ItemFlags.None, string[] tags = null, ItemMetaData itemMeta = null, int variant = 1) where T : Item
         {
-            Sprite smallSprite = AssetHelper.SpriteFromFile("Textures/Items/SmallSprites/" + smallSpriteFileName);
-            Sprite largeSprite = AssetHelper.SpriteFromFile("Textures/Items/LargeSprites/" + largeSpriteFileName, 50f);
-
             if (tags == null) tags = new string[0];
 
             bool isGenericItem = !flags.HasFlag(ItemFlags.MultipleUse) || (itemMeta == null && flags.HasFlag(ItemFlags.MultipleUse));
@@ -55,7 +52,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             ItemBuilder itemBuilder = new ItemBuilder(AdvancedCore.Instance.Info)
                 .SetNameAndDescription(nameKey, descKey)
                 .SetEnum(enumName)
-                .SetSprites(smallSprite, largeSprite)
+                .SetSprites(AssetStorage.sprites[smallSpriteKey], AssetStorage.sprites[largeSpriteKey])
                 .SetGeneratorCost(generatorCost)
                 .SetShopPrice(price)
                 .SetItemComponent<T>();
@@ -315,6 +312,17 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             ObjectStorage.RoomGroups.Add(name, group);
 
             return group;
+        }
+
+        public static Animator CreateActivityWallSign(string name, Sprite right, Sprite left)
+        {
+            Animator doorSign = GameObject.Instantiate(AssetHelper.LoadAsset<Animator>("ActivityExteriorSign_MathMachine"));
+            doorSign.gameObject.ConvertToPrefab(true);
+            doorSign.name = name;
+            SpriteRenderer[] spriteRenderers = doorSign.GetComponentsInChildren<SpriteRenderer>();
+            spriteRenderers[0].sprite = right;
+            spriteRenderers[1].sprite = left;
+            return doorSign;
         }
 
         public static void CreateDoorMatSet(string name, Material openMat, Material closedMat)

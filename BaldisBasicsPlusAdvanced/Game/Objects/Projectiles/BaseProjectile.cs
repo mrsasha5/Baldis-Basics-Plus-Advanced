@@ -3,7 +3,7 @@ using BaldisBasicsPlusAdvanced.Game.Adjusters;
 using BaldisBasicsPlusAdvanced.Helpers;
 using UnityEngine;
 
-#warning TODO: try to destroy adjusters
+#warning TODO: destroy adjusters and update this legacy heck
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
 {

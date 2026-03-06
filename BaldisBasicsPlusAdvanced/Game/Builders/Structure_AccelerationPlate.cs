@@ -115,9 +115,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                             plate.UpdateAngleIndex((float)tiles[j].Value * 90f);
                         count--;
                     }
-
                 }
-
             }
         }
 

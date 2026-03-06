@@ -1,5 +1,4 @@
-﻿using System;
-using BaldisBasicsPlusAdvanced.Cache;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 
 namespace BaldisBasicsPlusAdvanced.API
 {
@@ -8,7 +7,6 @@ namespace BaldisBasicsPlusAdvanced.API
     /// </summary>
     public class PitOverrides
     {
-
         private static bool kitchenStoveDisabled;
 
         private static bool englishClassDisabled;
@@ -39,9 +37,6 @@ namespace BaldisBasicsPlusAdvanced.API
         /// This can be easily turned on and off any time, but be aware of other mods!
         /// </summary>
         public static bool ExpelHammerPickupDisabled => hammerPickupDisables > 0;
-
-        [Obsolete("No longer exists since it's 0.11 addition!")]
-        public static bool RefreshPickupDisabled => true;
 
         /// <summary>
         /// It must be called only before mod assets will be loaded.
@@ -108,11 +103,5 @@ namespace BaldisBasicsPlusAdvanced.API
 
             if (hammerPickupDisables < 0) hammerPickupDisables = 0;
         }
-
-
-        [Obsolete("No longer exists since it's 0.11 addition!")]
-        public static void SetRefreshPickup(bool active) { }
-
-
     }
 }

@@ -50,14 +50,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         public override void OnGenerationFinished(LevelBuilder lb)
         {
             base.OnGenerationFinished(lb);
-
             if (lb is LevelGenerator)
             {
                 GenerateZiplines(lb);
             }
             else
             {
-                AdvancedCore.Logging.LogWarning("Ziplines Builder OnGenerationFinished: unknown Level Bulder type.");
+                AdvancedCore.Logging.LogWarning($"{name} OnGenerationFinished: unknown Level Bulder type.");
             }
         }
 
@@ -77,7 +76,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 ushort percentageDistanceToBreak = (ushort)data[i].data;
 
                 hanger.OverrideParameters(uses, percentageDistanceToBreak / 100f);
-
                 hanger.PostInitialization();
             }
         }
@@ -133,7 +131,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         private void CreatePillarDecoration(Vector3 pos, Transform parent)
         {
             GameObject gm = Instantiate(ceilingPillarPre);
-
             gm.transform.parent = parent;
             pos.y = 0f;
             gm.transform.position = pos;
@@ -186,7 +183,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                             .PostInitialization();
                 }
                 else break;
-
                 count--;
             }
 
@@ -210,7 +206,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                 if (ec.ContainsCoordinates(pos)) cell = ec.CellFromPosition(pos);
                 else
                 {
-                    AdvancedCore.Logging.LogWarning($"Ziplines Builder: cell is not found at ({pos.x}; {pos.y}; {pos.z})!");
+                    AdvancedCore.Logging.LogWarning($"{name}: cell is not found at {pos.ToString()}!");
                     break;
                 }
 
@@ -220,12 +216,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             }
         }
 
-        //Invented only for 0, 90, 180, 270 angles
+        // Invented only for 0, 90, 180, 270 angles
         private int AnalysePath(Cell cell1, Cell cell2)
         {
             Vector3 direction = (cell1.FloorWorldPosition - cell2.FloorWorldPosition).normalized;
 
-            if (direction.x != 0f && direction.x != 1f) return -1; //Do not spam with a lot of logs about null direction
+            if (direction.x != 0f && direction.x != 1f) return -1; // Do not spam with a lot of logs about null direction
             if (direction.z != 0f && direction.z != 1f) return -1;
 
             Cell cell = cell2;
@@ -243,8 +239,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             if (cell2.Null || cell1.Null || cell2.HasWallInDirection(dir) || cell1.HasWallInDirection(dir.GetOpposite()) ||
                 !cell2.AllCoverageFits(startCover) || !cell1.AllCoverageFits(endCover)) return -1;
 
-            //Start - cell2
-            //Goal - cell1
+            // Start - cell2
+            // Goal - cell1
             while (true)
             {
                 if (ec.ContainsCoordinates(pos))

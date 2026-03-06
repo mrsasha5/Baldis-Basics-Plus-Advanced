@@ -23,7 +23,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Pickups
 
         protected override void OnCreationPost()
         {
-            renderer.sprite = AssetStorage.sprites["adv_expel_hammer"];
+            renderer.sprite = AssetStorage.sprites["ExpelHammer"];
             purchasable = !LevelDataManager.LevelData.hammerPurchased;
             SetSaleState(purchasable);
             desc = "Adv_Item_ExpelHammer_Desc";

@@ -82,7 +82,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 
             gauge?.SetValue(baseTime, time);
 
-            if (Input.GetKeyDown(KeyBindingsManager.Keys["balloon_pop_action"].Button))
+            if (KeyBindingsManager.GetKey("balloon_pop_action", true))
             {
                 SetToDestroy();
             }

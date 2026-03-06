@@ -252,13 +252,13 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips
                 }    
             }
 
-            if (PrevEc.elevators.Count > 0)
+            if (PrevEc.Elevators.Count > 0)
             {
-                for (int j = 0; j < PrevEc.elevators.Count; j++)
+                for (int j = 0; j < PrevEc.Elevators.Count; j++)
                 {
-                    if (PrevEc.elevators[j].IsSpawn)
+                    if (PrevEc.Elevators[j].IsSpawn)
                     {
-                        PrevGameMan.StartCoroutine("WaitToExitSpawn", PrevEc.elevators[j].ColliderGroup);
+                        PrevGameMan.StartCoroutine("WaitToExitSpawn", PrevEc.Elevators[j].ColliderGroup);
                         break;
                     }
                 }

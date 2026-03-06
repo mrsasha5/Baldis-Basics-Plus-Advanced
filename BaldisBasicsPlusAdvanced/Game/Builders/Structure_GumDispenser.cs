@@ -39,7 +39,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         public override void PostOpenCalcGenerate(LevelGenerator lg, System.Random rng)
         {
             base.PostOpenCalcGenerate(lg, rng);
-
+            AdvancedCore.Logging.LogDebug($"{name} is building dispensers on PostOpenCalcGenerate(LevelGenerator, System.Random).");
             List<List<Cell>> halls = lg.Ec.FindHallways();
             halls.Sort((a, b) => b.Count - a.Count);
 
@@ -91,7 +91,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
                 if (count <= 0) break;
             }
-
+            AdvancedCore.Logging.LogDebug($"{name} is finished.");
         }
 
         public override void Load(List<StructureData> data)
@@ -126,6 +126,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             dispenser.bOffset = dir.ToIntVector2();
             dispenser.direction = dir;
 
+            AdvancedCore.Logging.LogDebug($"{name} is placing {dispenserPre.name} at {cell.position.ToString()} with {dir.ToString()} direction in the room {cell.room.name}.");
+
             return dispenser;
         }
 
@@ -151,7 +153,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             };
 
             Destroy(dispenser.gameObject);
-            
+            AdvancedCore.Logging.LogWarning($"{name} couldn't find a valid position for the button. Destroying dispenser!");
+
             return false;
         }
     }

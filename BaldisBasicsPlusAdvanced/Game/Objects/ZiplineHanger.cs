@@ -354,7 +354,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             return result == null || (bool)result;
         }
 
-
         private void KickEntity(Entity entity)
         {
             if (entity != null)

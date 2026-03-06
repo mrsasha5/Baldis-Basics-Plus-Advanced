@@ -54,7 +54,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
         {
             windObj.AudMan.OverrideSourcePosition(pm.transform.position);
 
-            if (Input.GetKeyDown(KeyBindingsManager.Keys["wind_blower_switch"].Button))
+            if (KeyBindingsManager.GetKey("wind_blower_switch", true))
             {
                 blowingAllowed = !blowingAllowed;
                 StartFadeEffect(!blowingAllowed);

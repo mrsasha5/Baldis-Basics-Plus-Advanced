@@ -1,4 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Compats;
+using BaldisBasicsPlusAdvanced.Compats.RewiredCustomManager;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using BaldisBasicsPlusAdvanced.SaveSystem.Data;
@@ -37,13 +39,20 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
         public override void Build()
         {
-            //Basics
+            // Basics
 
-            int maxElementsCount = 3; //on the one page
+            if (IntegrationManager.IsActive<RewiredPlusIntegration>())
+            {
+                CreateText("Desc", "Adv_Options_Menu_Key_Bindings_Overridden", Vector3.zero, BaldiFonts.ComicSans12, 
+                    TextAlignmentOptions.Center, new Vector2(300f, 50f), Color.black);
+                return;
+            }
+
+            int maxElementsCount = 3; // Elements per page
 
             float distanceBetweenBindings = 65f;
 
-            keyCodes = (KeyCode[])Enum.GetValues(typeof(KeyCode)); //Unity why I should do that???? Are you joking Unity's devs?????
+            keyCodes = (KeyCode[])Enum.GetValues(typeof(KeyCode)); // Unity why I should do that???? Are you joking Unity's devs?????
 
             Image background = CreateImage(null, "ButtonsBackground", Vector3.up * -40f + Vector3.left * 12f, new Vector2(325f, 195f));
             background.gameObject.AddComponent<Mask>().showMaskGraphic = false;
@@ -78,7 +87,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
             arrowDownButton.highlightedSprite = AssetStorage.sprites["menuArrow0"];
             arrowDownButton.unhighlightedSprite = AssetStorage.sprites["menuArrow2"];
 
-            //Bindings buttons and reset button
+            // Bindings buttons and reset button
 
             Vector3 position = Vector3.up * 25f + Vector3.left * 75f;
 
@@ -152,7 +161,6 @@ namespace BaldisBasicsPlusAdvanced.Menu
                             keyButtons[i].StopAllCoroutines();
                             keyButtons[i].StartCoroutine(ColorAnimator(keyButtons[i].text));
                         }
-                        
                     }
 
                     GetComponentInParent<AudioManager>().PlaySingle(AssetStorage.sounds["teleport"]);
@@ -168,7 +176,6 @@ namespace BaldisBasicsPlusAdvanced.Menu
             if (!redColors.Contains(keyButton.text))
             {
                 redColors.Add(keyButton.text);
-                
             }
             keyButton.StopAllCoroutines();
             keyButton.StartCoroutine(ColorAnimator(keyButton.text));

@@ -53,9 +53,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         [SerializeField]
         private Transform arrow;
 
-        //[SerializeField]
-        //private MeshRenderer hologram;
-
         [SerializeField]
         private SpriteRenderer pulleyRenderer;
 
@@ -157,17 +154,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             pulleyRenderer.name = "Pulley";
             pulleyRenderer.transform.localPosition = Vector3.up * pulleySpriteOffset;
 
-            /*Transform billboardBase = new GameObject("Billboard").AddComponent<BillboardUpdater>().transform;
-            billboardBase.transform.SetParent(transform, false);
-            hologram = ObjectCreator.CreateQuadRenderer();
-            hologram.transform.localScale = new Vector3(15f, 15f, 1f);
-            hologram.name = "Hologram";
-            hologram.transform.SetParent(billboardBase, false);
-            hologram.transform.localPosition = Vector3.up * -4.65f + Vector3.forward * 0.2f;
-            hologram.material.mainTexture = AssetHelper.LoadAsset<Texture2D>("BalloonBuster_Hologram");*/
-
             Renderer[] renderers = new Renderer[2];
-
             for (int i = 0; i < renderers.Length; i++)
             {
                 renderers[i] = ObjectCreator.CreateQuadRenderer();
@@ -176,22 +163,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                 renderers[i].transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
             }
 
-            renderers[0].material.mainTexture = 
-                AssetHelper.TextureFromFile("Textures/Activities/PairsComparator/PairsComparator_Base.png");
-            renderers[1].material.mainTexture =
-                AssetHelper.TextureFromFile("Textures/Activities/PairsComparator/PairsComparator_Arrow.png");
-
+            renderers[0].material.mainTexture = AssetStorage.textures["PairsComparator_Base"];
+            renderers[1].material.mainTexture = AssetStorage.textures["PairsComparator_Arrow"];
             renderers[0].transform.localPosition = Vector3.up * -5f;
             renderers[1].transform.localPosition = Vector3.up * -4.95f;
-
             arrow = renderers[1].transform;
 
-            bonusQSignSpriteRenderer = Instantiate(AssetHelper.LoadAsset<SpriteRenderer>("BonusQSign"));
-            bonusQSignSpriteRenderer.transform.SetParent(transform, false);
-            bonusQSignSpriteRenderer.transform.localPosition = Vector3.up * -4.9f;
-            bonusQSignSpriteRenderer.transform.localScale = new Vector3(2f, 2f, 1f);
-            bonusQSignSpriteRenderer.transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
-            bonusQSign = bonusQSignSpriteRenderer.GetComponent<Animator>();
+            this.ReflectionSetValue("exteriorSignPrefab", PrefabCreator.CreateActivityWallSign("ActivityExteriorSign_PairsComparator", 
+                AssetStorage.sprites["PairsComparator_WallSign_Right"], AssetStorage.sprites["PairsComparator_WallSign_Left"]));
 
             collider = gameObject.AddComponent<SphereCollider>();
             collider.isTrigger = true;
@@ -222,7 +201,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         public override void SetPower(bool val)
         {
             base.SetPower(val);
-            //hologram.gameObject.SetActive(val);
         }
 
         public override void SetBonusMode(bool val)
@@ -237,10 +215,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             base.Completed(player, correct);
 
             collider.enabled = false;
-            /*if (!correct)
-            {
-                hologram.material.SetColor(Color.red);
-            }*/
             StartCoroutine(BalloonPopper());
         }
 
@@ -283,8 +257,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                 balloonData[counter - 1] = data;
                 counter--;
             }
-
-            //hologram.material.SetColor(Color.white);
 
             collider.enabled = true;
             notebook.transform.position = transform.position;
@@ -453,7 +425,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             switching = false;
         }
 
-        //Hardcoded recreation
+        // Hardcoded recreation
         private IEnumerator PulleyAnimator()
         {
             audMan.PlaySingle(audPull);

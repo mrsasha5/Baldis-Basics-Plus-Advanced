@@ -25,7 +25,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         {
             base.InitializePrefab(variant);
             audHit = AssetStorage.sounds["adv_metal_blow"];
-            gaugeIcon = AssetHelper.SpriteFromFile("Textures/Gauges/adv_gauge_slowness.png");
+            gaugeIcon = AssetStorage.sprites["Gauge_Slowness"];
         }
 
         protected override void SetValues(PlateData data)

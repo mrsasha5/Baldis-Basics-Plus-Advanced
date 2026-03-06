@@ -80,7 +80,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private List<NPC> GetAvailableNPCs()
         {
             List<NPC> npcs = ec.Npcs.FindAll(x => x.GetMeta() == null || 
-                !x.GetMeta().tags.Contains(TagStorage.disappearingCharactersEventImmunity));
+                !x.GetMeta().tags.Contains(TagStorage.DISAPPEARING_CHARACTERS_IMMUNITY));
             npcs.Mix();
             return npcs;
         }

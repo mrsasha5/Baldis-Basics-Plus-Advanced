@@ -1,5 +1,4 @@
-﻿using System;
-using BaldisBasicsPlusAdvanced.Cache;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -9,12 +8,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
 {
     public class MysteriousTeleporterProjectile : BaseProjectile
     {
-
         protected override void SetEntityValues()
         {
             base.SetEntityValues();
             SetEntityName("Mysterious Teleporter");
-            SetEntitySprite(AssetStorage.sprites["adv_mysterious_teleporter"]);
+            SetEntitySprite(AssetStorage.sprites["MysteriousTeleporter_Large"]);
             SetEntityTrigger(1.5f);
         }
 

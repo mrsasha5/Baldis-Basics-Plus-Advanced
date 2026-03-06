@@ -115,7 +115,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             main.startColor = Color.white;
             emission.rateOverTime = 0f;
             emission.SetBursts(new Burst[] {
-                    new Burst(0f, 50, 100, 20, 0.1f)
+                    new Burst(0f, 50, 100, 10, 0.1f)
                 }
             );
             shape.shapeType = ParticleSystemShapeType.Sphere;
@@ -159,10 +159,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             {
                 particleSystems[0].Play();
                 particleSystems[1].Play();
-                audMan.QueueAudio(AssetStorage.sounds["adv_activation_start"]);
-                audMan.QueueAudio(AssetStorage.sounds["adv_activation_loop"]);
-                audMan.SetLoop(true);
             }
+            audMan.QueueAudio(AssetStorage.sounds["adv_activation_start"]);
+            audMan.QueueAudio(AssetStorage.sounds["adv_activation_loop"]);
+            audMan.SetLoop(true);
             DestroyWindows();
         }
 
@@ -174,7 +174,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             int aliveParticles = particleSystems[1].GetParticles(_particles);
             for (int i = 0; i < aliveParticles; i++)
             {
-                //Debug.LogWarning($"{_particles[i].position.ToString()} {transform.position.ToString()} Distance: {Vector3.Distance(_particles[i].position, transform.position)}");
                 if (Vector3.Distance(_particles[i].position, transform.position) <= particleDestroyDistance)
                 {
                     _particles[i].remainingLifetime = 0f;

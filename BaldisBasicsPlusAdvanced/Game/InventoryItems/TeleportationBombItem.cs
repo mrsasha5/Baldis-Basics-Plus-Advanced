@@ -39,7 +39,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 .AddTrigger(1f)
                 .SetLayerCollisionMask((LayerMask)2113541)
                 .AddRigidbody()
-                .AddDefaultRenderBaseFunction(AssetStorage.sprites["adv_teleportation_bomb"])
+                .AddDefaultRenderBaseFunction(AssetStorage.sprites["TeleportationBomb_Large"])
                 .Build();
             entity.SetGrounded(false);
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
@@ -63,14 +63,12 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                     entity.SetGrounded(value: true);
                     audMan.PlaySingle(AssetStorage.sounds["teleport"]);
                 }
-
                 entity.SetHeight(height);
             }
 
             if (beginsInTime > 0f)
             {
                 beginsInTime -= Time.deltaTime * ec.EnvironmentTimeScale;
-
                 if (beginsInTime <= 0f)
                 {
                     TeleportationHole bomb = Instantiate(ObjectStorage.Objects["teleportation_hole"].GetComponent<TeleportationHole>());

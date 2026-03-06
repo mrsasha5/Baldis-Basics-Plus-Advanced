@@ -7,7 +7,6 @@ using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Components.Animation;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -114,12 +113,11 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             spriteRenderer[0].transform.localPosition = Vector3.zero;
 
             Sprite[] sprites =
-                AssetLoader.SpritesFromSpritesheet(4, 4, 25f, Vector2.one * 0.5f, AssetStorage.textures["adv_criss_the_crystal"]);
-
+                AssetLoader.SpritesFromSpritesheet(4, 4, 25f, Vector2.one * 0.5f, AssetStorage.textures["CrissTheCrystal_Sheet"]);
             Sprite[] crazySprites =
-                AssetLoader.SpritesFromSpritesheet(3, 3, 25f, Vector2.one * 0.5f, AssetStorage.textures["adv_criss_the_crystal_crazy"]);
+                AssetLoader.SpritesFromSpritesheet(3, 3, 25f, Vector2.one * 0.5f, AssetStorage.textures["CrissTheCrystal_Crazy_Sheet"]);
 
-            gaugeIcon = AssetHelper.SpriteFromFile("Textures/Gauges/adv_gauge_crystal_blindness.png");
+            gaugeIcon = AssetStorage.sprites["Gauge_CrystalBlindness"];
 
             Sprite[] turnsCrazySprites = new Sprite[4];
             Sprite[] crazyRunningSprites = new Sprite[6];
@@ -169,26 +167,17 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             animator.AddAnimation("TurnsCrazy", new SpriteAnimation(10, turnsCrazySprites));
             animator.AddAnimation("Crazy_Running", new SpriteAnimation(10, crazyRunningSprites));
             animator.SetDefaultAnimation("Idle", 1f);
-
-            //GameObject laserObj = new GameObject("Laser");
-
-            //laserObj.transform.SetParent(transform, false);
-
-            //laser = laserObj.AddComponent<LaserObject>();
         }
 
         public override void Initialize()
         {
             base.Initialize();
-
             GameObject laserObj = new GameObject("Criss Laser");
             laser = laserObj.AddComponent<LaserObject>();
             laser.Initialize(this);
             laser.SetActive(false, playSound: false);
-
             CrissTheCrystal_Wandering state = new CrissTheCrystal_Wandering(this);
             behaviorStateMachine.ChangeState(state);
-
             state.SetTime(0f);
         }
 
@@ -222,7 +211,6 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
 
         public void TryDestroyCollider(Collider collider)
         {
-            Debug.Log($"Collider: {collider.name}");
             if (collider != null)
             {
                 if (collider.transform.CompareTag("Window"))

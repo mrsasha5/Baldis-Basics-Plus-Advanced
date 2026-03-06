@@ -32,6 +32,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         {
             if (lb.controlledRNG.NextDouble() <= parameters.chance[0])
             {
+                AdvancedCore.Logging.LogDebug($"{name} is building plates on OnGenerationFinished(LevelBuilder).");
                 if (Array.Find(FindObjectsOfType<UnityEngine.Object>(), x => x is IButtonReceiver) != null)
                     Build(lb, lb.controlledRNG, roomCells: false);
 
@@ -40,6 +41,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
                     ((PressurePlate)generatedPlates[i]).ConnectTo(CollectPotentialReceiversData(lb.controlledRNG));
                 }
                 generatedPlates.Clear();
+                AdvancedCore.Logging.LogDebug($"{name} is finished.");
             }
         }
 

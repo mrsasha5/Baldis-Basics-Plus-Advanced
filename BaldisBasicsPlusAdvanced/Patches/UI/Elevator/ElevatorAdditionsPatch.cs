@@ -80,10 +80,11 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         private static int? lastSentLifes;
 
-        public static bool LoadTip => !(ObjectStorage.TipKeys.Count == 0) &&
-                (OptionsDataManager.ExtraSettings.GetValue<bool>("tips"));
+        public static bool LoadTip => !(ObjectStorage.TipKeys.Count == 0) && OptionsDataManager.ExtraSettings.GetValue<bool>("tips");
 
         public static bool AnimationsEnabled => OptionsDataManager.ExtraSettings.GetValue<bool>("elevator_animations");
+
+        public static bool LoseAnimationQueued => loseAnimationQueued;
 
         public static string GetTipText()
         {
@@ -384,7 +385,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             explosionAnimator.AddAnimation("standard", new SpriteAnimation(10, explosionSprites));
             explosionAnimator.gameObject.SetActive(false);
 
-            elvScreen.StartCoroutine(ExplosionAnimator(3f, 2f, 1.5f, lifes));
+            elvScreen.StartCoroutine(ExplosionAnimator(3f, 1f, 1.5f, lifes));
         }
 
         private static IEnumerator ExplosionAnimator(float delay, float timeBeforeUpdateTubes, float time, int index)

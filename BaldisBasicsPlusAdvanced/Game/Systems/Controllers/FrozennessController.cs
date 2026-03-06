@@ -28,8 +28,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             audMan.transform.parent = entity.transform;
             audMan.PlaySingle(AssetStorage.sounds["adv_frozen"]);
 
-            frozenSprite = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_frozen_enemy"]).transform.parent.gameObject;
-            frozenSprite.transform.name = "adv_frozen_enemy";
+            frozenSprite = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["Frozen_Enemy"]).transform.parent.gameObject;
+            frozenSprite.transform.name = "FrozenEnemy";
             frozenSprite.transform.parent = entity.transform;
             frozenSprite.transform.localPosition = Vector3.up * -3.5f;
         }

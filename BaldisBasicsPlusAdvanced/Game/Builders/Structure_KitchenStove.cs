@@ -65,8 +65,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
 
             if (button == null)
             {
+                generatedPlates.Remove(stove);
                 Destroy(stove.gameObject);
-                AdvancedCore.Logging.LogWarning("Couldn't find a valid position for the button. Destroying Kitchen Stove!");
+                AdvancedCore.Logging.LogWarning($"{name} couldn't find a valid position for the button. Destroying Kitchen Stove!");
+                return null;
             }
 
             return stove;

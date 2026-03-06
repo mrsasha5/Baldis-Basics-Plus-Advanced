@@ -202,7 +202,7 @@
         </member>
         <member name="M:PlusLevelStudio.EditorInterface.AddObjectVisualWithMeshCollider(System.String,UnityEngine.GameObject,System.Boolean)">
             <summary>
-            Adds the specified object visual with a custom capsule collider for use in editor.
+            Adds the specified object visual with a custom mesh collider for use in editor.
             </summary>
             <param name="key">The key to use in the dictionary.</param>
             <param name="obj">The prefab to copy.</param>
@@ -328,6 +328,20 @@
             <param name="category"></param>
             <param name="tool"></param>
             <param name="addCategoryIfDoesntExist"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PlusLevelStudio.Editor.NPCProperties.GeneratePrefabs(NPC)">
+            <summary>
+            Generates the appropiate prefabs for the NPC, the first GameObject in the array must always be the NPC itself.
+            </summary>
+            <param name="baseNpc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PlusLevelStudio.Editor.NPCProperties.IsAtDefaultSettings">
+            <summary>
+            Returns if this NPCProperties is at the default settings.
+            This is done to avoid saving extra data and more importantly, avoid unnecessarily generating "customized" prefabs.
+            </summary>
             <returns></returns>
         </member>
         <member name="M:PlusLevelStudio.Editor.RandomStructureLocation.Compile(PlusLevelStudio.Editor.EditorLevelData,PlusStudioLevelFormat.BaldiLevel)">
@@ -582,6 +596,15 @@
             <summary>
             Creates the settings for the specified mode. Return null to indicate that this mode has no configurable settings.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PlusLevelStudio.Editor.EditorGameMode.AttemptToUpdateLegacyLevel(PlusLevelStudio.Editor.EditorController,PlusLevelStudio.StudioLevelLegacyFlags)">
+            <summary>
+            Called when an old level made in this mode attempts to load in editor. flagsToHandle is the levelData's LegacyFlags.
+            
+            </summary>
+            <param name="controller"></param>
+            <param name="flagsToHandle"></param>
             <returns></returns>
         </member>
         <member name="M:PlusLevelStudio.Editor.EditorGameModeSettings.MakeCopy">
@@ -854,6 +877,22 @@
             <param name="dir"></param>
             <returns>Whether the placement was successful. If it was, the tool is returned.</returns>
         </member>
+        <member name="M:PlusLevelStudio.Editor.Tools.BrushTool.CompareRectLists(System.Collections.Generic.List{UnityEngine.RectInt},System.Collections.Generic.List{UnityEngine.RectInt})">
+            <summary>
+            Compares the two rect lists by their perimeter, thus prioritizing bigger areas even if those bigger areas would result in more areas overall.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PlusLevelStudio.Editor.Tools.EraserTool.CompareRectLists(System.Collections.Generic.List{UnityEngine.RectInt},System.Collections.Generic.List{UnityEngine.RectInt})">
+            <summary>
+            Compares the two rect lists by their perimeter, thus prioritizing bigger areas even if those bigger areas would result in more areas overall.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
         <member name="T:PlusLevelStudio.Editor.Tools.PointTechnicalMarkerTool">
             <summary>
             Same as CellMarkerTool, but with the "technical_" id.
@@ -893,6 +932,16 @@
         <member name="T:PlusLevelStudio.Ingame.WormholeAmbienceRoomFunction">
             <summary>
             Identical to AmbienceRoomFunction, but can be checked for, so multiple wormholes dont add unnecessary extra ambiences.
+            </summary>
+        </member>
+        <member name="T:PlusLevelStudio.IStudioLegacyKnowledgable">
+            <summary>
+            An interface that a few classes can inherit (EditorLevelData, any class inheriting from BaseGameManager) to know if the level existed before certain features were implemented.
+            </summary>
+        </member>
+        <member name="T:PlusLevelStudio.StudioLevelLegacyFlags">
+            <summary>
+            Flags that represent
             </summary>
         </member>
         <member name="M:PlusLevelStudio.UI.UIExchangeHandler.SendInteractionMessage(System.String,System.Object)">

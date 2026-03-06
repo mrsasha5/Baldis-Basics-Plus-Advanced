@@ -196,11 +196,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetName("Criss the Crystal")
                 .SetMetaName("Adv_NPC_CrissTheCrystal")
                 .SetEnum("CrissTheCrystal")
-                .SetPoster(AssetStorage.textures["adv_poster_criss_the_crystal"],
-                "Adv_NPC_CrissTheCrystal", "Adv_NPC_CrissTheCrystal_Desc")
+                .SetPoster(AssetStorage.textures["Poster_CrissTheCrystal"],
+                    "Adv_NPC_CrissTheCrystal", "Adv_NPC_CrissTheCrystal_Desc")
                 .AddLooker()
                 .AddMetaFlag(NPCFlags.StandardNoCollide)
-                .SetMetaTags(new string[] { TagStorage.student })
+                .SetMetaTags(new string[] { TagStorage.STUDENT })
             );
 
             ObjectStorage.Posters.Add(ObjectStorage.Npcs["CrissTheCrystal"].Poster);
@@ -217,15 +217,15 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 nameKey: "Adv_Item_Hammer",
                 descKey: "Adv_Item_Hammer_Desc",
                 enumName: "Hammer",
-                smallSpriteFileName: "adv_hammer_small.png",
-                largeSpriteFileName: "adv_hammer_large.png",
+                smallSpriteKey: "Hammer_Small",
+                largeSpriteKey: "Hammer_Large",
                 generatorCost: 75,
                 price: 500,
                 flags: ItemFlags.None,
                 tags: new string[]
                 {
-                    TagStorage.repairTool,
-                    TagStorage.criminal_contraband
+                    TagStorage.REPAIR_TOOL,
+                    TagStorage.COMPAT_CRIMINAL_CONTRABAND
                 }
             ).overrideDisabled = true;
 
@@ -233,8 +233,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 nameKey: "Adv_Item_WindBlower",
                 descKey: "Adv_Item_WindBlower_Desc",
                 enumName: "WindBlower",
-                smallSpriteFileName: "adv_wind_blower_small.png",
-                largeSpriteFileName: "adv_wind_blower_large.png",
+                smallSpriteKey: "WindBlower_Small",
+                largeSpriteKey: "WindBlower_Large",
                 generatorCost: 25,
                 price: 300,
                 flags: ItemFlags.None
@@ -244,13 +244,13 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 nameKey: "Adv_Item_MysteriousTeleporter",
                 descKey: "Adv_Item_MysteriousTeleporter_Desc",
                 enumName: "MysteriousTeleporter",
-                smallSpriteFileName: "adv_mysterious_teleporter_small.png",
-                largeSpriteFileName: "adv_mysterious_teleporter_large.png",
+                smallSpriteKey: "MysteriousTeleporter_Small",
+                largeSpriteKey: "MysteriousTeleporter_Large",
                 generatorCost: 40,
                 price: 500,
                 tags: new string[]
                 {
-                    TagStorage.criminal_contraband
+                    TagStorage.COMPAT_CRIMINAL_CONTRABAND
                 },
                 flags: ItemFlags.CreatesEntity
             );
@@ -259,8 +259,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 nameKey: "Adv_Item_IceBoots",
                 descKey: "Adv_Item_IceBoots_Desc",
                 enumName: "IceBoots",
-                smallSpriteFileName: "adv_ice_boots_small.png",
-                largeSpriteFileName: "adv_ice_boots_large.png",
+                smallSpriteKey: "IceBoots_Small",
+                largeSpriteKey: "IceBoots_Large",
                 generatorCost: 50,
                 price: 300,
                 flags: ItemFlags.Persists
@@ -271,8 +271,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_PlaceableFan_Desc",
                 enumName: "PlaceableFan",
                 flags: ItemFlags.CreatesEntity,
-                smallSpriteFileName: "adv_placeable_fan_small.png",
-                largeSpriteFileName: "adv_placeable_fan_large.png",
+                smallSpriteKey: "PlaceableFan_Small",
+                largeSpriteKey: "PlaceableFan_Large",
                 generatorCost: 75,
                 price: 750
             );
@@ -282,13 +282,13 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_TeleportationBomb_Desc",
                 enumName: "TeleportationBomb",
                 flags: ItemFlags.CreatesEntity | ItemFlags.Persists,
-                smallSpriteFileName: "adv_teleportation_bomb_small.png",
-                largeSpriteFileName: "adv_teleportation_bomb_large.png",
+                smallSpriteKey: "TeleportationBomb_Small",
+                largeSpriteKey: "TeleportationBomb_Large",
                 generatorCost: 75,
                 price: 500,
                 tags: new string[]
                 {
-                    TagStorage.criminal_contraband
+                    TagStorage.COMPAT_CRIMINAL_CONTRABAND
                 }
             );
 
@@ -297,13 +297,13 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_MagicClock_Desc",
                 enumName: "MagicClock",
                 flags: ItemFlags.Persists,
-                smallSpriteFileName: "adv_magic_clock_small.png",
-                largeSpriteFileName: "adv_magic_clock_large.png",
+                smallSpriteKey: "MagicClock_Small",
+                largeSpriteKey: "MagicClock_Large",
                 generatorCost: 75,
                 price: 750,
                 tags: new string[]
                 {
-                    TagStorage.criminal_contraband
+                    TagStorage.COMPAT_CRIMINAL_CONTRABAND
                 }
             );
 
@@ -312,8 +312,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_InflatableBalloon_Desc",
                 enumName: "InflatableBalloon",
                 flags: ItemFlags.None,
-                smallSpriteFileName: "adv_inflatable_balloon_small.png",
-                largeSpriteFileName: "adv_inflatable_balloon_large.png",
+                smallSpriteKey: "InflatableBalloon_Small",
+                largeSpriteKey: "InflatableBalloon_Large",
                 generatorCost: 50,
                 price: 300
             );
@@ -323,8 +323,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_Dough_Desc",
                 enumName: "Dough",
                 flags: ItemFlags.CreatesEntity,
-                smallSpriteFileName: "adv_dough_small.png",
-                largeSpriteFileName: "adv_dough_large.png",
+                smallSpriteKey: "Dough_Small",
+                largeSpriteKey: "Dough_Large",
                 generatorCost: 25,
                 price: 300
             );
@@ -334,12 +334,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_MysteriousBusPass_Desc",
                 enumName: "MysteriousBusPass",
                 flags: ItemFlags.NoUses,
-                smallSpriteFileName: "adv_mysterious_bus_pass_small.png",
-                largeSpriteFileName: "adv_mysterious_bus_pass_large.png",
+                smallSpriteKey: "MysteriousBusPass_Small",
+                largeSpriteKey: "MysteriousBusPass_Large",
                 generatorCost: 75,
                 price: 400,
                 tags: new string[] { 
-                    TagStorage.forbiddenPresent 
+                    TagStorage.FORBIDDEN_PRESENT 
                 }
             );
         }
@@ -351,9 +351,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_Bread_Desc",
                 enumName: "Bread",
                 flags: ItemFlags.MultipleUse,
-                tags: new string[] { TagStorage.food },
-                smallSpriteFileName: "adv_bread_small.png",
-                largeSpriteFileName: "adv_bread_large.png",
+                tags: new string[] { TagStorage.FOOD },
+                smallSpriteKey: "Bread_Small",
+                largeSpriteKey: "Bread_Large",
                 generatorCost: 35,
                 price: 550
                 );
@@ -363,9 +363,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_BreadPiece_Desc",
                 enumName: "Bread",
                 flags: ItemFlags.MultipleUse,
-                tags: new string[] { TagStorage.food },
-                smallSpriteFileName: "adv_piece_of_bread_small.png",
-                largeSpriteFileName: "adv_piece_of_bread_large.png",
+                tags: new string[] { TagStorage.FOOD },
+                smallSpriteKey: "Bread_Small",
+                largeSpriteKey: "Bread_Large",
                 generatorCost: 35,
                 price: 550,
                 itemMeta: bread2.GetMeta()
@@ -376,9 +376,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_RawChickenLeg_Desc",
                 enumName: "RawChickenLeg",
                 flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
-                tags: new string[] { TagStorage.food },
-                smallSpriteFileName: "adv_raw_chicken_leg_small.png",
-                largeSpriteFileName: "adv_raw_chicken_leg_large.png",
+                tags: new string[] { TagStorage.FOOD },
+                smallSpriteKey: "RawChickenLeg_Small",
+                largeSpriteKey: "RawChickenLeg_Large",
                 generatorCost: 30,
                 price: 500
                 );
@@ -388,9 +388,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_RawChickenLeg_Desc",
                 enumName: "RawChickenLeg",
                 flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
-                tags: new string[] { TagStorage.food },
-                smallSpriteFileName: "adv_raw_chicken_leg_small.png",
-                largeSpriteFileName: "adv_raw_chicken_leg_large.png",
+                tags: new string[] { TagStorage.FOOD },
+                smallSpriteKey: "RawChickenLeg_Small",
+                largeSpriteKey: "RawChickenLeg_Large",
                 generatorCost: 30,
                 price: 500,
                 itemMeta: rawChicken2.GetMeta()
@@ -401,9 +401,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_CookedChickenLeg_Desc",
                 enumName: "CookedChickenLeg",
                 flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
-                tags: new string[] { TagStorage.food },
-                smallSpriteFileName: "adv_cooked_chicken_leg_small.png",
-                largeSpriteFileName: "adv_cooked_chicken_leg_large.png",
+                tags: new string[] { TagStorage.FOOD },
+                smallSpriteKey: "CookedChickenLeg_Small",
+                largeSpriteKey: "CookedChickenLeg_Large",
                 generatorCost: 75,
                 price: 800,
                 variant: 2
@@ -414,9 +414,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 descKey: "Adv_Item_CookedChickenLeg_Desc",
                 enumName: "CookedChickenLeg",
                 flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
-                tags: new string[] { TagStorage.food },
-                smallSpriteFileName: "adv_cooked_chicken_leg_small.png",
-                largeSpriteFileName: "adv_cooked_chicken_leg_large.png",
+                tags: new string[] { TagStorage.FOOD },
+                smallSpriteKey: "CookedChickenLeg_Small",
+                largeSpriteKey: "CookedChickenLeg_Large",
                 generatorCost: 75,
                 price: 800,
                 itemMeta: cookedChicken2.GetMeta(),
@@ -427,8 +427,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 nameKey: "Adv_Item_BoxingGlove",
                 descKey: "Adv_Item_BoxingGlove_Desc",
                 enumName: "BoxingGlove",
-                smallSpriteFileName: "adv_boxing_glove_small.png",
-                largeSpriteFileName: "adv_boxing_glove_large.png",
+                smallSpriteKey: "BoxingGlove_Small",
+                largeSpriteKey: "BoxingGlove_Large",
                 generatorCost: 50,
                 price: 500,
                 flags: ItemFlags.MultipleUse
@@ -438,8 +438,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 nameKey: "Adv_Item_BoxingGlove1",
                 descKey: "Adv_Item_BoxingGlove_Desc",
                 enumName: "BoxingGlove",
-                smallSpriteFileName: "adv_boxing_glove_small.png",
-                largeSpriteFileName: "adv_boxing_glove_large.png",
+                smallSpriteKey: "BoxingGlove_Small",
+                largeSpriteKey: "BoxingGlove_Large",
                 generatorCost: 50,
                 price: 500,
                 flags: ItemFlags.MultipleUse,
@@ -450,8 +450,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 nameKey: "Adv_Item_PlaceablePortal",
                 descKey: "Adv_Item_PlaceablePortal_Desc",
                 enumName: "PlaceablePortal",
-                smallSpriteFileName: "adv_placeable_portal_small.png",
-                largeSpriteFileName: "adv_placeable_portal_large.png",
+                smallSpriteKey: "PlaceablePortal_Small",
+                largeSpriteKey: "PlaceablePortal_Large",
                 generatorCost: 30,
                 price: 750,
                 flags: ItemFlags.MultipleUse
@@ -461,8 +461,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 nameKey: "Adv_Item_PlaceablePortal1",
                 descKey: "Adv_Item_PlaceablePortal_Desc",
                 enumName: "PlaceablePortal",
-                smallSpriteFileName: "adv_placeable_portal_small.png",
-                largeSpriteFileName: "adv_placeable_portal_large.png",
+                smallSpriteKey: "PlaceablePortal_Small",
+                largeSpriteKey: "PlaceablePortal_Large",
                 generatorCost: 30,
                 price: 750,
                 flags: ItemFlags.MultipleUse,
@@ -780,16 +780,17 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 if (advMathMachineIsCorner) mathMachineComp = GameObject.Instantiate(AssetHelper.LoadAsset<MathMachine>("MathMachine_Corner"));
 
                 GameObject advancedMathMachineObj = mathMachineComp.gameObject;
+                advancedMathMachineObj.ConvertToPrefab(true);
                 advancedMathMachineObj.name = !advMathMachineIsCorner ? "AdvancedMathMachine" : "AdvancedMathMachineCorner";
 
                 AdvancedMathMachine advancedMathMachine = advancedMathMachineObj.AddComponent<AdvancedMathMachine>();
                 mathMachineComp.CopyAllValuesTo(advancedMathMachine);
-
+                advancedMathMachine.ReflectionSetValue("exteriorSignPrefab", 
+                    PrefabCreator.CreateActivityWallSign("ActivityExteriorSign_AMM", AssetStorage.sprites["AMM_WallSign_Right"], 
+                        AssetStorage.sprites["AMM_WallSign_Left"]));
                 advancedMathMachine.InitializePrefab(1);
 
                 GameObject.Destroy(mathMachineComp);
-
-                advancedMathMachineObj.ConvertToPrefab(true);
                 ObjectStorage.Objects.Add(!advMathMachineIsCorner ? "advanced_math_machine" : "advanced_math_machine_corner", advancedMathMachineObj);
 
                 if (advMathMachineIsCorner) break;
@@ -819,9 +820,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabCreator.CreatePlate<PressurePlate>("plate");
             PrefabCreator.CreatePlate<InvisibilityPlate>("invisibility_plate");
             PrefabCreator.CreatePlate<AccelerationPlate>("acceleration_plate");
-
             PrefabCreator.CreatePlate<NoisyPlate>("noisy_plate");
-
             PrefabCreator.CreatePlate<StealingPlate>("stealing_plate");
             PrefabCreator.CreatePlate<BullyPlate>("bully_plate");
             PrefabCreator.CreatePlate<PresentPlate>("present_plate");
@@ -830,7 +829,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabCreator.CreatePlate<ProtectionPlate>("protection_plate");
             PrefabCreator.CreatePlate<TeleportationPlate>("teleportation_plate");
             PrefabCreator.CreatePlate<MysteriousPlate>("fake_plate");
-            //PrefabsCreator.CreatePlate<SafetyTrapdoor>("safety_trapdoor");
             PrefabCreator.CreatePlate<KitchenStove>("kitchen_stove");
             PrefabCreator.CreatePlate<JohnnyKitchenStove>("johnny_kitchen_stove");
 
@@ -950,7 +948,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .SetLayerCollisionMask(LayerHelper.entityCollisionMask)
                 .AddRenderbaseFunction(delegate (Entity entity)
                 {
-                    Transform fanBaseRenderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_dough"])
+                    Transform fanBaseRenderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["Dough_Large"])
                     .transform.parent;
                     fanBaseRenderer.SetParent(entity.transform);
                     return fanBaseRenderer;
@@ -1086,23 +1084,23 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void SetTags()
         {
-            SetTagsTo(new string[] { TagStorage.firstPrizeImmunity },
+            SetTagsTo(new string[] { TagStorage.FIRST_PRIZE_IMMUNITY },
                 Character.Bully, Character.Sweep, Character.Prize);
 
-            SetTagsTo(new string[] { TagStorage.coldSchoolEventImmunity },
+            SetTagsTo(new string[] { TagStorage.COLD_SCHOOL_IMMUNIY },
                 Character.Pomp, Character.Sweep, Character.Prize, Character.Chalkles);
 
-            SetTagsTo(new string[] { TagStorage.narrowlyFunctional },
+            SetTagsTo(new string[] { TagStorage.NARROWLY_FUNCTIONAL },
                 Items.BusPass, Items.lostItem0, Items.lostItem1, Items.lostItem2, Items.lostItem3,
                 Items.lostItem4, Items.lostItem5, Items.lostItem6, Items.lostItem7, Items.lostItem8, Items.lostItem9,
                 Items.CircleKey, Items.TriangleKey, Items.SquareKey, Items.PentagonKey, Items.HexagonKey, Items.WeirdKey);
-            SetTagsTo(new string[] { TagStorage.perfectRate, TagStorage.symbolMachinePotentialReward },
+            SetTagsTo(new string[] { TagStorage.PERFECT_RATE, TagStorage.SYMBOL_MACHINE_POTENTIAL_REWARD },
                 Items.GrapplingHook, Items.Apple, Items.Bsoda, Items.Teleporter);
-            SetTagsTo(new string[] { TagStorage.goodRate, TagStorage.symbolMachinePotentialReward },
+            SetTagsTo(new string[] { TagStorage.GOOD_RATE, TagStorage.SYMBOL_MACHINE_POTENTIAL_REWARD },
                 Items.PortalPoster, Items.NanaPeel, Items.Quarter, Items.ZestyBar, Items.DietBsoda);
-            SetTagsTo(new string[] { TagStorage.normalRate, TagStorage.symbolMachinePotentialReward },
+            SetTagsTo(new string[] { TagStorage.NORMAL_RATE, TagStorage.SYMBOL_MACHINE_POTENTIAL_REWARD },
                 Items.Nametag, Items.ChalkEraser, Items.DetentionKey);
-            SetTagsTo(new string[] { TagStorage.commonRate, TagStorage.symbolMachinePotentialReward },
+            SetTagsTo(new string[] { TagStorage.COMMON_RATE, TagStorage.SYMBOL_MACHINE_POTENTIAL_REWARD },
                 Items.Scissors, Items.Tape, Items.PrincipalWhistle, Items.Wd40);
         }
 

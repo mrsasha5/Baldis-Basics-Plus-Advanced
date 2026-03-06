@@ -11,7 +11,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
     [HarmonyPatch(typeof(Map))]
     internal class MapLegacyFillingPatch
     {
-
         private static Map map;
 
         private static FieldInfo _gridPosField = AccessTools.Field(typeof(Map), "_gridPosition");
@@ -76,6 +75,10 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
                     "Detected wrong instructions length in MapLegacyFillingPatch!\n" +
                     "Is game codebase updated or somebody joined to my party?");
                 AdvancedCore.Logging.LogWarning(matcher.Length);
+            }
+            else
+            {
+                AdvancedCore.Logging.LogInfo("MapLegacyFillingPatch: defects are not detected. Guessing everything was patched well.");
             }
 
             return matcher.InstructionEnumeration();
