@@ -43,7 +43,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
             if (IntegrationManager.IsActive<RewiredPlusIntegration>())
             {
-                CreateText("Desc", "Adv_Options_Menu_Key_Bindings_Overridden", Vector3.zero, BaldiFonts.ComicSans12, 
+                CreateText("Desc", "Adv_Options_KeyBindings_Overridden", Vector3.zero, BaldiFonts.ComicSans12, 
                     TextAlignmentOptions.Center, new Vector2(300f, 50f), Color.black);
                 return;
             }
@@ -103,7 +103,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
                     BaldiFonts.ComicSans18, TextAlignmentOptions.Left, new Vector2(190f, 45f), Color.black);
                 textButton.transform.SetParent(background.transform, worldPositionStays: true);
                 textButton.OnPress.RemoveAllListeners();
-                textButton.underlineOnHigh = false; //don't needed
+                textButton.underlineOnHigh = false;
                 AddTooltip(textButton, bindings[i].LocDescKey);
                 textButtons.Add(textButton);
 
@@ -214,7 +214,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
         private IEnumerator Waiter(StandardMenuButton button, KeyBindingData data)
         {
-            yield return null; //lol yeah. I just will skip the one frame.
+            yield return null; // I just will skip the one frame.
 
             KeyCode pressed = KeyCode.None;
 

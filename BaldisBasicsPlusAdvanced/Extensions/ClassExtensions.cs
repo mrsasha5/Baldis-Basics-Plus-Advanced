@@ -4,7 +4,6 @@ using BaldisBasicsPlusAdvanced.Helpers;
 using System.Collections;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
 using UnityEngine.UI;
-using System.Reflection;
 using System;
 using BaldisBasicsPlusAdvanced.Game.Components.Movement;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
@@ -112,116 +111,6 @@ namespace BaldisBasicsPlusAdvanced.Extensions
             return collider.gameObject.layer == LayerHelper.standardEntities || collider.gameObject.layer == LayerHelper.clickableEntities;
         }
 
-        private static IEnumerator ShutAnimation(LockdownDoor door, float speed)
-        {
-            ReflectionHelper.SetValue(door, "moving", true);
-
-            AudioManager audMan = door.GetComponent<AudioManager>();
-            Collider collider = door.GetComponent<Collider>();
-            MeshRenderer renderer = door.GetComponentInChildren<MeshRenderer>();
-
-            audMan.QueueAudio(AssetStorage.sounds["lockdown_door"], playImmediately: true);
-            audMan.SetLoop(val: true);
-
-            while (renderer.transform.position.y > 0f)
-            {
-                yield return null;
-                renderer.transform.position -= Vector3.up * (speed * Time.deltaTime * door.ec.EnvironmentTimeScale);
-                if (renderer.transform.position.y <= ReflectionHelper.GetValue<float>(door, "collisionHeight") && !collider.enabled)
-                {
-                    collider.enabled = true;
-                }
-            }
-
-            ReflectionHelper.SetValue(door, "moving", false);
-
-            collider.enabled = true;
-            renderer.transform.position -= Vector3.up * (0f - renderer.transform.position.y);
-
-            door.aTile.Mute(door.direction, block: true);
-            door.bTile.Mute(door.direction.GetOpposite(), block: true);
-
-            audMan.FlushQueue(endCurrent: true);
-            audMan.PlaySingle(AssetStorage.sounds["lock_door_stop"]);
-        }
-
-        private static IEnumerator OpenAnimation(LockdownDoor door, float speed)
-        {
-            AudioManager audMan = door.GetComponent<AudioManager>();
-            Collider collider = door.GetComponent<Collider>();
-            MeshRenderer renderer = door.GetComponentInChildren<MeshRenderer>();
-
-            if (renderer.transform.position.y >= door.originalHeight)
-            {
-                renderer.transform.position -= Vector3.up * (renderer.transform.position.y - door.originalHeight);
-                collider.enabled = false;
-                yield break;
-            }
-
-            ReflectionHelper.SetValue(door, "moving", true);
-
-            audMan.QueueAudio(AssetStorage.sounds["lockdown_door"], playImmediately: true);
-            audMan.SetLoop(val: true);
-
-            while (renderer.transform.position.y < door.originalHeight)
-            {
-                yield return null;
-                renderer.transform.position += Vector3.up * (speed * Time.deltaTime * door.ec.EnvironmentTimeScale);
-                if (renderer.transform.position.y > ReflectionHelper.GetValue<float>(door, "collisionHeight") && collider.enabled)
-                {
-                    collider.enabled = false;
-                }
-            }
-
-            ReflectionHelper.SetValue(door, "moving", false);
-
-            collider.enabled = false;
-            renderer.transform.position -= Vector3.up * (renderer.transform.position.y - door.originalHeight);
-            audMan.FlushQueue(endCurrent: true);
-            audMan.PlaySingle(AssetStorage.sounds["lock_door_stop"]);
-        }
-
-        public static void Toggle(this LockdownDoor door, float speed, bool toggleEvenItMoves = false, bool? shut = null)
-        {
-            bool isMoving = ReflectionHelper.GetValue<bool>(door, "moving");
-            if (!isMoving || toggleEvenItMoves)
-            {
-                if (isMoving)
-                {
-                    door.StopCoroutine(ReflectionHelper.GetValue<IEnumerator>(door, "doorMover"));
-                }
-
-                bool open = shut == null ? !door.open : !(bool)shut;
-
-                if (open) //Open method analog
-                {
-                    door.open = true;
-
-                    if (door.closeBlocks) door.Block(false); //based on Door class
-
-                    IEnumerator enumerator = OpenAnimation(door, speed);
-
-                    ReflectionHelper.SetValue(door, "doorMover", enumerator);
-
-                    door.StartCoroutine(enumerator);
-
-                    door.aTile.Mute(door.direction, false);
-                    door.bTile.Mute(door.direction.GetOpposite(), false);
-                } else //Shut method analog
-                {
-                    door.open = false;
-
-                    if (door.closeBlocks) door.Block(true); //based on Door class
-
-                    IEnumerator enumerator = ShutAnimation(door, speed);
-
-                    ReflectionHelper.SetValue(door, "doorMover", enumerator);
-
-                    door.StartCoroutine(enumerator);
-                }
-            }
-        }
-
         public static Vector3 GetVector3FromCellPosition(this IntVector2 vec2)
         {
             Vector3 vector3 = new Vector3();
@@ -232,7 +121,7 @@ namespace BaldisBasicsPlusAdvanced.Extensions
 
         public static Vector3 CorrectForCell(this Vector3 position, float y = 5f)
         {
-            EnvironmentController ec = Singleton<BaseGameManager>.Instance.Ec;
+            EnvironmentController ec = BaseGameManager.Instance.Ec;
 
             IntVector2 _vector = ec.CellFromPosition(position).position;
 
@@ -271,20 +160,10 @@ namespace BaldisBasicsPlusAdvanced.Extensions
         {
             Force force = new Force(direction, initialSpeed, acceleration);
             entity.AddForce(force);
-
             ForcedEntityBehaviour behaviour = entity.gameObject.AddComponent<ForcedEntityBehaviour>();
             behaviour.Initialize(
                 BaseGameManager.Instance.Ec, entity, force, direction, minSlamMagnitude, 
                 behaviour.DefaultSlamDistance, makesNoises);
-        }
-
-        public static void CopyAllValuesTo<T>(this T @object, T target)
-        {
-            FieldInfo[] originalFields = @object.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            for (int i = 0; i < originalFields.Length; i++)
-            {
-                ReflectionHelper.SetValue(target, originalFields[i].Name, ReflectionHelper.GetValue(@object, originalFields[i].Name));
-            }
         }
 
         public static RoomGroup SetCeilingTex(this RoomGroup group, Texture2D tex, int weight)
@@ -325,7 +204,7 @@ namespace BaldisBasicsPlusAdvanced.Extensions
 
         public static string Localize(this string text)
         {
-            return Singleton<LocalizationManager>.Instance.GetLocalizedText(text);
+            return LocalizationManager.Instance.GetLocalizedText(text);
         }
 
         public static void SetAnyDirection(this BeltManager belt, Vector3 vector)
@@ -361,7 +240,6 @@ namespace BaldisBasicsPlusAdvanced.Extensions
         {
             List<T> inputObjects = new List<T>(list);
             List<T> objects = new List<T>();
-            
             while (inputObjects.Count > 0)
             {
                 int chosen = cRng.Next(0, inputObjects.Count);
@@ -420,13 +298,11 @@ namespace BaldisBasicsPlusAdvanced.Extensions
 
         public static void SoundTeleport(this Entity entity, Vector3 pos)
         {
-            //Old pos
             AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
             audMan.PlaySingle(AssetStorage.sounds["teleport"]);
 
             entity.Teleport(pos);
 
-            //Actual pos
             AudioManager _audMan = ObjectCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
             _audMan.PlaySingle(AssetStorage.sounds["teleport"]);
         }

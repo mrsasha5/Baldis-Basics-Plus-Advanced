@@ -184,6 +184,7 @@ namespace BaldisBasicsPlusAdvanced
 
             yield return "Preparing Integration Manager...";
             IntegrationManager.Prepare();
+            IntegrationManager.OnModLoadingStarted();
             yield return "Patching game...";
             harmony.PatchAllConditionals();
 
@@ -246,8 +247,8 @@ namespace BaldisBasicsPlusAdvanced
         {
             CustomOptionsCore.OnMenuInitialize += delegate (OptionsMenu menu, CustomOptionsHandler handler)
             {
-                handler.AddCategory<ExtraOptionsMenu>("Adv_Options_Menu_Extra_Settings");
-                handler.AddCategory<KeyBindingsOptionsMenu>("Adv_Options_Menu_Key_Bindings_Settings");
+                handler.AddCategory<ExtraOptionsMenu>("Adv_Options_KeyBindings");
+                handler.AddCategory<KeyBindingsOptionsMenu>("Adv_Options_KeyBindings_Warning");
             };
         }
 

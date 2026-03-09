@@ -21,7 +21,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
         public override void Build()
         {
-            bool gameInitialized = Singleton<BaseGameManager>.Instance != null;
+            bool gameInitialized = BaseGameManager.Instance != null;
 
             CreateSynchronizatedToggleButton(
                 synchronizableName: "tips",

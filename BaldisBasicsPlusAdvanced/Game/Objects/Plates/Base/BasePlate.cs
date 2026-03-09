@@ -1,6 +1,4 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Compats;
-using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
 using System.Collections;
@@ -11,7 +9,6 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 {
-
     public class BasePlate : MonoBehaviour, IPrefab
     {
         [SerializeField]
@@ -25,9 +22,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
         [SerializeField]
         protected Material deactivatedMaterial;
-
-        [SerializeField]
-        protected Sprite editorToolSprite;
 
         [SerializeField]
         protected List<MeshRenderer> meshRenderers = new List<MeshRenderer>();

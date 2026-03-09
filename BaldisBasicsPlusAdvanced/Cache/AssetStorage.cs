@@ -148,7 +148,8 @@ namespace BaldisBasicsPlusAdvanced.Cache
             pickup = Array.Find(AssetHelper.LoadAssets<Pickup>("Pickup"), x => x.gameObject.activeSelf);
             classDoor = AssetHelper.LoadAsset<StandardDoor>("ClassDoor_Standard");
             cursor = AssetHelper.LoadAsset<CursorController>("CursorOrigin");
-            gameButton = Array.Find(AssetHelper.LoadAssets<GameButton>("GameButton"), x => x.gameObject.activeSelf);
+            gameButton = Array.Find(AssetHelper.LoadAssets<GameButton>("GameButton"), 
+                x => x.gameObject.activeSelf && x.transform.parent == null);
 
             texts.Add("total_display", AssetHelper.LoadAsset<TextMeshPro>("TotalDisplay"));
 

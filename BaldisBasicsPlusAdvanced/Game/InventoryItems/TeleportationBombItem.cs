@@ -17,13 +17,13 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
         private CapsuleCollider capsuleCollider;
 
         [SerializeField]
-        private float beginsInTime;
+        private float startsIn;
 
         private float endHeight = 0.5f;
 
-        private float throwSpeed = 80f; //50f
+        private float throwSpeed = 80f;
 
-        private float gravity = 15f; //10f
+        private float gravity = 15f;
 
         private EnvironmentController ec;
 
@@ -45,12 +45,12 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
             capsuleCollider = GetComponent<CapsuleCollider>();
             capsuleCollider.height = 5f;
-            beginsInTime = 3f;
+            startsIn = 3f;
         }
 
         private void Update()
         {
-            if (beginsInTime <= 0f) return;
+            if (startsIn <= 0f) return;
 
             if (!ready)
             {
@@ -66,10 +66,10 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 entity.SetHeight(height);
             }
 
-            if (beginsInTime > 0f)
+            if (startsIn > 0f)
             {
-                beginsInTime -= Time.deltaTime * ec.EnvironmentTimeScale;
-                if (beginsInTime <= 0f)
+                startsIn -= Time.deltaTime * ec.EnvironmentTimeScale;
+                if (startsIn <= 0f)
                 {
                     TeleportationHole bomb = Instantiate(ObjectStorage.Objects["teleportation_hole"].GetComponent<TeleportationHole>());
                     Vector3 pos = transform.position;

@@ -749,32 +749,21 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeObjects()
         {
-            //Variables for everyone
             MathMachine mathMachineComp = GameObject.Instantiate(AssetHelper.LoadAsset<MathMachine>("MathMachine"));
 
-            //Cloning the Rotohall and making it as rusty
-
+            // Cloning the Rotohall and making it as rusty
             RotoHall rotoHall = GameObject.Instantiate(AssetHelper.LoadAsset<RotoHall>("RotoHall_Base"));
             rotoHall.gameObject.ConvertToPrefab(true);
             rotoHall.name = "RustyRotoHall_Base";
-
-            RustyRotohall rustyRotoHall = rotoHall.gameObject.AddComponent<RustyRotohall>();
-            rotoHall.CopyAllValuesTo(rustyRotoHall);
-            GameObject.Destroy(rotoHall);
-
-            ReflectionHelper.SetValue<EnvironmentObject>(rustyRotoHall.GetComponent<EntitySpinner>(), "environmentObject", rustyRotoHall);
-
-            ReflectionHelper.SetValue<float>(rustyRotoHall, "speed", 25f);
-            ReflectionHelper.SetValue<SoundObject>(rustyRotoHall, "audTurn", AssetStorage.sounds["adv_turning_start"]);
-
-            rotoHall.GetComponent<MeshRenderer>().material.SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_blank"]);
-
+            RustyRotohall rustyRotoHall = rotoHall.gameObject.SwapComponent<RotoHall, RustyRotohall>(rotoHall);
+            rustyRotoHall.GetComponent<EntitySpinner>().ReflectionSetValue("environmentObject", rustyRotoHall);
+            rustyRotoHall.ReflectionSetValue("speed", 25f);
+            rustyRotoHall.ReflectionSetValue("audTurn", AssetStorage.sounds["adv_turning_start"]);
+            rustyRotoHall.GetComponent<MeshRenderer>().material.SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_blank"]);
             ObjectStorage.Objects.Add("rusty_rotohall", rustyRotoHall.gameObject);
 
-            //Advanced Math Machine
-
+            // Advanced Math Machine
             bool advMathMachineIsCorner = false;
-
             while (true)
             {
                 if (advMathMachineIsCorner) mathMachineComp = GameObject.Instantiate(AssetHelper.LoadAsset<MathMachine>("MathMachine_Corner"));
@@ -783,40 +772,41 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 advancedMathMachineObj.ConvertToPrefab(true);
                 advancedMathMachineObj.name = !advMathMachineIsCorner ? "AdvancedMathMachine" : "AdvancedMathMachineCorner";
 
-                AdvancedMathMachine advancedMathMachine = advancedMathMachineObj.AddComponent<AdvancedMathMachine>();
-                mathMachineComp.CopyAllValuesTo(advancedMathMachine);
+                AdvancedMathMachine advancedMathMachine = 
+                    advancedMathMachineObj.SwapComponent<MathMachine, AdvancedMathMachine>(mathMachineComp);
                 advancedMathMachine.ReflectionSetValue("exteriorSignPrefab", 
                     PrefabCreator.CreateActivityWallSign("ActivityExteriorSign_AMM", AssetStorage.sprites["AMM_WallSign_Right"], 
                         AssetStorage.sprites["AMM_WallSign_Left"]));
                 advancedMathMachine.InitializePrefab(1);
 
-                GameObject.Destroy(mathMachineComp);
-                ObjectStorage.Objects.Add(!advMathMachineIsCorner ? "advanced_math_machine" : "advanced_math_machine_corner", advancedMathMachineObj);
+                ObjectStorage.Objects.Add(!advMathMachineIsCorner ? "advanced_math_machine" : "advanced_math_machine_corner", 
+                    advancedMathMachineObj);
 
                 if (advMathMachineIsCorner) break;
                 advMathMachineIsCorner = true;
             }
-            
 
-            //Zipline Hangers
+            // Compass Comparator
+            PrefabCreator.CreateObjectPrefab<PairsComparator>("PairsComparator", "pairs_comparator");
+
+            // Zipline Hangers
             PrefabCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Hanger", "zipline_hanger");
             PrefabCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Black Hanger", "zipline_black_hanger", variant: 2);
 
-            //Voting Ballot
+            // Voting Ballot
             PrefabCreator.CreateObjectPrefab<VotingBallot>("Voting Ballot", "voting_ballot");
 
-            //Pulley
+            // Pulley
             PrefabCreator.CreateObjectPrefab<Pulley>("Pulley", "pulley");
 
-            //Gum Dispenser
+            // Gum Dispenser
             PrefabCreator.CreateObjectPrefab<GumDispenser>("Gum Dispenser", "gum_dispenser");
 
-            //Mysterious portals
+            // Mysterious portals
             PrefabCreator.CreateObjectPrefab<MysteriousPortal>("Mysterious Portal", "mysterious_portal");
             PrefabCreator.CreateObjectPrefab<CrazyMysteriousPortal>("Crazy Mysterious Portal", "crazy_mysterious_portal");
 
-            //Plates
-
+            // Plates
             PrefabCreator.CreatePlate<PressurePlate>("plate");
             PrefabCreator.CreatePlate<InvisibilityPlate>("invisibility_plate");
             PrefabCreator.CreatePlate<AccelerationPlate>("acceleration_plate");
@@ -832,34 +822,23 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabCreator.CreatePlate<KitchenStove>("kitchen_stove");
             PrefabCreator.CreatePlate<JohnnyKitchenStove>("johnny_kitchen_stove");
 
-            //plates end
-
-            //triggers
-
+            // Triggers
             PrefabCreator.CreateTrigger<NoPlatesCooldownTrigger>("no_plates_cooldown");
             PrefabCreator.CreateTrigger<PitStopOverridesTrigger>("pit_stop_overrides");
 
-            //triggers end
-
-            //spelling
-
+            // Spelling
             PrefabCreator.CreateObjectPrefab<SymbolMachine>("SymbolMachine", "symbol_machine");
-
             string alphabet = "abcdefghijklmnopqrstuvwxyz";
-            
             for (int i = 0; i < alphabet.Length; i++)
             {
                 ApiManager.CreateNewSpelloon(alphabet[i].ToString(),
                     AssetStorage.sprites["adv_balloon_" + alphabet[i]]);
             }
-            //spelling end
 
             PrefabCreator.CreateObjectPrefab<TeleportationHole>("Teleportation Hole", "teleportation_hole");
             PrefabCreator.CreateObjectPrefab<Reaper>("Farm Reaper", "farm_reaper");
             PrefabCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_flag");
             PrefabCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_points_flag", variant: 2);
-
-            PrefabCreator.CreateObjectPrefab<PairsComparator>("PairsComparator", "pairs_comparator");
 
             GameObject cornSign = new GameObject("Corn Sign");
             ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_corn_sign1"])
@@ -876,34 +855,24 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeEntities()
         {
-            //Mysterious Teleporter
-            PrefabCreator.CreateObjectPrefab<MysteriousTeleporterProjectile>("Mysterious Teleporter", "mysterious_teleporter");
+            // Mysterious Teleporter
+            PrefabCreator.CreateObjectPrefab<MysteriousTeleporterProjectile>("MysteriousTeleporter", "mysterious_teleporter");
+            // Anvil Projectile
+            PrefabCreator.CreateObjectPrefab<AnvilProjectile>("AnvilProjectile", "anvil_projectile");
 
-            //Anvil Projectile
-            PrefabCreator.CreateObjectPrefab<AnvilProjectile>("Anvil Projectile", "anvil_projectile");
-
-            //Own gum
-            Gum gumPre = AssetHelper.LoadAsset<Gum>("Gum");
-
-            Gum gumComp = GameObject.Instantiate(gumPre);
-
+            // Custom gum since original one requires Beans
+            Gum gumComp = GameObject.Instantiate(AssetHelper.LoadAsset<Gum>("Gum"));
             GumProjectile gumProj = gumComp.gameObject.AddComponent<GumProjectile>();
             gumProj.gameObject.ConvertToPrefab(true);
-
             gumProj.Speed = ReflectionHelper.GetValue<float>(gumComp, "speed");
             gumProj.canvas = ReflectionHelper.GetValue<Canvas>(gumComp, "canvas");
             gumProj.moveMod = ReflectionHelper.GetValue<MovementModifier>(gumComp, "moveMod");
             gumProj.playerMod = ReflectionHelper.GetValue<MovementModifier>(gumComp, "playerMod");
             gumProj.groundedSprite = ReflectionHelper.GetValue<GameObject>(gumComp, "groundedSprite");
             gumProj.flyingSprite = ReflectionHelper.GetValue<GameObject>(gumComp, "flyingSprite");
-
             gumProj.InitializePrefab(1);
-
             GameObject.Destroy(gumComp);
-
             ObjectStorage.Objects.Add("gum", gumProj.gameObject);
-
-            //gum end
 
             PrefabCreator.CreateEntity<Fan>(new EntityBuilder()
                 .SetName("Fan")

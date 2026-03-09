@@ -70,14 +70,13 @@ namespace BaldisBasicsPlusAdvanced.Compats
             }
         }
 
-        internal static void Initialize()
+        internal static void OnModLoadingStarted()
         {
             MethodInfo method = typeof(CompatibilityModule)
-                .GetMethod("Initialize", AccessTools.all);
+                .GetMethod("OnModLoadingStarted", AccessTools.all);
             for (int i = 0; i < modules.Count; i++)
             {
                 bool isIntegrable = modules[i].IsIntegrable();
-
                 if (isIntegrable)
                 {
                     method.Invoke(modules[i], null);
@@ -92,6 +91,16 @@ namespace BaldisBasicsPlusAdvanced.Compats
                     modules.RemoveAt(i);
                     i--;
                 }
+            }
+        }
+
+        internal static void Initialize()
+        {
+            MethodInfo method = typeof(CompatibilityModule)
+                .GetMethod("Initialize", AccessTools.all);
+            for (int i = 0; i < modules.Count; i++)
+            {
+                method.Invoke(modules[i], null);
             }
         }
 

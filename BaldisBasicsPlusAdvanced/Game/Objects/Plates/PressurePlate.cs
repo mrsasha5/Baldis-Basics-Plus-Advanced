@@ -12,15 +12,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         {
             base.Set(val);
             this.on = val;
+            foreach (IButtonReceiver buttonReceiver in buttonReceivers)
+            {
+                buttonReceiver.ButtonPressed(on);
+            }
         }
 
         protected override void Pressed(int playerNumber)
         {
             base.Pressed(playerNumber);
-            foreach (IButtonReceiver receiver in buttonReceivers)
-            {
-                receiver.ButtonPressed(!on);
-            }
+            Set(!on);
         }
 
         bool IClickable<int>.ClickableHidden()

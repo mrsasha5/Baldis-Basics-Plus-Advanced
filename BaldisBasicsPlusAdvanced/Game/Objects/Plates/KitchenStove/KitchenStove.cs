@@ -257,27 +257,27 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
         private Pickup InitializePickup()
         {
             Vector3 position = transform.position + Vector3.up * 5f;
-
             Vector3? offset = GetOffset(pickups.Count + 1);
 
             if (offset != null) position += (Vector3)offset;
 
             Pickup _pickup = Instantiate(AssetStorage.pickup, position, Quaternion.identity, transform);
 
-            //I hate current pickup code base
+            // I hate current pickup code base
             PickupClickOverrider controllerPre = _pickup.gameObject.AddComponent<PickupClickOverrider>();
             controllerPre.stove = this;
 
-            GameObject pickupObj = _pickup.gameObject;
+            /*GameObject pickupObj = _pickup.gameObject;
             Destroy(_pickup);
             Pickup pickup = pickupObj.AddComponent<Pickup>();
             _pickup.CopyAllValuesTo(pickup);
-
             controllerPre.pickup = pickup;
-
             pickups.Add(pickup);
+            return pickup;*/
 
-            return pickup;
+            controllerPre.pickup = _pickup;
+            pickups.Add(_pickup);
+            return _pickup;
         }
 
         public void CreatePickup(ItemObject item)

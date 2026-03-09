@@ -44,7 +44,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
         {
             entity.ExternalActivity.moveMods.Add(moveMod);
 
-            invincibleEffect = true; //add immunity!
+            invincibleEffect = true; // Immunity for the player.
 
             if (owner == ControllerOwner.Player)
             {
@@ -55,31 +55,35 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             {
                 entity.ExternalActivity.moveMods.Add(zeroMoveMod);
             }
-
             forward = entity.transform.forward;
         }
 
         public override void VirtualTriggerEnter(Collider other)
         {
             base.VirtualTriggerEnter(other);
-
             if (other.tag == "NPC" && other.TryGetComponent(out Entity entity))
             {
                 NPC npc = other.GetComponent<NPC>();
-                NpcControllerSystem controllerSystem = npc.GetControllerSystem();
-                controllerSystem.CreateController(out FrozennessController frozennessController);
-                frozennessController.SetTime(10f);
+                if (ReflEvent_IsFreezable(npc))
+                {
+                    NpcControllerSystem controllerSystem = npc.GetControllerSystem();
+                    controllerSystem.CreateController(out FrozennessController frozennessController);
+                    frozennessController.SetTime(10f);
+                }
 
-                entity.AddForce(new Force(forward, pushSpeed, pushAcceleration));
-                ec.GetAudMan().PlaySingle(AssetStorage.sounds["bang"]);
-                ec.MakeNoise(entity.transform.position, 64);
+                if (ReflEvent_IsPushable(npc))
+                {
+                    entity.AddForce(new Force(forward, pushSpeed, pushAcceleration));
+                    ec.GetAudMan().PlaySingle(AssetStorage.sounds["bang"]);
+                    ec.MakeNoise(entity.transform.position, 64); //like First Prize
+                    ReflEvent_OnIceBootsHit(npc, pm);
+                }
             }
         }
 
         public override void VirtualUpdate()
         {
             base.VirtualUpdate();
-
             UpdateSpeed();
             moveMod.movementAddend = forward * speed;
 
@@ -89,17 +93,20 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 return;
             }
 
-            if (speed > minSpeedToBreak && Physics.Raycast(entity.transform.position, forward, out hit, distanceToBreak, 
-                LayerHelper.ignorableCollidableObjects))
+            if (speed > minSpeedToBreak && Physics.Raycast(entity.transform.position, forward, out hit, distanceToBreak, LayerHelper.ignorableCollidableObjects))
             {
                 if (hit.transform.tag == "Window" && hit.transform.TryGetComponent(out Window window) && !window.IsOpen)
                 {
-                    window.Break(true);
+                    if (ReflEvent_IsPushable(window))
+                    {
+                        window.Break(true);
+                        ReflEvent_OnIceBootsHit(window, pm);
+                    }
                 }
             }
 
-            if (speed > minSpeedToBreak && Physics.Raycast(entity.transform.position, forward, out hit, distanceToBreak, 
-                LayerHelper.ignorableCollidableObjects, QueryTriggerInteraction.Ignore) && !hit.collider.isTrigger)
+            if (speed > minSpeedToBreak && Physics.Raycast(entity.transform.position, forward, out hit, distanceToBreak, LayerHelper.ignorableCollidableObjects, QueryTriggerInteraction.Ignore)
+            && !hit.collider.isTrigger)
             {
                 BreakBoots(AssetStorage.sounds["bang"]);
                 ec.MakeNoise(entity.transform.position, 64);
@@ -136,6 +143,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
 
                 ec.GetAudMan().PlaySingle(soundToPlay);
                 entity.ExternalActivity.moveMods.Remove(moveMod);
+
                 broken = true;
             }
         }
@@ -145,5 +153,24 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             base.SetToDestroy();
             BreakBoots();
         }
+
+        private void ReflEvent_OnIceBootsHit(object @object, PlayerManager pm)
+        {
+            ReflectionHelper.NoCache_UseMethod(@object, "Adv_OnIceBootsHit", pm);
+        }
+
+        private bool ReflEvent_IsFreezable(object @object)
+        {
+            object isFreezable = ReflectionHelper.NoCache_UseMethod(@object, "Adv_IsFreezable");
+            return isFreezable == null || ((bool)isFreezable);
+        }
+
+
+        private bool ReflEvent_IsPushable(object @object)
+        {
+            object isPushable = ReflectionHelper.NoCache_UseMethod(@object, "Adv_IsPushable");
+            return isPushable == null || ((bool)isPushable);
+        }
+
     }
 }

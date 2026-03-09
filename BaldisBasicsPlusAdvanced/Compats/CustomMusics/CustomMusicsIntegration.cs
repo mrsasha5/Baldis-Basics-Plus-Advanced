@@ -21,7 +21,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics
         protected override void OnAssetsPostLoad()
         {
             base.OnAssetsPostLoad();
-
             MIDIHolder[] holders = 
                 MusicRegister.AddMIDIsFromDirectory(MidiDestiny.Schoolhouse, AssetHelper.modPath + "Audio/Music/Floors");
             holders = holders.AddRangeToArray(

@@ -3,6 +3,7 @@ using System.Reflection;
 
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
+    // Planned to be destroyed completely since this terrible solution was made by me for weird reason
     internal class ReflectionHelper
     {
         public static object UseMethod(object instance, string methodName, params object[] parameters)
@@ -10,7 +11,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             return Traverse.Create(instance).Method(methodName, parameters).GetValue();
         }
 
-        //Still ignoring ReflectionSetVariable from API because I don't need logs about missing method in special cases
         public static object NoCache_UseMethod(object instance, string methodName, params object[] parameters)
         {
             MethodInfo method = instance.GetType().GetMethod(methodName, AccessTools.all);
@@ -19,11 +19,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
                 method.Invoke(instance, parameters);
             }
             return null;
-        }
-
-        public static object GetValue(object instance, string fieldName)
-        {
-            return Traverse.Create(instance).Field(fieldName).GetValue();
         }
 
         public static T GetValue<T>(object instance, string fieldName)

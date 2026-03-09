@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -14,6 +13,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
     {
         private static FieldInfo _buttonAnimator = AccessTools.Field(typeof(ElevatorScreen), "buttonAnimator");
         private static FieldInfo _buttonLabel = AccessTools.Field(typeof(ElevatorScreen), "buttonLabel");
+        private static FieldInfo _skipButton = AccessTools.Field(typeof(ElevatorScreen), "skipButton");
 
         [HarmonyPatch("Update")]
         [HarmonyTranspiler]
@@ -51,6 +51,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             TMP_Text buttonLabel = (TMP_Text)_buttonLabel.GetValue(ElevatorAdditionsPatch.elvScreen);
             buttonAnimator.Play("ButtonRise", -1, 0f);
             buttonLabel.text = LocalizationManager.Instance.GetLocalizedText("But_Play!");
+            ((GameObject)_skipButton.GetValue(ElevatorAdditionsPatch.elvScreen)).SetActive(CoreGameManager.Instance.sceneObject.skippable);
         }
     }
 }

@@ -15,12 +15,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 {
     internal class LevelLoaderIntegration
     {
-
-        private const string minVersion = "1.6.0.0";
+        private const string MIN_VERSION = "1.10.0.0";
 
         public static void Initialize()
         {
-            if (Chainloader.PluginInfos[IntegrationManager.levelLoaderId].Metadata.Version < new Version(minVersion))
+            if (Chainloader.PluginInfos[IntegrationManager.levelLoaderId].Metadata.Version < new Version(MIN_VERSION))
             {
                 ObjectCreator.CauseCrash(new Exception("Level Loading system is outdated, please update it!"));
             }

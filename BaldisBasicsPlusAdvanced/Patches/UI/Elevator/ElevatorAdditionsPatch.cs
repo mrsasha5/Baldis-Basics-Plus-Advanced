@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
 namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 {
-    //I would override prefab, but Mystman copied that in MainMenu and overriding prefab is not affecting instance from MainMenu
+    // I would override prefab, but Mystman copied that in MainMenu and overriding prefab is not affecting instance from MainMenu
     [HarmonyPatch(typeof(ElevatorScreen))]
     internal class ElevatorAdditionsPatch
     {

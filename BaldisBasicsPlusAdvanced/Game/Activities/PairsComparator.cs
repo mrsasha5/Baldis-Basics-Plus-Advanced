@@ -169,6 +169,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             renderers[1].transform.localPosition = Vector3.up * -4.95f;
             arrow = renderers[1].transform;
 
+            // Own hanging sign
+            Animator sign = Instantiate(AssetHelper.LoadAsset<Animator>("ActivityExteriorSign"));
+            sign.transform.SetParent(transform, false);
+            sign.transform.localPosition = Vector3.up * -4f;
+            sign.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+            this.ReflectionSetValue("exteriorSigns", new List<Animator>() { sign });
+
+            // Outside sign
             this.ReflectionSetValue("exteriorSignPrefab", PrefabCreator.CreateActivityWallSign("ActivityExteriorSign_PairsComparator", 
                 AssetStorage.sprites["PairsComparator_WallSign_Right"], AssetStorage.sprites["PairsComparator_WallSign_Left"]));
 
@@ -198,11 +206,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             room.ec.AddActivity(this);
         }
 
-        public override void SetPower(bool val)
-        {
-            base.SetPower(val);
-        }
-
         public override void SetBonusMode(bool val)
         {
             base.SetBonusMode(val);
@@ -213,7 +216,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         public override void Completed(int player, bool correct)
         {
             base.Completed(player, correct);
-
             collider.enabled = false;
             StartCoroutine(BalloonPopper());
         }
@@ -221,11 +223,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         public override void ReInit()
         {
             base.ReInit();
-
             List<int> usedSums = new List<int>();
-
             int counter = balloonAmmount / 2;
-
             while (counter > 0)
             {
                 List<PotentialPairBalloonData> _values = new List<PotentialPairBalloonData>(values);
@@ -325,36 +324,50 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
         public void Clicked(int player)
         {
-            PairsComparatorData chosenPair = balloonData[this.chosenPair];
+            PairsComparatorData _chosenPair = balloonData[chosenPair];
             if (!ClickableHidden())
             {
-                bool isUnusedDataFound = false;
+                int nonLockedPairsLeft = 0;
+                int lastPairIndex = 0;
                 bool correct = true;
-                foreach (PairsComparatorData data in balloonData)
+                for (int i = 0; i < balloonData.Count; i++)
                 {
-                    if (!data.locked && chosenPair.balloon != data.balloon)
+                    if (!balloonData[i].locked && _chosenPair.balloon != balloonData[i].balloon)
                     {
-                        isUnusedDataFound = true;
+                        nonLockedPairsLeft++;
+                        lastPairIndex = i;
                     }
 
-                    if (!data.locked && chosenPair.totalValue > data.totalValue && chosenPair.totalValue != data.totalValue)
+                    if (!balloonData[i].locked && _chosenPair.totalValue > balloonData[i].totalValue && 
+                        _chosenPair.totalValue != balloonData[i].totalValue)
                     {
                         correct = false;
-                        break;
                     }
                 }
 
                 pulling = true;
-                StartCoroutine(ActionCompleter(player, correct, !isUnusedDataFound, 1f));
-                StartCoroutine(PulleyAnimator());
+                // Player does not need anymore click last pair to complete activity
+                // This change is made since Match Activity follows the same rule beginning from 0.14
+                if (nonLockedPairsLeft == 1 && correct)
+                {
+                    StartCoroutine(ActionCompleter(lastPairIndex, player, correct, false, 1f));
+                    StartCoroutine(ActionCompleter(chosenPair, player, correct, true, 1f));
+                    StartCoroutine(PulleyAnimator());
+                }
+                else
+                {
+                    StartCoroutine(ActionCompleter(chosenPair, player, correct, false, 1f));
+                    StartCoroutine(PulleyAnimator());
+                }
+                
             }
         }
 
-        private IEnumerator ActionCompleter(int player, bool correct, bool finalAction, float delay)
+        private IEnumerator ActionCompleter(int index, int player, bool correct, bool finalAction, float delay)
         {
-            PairsComparatorData chosenPair = balloonData[this.chosenPair];
+            PairsComparatorData chosenPair = balloonData[index];
             chosenPair.locked = true;
-            balloonData[this.chosenPair] = chosenPair;
+            balloonData[index] = chosenPair;
 
             while (delay > 0f)
             {
@@ -384,7 +397,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                     room.functions.OnActivityProgress();
                     CoreGameManager.Instance.AddPoints(bonusMode ? bonusPointsPerPair : pointsPerPair, 0, true);
                 }
-
+                CoreGameManager.Instance.GetPlayer(0).plm.AddStamina(CoreGameManager.Instance.GetPlayer(0).plm.StaminaMax, limited: true);
                 BaseGameManager.Instance.PleaseBaldi(baldiPause, rewardSticker: true);
             }
             else

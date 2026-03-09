@@ -32,7 +32,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
         public static List<GameObject> GetVisualPrefabsFrom(string type)
         {
             List<GameObject> prefabs = new List<GameObject>();
-
             for (int i = 0; i < visualPrefabs.Count; i++)
             {
                 if (visualPrefabs[i].builder == type)
@@ -40,7 +39,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                     prefabs.Add(visualPrefabs[i].visualPrefab);
                 }
             }
-
             return prefabs;
         }
 
@@ -352,23 +350,37 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 counter--;
             }
 
-            //Advanced MMs
-            GameObject advancedMMVisual = 
-                EditorInterface.AddActivityVisual("adv_advanced_math_machine", ObjectStorage.Objects["advanced_math_machine"]);
-            BoxCollider mmCollider = ObjectStorage.Objects["advanced_math_machine"].transform.Find("Model").GetComponent<BoxCollider>();
+            // Advanced MMs
+            GameObject advancedMMVisual = EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectStorage.Objects["advanced_math_machine"]);
+            BoxCollider mmCollider = advancedMMVisual.transform.Find("Model").GetComponent<BoxCollider>();
+            GameObject advancedCornerMMVisual = EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectStorage.Objects["advanced_math_machine_corner"]);
+            BoxCollider cornerMmCollider = advancedCornerMMVisual.transform.Find("Model").GetComponent<BoxCollider>();
 
-            GameObject advancedCornerMMVisual =
-                EditorInterface.AddActivityVisual("adv_advanced_math_machine_corner", ObjectStorage.Objects["advanced_math_machine_corner"]);
-            BoxCollider cornerMmCollider = 
-                ObjectStorage.Objects["advanced_math_machine_corner"].transform.Find("Model").GetComponent<BoxCollider>();
+            advancedMMVisual.gameObject.layer = LevelStudioPlugin.editorInteractableLayer;
+            advancedCornerMMVisual.gameObject.layer = LevelStudioPlugin.editorInteractableLayer;
+            mmCollider.gameObject.layer = LevelStudioPlugin.editorInteractableLayer;
+            cornerMmCollider.gameObject.layer = LevelStudioPlugin.editorInteractableLayer;
+            UnityEngine.Object.DestroyImmediate(advancedMMVisual.transform.Find("Buffer").gameObject);
+            UnityEngine.Object.DestroyImmediate(advancedCornerMMVisual.transform.Find("Buffer").gameObject);
 
-            BoxCollider ammCollider = advancedMMVisual.AddComponent<BoxCollider>();
-            ammCollider.size = mmCollider.size;
-            ammCollider.center = mmCollider.center;
+            MovableObjectInteraction movableObjectInteraction1 = mmCollider.gameObject.AddComponent<MovableObjectInteraction>();
+            movableObjectInteraction1.allowedRotations = RotateAxis.Yaw;
+            movableObjectInteraction1.allowedAxis = MoveAxis.All;
+            mmCollider.gameObject.AddComponent<EditorRendererContainer>()
+                .AddRendererRange(advancedMMVisual.GetComponentsInChildren<Renderer>(), "none");
+            mmCollider.gameObject.AddComponent<EditorDeletableObject>().renderContainer =
+                mmCollider.gameObject.GetComponent<EditorRendererContainer>();
 
-            BoxCollider cornerAmmCollider = advancedCornerMMVisual.AddComponent<BoxCollider>();
-            cornerAmmCollider.size = cornerMmCollider.size;
-            cornerAmmCollider.center = cornerMmCollider.center;
+            MovableObjectInteraction movableObjectInteraction2 = cornerMmCollider.gameObject.AddComponent<MovableObjectInteraction>();
+            movableObjectInteraction2.allowedRotations = RotateAxis.Yaw;
+            movableObjectInteraction2.allowedAxis = MoveAxis.All;
+            cornerMmCollider.gameObject.AddComponent<EditorRendererContainer>()
+                .AddRendererRange(advancedCornerMMVisual.GetComponentsInChildren<Renderer>(), "none");
+            cornerMmCollider.gameObject.AddComponent<EditorDeletableObject>().renderContainer =
+                cornerMmCollider.gameObject.GetComponent<EditorRendererContainer>();
+
+            LevelStudioPlugin.Instance.activityDisplays.Add("adv_advanced_math_machine", advancedMMVisual);
+            LevelStudioPlugin.Instance.activityDisplays.Add("adv_advanced_math_machine_corner", advancedCornerMMVisual);
 
             EditorInterface.AddObjectVisual("adv_farm_finish_flag", ObjectStorage.Objects["farm_flag"], true)
                 .GetComponentInChildren<SpriteRenderer>().RemoveBillboard();

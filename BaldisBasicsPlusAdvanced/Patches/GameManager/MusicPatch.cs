@@ -10,7 +10,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameManager
     [HarmonyPatch]
     internal class MusicPatch
     {
-
         public static Dictionary<LevelType, List<string>> musicNames = new Dictionary<LevelType, List<string>>();
 
         private static bool methodsLocked;
@@ -57,7 +56,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameManager
         [HarmonyPatch(typeof(MusicManager))]
         private class MusicManagerSpecialPatch
         {
-
             [HarmonyPatch("PlayMidi", new Type[] { typeof(string), typeof(float), typeof(bool) })]
             [HarmonyPrefix]
             private static bool OnPlayMidi()
@@ -71,9 +69,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameManager
             {
                 return !methodsLocked;
             }
-
         }
-
-
     }
 }
