@@ -50,15 +50,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             const float pixelsPerUnit = 27f;
 
             entity.gameObject.SetRigidbody();
-
             this.entity = entity;
-
             gameObject.GetComponent<CapsuleCollider>().height = 5f;
-
             rotator = entity.gameObject.AddComponent<SpriteRotator>();
-
-            ReflectionHelper.SetValue<SpriteRenderer>(rotator, "spriteRenderer", GetComponentInChildren<SpriteRenderer>());
-
+            rotator.ReflectionSetValue("spriteRenderer", GetComponentInChildren<SpriteRenderer>());
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
 
             animator = gameObject.AddComponent<CustomRotatedSpriteAnimator>();

@@ -44,8 +44,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         protected bool trackingPlayer;
 
-        protected bool popping;
-
         protected bool revealing;
 
         protected bool unrevealing;
@@ -137,20 +135,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         public void Pop()
         {
-            if (!popping)
+            if (trackingPlayer)
             {
-                popping = true;
-                if (trackingPlayer)
-                {
-                    OnDropped();
-                }
-
-                floater.Entity.Enable(val: false);
-                floater.Entity.SetActive(value: false);
-                Instantiate(explosionPre).transform.position = transform.position;
-                if (destroyOnPop)
-                    Destroy(gameObject);
+                OnDropped();
             }
+            floater.Entity.Enable(val: false);
+            floater.Entity.SetActive(value: false);
+            Instantiate(explosionPre).transform.position = transform.position;
+            if (destroyOnPop)
+                Destroy(gameObject);
         }
 
         private IEnumerator Tracker(PlayerManager player, int playerNumber)

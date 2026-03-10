@@ -2,7 +2,6 @@
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.RewiredCustomManager;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
-using BaldisBasicsPlusAdvanced.SaveSystem;
 using BaldisBasicsPlusAdvanced.SaveSystem.Data;
 using BaldisBasicsPlusAdvanced.SaveSystem.Managers;
 using MTM101BaldAPI.OptionsAPI;
@@ -56,6 +55,9 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
             Image background = CreateImage(null, "ButtonsBackground", Vector3.up * -40f + Vector3.left * 12f, new Vector2(325f, 195f));
             background.gameObject.AddComponent<Mask>().showMaskGraphic = false;
+
+            CreateText("TipText", "Adv_Options_KeyBindings_Warning", new Vector3(-25f, -158f, 0f), BaldiFonts.ComicSans12,
+                TextAlignmentOptions.Left, new Vector2(300f, 50f), Color.black);
 
             StandardMenuButton arrowUpButton =
                 CreateButton(delegate

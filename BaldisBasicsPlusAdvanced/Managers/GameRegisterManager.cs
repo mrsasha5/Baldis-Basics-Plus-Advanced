@@ -364,8 +364,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 enumName: "Bread",
                 flags: ItemFlags.MultipleUse,
                 tags: new string[] { TagStorage.FOOD },
-                smallSpriteKey: "Bread_Small",
-                largeSpriteKey: "Bread_Large",
+                smallSpriteKey: "PieceOfBread_Small",
+                largeSpriteKey: "PieceOfBread_Large",
                 generatorCost: 35,
                 price: 550,
                 itemMeta: bread2.GetMeta()

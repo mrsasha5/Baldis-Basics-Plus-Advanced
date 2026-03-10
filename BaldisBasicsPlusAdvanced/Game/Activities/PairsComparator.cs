@@ -332,14 +332,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                 bool correct = true;
                 for (int i = 0; i < balloonData.Count; i++)
                 {
-                    if (!balloonData[i].locked && _chosenPair.balloon != balloonData[i].balloon)
+                    if (!balloonData[i].locked && balloonData[i].balloon != _chosenPair.balloon)
                     {
                         nonLockedPairsLeft++;
                         lastPairIndex = i;
                     }
 
                     if (!balloonData[i].locked && _chosenPair.totalValue > balloonData[i].totalValue && 
-                        _chosenPair.totalValue != balloonData[i].totalValue)
+                        balloonData[i].totalValue != _chosenPair.totalValue)
                     {
                         correct = false;
                     }
@@ -352,14 +352,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                 {
                     StartCoroutine(ActionCompleter(lastPairIndex, player, correct, false, 1f));
                     StartCoroutine(ActionCompleter(chosenPair, player, correct, true, 1f));
-                    StartCoroutine(PulleyAnimator());
                 }
                 else
                 {
                     StartCoroutine(ActionCompleter(chosenPair, player, correct, false, 1f));
-                    StartCoroutine(PulleyAnimator());
                 }
-                
+                StartCoroutine(PulleyAnimator());
             }
         }
 

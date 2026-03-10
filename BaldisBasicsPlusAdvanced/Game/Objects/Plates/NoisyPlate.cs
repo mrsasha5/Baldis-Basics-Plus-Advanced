@@ -18,9 +18,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         private float cooldown;
 
         [SerializeField]
-        private float resetFacultyColorTime;
-
-        [SerializeField]
         private int points;
 
         [SerializeField]
@@ -46,8 +43,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
             cooldown = 60f;
             generosity = 1;
             points = 30;
-            
-            resetFacultyColorTime = 10f;
         }
 
         protected override void SetValues(PlateData data)

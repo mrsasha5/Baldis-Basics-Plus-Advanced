@@ -3,6 +3,7 @@ using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
+using BaldisBasicsPlusAdvanced.Compats.RewiredCustomManager;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using BaldisBasicsPlusAdvanced.Generation;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -17,13 +18,11 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.OptionsAPI;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.SaveSystem;
+using Rewired;
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
-using UnityEngine;
 using static BepInEx.BepInDependency;
 
 namespace BaldisBasicsPlusAdvanced
@@ -47,6 +46,8 @@ namespace BaldisBasicsPlusAdvanced
         internal static ManualLogSource Logging => Instance.Logger;
 
         internal static CultureInfo StandardCultureInfo => CultureInfo.GetCultureInfo("eu");
+
+        internal static bool LoadingFinished { get; private set; }
 
         private static Harmony harmony;
 
@@ -88,6 +89,7 @@ namespace BaldisBasicsPlusAdvanced
 
             AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English", Language.English);
             AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English/Compats", Language.English);
+            Rewired.ReInput.ControllerConnectedEvent += OnControllerConnected;
         }
 
         private static IEnumerator ModPostLoader()
@@ -157,6 +159,7 @@ namespace BaldisBasicsPlusAdvanced
             }
 
             GC.Collect();
+            LoadingFinished = true;
         }
 
         private IEnumerator OnAssetsPreLoad()
@@ -237,18 +240,15 @@ namespace BaldisBasicsPlusAdvanced
             GenerationManager.LoadHardcodedGenerationData();
             yield return "Initializing integration modules...";
             IntegrationManager.Initialize();
-
             GC.Collect();
-
-            yield break;
         }
 
         private void PrepareSettingsMenu()
         {
             CustomOptionsCore.OnMenuInitialize += delegate (OptionsMenu menu, CustomOptionsHandler handler)
             {
-                handler.AddCategory<ExtraOptionsMenu>("Adv_Options_KeyBindings");
-                handler.AddCategory<KeyBindingsOptionsMenu>("Adv_Options_KeyBindings_Warning");
+                handler.AddCategory<ExtraOptionsMenu>("Adv_Options_ExtraSettings");
+                handler.AddCategory<KeyBindingsOptionsMenu>("Adv_Options_KeyBindings");
             };
         }
 
@@ -280,5 +280,19 @@ namespace BaldisBasicsPlusAdvanced
             return notif;
         }
 
+        private static void OnControllerConnected(ControllerStatusChangedEventArgs args)
+        {
+            ReInput.ControllerConnectedEvent -= OnControllerConnected;
+            Instance.StartCoroutine(ControllerChecker());
+        }
+
+        private static IEnumerator ControllerChecker()
+        {
+            while (!LoadingFinished) yield return null;
+            if (!IntegrationManager.IsActive<RewiredPlusIntegration>())
+            {
+                NotificationManager.Instance.Queue("Adv_Notif_ControllerWarning", AssetStorage.sounds["buzz_elv"], time: 15f, isForced: true);
+            }
+        }
     }
 }

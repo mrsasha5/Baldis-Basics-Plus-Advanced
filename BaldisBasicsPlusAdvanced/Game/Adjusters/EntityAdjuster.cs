@@ -3,9 +3,7 @@ using HarmonyLib;
 using MTM101BaldAPI;
 using MTM101BaldAPI.ObjectCreation;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Adjusters
@@ -138,7 +136,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Adjusters
             this.layer = LayerHelper.LayerFromName(layer);
             return this;
         }
-
 
         public EntityAdjuster SetLayerCollisionMask(LayerMask mask)
         {
