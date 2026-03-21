@@ -4,6 +4,7 @@ using BaldisBasicsPlusAdvanced.Compats;
 using BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio;
 using BaldisBasicsPlusAdvanced.Compats.RewiredCustomManager;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using BaldisBasicsPlusAdvanced.Generation;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -59,8 +60,10 @@ namespace BaldisBasicsPlusAdvanced
             PrepareSettingsMenu();
             ModdedSaveGame.AddSaveHandler(LevelDataManager.Instance);
             GeneratorManagement.Register(this, GenerationModType.Addend, GeneratorPatchingManager.RegisterMainLevelData);
+            GeneratorManagement.Register(this, GenerationModType.Finalizer, GenerationManager.PatchSceneObjectOnFinalize);
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), LoadingEventOrder.Pre);
-            LoadingEvents.RegisterOnAssetsLoaded(Info, ModPostLoader(), LoadingEventOrder.Post);
+            LoadingEvents.RegisterOnAssetsLoaded(Info, GenericModLoader(OnAssetsPostLoad()), LoadingEventOrder.Post);
+            LoadingEvents.RegisterOnAssetsLoaded(Info, GenericModLoader(OnAssetsFinalLoad()), LoadingEventOrder.Final);
 
 #if BETA
             MTM101BaldiDevAPI.AddWarningScreen(
@@ -89,51 +92,17 @@ namespace BaldisBasicsPlusAdvanced
             Rewired.ReInput.ControllerConnectedEvent += OnControllerConnected;
         }
 
-        private static IEnumerator ModPostLoader()
+        private static IEnumerator OnAssetsFinalLoad()
         {
-            IEnumerator assetsLoading = OnAssetsPostLoad();
-            bool move = true;
-            while (move)
-            {
-                try
-                {
-                    move = assetsLoading.MoveNext();
-                }
-                catch (Exception e)
-                {
-                    Logging.LogWarning($"Exception occured on state: {assetsLoading.Current.ToString()}");
-                    ObjectCreator.CauseCrash(e);
-                }
-                yield return assetsLoading.Current;
-            }
-        }
+            yield return 1;
 
-        private IEnumerator ModLoader()
-        {
-            if (!Directory.Exists(AssetHelper.modPath))
+            yield return "Patching some rooms...";
+            foreach (RoomAsset room in AssetHelper.LoadAssets<RoomAsset>())
             {
-                ObjectCreator.CauseCrash(new Exception("Assets folder is missing!"));
-            }
-            AssetManagerCore.PreInitialize();
-
-            IEnumerator assetsLoading = OnAssetsPreLoad();
-            bool move = true;
-            while (move)
-            {
-                try
+                if (room.roomFunctionContainer.GetFunctions()?.Find(x => x is CraneRoomFunction) != null)
                 {
-                    move = assetsLoading.MoveNext();
+                    room.wallTex = AssetStorage.textures["NewWhiteBricksWall"];
                 }
-                catch (Exception e)
-                {
-                    if (assetsLoading.Current != null)
-                    {
-                        Logging.LogWarning($"Exception occured on state: {assetsLoading.Current.ToString()}");   
-                    } else Logging.LogWarning($"Exception occured on null state!");
-
-                    ObjectCreator.CauseCrash(e);
-                }
-                yield return assetsLoading.Current;
             }
         }
 
@@ -288,6 +257,54 @@ namespace BaldisBasicsPlusAdvanced
             if (!IntegrationManager.IsActive<RewiredPlusIntegration>())
             {
                 NotificationManager.Instance.Queue("Adv_Notif_ControllerWarning", AssetStorage.sounds["buzz_elv"], time: 15f, isForced: true);
+            }
+        }
+
+        private static IEnumerator GenericModLoader(IEnumerator enumerator)
+        {
+            bool move = true;
+            while (move)
+            {
+                try
+                {
+                    move = enumerator.MoveNext();
+                }
+                catch (Exception e)
+                {
+                    Logging.LogWarning($"Exception occured on state: {enumerator.Current.ToString()}");
+                    ObjectCreator.CauseCrash(e);
+                }
+                yield return enumerator.Current;
+            }
+        }
+
+        private IEnumerator ModLoader()
+        {
+            if (!Directory.Exists(AssetHelper.modPath))
+            {
+                ObjectCreator.CauseCrash(new Exception("Assets folder is missing!"));
+            }
+            AssetManagerCore.PreInitialize();
+
+            IEnumerator assetsLoading = OnAssetsPreLoad();
+            bool move = true;
+            while (move)
+            {
+                try
+                {
+                    move = assetsLoading.MoveNext();
+                }
+                catch (Exception e)
+                {
+                    if (assetsLoading.Current != null)
+                    {
+                        Logging.LogWarning($"Exception occured on state: {assetsLoading.Current.ToString()}");
+                    }
+                    else Logging.LogWarning($"Exception occured on null state!");
+
+                    ObjectCreator.CauseCrash(e);
+                }
+                yield return assetsLoading.Current;
             }
         }
     }

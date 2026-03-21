@@ -21,7 +21,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
         {
             if (Chainloader.PluginInfos[IntegrationManager.levelLoaderId].Metadata.Version < new Version(MIN_VERSION))
             {
-                ObjectCreator.CauseCrash(new Exception("Level Loading system is outdated, please update it!"));
+                ObjectCreator.CauseCrash(new Exception($"Level Loading system is outdated. Min version must equal or be higher than {MIN_VERSION}."));
             }
 
             foreach (string objectName in ObjectStorage.ItemObjects.Keys)
@@ -45,7 +45,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                     string key = "adv_" + name;
                     LevelLoaderPlugin.Instance.basicObjects.Add(key, plate.gameObject);
                 }
-            
             }
 
             InitializeEvents();
@@ -309,6 +308,11 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 AssetHelper.TextureFromFile("Textures/Rooms/CornField/Adv_Thick_Corn_Wall.png"));
             LevelLoaderPlugin.Instance.roomTextureAliases.Add(
                 "adv_corn_floor", AssetHelper.LoadAsset<Texture2D>("ground2"));
+
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("adv_green_bricks", AssetStorage.textures["GreenBricks"]);
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("adv_new_white_bricks_wall", AssetStorage.textures["NewWhiteBricksWall"]);
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("adv_parquet_floor", AssetStorage.textures["ParquetFloor"]);
+            LevelLoaderPlugin.Instance.roomTextureAliases.Add("adv_tiled_ceiling", AssetStorage.textures["TiledCeiling"]);
         }
 
     }

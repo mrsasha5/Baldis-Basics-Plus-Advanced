@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Generation.Data;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
@@ -10,10 +8,8 @@ using Newtonsoft.Json;
 
 namespace BaldisBasicsPlusAdvanced.Generation
 {
-    //This class is going fully replace GeneratorPatchingManager someday
     internal class GenerationManager
     {
-
         private static List<BaseSpawnData> data = new List<BaseSpawnData>();
 
         public static List<BaseSpawnData> Data => data;
@@ -24,6 +20,11 @@ namespace BaldisBasicsPlusAdvanced.Generation
             {
                 data.Add(JsonConvert.DeserializeObject<T>(File.ReadAllText(path)));
             }
+        }
+
+        public static void PatchSceneObjectOnFinalize(string name, int floor, SceneObject sceneObject)
+        {
+
         }
 
         public static void LoadGenerationDataFromFiles()

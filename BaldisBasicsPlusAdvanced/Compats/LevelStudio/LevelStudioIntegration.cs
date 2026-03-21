@@ -156,6 +156,10 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             LevelStudioPlugin.Instance.selectableTextures.Add("adv_advanced_class_wall");
             LevelStudioPlugin.Instance.selectableTextures.Add("adv_advanced_class_ceiling");
             LevelStudioPlugin.Instance.selectableTextures.Add("adv_corn_wall");
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_green_bricks");
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_new_white_bricks_wall");
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_parquet_floor");
+            LevelStudioPlugin.Instance.selectableTextures.Add("adv_tiled_ceiling");
 
             #endregion
 
@@ -574,6 +578,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new TextureContainer("adv_corn_floor", "adv_corn_wall", "None"));
             LevelStudioPlugin.Instance.defaultRoomTextures.Add("adv_class_compass_comparator",
                 LevelStudioPlugin.Instance.defaultRoomTextures["class"]);
+
+            LevelStudioPlugin.Instance.defaultRoomTextures["crane"].wall = "adv_new_white_bricks_wall";
         }
 
         public static void LoadEditorAssets()

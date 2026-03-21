@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Helpers;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -10,7 +11,6 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
     [JsonObject]
     public class CellTextureSerializableData
     {
-
         public Dictionary<int, int> weights;
 
         public int[] bannedFloors;
@@ -34,8 +34,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
 
             CellTextureSerializableData instance = 
                 JsonConvert.DeserializeObject<CellTextureSerializableData>(File.ReadAllText(jsonPath));
-            instance.tex = AssetHelper.TextureFromFile(path, overrideBasePath: true);
-
+            instance.tex = AssetStorage.LoadModTexture(Path.GetFileNameWithoutExtension(path), path, overrideBasePath: true);
             return instance;
         }
 

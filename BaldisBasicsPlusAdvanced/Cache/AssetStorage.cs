@@ -878,13 +878,14 @@ namespace BaldisBasicsPlusAdvanced.Cache
             sprites.Add(key, sprite);
         }
 
-        public static void LoadModTexture(string key, string path, bool doNotUnload = false)
+        public static Texture2D LoadModTexture(string key, string path, bool doNotUnload = false, bool overrideBasePath = false)
         {
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading: " + path);
 #endif
-            Texture2D texture = AssetHelper.TextureFromFile("Textures/" + path);
+            Texture2D texture = AssetHelper.TextureFromFile(overrideBasePath ? path : "Textures/" + path, overrideBasePath);
             textures.Add(key, texture);
+            return texture;
         }
 
         public static void LoadGameObject(string key, string name, bool doNotUnload = false)

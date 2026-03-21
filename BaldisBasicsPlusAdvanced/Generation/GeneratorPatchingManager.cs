@@ -11,15 +11,14 @@ using System.Linq;
 
 namespace BaldisBasicsPlusAdvanced.Generation
 {
-    //Legacy class
+    // Legacy class that'll die soon
     internal class GeneratorPatchingManager
     {
-
         private static bool recipesLoaded;
 
         private static void RegisterLevelData(string name, int floor, CustomLevelObject levelObject)
         {
-            //Cannot remind why I did put it here, lol
+            // Cannot remind why I did put it here, lol
             if (!recipesLoaded)
             {
                 ApiManager.LoadKitchenStoveRecipesFromFolder(AdvancedCore.Instance.Info,
@@ -104,7 +103,7 @@ namespace BaldisBasicsPlusAdvanced.Generation
                 }
             }
 
-            //For halls
+            // For halls
             foreach (CustomRoomData roomData in ObjectStorage.CustomRoomData)
             {
                 if (roomData.isAHallway != null && !(bool)roomData.isAHallway) continue;
@@ -137,22 +136,14 @@ namespace BaldisBasicsPlusAdvanced.Generation
 
         public static void RegisterMainLevelData(string name, int floor, SceneObject mainLevel)
         {
-            GenerationManager.RegisterSceneObjectData(name, floor, mainLevel); //New system (WiP)
+            GenerationManager.RegisterSceneObjectData(name, floor, mainLevel); // New system (WiP)
             floor++;
 
             if (name == "END") return;
 
-            if (mainLevel.levelObject != null)
+            foreach (CustomLevelObject levelObject in mainLevel.GetCustomLevelObjects())
             {
-                RegisterLevelData(name, floor, (CustomLevelObject)mainLevel.levelObject);
-            }
-
-            if (mainLevel.randomizedLevelObject.Length > 0)
-            {
-                foreach (WeightedLevelObject weightedLevelObj in mainLevel.randomizedLevelObject)
-                {
-                    RegisterLevelData(name, floor, (CustomLevelObject)weightedLevelObj.selection);
-                }
+                RegisterLevelData(name, floor, levelObject);
             }
 
 #if DEBUG
@@ -235,6 +226,5 @@ namespace BaldisBasicsPlusAdvanced.Generation
         }
 
 #endif
-
         }
 }
