@@ -7,7 +7,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
 {
     public class AnvilProjectile : BaseHeightableProjectile
     {
-
         protected override void SetEntityValues()
         {
             base.SetEntityValues();
@@ -16,16 +15,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             SetEntityTrigger(3f);
         }
 
-        public override void EntityTriggerEnter(Collider other, bool validCollision)
+        public override void EntityTriggerEnter(Entity otherEntity, Collider other, bool validCollision)
         {
-            base.EntityTriggerEnter(other, validCollision);
+            base.EntityTriggerEnter(otherEntity, other, validCollision);
             if (validCollision && flying)
             {
-                if (other.TryGetComponent(out Entity entity))
+                if (otherEntity != null)
                 {
-                    entity.Squish(10f);
-                    //cus nobody shouldn't disable environment
-                    entity.SetSpeedEffect(0.25f, 10f);
+                    otherEntity.Squish(10f);
+                    otherEntity.SetSpeedEffect(0.25f, 10f);
                     ObjectCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true)
                         .PlaySingle(AssetStorage.sounds["adv_metal_blow"]);
                 }
@@ -33,7 +31,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
                 {
                     window.Break(makeNoise: false);
                 }
-                
             }
         }
 

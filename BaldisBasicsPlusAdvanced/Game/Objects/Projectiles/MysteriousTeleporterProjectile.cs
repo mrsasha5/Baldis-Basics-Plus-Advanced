@@ -16,8 +16,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             SetEntityTrigger(1.5f);
         }
 
-        public override void EntityTriggerEnter(Collider other, bool validCollision)
+        public override void EntityTriggerEnter(Entity otherEntity, Collider other, bool validCollision)
         {
+            base.EntityTriggerEnter(otherEntity, other, validCollision);
             if (validCollision && flying && other.isTrigger && other.CompareTag("NPC") && other.TryGetComponent(out NPC npc)
                 && PlayerIsLauncher && ReflEvent_OnMysteriousTeleporterPreHit(npc, (PlayerManager)launcher))
             {

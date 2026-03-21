@@ -145,17 +145,17 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
 
         }
 
-        public virtual void EntityTriggerEnter(Collider other, bool validCollision)
+        public virtual void EntityTriggerEnter(Entity otherEntity, Collider other, bool validCollision)
         {
             
         }
 
-        public virtual void EntityTriggerExit(Collider other, bool validCollision)
+        public virtual void EntityTriggerExit(Entity otherEntity, Collider other, bool validCollision)
         {
             
         }
 
-        public virtual void EntityTriggerStay(Collider other, bool validCollision)
+        public virtual void EntityTriggerStay(Entity otherEntity, Collider other, bool validCollision)
         {
             
         }

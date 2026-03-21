@@ -15,7 +15,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 {
     internal class LevelLoaderIntegration
     {
-        private const string MIN_VERSION = "1.10.0.0";
+        private const string MIN_VERSION = "1.11.0.0";
 
         public static void Initialize()
         {

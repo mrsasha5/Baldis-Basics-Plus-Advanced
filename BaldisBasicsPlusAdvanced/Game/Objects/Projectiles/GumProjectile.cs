@@ -96,9 +96,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             }
         }
 
-        public override void EntityTriggerEnter(Collider other, bool validCollision)
+        public override void EntityTriggerEnter(Entity otherEntity, Collider other, bool validCollision)
         {
-            base.EntityTriggerEnter(other, validCollision);
+            base.EntityTriggerEnter(otherEntity, other, validCollision);
             if (!flying || !validCollision)
             {
                 return;

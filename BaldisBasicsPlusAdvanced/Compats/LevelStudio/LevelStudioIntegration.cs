@@ -88,7 +88,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             guid = GUID;
             priority = 127;
             versionInfo = new VersionInfo(this)
-                .SetMinVersion("1.5.0.0", exceptCurrent: false);
+                .SetMinVersion("1.8.0.0", exceptCurrent: false);
 
             CreateConfigValue("Level Studio",
                 "Adds support for Level Studio like new objects, structures and other content which can be used on your levels!");

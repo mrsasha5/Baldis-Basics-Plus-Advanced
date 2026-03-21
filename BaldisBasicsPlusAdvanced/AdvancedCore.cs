@@ -37,7 +37,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "BB+ Advanced Edition";
 
-        public const string version = "0.3.4";
+        public const string version = "0.3.4.1";
 
         private static AdvancedCore instance;
 
@@ -53,12 +53,9 @@ namespace BaldisBasicsPlusAdvanced
 
         private void Awake()
         {
-            harmony = new Harmony(modId);
-
             instance = this;
-
+            harmony = new Harmony(modId);
             ConfigManager.Initialize();
-
             PrepareSettingsMenu();
             ModdedSaveGame.AddSaveHandler(LevelDataManager.Instance);
             GeneratorManagement.Register(this, GenerationModType.Addend, GeneratorPatchingManager.RegisterMainLevelData);
@@ -117,7 +114,6 @@ namespace BaldisBasicsPlusAdvanced
             {
                 ObjectCreator.CauseCrash(new Exception("Assets folder is missing!"));
             }
-
             AssetManagerCore.PreInitialize();
 
             IEnumerator assetsLoading = OnAssetsPreLoad();

@@ -150,12 +150,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
             }
         }
 
-        public void EntityTriggerEnter(Collider other, bool validCollision)
+        public void EntityTriggerEnter(Entity otherEntity, Collider other, bool validCollision)
         {
             if (validCollision && ready && this.target == null && !other.TryGetComponent(out GroundDough _)
-                && other.TryGetComponent(out Entity target) && target.Grounded)
+                && otherEntity != null && otherEntity.Grounded)
             {
-                this.target = target;
+                target = otherEntity;
                 audMan.PlaySingle(audOnSlip);
 
                 target.AddForce(new Force(target.transform.forward, 50f, -50f));
@@ -181,12 +181,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
             gauge?.Deactivate();
         }
 
-        public void EntityTriggerStay(Collider other, bool validCollision)
+        public void EntityTriggerStay(Entity otherEntity, Collider other, bool validCollision)
         {
 
         }
 
-        public void EntityTriggerExit(Collider other, bool validCollision)
+        public void EntityTriggerExit(Entity otherEntity, Collider other, bool validCollision)
         {
             
         }

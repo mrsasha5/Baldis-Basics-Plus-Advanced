@@ -20,8 +20,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Adjusters
 
         private static readonly FieldInfo _collisionLayerMask = AccessTools.Field(typeof(Entity), "collisionLayerMask");
 
-        private static readonly FieldInfo _defaultLayer = AccessTools.Field(typeof(Entity), "defaultLayer");
-
         private string entityName = "Unnamed";
 
         private float baseRadius = 1f;
@@ -57,7 +55,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Adjusters
             capsuleCollider2.enabled = triggerRadius > 0f;
             _trigger.SetValue(entity, capsuleCollider2);
             _collider.SetValue(entity, capsuleCollider);
-            _defaultLayer.SetValue(entity, obj.layer);
             _collisionLayerMask.SetValue(entity, collisionLayerMask);
             _externalActivity.SetValue(entity, obj.AddComponent<ActivityModifier>());
 

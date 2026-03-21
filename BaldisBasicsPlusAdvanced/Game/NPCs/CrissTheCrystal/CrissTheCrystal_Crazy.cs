@@ -58,9 +58,9 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
             }
         }
 
-        public override void OnStateTriggerEnter(Collider other, bool validCollision)
+        public override void OnStateTriggerEnter(Entity otherEntity, Collider other, bool validCollision)
         {
-            base.OnStateTriggerEnter(other, validCollision);
+            base.OnStateTriggerEnter(otherEntity, other, validCollision);
             if (validCollision && other.TryGetComponent(out Entity entity))
             {
                 entity.AddForce(new Force((entity.transform.position - criss.transform.position).normalized, 50f, -50f));
