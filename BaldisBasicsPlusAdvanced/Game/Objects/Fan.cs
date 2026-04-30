@@ -54,14 +54,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             gameObject.GetComponent<CapsuleCollider>().height = 5f;
             rotator = entity.gameObject.AddComponent<SpriteRotator>();
             rotator.ReflectionSetValue("spriteRenderer", GetComponentInChildren<SpriteRenderer>());
-            audMan = gameObject.AddComponent<PropagatedAudioManager>();
-
+            audMan = ObjectCreator.InitPropagatedAudioManager(gameObject);
             animator = gameObject.AddComponent<CustomRotatedSpriteAnimator>();
 
             Sprite[][] sprites;
-            
             sprites = new Sprite[2][];
-
             sprites[0] = new Sprite[]
             {
                 AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_2.png", pixelsPerUnit),
@@ -166,7 +163,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         {
             broken = false;
             time = 20f;
-            PlayerInteractionController.Instance.SetGameTip(0);
         }
 
         private IEnumerator Turning()
@@ -205,18 +201,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         public void ClickableSighted(int player)
         {
-            if (ClickableHidden()) return;
-
-            ItemManager itm = Singleton<CoreGameManager>.Instance.GetPlayer(0).itm;
-            if (broken && itm.items[itm.selectedItem].GetMeta().tags.Contains("adv_repair_tool"))
-            {
-                PlayerInteractionController.Instance.SetGameTip(0, "Adv_Tip_Repair");
-            }
         }
 
         public void ClickableUnsighted(int player)
         {
-            PlayerInteractionController.Instance.SetGameTip(0);
         }
 
         public bool ClickableHidden()

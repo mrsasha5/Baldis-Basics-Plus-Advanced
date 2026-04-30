@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
+    [Obsolete("Voting event is removed.")]
     public class TurnOffFacultyNoisyPlatesTopic : BaseTopic
     {
         public override string Desc => "Adv_SC_Topic_NoisyPlates".Localize();

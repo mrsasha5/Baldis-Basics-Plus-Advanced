@@ -122,7 +122,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             collider.radius = 3f;
             collider.isTrigger = true;
 
-            motorAudMan = ObjectCreator.CreatePropagatedAudMan(Vector3.zero);
+            motorAudMan = ObjectCreator.CreatePropagatedAudioManager(Vector3.zero);
             motorAudMan.transform.SetParent(transform, false);
 
             audMan = gameObject.AddComponent<PropagatedAudioManager>();
@@ -307,8 +307,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             {
                 pm.ec.GetAudMan().PlaySingle(AssetStorage.sounds["error_maybe"]);
             }
-
-            PlayerInteractionController.Instance.SetGameTip(player);
         }
 
         private bool SetMoving()
@@ -407,12 +405,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         public void ClickableSighted(int player)
         {
-            if (!ClickableHidden()) PlayerInteractionController.Instance.SetGameTip(player, "Adv_Tip_ZiplineHanger");
+            
         }
 
         public void ClickableUnsighted(int player)
         {
-            PlayerInteractionController.Instance.SetGameTip(player);
+            
         }
     }
 }

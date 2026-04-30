@@ -8,31 +8,33 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
     public class TeleportationBombItem : Item, IPrefab
     {
         [SerializeField]
-        private Entity entity;
+        private SoundObject audDrop;
 
         [SerializeField]
-        private AudioManager audMan;
+        private Entity entity;
 
         [SerializeField]
         private CapsuleCollider capsuleCollider;
 
         [SerializeField]
-        private float startsIn;
-
         private float endHeight = 0.5f;
 
-        private float throwSpeed = 80f;
+        [SerializeField]
+        private float throwSpeed = 150f;
 
+        [SerializeField]
         private float gravity = 15f;
 
-        private EnvironmentController ec;
-
+        [SerializeField]
         private float height = 5f;
+
+        private EnvironmentController ec;
 
         private bool ready;
 
         public void InitializePrefab(int variant)
         {
+            audDrop = AssetStorage.sounds["banana_slip"];
             entity = new EntityAdjuster(gameObject)
                 .SetName("Teleportation Bomb")
                 .SetLayer("StandardEntities")
@@ -42,16 +44,12 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                 .AddDefaultRenderBaseFunction(AssetStorage.sprites["TeleportationBomb_Large"])
                 .Build();
             entity.SetGrounded(false);
-            audMan = gameObject.AddComponent<PropagatedAudioManager>();
             capsuleCollider = GetComponent<CapsuleCollider>();
             capsuleCollider.height = 5f;
-            startsIn = 3f;
         }
 
         private void Update()
         {
-            if (startsIn <= 0f) return;
-
             if (!ready)
             {
                 height -= gravity * Time.deltaTime * ec.EnvironmentTimeScale;
@@ -61,23 +59,18 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
                     height = endHeight;
                     ready = true;
                     entity.SetGrounded(value: true);
-                    audMan.PlaySingle(AssetStorage.sounds["teleport"]);
                 }
                 entity.SetHeight(height);
             }
 
-            if (startsIn > 0f)
+            if (ready)
             {
-                startsIn -= Time.deltaTime * ec.EnvironmentTimeScale;
-                if (startsIn <= 0f)
-                {
-                    TeleportationHole bomb = Instantiate(ObjectStorage.Objects["teleportation_hole"].GetComponent<TeleportationHole>());
-                    Vector3 pos = transform.position;
-                    pos.y = 5f;
-                    bomb.transform.position = pos;
-                    bomb.Initialize(ec, endsIn: 10f);
-                    Destroy(gameObject);
-                }
+                TeleportationHole bomb = Instantiate(ObjectStorage.Objects["teleportation_hole"].GetComponent<TeleportationHole>());
+                Vector3 pos = transform.position;
+                pos.y = 5f;
+                bomb.transform.position = pos;
+                bomb.Initialize(ec, endsIn: 10f);
+                Destroy(gameObject);
             }
         }
 
@@ -88,6 +81,8 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             entity.AddForce(new Force(Singleton<CoreGameManager>.Instance.GetCamera(pm.playerNumber).transform.forward, throwSpeed, 
                 -throwSpeed));
             entity.CopyStatusEffects(pm.plm.Entity);
+            CoreGameManager.Instance.audMan.PlaySingle(audDrop);
+            pm.RuleBreak("Bullying", 1f);
             return true;
         }
     }

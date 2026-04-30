@@ -16,7 +16,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Characters
         private static void OnTriggerEnter(FirstPrize_Active __instance, Collider other, ref MoveModsManager ___moveModsMan)
         {
             if (other.CompareTag("NPC") &&
-                OptionsDataManager.ExtraSettings.GetValue<bool>("first_prize_extensions"))
+                ExtraSettingsManager.ExtraSettings.GetValue<bool>("first_prize_extensions"))
             {
                 NPCMetadata meta = other.GetComponent<NPC>().GetMeta();
 
@@ -35,7 +35,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Characters
         private static void OnTriggerExit(FirstPrize_Active __instance, Collider other, ref MoveModsManager ___moveModsMan)
         {
             if (other.CompareTag("NPC") && 
-                OptionsDataManager.ExtraSettings.GetValue<bool>("first_prize_extensions"))
+                ExtraSettingsManager.ExtraSettings.GetValue<bool>("first_prize_extensions"))
             {
                 NPCMetadata meta = other.GetComponent<NPC>().GetMeta();
 

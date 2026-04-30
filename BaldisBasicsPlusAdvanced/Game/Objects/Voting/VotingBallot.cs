@@ -17,6 +17,7 @@ using UnityEngine.AI;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
 {
+    [Obsolete("Voting event is removed.")]
     public class VotingBallot : MonoBehaviour, IPrefab
     {
         [SerializeField]

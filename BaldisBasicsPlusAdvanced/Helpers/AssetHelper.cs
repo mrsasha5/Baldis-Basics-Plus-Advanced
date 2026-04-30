@@ -1,16 +1,32 @@
-﻿using System;
+﻿using BepInEx.Bootstrap;
+using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
-using UnityEngine;
-using System.Linq;
-using BepInEx.Bootstrap;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using MTM101BaldAPI;
+using System.Linq;
+using System.Reflection;
+using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
     public class AssetHelper
     {
+        public static Texture2D LoadEmbeddedTexture(string name, TextureFormat format = TextureFormat.RGBA32)
+        {
+            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
+            Texture2D tex = null;
+            using (BinaryReader reader = new BinaryReader(stream))
+            {
+                tex = new Texture2D(2, 2, format, mipChain: false);
+                tex.name = Path.GetFileNameWithoutExtension(name);
+                tex.LoadImage(reader.ReadBytes((int)stream.Length));
+                tex.filterMode = FilterMode.Point;
+            }
+            stream.Dispose();
+            return tex;
+        }
+
         public static Sprite SpriteFromFile(string path, float pixelsPerUnit = 1f, Vector2? center = null, bool overrideBasePath = false)
         {
             Texture2D texture = AssetLoader.TextureFromFile(overrideBasePath ? path : modPath + path);

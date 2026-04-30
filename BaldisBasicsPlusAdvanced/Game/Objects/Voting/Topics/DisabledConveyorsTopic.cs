@@ -1,10 +1,12 @@
 ﻿using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches.Objects;
+using System;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
+    [Obsolete("Voting event is removed.")]
     public class DisabledConveyorsTopic : BaseTopic
     {
 

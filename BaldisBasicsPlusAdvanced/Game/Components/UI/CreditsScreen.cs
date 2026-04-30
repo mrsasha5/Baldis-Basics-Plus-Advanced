@@ -17,7 +17,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 {
     public class CreditsScreen : MonoBehaviour, IPrefab
     {
-
         [SerializeField]
         private AudioManager musMan;
 
@@ -130,10 +129,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             switchBgTime = 10f;
             fadeSpeed = 0.5f;
 
-            musMan = ObjectCreator.CreateAudMan(Vector3.zero);
-            musMan.transform.SetParent(transform, false);
+            musMan = ObjectCreator.CreateAudioManager(Vector3.zero, distanceIndependent: true, transform);
             musMan.ignoreListenerPause = true;
             musMan.useUnscaledPitch = true;
+            musMan.ReflectionSetValue("usesSfx", false);
+            musMan.ReflectionSetValue("usesMusic", true);
 
             audMusics = new List<SoundObject>()
             {
@@ -384,10 +384,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
             paused = pauses > 0;
 
-            //AW MYSTMAN!!! USE UNPAUSE!!!!
-            //musMan.Pause(paused);
-            if (paused) musMan.audioDevice.Pause();
-            else musMan.audioDevice.UnPause();
+            if (paused) musMan.audioSourceManager.Pause();
+            else musMan.audioSourceManager.GetAudioSource(SoundType.Music).UnPause();
 
             MusicManager.Instance.PauseMidi(paused);
 
@@ -463,12 +461,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
                     }
                 }
 
-                if (!musMan.audioDevice.isPlaying && !MusicManager.Instance.MidiPlaying)
+                if (!musMan.audioSourceManager.isPlaying && !MusicManager.Instance.MidiPlaying)
                 {
                     if (soundObjectIndex <= audMusics.Count - 1)
                     {
-                        musMan.audioDevice.clip = audMusics[soundObjectIndex].soundClip;
-                        musMan.audioDevice.Play();
+                        musMan.audioSourceManager.GetAudioSource(SoundType.Music).clip = audMusics[soundObjectIndex].soundClip;
+                        musMan.audioSourceManager.Play();
                         soundObjectIndex++;
                         //isMidiPlaying = false;
                     }
@@ -508,182 +506,3 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
     }
 }
-
-//I decided it's really not worth this
-/*
-        private class FrameState
-        {
-
-            public Vector3 textPosition;
-
-            public int audioIndex = -1;
-
-            public int midiIndex = -1;
-
-            public int bgIndex;
-
-            public float audioTime;
-
-            public float midiTime;
-
-            public Color backgroundColor;
-
-            public float time;
-
-            public float totalTime;
-
-            public bool switchingBg;
-
-        }
-
-        private List<FrameState> frames = new List<FrameState>();
-
-        //for skip back button
-
-        private float resetTimeMultiplierTime;
-
-        private int timeMultiplier = 1;
-
-        //ends
-
-        private void Update()
-        {
-            if (resetTimeMultiplierTime > 0f)
-            {
-                resetTimeMultiplierTime -= Time.unscaledDeltaTime;
-                if (resetTimeMultiplierTime <= 0f)
-                {
-                    timeMultiplier = 1;
-                }
-            }
-
-            //if (!paused)
-            {
-                totalTime += Time.unscaledDeltaTime;   
-
-                if ((int)totalTime != timeInt) SaveFrame();
-
-                timeInt = (int)totalTime;
-
-                .........................
-            }
-        }
-
-        private void Move(float seconds)
-        {
-            float totalTimeToFind = totalTime + seconds;
-            if (seconds >= 0f)
-            {
-                //Not implemented btw, haha!
-            }
-            else
-            {
-                float[] totalTimes = new float[frames.Count];
-
-                for (int i = 0; i < totalTimes.Length; i++)
-                {
-                    totalTimes[i] = frames[i].totalTime;
-                }
-
-                float nearestTime = MathHelper.FindNearestValue(totalTimes, totalTimeToFind);
-                int index = 0;
-                for (int i = 0; i < frames.Count; i++)
-                {
-                    if (frames[i].totalTime == nearestTime)
-                    {
-                        index = i;
-                        break;
-                    }
-                }
-
-                resetTimeMultiplierTime = 5f;
-                timeMultiplier++;
-
-                LoadFrame(frames[index]);
-            }
-        }
-
-        private void LoadFrame(FrameState frame)
-        {
-            tmpText.transform.position = frame.textPosition;
-            time = frame.time;
-            spriteIndex = frame.bgIndex;
-
-            musMan.FlushQueue(true);
-            MusicManager.Instance.StopMidi();
-
-            if (frame.audioIndex != -1)
-            {
-                soundObjectIndex = frame.audioIndex;
-                musMan.audioDevice.clip = audMusics[frame.audioIndex].soundClip;
-                musMan.audioDevice.time = frame.audioTime;
-            }
-
-            if (frame.midiIndex != -1)
-            {
-                midiIndex = frame.midiIndex;
-                MusicManager.Instance.PlayMidi(midiNames[midiIndex], false);
-                MusicManager.Instance.MidiPlayer.MPTK_Position = frame.midiTime;
-            }
-
-            backgroundImage.sprite = backgroundSprites[spriteIndex - 1];
-            if (frame.switchingBg)
-            {
-                StopAllCoroutines();
-                backgroundImage.color = frame.backgroundColor;
-                StartCoroutine(BackgroundSwitcher());
-            }
-            else
-            {
-                StopAllCoroutines();
-                backgroundImage.color = new Color(1f, 1f, 1f, 0.5f);
-                switchingBg = false;
-            }
-
-            //frameLoaded = true;
-        }
-
-        private void SaveFrame()
-        {
-            FrameState frame = new FrameState();
-
-            frame.time = time;
-            frame.totalTime = totalTime;
-            frame.bgIndex = spriteIndex;
-
-            if (!isMidiPlaying)
-            {
-                frame.audioIndex = soundObjectIndex - 1;
-                frame.audioTime = musMan.audioDevice.time;
-            }
-            else
-            {
-                frame.midiIndex = midiIndex - 1;
-                frame.midiTime = (float)MusicManager.Instance.MidiPlayer.MPTK_Position;
-            }
-
-            frame.textPosition = tmpText.transform.position;
-
-            if (switchingBg)
-            {
-                frame.switchingBg = true;
-                frame.backgroundColor = backgroundImage.color;
-            }
-
-            frames.Add(frame);
-        }
-
-            skipBackButton.OnPress.AddListener(
-                delegate
-                {
-                    Move(-10f * timeMultiplier);
-                }
-            );
-
-            skipForwardButton.OnPress.AddListener(
-                delegate
-                {
-                    Move(30f);
-                }
-            );
-*/

@@ -16,7 +16,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 {
     public class ObjectCreator
     {
-
         public static TextMeshPro CreateTextMesh(BaldiFonts font, Vector2? size = null, Transform parent = null, 
             Vector3? position = null)
         {
@@ -158,29 +157,46 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             return spriteRenderer;
         }
 
-        public static AudioManager CreateAudMan(Vector3 pos)
+        public static AudioManager CreateAudioManager(Vector3 pos, bool distanceIndependent, Transform parent)
         {
             GameObject audMan = new GameObject("AudioManager");
+            if (parent != null) audMan.transform.parent = parent;
             audMan.transform.position = pos;
-            return CreateAudMan(audMan);
+            return InitAudioManager(audMan, distanceIndependent);
         }
 
-        public static AudioManager CreateAudMan(GameObject obj)
+        public static AudioManager InitAudioManager(GameObject obj, bool distanceIndependent)
         {
-            AudioSource audDevice = obj.AddComponent<AudioSource>();
+#warning for some fucking weird reason it does not work properly when prefab is instantiated, only some properties are copied
+            bool active = obj.activeSelf;
+            obj.gameObject.SetActive(false); // Awake() throws an exception since audioDevice is null
+                                             // So using this approach for avoiding it
             AudioManager audMan = obj.AddComponent<AudioManager>();
-            audMan.audioDevice = audDevice;
+            AudioSource audSrc = obj.AddComponent<AudioSource>(); // To avoid crash on Awake()
+            audMan.audioDevice = audSrc;
+            audSrc.rolloffMode = AudioRolloffMode.Custom;
+            if (distanceIndependent)
+            {
+                audMan.audioDevice.spatialBlend = 0f;
+                audMan.positional = false;
+            }
+            else
+            {
+                audMan.audioDevice.spatialBlend = 1f;
+                audMan.audioDevice.maxDistance = 100f;
+            }
+            obj.gameObject.SetActive(active);
             return audMan;
         }
 
-        public static PropagatedAudioManager CreatePropagatedAudMan(Vector3 pos, bool destroyWhenAudioEnds = false)
+        public static PropagatedAudioManager CreatePropagatedAudioManager(Vector3 pos, bool destroyWhenAudioEnds = false)
         {
             GameObject gm = new GameObject("PropagatedAudioManager");
             gm.transform.position = pos;
-            return CreatePropagatedAudMan(gm, destroyWhenAudioEnds);
+            return InitPropagatedAudioManager(gm, destroyWhenAudioEnds);
         }
 
-        public static PropagatedAudioManager CreatePropagatedAudMan(GameObject obj, bool destroyWhenAudioEnds = false)
+        public static PropagatedAudioManager InitPropagatedAudioManager(GameObject obj, bool destroyWhenAudioEnds = false)
         {
             PropagatedAudioManager audMan = obj.AddComponent<PropagatedAudioManager>();
 
@@ -188,26 +204,21 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             {
                 audMan.gameObject.AddComponent<DestroyAudioOnEnd>().Assign(audMan, destroyWithObject: true);
             }
-
             return audMan;
         }
 
         public static void AddChalkCloudEffect(NPC npc, float time, EnvironmentController ec)
         {
             GameObject gm = CreateChalkCloud(npc.transform.position, ec, npc.transform);
-
             TemporaryGameObject temporaryGm = gm.AddComponent<TemporaryGameObject>();
             temporaryGm.Initialize(ec, gm, time);
-            
         }
 
         public static void AddChalkCloudEffect(Transform transform, float time, EnvironmentController ec)
         {
             GameObject gm = CreateChalkCloud(transform.position, ec, transform);
-
             TemporaryGameObject temporaryGm = gm.AddComponent<TemporaryGameObject>();
             temporaryGm.Initialize(ec, gm, time);
-
         }
 
         public static GameObject CreateChalkCloud(Vector3 position, EnvironmentController ec, Transform parent = null)
@@ -281,7 +292,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         public static TimerText CreateBobTimerText(Transform parent)
         {
             Transform textBase = new GameObject("TextBase").transform;
-
             TextMeshPro text = GameObject.Instantiate((TextMeshPro)AssetStorage.texts["total_display"], textBase);
             text.text = "";
             text.gameObject.SetActive(true);
@@ -289,9 +299,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             if (parent != null) textBase.parent = parent;
 
             TimerText bobTimer = text.gameObject.AddComponent<TimerText>();
-
             bobTimer.Setup(text);
-
             return bobTimer;
         }
 

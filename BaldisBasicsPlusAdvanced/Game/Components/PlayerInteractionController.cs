@@ -18,20 +18,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Components
             instance = this;
         }
 
-        public void SetGameTip(int player, string tooltip = null)
-        {
-            if (OptionsDataManager.ExtraSettings.GetValue<bool>("tips_during_game"))
-            {
-                if (tooltip != null)
-                {
-                    Singleton<CoreGameManager>.Instance.GetHud(player).SetTooltip(tooltip);
-                } else
-                {
-                    Singleton<CoreGameManager>.Instance.GetHud(player).CloseTooltip();
-                }
-            }     
-        }
-
         public void SetIgnorePlayerEntitiesInteraction(bool state)
         {
             if (state)

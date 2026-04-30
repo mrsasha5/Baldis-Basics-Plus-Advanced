@@ -91,7 +91,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         private Entity entity;
 
-        //It exists only for fixing cursor on one frame after returning back
+        // It exists only for fixing cursor on one frame after returning back
         private bool showCursor = true;
 
         private bool taken;
@@ -116,13 +116,11 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             handleColor = Color.yellow;
 
-            audMan = ObjectCreator.CreateAudMan(gameObject);
-            motorAudMan = ObjectCreator.CreateAudMan(Vector3.zero);
+            audMan = ObjectCreator.InitAudioManager(gameObject, distanceIndependent: false);
+            motorAudMan = ObjectCreator.CreateAudioManager(Vector3.zero, distanceIndependent: false, transform);
             motorAudMan.name = "Motor";
-            motorAudMan.transform.SetParent(transform, false);
 
             backgrounds = new Texture2D[5];
-
             for (int i = 0; i < backgrounds.Length; i++)
             {
                 backgrounds[i] = AssetStorage.textures["adv_pulley_base" + (i + 1)];

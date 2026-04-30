@@ -17,6 +17,8 @@ namespace BaldisBasicsPlusAdvanced.Menu
     {
         private Dictionary<string, MenuToggle> synchronizatedToggles = new Dictionary<string, MenuToggle>();
 
+        private MenuToggle legacyElevator;
+
         internal static GameObject disableCover;
 
         public override void Build()
@@ -28,17 +30,17 @@ namespace BaldisBasicsPlusAdvanced.Menu
                 nameKey: "Adv_Option_Tips",
                 descKey: "Adv_Option_Tips_Desc",
                 pos: new Vector3(70f, 35f, 0f),
-                width: 250f
-            );
-
-            CreateSynchronizatedToggleButton(
-                synchronizableName: "tips_during_game",
-                nameKey: "Adv_Option_Tips_During_Game",
-                descKey: "Adv_Option_Tips_During_Game_Desc",
-                pos: new Vector3(70f, -5f, 0f),
                 width: 250f,
                 setDisabledCover: true
-            ).Disable(gameInitialized);
+            ).Disable(!ExtraSettingsManager.ExtraSettings.GetValue<bool>("legacy_elevator"));
+
+            legacyElevator = CreateSynchronizatedToggleButton(
+                synchronizableName: "legacy_elevator",
+                nameKey: "Adv_Option_LegacyElevator",
+                descKey: "Adv_Option_LegacyElevator_Desc",
+                pos: new Vector3(70f, -5f, 0f),
+                width: 250f
+            );
 
             CreateSynchronizatedToggleButton(
                 synchronizableName: "particles",
@@ -53,8 +55,9 @@ namespace BaldisBasicsPlusAdvanced.Menu
                 nameKey: "Adv_Option_Elv_Animations",
                 descKey: "Adv_Option_Elv_Animations_Desc",
                 pos: new Vector3(70f, -85f, 0f),
-                width: 250f
-            );
+                width: 250f,
+                setDisabledCover: true
+            ).Disable(!ExtraSettingsManager.ExtraSettings.GetValue<bool>("legacy_elevator"));
 
             CreateSynchronizatedToggleButton(
                 synchronizableName: "first_prize_extensions",
@@ -76,7 +79,7 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
             CreateApplyButton(OnApply);
 
-            if (OptionsDataManager.ExtraSettings.showNotif)
+            if (ExtraSettingsManager.ExtraSettings.showNotif)
             {
                 Image notif =
                     UIHelpers.CreateImage(AssetStorage.sprites["exclamation_point_sheet0"], transform,
@@ -103,11 +106,23 @@ namespace BaldisBasicsPlusAdvanced.Menu
         private void OnApply()
         {
             string[] keys = synchronizatedToggles.Keys.ToArray();
+            if (!legacyElevator.Value)
+            {
+                synchronizatedToggles["tips"].Disable(true);
+                synchronizatedToggles["elevator_animations"].Disable(true);
+                if (synchronizatedToggles["tips"].Value) synchronizatedToggles["tips"].Toggle();
+                if (synchronizatedToggles["elevator_animations"].Value) synchronizatedToggles["elevator_animations"].Toggle();
+            }
+            else
+            {
+                synchronizatedToggles["tips"].Disable(false);
+                synchronizatedToggles["elevator_animations"].Disable(false);
+            }
             for (int i = 0; i < synchronizatedToggles.Count; i++)
             {
-                OptionsDataManager.ExtraSettings.SetValue(keys[i], synchronizatedToggles[keys[i]].Value);
+                ExtraSettingsManager.ExtraSettings.SetValue(keys[i], synchronizatedToggles[keys[i]].Value);
             }
-            OptionsDataManager.Save();
+            ExtraSettingsManager.Save();
             GetComponentInParent<AudioManager>().PlaySingle(AssetStorage.sounds["bell"]);
         }
 
@@ -119,10 +134,9 @@ namespace BaldisBasicsPlusAdvanced.Menu
 
         private MenuToggle CreateSynchronizatedToggleButton(string synchronizableName, string nameKey, string descKey, Vector3 pos, float width, bool setDisabledCover = false)
         {
-            MenuToggle toggle = CreateToggle(synchronizableName, nameKey, OptionsDataManager.ExtraSettings.GetValue<bool>(synchronizableName), pos, width);
+            MenuToggle toggle = CreateToggle(synchronizableName, nameKey, ExtraSettingsManager.ExtraSettings.GetValue<bool>(synchronizableName), pos, width);
 
             if (!string.IsNullOrEmpty(descKey)) AddTooltip(toggle, descKey);
-
             if (!string.IsNullOrEmpty(synchronizableName)) synchronizatedToggles.Add(synchronizableName, toggle);
 
             //DisabledCover
@@ -133,7 +147,6 @@ namespace BaldisBasicsPlusAdvanced.Menu
                 obj.GetComponent<RectTransform>().sizeDelta = new Vector2(100f, 48f);
                 obj.transform.localPosition = Vector3.zero;
             }
-
             return toggle;
         }
     }

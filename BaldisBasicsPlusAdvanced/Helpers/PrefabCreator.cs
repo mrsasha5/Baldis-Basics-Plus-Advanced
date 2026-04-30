@@ -1,16 +1,17 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game;
-using MTM101BaldAPI.Registers;
-using MTM101BaldAPI;
-using UnityEngine;
-using MTM101BaldAPI.ObjectCreation;
-using UnityEngine.UI;
-using BaldisBasicsPlusAdvanced.Game.Objects.SodaMachines;
-using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
-using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Overlay;
 using BaldisBasicsPlusAdvanced.Game.Objects;
-using BaldisBasicsPlusAdvanced.Extensions;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
+using BaldisBasicsPlusAdvanced.Game.Objects.SodaMachines;
+using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
+using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
+using MTM101BaldAPI;
+using MTM101BaldAPI.ObjectCreation;
+using MTM101BaldAPI.Registers;
+using UnityEngine;
+using UnityEngine.UI;
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
     public class PrefabCreator
@@ -92,7 +93,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
             ObjectStorage.Events.Add(enumName, randomEvent);
             return randomEvent;
-
         }
 
         public static SodaMachine CreateVendingMachine(
@@ -151,12 +151,10 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         {
             GameObject gm = new GameObject(name);
             gm.ConvertToPrefab(true);
-
             T builder = gm.AddComponent<T>();
             if (builder is IPrefab) ((IPrefab)builder).InitializePrefab(variant);
 
             ObjectStorage.StructureBuilders.Add(name, builder);
-
             return builder;
         }
 
@@ -164,7 +162,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         {
             GameObject overlay = GameObject.Instantiate(AssetHelper.LoadAsset<GameObject>("GumOverlay"));
             overlay.ConvertToPrefab(setActive);
-
             overlay.name = name;
             Image image = overlay.GetComponentInChildren<Image>();
             image.sprite = sprite;
@@ -173,7 +170,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
             effectsManager.InitializePrefab(image);
 
             ObjectStorage.Overlays.Add(name, overlay.GetComponent<Canvas>());
-
             return overlay;
         }
 
@@ -181,7 +177,6 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         {
             GameObject plateObj = new GameObject(name);
             plateObj.ConvertToPrefab(true);
-
             T plate = plateObj.AddComponent<T>();
             plate.InitializePrefab(variant);
 
@@ -197,21 +192,25 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         {
             GameObject triggerObj = new GameObject(name);
             triggerObj.ConvertToPrefab(true);
-
             T trigger = triggerObj.AddComponent<T>();
             trigger.InitializePrefab(variant);
             
             ObjectStorage.Triggers.Add(name, trigger);
-
             return trigger;
         }
 
         public static T CreateBalloonPrefab<T>(string name, string keyName, int variant = 1) where T : BaseBalloonBehaviour
         {
+            // Oh yeah, more hacks to avoid fucking issues with Awake()
+            bool active = AssetStorage.gameObjects["math_num_0"].activeSelf;
+            AssetStorage.gameObjects["math_num_0"].SetActive(false);
+
             GameObject obj = GameObject.Instantiate(AssetStorage.gameObjects["math_num_0"]);
             obj.name = name;
             GameObject.Destroy(obj.GetComponent<MathMachineNumber>());
             obj.ConvertToPrefab(true);
+
+            AssetStorage.gameObjects["math_num_0"].SetActive(active); // Hacks, hacks!!!
 
             T prefabComponent = obj.AddComponent<T>();
             prefabComponent.InitializePrefab(variant);
@@ -262,11 +261,11 @@ namespace BaldisBasicsPlusAdvanced.Helpers
         public static void CreateFunctionContainerWithRoomFunction<T>(string name, int variant = 1) where T : RoomFunction, new()
         {
             RoomFunctionContainer container = new GameObject(name).AddComponent<RoomFunctionContainer>();
+            container.gameObject.ConvertToPrefab(true);
             T func = RoomHelper.SetupRoomFunction<T>(container);
 
             if (func is IPrefab) ((IPrefab)func).InitializePrefab(variant);
 
-            container.gameObject.ConvertToPrefab(true);
             ObjectStorage.RoomFunctionsContainers.Add(name, container);
         }
 

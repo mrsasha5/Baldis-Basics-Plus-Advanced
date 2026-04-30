@@ -17,7 +17,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu
             {
                 Destroy(notifImage.gameObject);
                 Destroy(this);
-                OptionsDataManager.ExtraSettings.showNotif = false; //invokes first than preservation
+                ExtraSettingsManager.ExtraSettings.showNotif = false; //invokes first than preservation
             }
         }
 

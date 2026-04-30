@@ -7,7 +7,7 @@ using HarmonyLib;
 
 namespace BaldisBasicsPlusAdvanced.Patches.UI
 {
-    //It was removed in 0.10 btw
+    // It was removed in 0.10 btw
     [HarmonyPatch(typeof(Map))]
     internal class MapLegacyFillingPatch
     {
@@ -30,14 +30,14 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI
         {
             CodeMatcher matcher = new CodeMatcher();
             ReflectionHelper.SetValue(
-                matcher, "codes", 
-                instructions.Select((CodeInstruction c) => new CodeInstruction(c)).ToList()); //For context:
-                                                                                              //I can't use constructor
-                                                                                              //Since it contains ILGenerator variable
+                matcher, "codes",
+                instructions.Select((CodeInstruction c) => new CodeInstruction(c)).ToList()); // I can't use constructor
+                                                                                              // Since it contains ILGenerator variable
             CodeInstruction hackyInstruction = matcher
                 .MatchForward(false, new CodeMatch(OpCodes.Beq))
                 .InstructionAt(0);
-            ReflectionHelper.SetValue(hackyInstruction, "opcode", OpCodes.Brfalse_S); //For context: I can't use Label class
+            ReflectionHelper.SetValue(hackyInstruction, "opcode", OpCodes.Brfalse_S); // I can't use Label class
+            // because .NET Standard 2.0
 
             matcher
                 .MatchBack(false, new CodeMatch(OpCodes.Ldarg_0))

@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
-using BaldisBasicsPlusAdvanced.Cache;
+﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
+    [Obsolete("Voting event is removed.")]
     public class OpenVentsTopic : BaseTopic
     {
 
@@ -56,7 +58,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
             base.OnVotingEndedPre(isWin);
             if (isWin)
             {
-                time = Random.Range(120f, 180f);
+                time = UnityEngine.Random.Range(120f, 180f);
                 vents = new List<VentController>();
                 foreach (VentController controller in GameObject.FindObjectsOfType<VentController>())
                 {
@@ -71,7 +73,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
                     pull.transform.SetParent(entrance.gameObject.transform, false);
                     pull.maxForce = 40f;
 
-                    AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(pull.gameObject);
+                    AudioManager audMan = ObjectCreator.InitPropagatedAudioManager(pull.gameObject);
                     audMan.QueueAudio(AssetStorage.sounds["vent_vacuum"]);
                     audMan.QueueAudio(AssetStorage.sounds["vent_travel"]);
                     audMan.SetLoop(true);

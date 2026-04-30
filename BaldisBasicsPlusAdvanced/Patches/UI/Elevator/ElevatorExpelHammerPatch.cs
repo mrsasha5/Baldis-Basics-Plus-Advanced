@@ -23,7 +23,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
     [HarmonyPatch(typeof(ElevatorScreen))]
     internal class ElevatorExpelHammerPatch
     {
-
         public enum Status
         {
             Available,
@@ -119,7 +118,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             shouldInitialize = false;
             if (!Available) return;
             shouldInitialize = true;
-
             //if (IntegrationManager.IsActive<SpatialElevatorIntegration>()) return;
 
             elvScreen = __instance;
@@ -440,7 +438,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
             SetState(false, animate: false);
             
             elvScreen.GetComponent<AudioManager>().PlaySingle(AssetStorage.sounds["adv_boing"]);
-            
         }
 
         private static void AppendButtons()

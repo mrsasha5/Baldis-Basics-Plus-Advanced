@@ -24,7 +24,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
                 {
                     otherEntity.Squish(10f);
                     otherEntity.SetSpeedEffect(0.25f, 10f);
-                    ObjectCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true)
+                    ObjectCreator.CreatePropagatedAudioManager(entity.transform.position, destroyWhenAudioEnds: true)
                         .PlaySingle(AssetStorage.sounds["adv_metal_blow"]);
                 }
                 else if (other.transform.TryGetComponent(out Window window))
@@ -43,7 +43,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
         protected override void Destroy()
         {
             base.Destroy();
-            ObjectCreator.CreatePropagatedAudMan(transform.position, destroyWhenAudioEnds: true)
+            ObjectCreator.CreatePropagatedAudioManager(transform.position, destroyWhenAudioEnds: true)
                 .PlaySingle(AssetStorage.sounds["adv_metal_blow"]);
         }
 

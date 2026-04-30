@@ -57,9 +57,7 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
                 return null;
 
             string jsonData = File.ReadAllText(folderPath + Path.GetFileNameWithoutExtension(path) + ".json");
-
             CustomRoomData roomData = JsonConvert.DeserializeObject<CustomRoomData>(jsonData);
-
             roomData.InheritProperties();
 
             BinaryReader reader = new BinaryReader(File.OpenRead(path));

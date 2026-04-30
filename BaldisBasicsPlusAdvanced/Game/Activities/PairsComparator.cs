@@ -15,7 +15,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
     {
         public CompassBalloon balloon;
 
-        public int totalValue;
+        public float totalValue;
 
         public float rotationAngle;
 
@@ -27,7 +27,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
     {
         public Sprite sprite;
 
-        public int value;
+        public float value;
     }
 
     public class PairsComparator : Activity, IPrefab, IClickable<int>
@@ -46,6 +46,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
         [SerializeField]
         private SoundObject audPull;
+
+        [SerializeField]
+        private SoundObject audReveal;
+
+        [SerializeField]
+        private SoundObject audSelected;
 
         [SerializeField]
         private SphereCollider collider;
@@ -124,6 +130,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             audIncorrect = AssetStorage.sounds["activity_incorrect"];
             audPull = AssetHelper.LoadAsset<SoundObject>("BalloonBuster_Pulley");
             audRespawn = AssetHelper.LoadAsset<SoundObject>("NoteRespawn");
+            audReveal = AssetStorage.sounds["balloon_reveal"];
+            audSelected = AssetHelper.LoadAsset<SoundObject>("Boink");
             baldiPause = 5f;
             balloonAmmount = 8;
             spawnRadius = 20f;
@@ -146,8 +154,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
             Sprite sprite = AssetHelper.SpriteFromFile("Textures/Objects/BluePulley.png", 22f);
 
-            audMan = ObjectCreator.CreatePropagatedAudMan(gameObject);
-            motorMan = ObjectCreator.CreatePropagatedAudMan(new GameObject("MotorMan"));
+            audMan = ObjectCreator.InitPropagatedAudioManager(gameObject);
+            motorMan = ObjectCreator.InitPropagatedAudioManager(new GameObject("MotorMan"));
             motorMan.transform.SetParent(transform, false);
             pulleyRenderer = ObjectCreator.CreateSpriteRenderer(sprite);
             pulleyRenderer.transform.SetParent(transform, false);
@@ -223,7 +231,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         public override void ReInit()
         {
             base.ReInit();
-            List<int> usedSums = new List<int>();
+            List<float> usedSums = new List<float>();
             int counter = balloonAmmount / 2;
             while (counter > 0)
             {
@@ -373,6 +381,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
                 yield return null;
             }
 
+            if (!finalAction)
+                audMan.PlaySingle(audReveal, 1.25f);
             chosenPair.balloon.Reveal(correct);
             chosenPair.balloon.ConnectedBalloon.Reveal(correct);
 
@@ -430,6 +440,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             rotation.y = balloonData[chosenPair].rotationAngle + transform.rotation.eulerAngles.y;
             arrow.rotation = Quaternion.Euler(rotation);
 
+            audMan.PlaySingle(audSelected);
             balloonData[chosenPair].balloon.AnimateSelection();
             balloonData[chosenPair].balloon.ConnectedBalloon.AnimateSelection();
 
@@ -554,12 +565,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
     public class CompassBalloon : BaseBalloonBehaviour
     {
         [SerializeField]
-        private SoundObject audSelected;
-
-        [SerializeField]
-        private AudioManager audMan;
-
-        [SerializeField]
         private Sprite correctSprite;
 
         [SerializeField]
@@ -573,18 +578,16 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
         private bool clickHidden;
 
-        public int value;
+        public float value;
 
         public CompassBalloon ConnectedBalloon => connectedInstance;
 
         public override void InitializePrefab(int variant)
         {
             base.InitializePrefab(variant);
-            audSelected = AssetHelper.LoadAsset<SoundObject>("Boink");
             correctSprite = AssetHelper.SpriteFromFile("Textures/Objects/Balloon_Correct.png", 30f);
             incorrectSprite = AssetHelper.SpriteFromFile("Textures/Objects/Balloon_Incorrect.png", 30f);
 
-            audMan = ObjectCreator.CreatePropagatedAudMan(gameObject);
             offsetAnimationEnabled = false;
             destroyOnPop = false;
 
@@ -614,14 +617,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
 
         public void Reveal(bool correct)
         {
-            audMan.PlaySingle(audReveal);
             PlayRevealAnimation(correct ? correctSprite : incorrectSprite);
             revealed = true;
         }
 
         public void AnimateSelection()
         {
-            audMan.PlaySingle(audSelected);
             StartCoroutine(SelectAnimator());
         }
 

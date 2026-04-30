@@ -58,11 +58,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
             audEat = AssetStorage.sounds["adv_yum"];
 
             entity.gameObject.SetRigidbody();
-
             this.entity = entity;
             entity.SetGrounded(false);
-            audMan = gameObject.AddComponent<PropagatedAudioManager>();
-            ReflectionHelper.SetValue<bool>(audMan, "disableSubtitles", true);
+            audMan = ObjectCreator.InitPropagatedAudioManager(gameObject);
+            audMan.ReflectionSetValue("disableSubtitles", true);
 
             minHeight = 1.55f;
             height = 5f;

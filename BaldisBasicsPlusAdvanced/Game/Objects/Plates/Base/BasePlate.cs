@@ -148,7 +148,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base
 
             gameObject.layer = LayerHelper.ignoreRaycastB;
 
-            audMan = gameObject.AddComponent<PropagatedAudioManager>();
+            audMan = ObjectCreator.InitPropagatedAudioManager(gameObject);
 
             activatedMaterial = new Material(AssetStorage.materials["belt"]);
             deactivatedMaterial = new Material(AssetStorage.materials["belt"]);

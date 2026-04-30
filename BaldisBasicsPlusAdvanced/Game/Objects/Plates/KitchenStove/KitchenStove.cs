@@ -678,15 +678,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove
 
             public void ClickableSighted(int player)
             {
-                if (!ClickableHidden())
-                {
-                    PlayerInteractionController.Instance.SetGameTip(player, "Adv_Tip_KitchenStove");
-                }
+                
             }
 
             public void ClickableUnsighted(int player)
             {
-                PlayerInteractionController.Instance.SetGameTip(player);
+                
             }
         }
 

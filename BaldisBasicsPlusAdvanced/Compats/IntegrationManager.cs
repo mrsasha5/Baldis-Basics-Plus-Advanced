@@ -1,4 +1,5 @@
-﻿using BaldisBasicsPlusAdvanced.Extensions;
+﻿using BaldisBasicsPlusAdvanced.Exceptions;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using HarmonyLib;
 using System;
@@ -11,17 +12,14 @@ namespace BaldisBasicsPlusAdvanced.Compats
 #warning TODO: add special screen when any module breaks
     internal class IntegrationManager
     {
-        public static bool LevelLoaderInstalled => AssetHelper.ModInstalled(levelLoaderId);
+        public static bool LevelLoaderInstalled => AssetHelper.ModInstalled(LEVEL_LOADER_ID);
 
-        public const string levelLoaderId = "mtm101.rulerp.baldiplus.levelstudioloader";
-
-        public const string recommendedCharactersId = "io.github.uncertainluei.baldiplus.recommendedchars";
-
-        public const string carnivalPackId = "mtm101.rulerp.bbplus.carnivalpackroot";
-
-        public const string criminalPackId = "mtm101.rulerp.baldiplus.criminalpackroot";
-
-        public const string piratePackId = "mtm101.rulerp.baldiplus.piratepack";
+        public const string LEVEL_LOADER_ID = "mtm101.rulerp.baldiplus.levelstudioloader";
+        public const string REC_CHARS_ID = "io.github.uncertainluei.baldiplus.recommendedchars";
+        public const string CARNIVAL_PACK_ID = "mtm101.rulerp.bbplus.carnivalpackroot";
+        public const string CRIMINAL_PACK_ID = "mtm101.rulerp.baldiplus.criminalpackroot";
+        public const string PIRATE_PACK_ID = "mtm101.rulerp.baldiplus.piratepack";
+        public const string QOP_ID = "rost.moment.baldiplus.qop";
 
         private static List<CompatibilityModule> modules = new List<CompatibilityModule>();
 
@@ -43,7 +41,6 @@ namespace BaldisBasicsPlusAdvanced.Compats
         internal static void Prepare()
         {
             List<Type> types = Assembly.GetAssembly(typeof(AdvancedCore)).TryGetAllTypes().ToList();
-
             for (int i = 0; i < types.Count; i++)
             {
                 if (!types[i].IsSubclassOf(typeof(CompatibilityModule)))
@@ -54,16 +51,13 @@ namespace BaldisBasicsPlusAdvanced.Compats
             }
             foreach (Type type in types)
             {
-                Object module = Activator.CreateInstance(type, true);
+                object module = Activator.CreateInstance(type, true);
                 modules.Add((CompatibilityModule)module);
             }
             types.Clear();
-
             modules.Sort((m1, m2) => m2.Priority.CompareTo(m1.Priority));
-
             MethodInfo method = typeof(CompatibilityModule)
                 .GetMethod("PreInitialize", AccessTools.all);
-
             for (int i = 0; i < modules.Count; i++)
             {
                 method.Invoke(modules[i], null);
@@ -83,8 +77,13 @@ namespace BaldisBasicsPlusAdvanced.Compats
                 }
                 else if (!isIntegrable && modules[i].IsForced)
                 {
-                    throw new Exception($"Baldi's Basics Plus Advanced Edition. Required dependency is missing!" +
+                    throw new MessageException($"Required dependency is missing!" +
                         $"\nGUID of the integrable mod: {modules[i].Guid}");
+                }
+                else if (modules[i].RequiresCorrectVersion && 
+                    !modules[i].VersionInfo.IsPluginCorrect(out bool versionChecked, out string error) && versionChecked)
+                {
+                    throw new MessageException(error);
                 }
                 else
                 {
@@ -112,6 +111,5 @@ namespace BaldisBasicsPlusAdvanced.Compats
                 method.Invoke(modules[i], null);
             }
         }
-
     }
 }

@@ -2,7 +2,6 @@
 using BaldisBasicsPlusAdvanced.Game.Objects.Projectiles;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI;
-using MTM101BaldAPI.Components;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,9 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
         public void InitializePrefab(int variant)
         {
             InitializeRenderer();
-
-            audMan = gameObject.AddComponent<PropagatedAudioManager>();
-
+            audMan = ObjectCreator.InitPropagatedAudioManager(gameObject);
             cooldownTime = 30f;
             maxUses = 5;
         }

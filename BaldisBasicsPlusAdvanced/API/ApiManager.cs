@@ -35,7 +35,7 @@ namespace BaldisBasicsPlusAdvanced.API
         /// It contains data from options menu "Extra Settings".
         /// Please note that the value will be nullable until player's profile will be loaded.
         /// </summary>
-        public static ExtraSettingsData ExtraSettings => OptionsDataManager.ExtraSettings;
+        public static ExtraSettingsData ExtraSettings => ExtraSettingsManager.ExtraSettings;
 
         #region Kitchen Stove Recipes
 
@@ -251,7 +251,7 @@ namespace BaldisBasicsPlusAdvanced.API
 
         #endregion
 
-        #region Objects (plates, Spelloons)
+        #region Objects (plates, spelloons)
 
         [Obsolete]
         public static T CreatePlate<T>(string name) where T : BasePlate
@@ -275,10 +275,16 @@ namespace BaldisBasicsPlusAdvanced.API
                 return false;
             }
 
+            // Again
+            bool active = AssetStorage.gameObjects["math_num_0"].activeSelf;
+            AssetStorage.gameObjects["math_num_0"].SetActive(false);
+
             MathMachineNumber mathNumComp = GameObject.Instantiate(
                 AssetStorage.gameObjects["math_num_0"].GetComponent<MathMachineNumber>());
             GameObject.Destroy(mathNumComp);
             mathNumComp.gameObject.ConvertToPrefab(true);
+
+            AssetStorage.gameObjects["math_num_0"].SetActive(active);
 
             Spelloon spelloon = mathNumComp.gameObject.AddComponent<Spelloon>();
             spelloon.name = "Spelloon_" + symbol;
@@ -366,8 +372,7 @@ namespace BaldisBasicsPlusAdvanced.API
 
         #region School Council
 
-        /// <param name="pluginInfo"></param>
-        /// <returns>List (new instance).</returns>
+        [Obsolete("Voting event is removed.")]
         public static List<WeightedCouncilTopic> GetAllWeightedSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
         {
             if (!ObjectStorage.Topics.ContainsKey(pluginInfo))
@@ -376,13 +381,13 @@ namespace BaldisBasicsPlusAdvanced.API
             return new List<WeightedCouncilTopic>(ObjectStorage.Topics[pluginInfo]);
         }
 
-        [Obsolete("Use GetAllWeightedSchoolCouncilTopicsFrom!")]
+        [Obsolete("Voting event is removed.")]
         public static List<WeightedCouncilTopic> GetAllWeigthedSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
         {
             return GetAllWeightedSchoolCouncilTopicsFrom(pluginInfo);
         }
 
-        [Obsolete("Use GetAllWeightedSchoolCouncilTopicsFrom!")]
+        [Obsolete("Voting event is removed.")]
         public static List<BaseTopic> GetAllSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
         {
             if (!ObjectStorage.Topics.ContainsKey(pluginInfo))
@@ -399,10 +404,7 @@ namespace BaldisBasicsPlusAdvanced.API
             return topics;
         }
 
-        /// <summary>
-        /// Gets all topics from all mods.
-        /// </summary>
-        /// <returns>List (new instance).</returns>
+        [Obsolete("Voting event is removed.")]
         public static List<BaseTopic> GetAllSchoolCouncilTopics()
         {
             List<BaseTopic> topics = new List<BaseTopic>();
@@ -418,12 +420,7 @@ namespace BaldisBasicsPlusAdvanced.API
             return topics;
         }
 
-        /// <summary>
-        /// Creates a new topic that can appear on the voting event.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="pluginInfo"></param>
-        /// <param name="weight"></param>
+        [Obsolete("Voting event is removed.")]
         public static void CreateSchoolCouncilTopic<T>(PluginInfo pluginInfo, int weight = 100) where T : BaseTopic, new()
         {
             if (!ObjectStorage.Topics.ContainsKey(pluginInfo)) 
@@ -436,11 +433,7 @@ namespace BaldisBasicsPlusAdvanced.API
             });
         }
 
-        /// <summary>
-        /// Unloads all voting topics except provided mods.
-        /// </summary>
-        /// <param name="pluginInfos"></param>
-        /// <returns>Plugins which topics were removed.</returns>
+        [Obsolete("Voting event is removed.")]
         public static List<PluginInfo> UnloadAllSchoolCouncilTopicsExcept(params PluginInfo[] pluginInfos)
         {
             List<PluginInfo> unloadedPlugins = new List<PluginInfo>();
@@ -455,11 +448,7 @@ namespace BaldisBasicsPlusAdvanced.API
             return unloadedPlugins;
         }
 
-        /// <summary>
-        /// Unloads all voting topics from provided mods.
-        /// </summary>
-        /// <param name="pluginInfos"></param>
-        /// <returns>Plugins which topics were removed.</returns>
+        [Obsolete("Voting event is removed.")]
         public static List<PluginInfo> UnloadAllSchoolCouncilTopicsFrom(params PluginInfo[] pluginInfos)
         {
             List<PluginInfo> unloadedPlugins = new List<PluginInfo>();
@@ -474,18 +463,13 @@ namespace BaldisBasicsPlusAdvanced.API
             return unloadedPlugins;
         }
 
-        /// <summary>
-        /// Unloads all voting topics.
-        /// </summary>
+        [Obsolete("Voting event is removed.")]
         public static void UnloadAllSchoolCouncilTopics()
         {
             ObjectStorage.Topics.Clear();
         }
 
-        /// <summary>
-        /// Unloads voting topics by references.
-        /// </summary>
-        /// <param name="topics"></param>
+        [Obsolete("Voting event is removed.")]
         public static void UnloadSchoolCouncilTopics(params BaseTopic[] topics)
         {
             foreach (List<WeightedCouncilTopic> _topics in ObjectStorage.Topics.Values)

@@ -35,15 +35,9 @@ using BaldisBasicsPlusAdvanced.Compats;
 using MTM101BaldAPI.AssetTools;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
 using BaldisBasicsPlusAdvanced.Game.Objects.Portals;
-using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm;
-using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.NPCs;
-using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects;
-using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
 using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
 using BaldisBasicsPlusAdvanced.Game.Activities;
-using PlusStudioLevelFormat;
-using PlusStudioLevelLoader;
 using BaldisBasicsPlusAdvanced.Extensions;
 #endregion
 
@@ -56,10 +50,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeMidis()
         {
-            FarmFieldTripManager.farmTripMusicKey =
-                AssetLoader.MidiFromFile(AssetHelper.modPath + "Audio/Music/FieldTrips/Adv_BSideSkid_CornTime.mid",
-                    "Adv_BSideSkid_CornTime");
-
             if (IntegrationManager.IsActive<CustomMusicsIntegration>()) return;
 
             void LoadFrom(string path, LevelType type)
@@ -133,7 +123,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeSceneObjects()
         {
-            const string fieldTripsModeName = "Mode_SpecialFieldTrips";
+            /*const string fieldTripsModeName = "Mode_SpecialFieldTrips";
 
             BinaryReader binaryReader = new BinaryReader(File.OpenRead(AssetHelper.modPath + "Data/Levels/Farm.bpl"));
             BaldiLevel level = BaldiLevel.Read(binaryReader);
@@ -163,7 +153,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             farmScene.AddMeta(AdvancedCore.Instance, new string[] { "adv_special_field_trip" });
 
-            binaryReader.Close();
+            binaryReader.Close();*/
         }
 
         #endregion
@@ -329,7 +319,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 price: 300
             );
 
-            PrefabCreator.CreateItem<MysteriousBusPassItem>(
+            /*PrefabCreator.CreateItem<MysteriousBusPassItem>(
                 nameKey: "Adv_Item_MysteriousBusPass",
                 descKey: "Adv_Item_MysteriousBusPass_Desc",
                 enumName: "MysteriousBusPass",
@@ -341,7 +331,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 tags: new string[] { 
                     TagStorage.FORBIDDEN_PRESENT 
                 }
-            );
+            );*/
         }
 
         public static void InitializeMultipleUsableItems()
@@ -623,6 +613,9 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabCreator.CreateOverlay("ElephantOverlay", AssetStorage.sprites["adv_elephant_overlay"], true);
             PrefabCreator.CreateOverlay("ShieldOverlay", AssetStorage.sprites["adv_protected_overlay"], true);
 
+            Canvas errorScreen = ObjectCreator.CreateCanvas(false);
+
+
             //Initializing Chalkboard Menu
             Canvas canvas = ObjectCreator.CreateCanvas(setGlobalCam: true);
             canvas.name = "Chalkboard Menu";
@@ -734,13 +727,13 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeTrips()
         {
-            new FieldTripData()
+            /*new FieldTripData()
             {
                 sceneName = "Farm",
                 sceneObject = ObjectStorage.SceneObjects["Farm"]
             }
             .SetDefaultSkybox()
-            .Register();
+            .Register();*/
         }
 
         #endregion
@@ -749,8 +742,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeObjects()
         {
-            MathMachine mathMachineComp = GameObject.Instantiate(AssetHelper.LoadAsset<MathMachine>("MathMachine"));
-
             // Cloning the Rotohall and making it as rusty
             RotoHall rotoHall = GameObject.Instantiate(AssetHelper.LoadAsset<RotoHall>("RotoHall_Base"));
             rotoHall.gameObject.ConvertToPrefab(true);
@@ -762,39 +753,12 @@ namespace BaldisBasicsPlusAdvanced.Managers
             rustyRotoHall.GetComponent<MeshRenderer>().material.SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_blank"]);
             ObjectStorage.Objects.Add("rusty_rotohall", rustyRotoHall.gameObject);
 
-            // Advanced Math Machine
-            bool advMathMachineIsCorner = false;
-            while (true)
-            {
-                if (advMathMachineIsCorner) mathMachineComp = GameObject.Instantiate(AssetHelper.LoadAsset<MathMachine>("MathMachine_Corner"));
-
-                GameObject advancedMathMachineObj = mathMachineComp.gameObject;
-                advancedMathMachineObj.ConvertToPrefab(true);
-                advancedMathMachineObj.name = !advMathMachineIsCorner ? "AdvancedMathMachine" : "AdvancedMathMachineCorner";
-
-                AdvancedMathMachine advancedMathMachine = 
-                    advancedMathMachineObj.SwapComponent<MathMachine, AdvancedMathMachine>(mathMachineComp);
-                advancedMathMachine.ReflectionSetValue("exteriorSignPrefab", 
-                    PrefabCreator.CreateActivityWallSign("ActivityExteriorSign_AMM", AssetStorage.sprites["AMM_WallSign_Right"], 
-                        AssetStorage.sprites["AMM_WallSign_Left"]));
-                advancedMathMachine.InitializePrefab(1);
-
-                ObjectStorage.Objects.Add(!advMathMachineIsCorner ? "advanced_math_machine" : "advanced_math_machine_corner", 
-                    advancedMathMachineObj);
-
-                if (advMathMachineIsCorner) break;
-                advMathMachineIsCorner = true;
-            }
-
             // Compass Comparator
             PrefabCreator.CreateObjectPrefab<PairsComparator>("PairsComparator", "pairs_comparator");
 
             // Zipline Hangers
             PrefabCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Hanger", "zipline_hanger");
             PrefabCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Black Hanger", "zipline_black_hanger", variant: 2);
-
-            // Voting Ballot
-            PrefabCreator.CreateObjectPrefab<VotingBallot>("Voting Ballot", "voting_ballot");
 
             // Pulley
             PrefabCreator.CreateObjectPrefab<Pulley>("Pulley", "pulley");
@@ -836,7 +800,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             }
 
             PrefabCreator.CreateObjectPrefab<TeleportationHole>("Teleportation Hole", "teleportation_hole");
-            PrefabCreator.CreateObjectPrefab<Reaper>("Farm Reaper", "farm_reaper");
             PrefabCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_flag");
             PrefabCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_points_flag", variant: 2);
 
@@ -948,7 +911,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeRoomAssetsInPrefabs()
         {
-            VotingEvent.LoadRoomAssetsForAllPrefabs();
+            
         }
 
         public static void InitializeRoomBasics()
@@ -986,7 +949,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             {
                 CustomRoomData roomData = CustomRoomData.RoomFromFile(path);
                 if (roomData == null) continue;
-
                 ObjectStorage.CustomRoomData.Add(roomData);
             }
         }

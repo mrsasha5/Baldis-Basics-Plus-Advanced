@@ -38,8 +38,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         public override void InitializePrefab(int variant)
         {
             base.InitializePrefab(variant);
-            audAlarm = AssetStorage.sounds["buzz_elv"]; //adv_emergency
-
+            audAlarm = AssetStorage.sounds["buzz_elv"];
             cooldown = 60f;
             generosity = 1;
             points = 30;

@@ -12,7 +12,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 {
     public class ColdSchoolEvent : RandomEvent, IPrefab
     {
-
         private static int activeEvents;
 
         public static int ActiveEvents => activeEvents;
@@ -55,8 +54,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
         public void InitializePrefab(int variant)
         {
-            audMan = gameObject.AddComponent<AudioManager>();
-            audMan.audioDevice = gameObject.AddComponent<AudioSource>();
+            audMan = ObjectCreator.InitAudioManager(gameObject, distanceIndependent: true);
             maxRaycast = 62.5f;
         }
 

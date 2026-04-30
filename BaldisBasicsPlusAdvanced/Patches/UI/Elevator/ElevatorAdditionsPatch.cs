@@ -19,13 +19,16 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
     [HarmonyPatch(typeof(ElevatorScreen))]
     internal class ElevatorAdditionsPatch
     {
-        private class UnityEventsTracker : MonoBehaviour
+        public class UnityEventsTracker : MonoBehaviour
         {
+            public Action onDestroy;
+
             private void OnDestroy()
             {
                 loseAnimationQueued = false;
                 tubesUpdateRequired = false;
                 lastSentLifes = null;
+                onDestroy?.Invoke();
             }
         }
 
@@ -80,9 +83,9 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Elevator
 
         private static int? lastSentLifes;
 
-        public static bool LoadTip => !(ObjectStorage.TipKeys.Count == 0) && OptionsDataManager.ExtraSettings.GetValue<bool>("tips");
+        public static bool LoadTip => !(ObjectStorage.TipKeys.Count == 0) && ExtraSettingsManager.ExtraSettings.GetValue<bool>("tips");
 
-        public static bool AnimationsEnabled => OptionsDataManager.ExtraSettings.GetValue<bool>("elevator_animations");
+        public static bool AnimationsEnabled => ExtraSettingsManager.ExtraSettings.GetValue<bool>("elevator_animations");
 
         public static bool LoseAnimationQueued => loseAnimationQueued;
 

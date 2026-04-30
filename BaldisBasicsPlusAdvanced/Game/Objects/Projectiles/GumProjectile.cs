@@ -65,9 +65,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
         public override void InitializePrefab(int variant)
         {
             gaugeIcon = AssetHelper.LoadAsset<Sprite>("beans_gum_icon");
-
             entity = gameObject.GetComponent<Entity>();
-            audMan = gameObject.AddComponent<PropagatedAudioManager>();
+            audMan = ObjectCreator.InitPropagatedAudioManager(gameObject);
             setTime = 10f;
         }
 

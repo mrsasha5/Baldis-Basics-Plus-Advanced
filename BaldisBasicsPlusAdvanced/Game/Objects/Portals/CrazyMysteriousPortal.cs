@@ -27,8 +27,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
         public override void InitializePrefab(int variant)
         {
             base.InitializePrefab(variant);
-
-            selfTeleportAudMan = ObjectCreator.CreatePropagatedAudMan(Vector3.zero);
+            selfTeleportAudMan = ObjectCreator.CreatePropagatedAudioManager(Vector3.zero);
             selfTeleportAudMan.transform.SetParent(transform, false);
 
             minMaxTime = new Vector2(10f, 30f);
@@ -81,14 +80,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
                 spriteRenderer.GetPropertyBlock(spriteProperties);
 
                 spriteProperties.SetFloat("_SpriteColorGlitchPercent",
-                Mathf.Clamp01(selfTeleportAudMan.audioDevice.time / selfTeleportAudMan.audioDevice.clip.length));
+                Mathf.Clamp01(selfTeleportAudMan.audioSourceManager.GetAudioSource(SoundType.Effect).time /
+                    selfTeleportAudMan.audioSourceManager.GetAudioSource(SoundType.Effect).clip.length));
                 spriteProperties.SetFloat("_SpriteColorGlitchVal", UnityEngine.Random.Range(0f, 4096f));
 
                 spriteRenderer.SetPropertyBlock(spriteProperties);
                 yield return null;
             }
 
-            AudioManager teleportAudMan = ObjectCreator.CreatePropagatedAudMan(transform.position, true);
+            AudioManager teleportAudMan = ObjectCreator.CreatePropagatedAudioManager(transform.position, true);
                 teleportAudMan.PlaySingle(audTeleport);
 
             transform.position = ec.RandomCell(includeOffLimits: false, includeWithObjects: false, useEntitySafeCell: true)

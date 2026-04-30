@@ -5,6 +5,7 @@ using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Activities;
 using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
+using BaldisBasicsPlusAdvanced.Game.Rooms.Functions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BepInEx.Bootstrap;
 using MTM101BaldAPI;
@@ -19,7 +20,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 
         public static void Initialize()
         {
-            if (Chainloader.PluginInfos[IntegrationManager.levelLoaderId].Metadata.Version < new Version(MIN_VERSION))
+            if (Chainloader.PluginInfos[IntegrationManager.LEVEL_LOADER_ID].Metadata.Version < new Version(MIN_VERSION))
             {
                 ObjectCreator.CauseCrash(new Exception($"Level Loading system is outdated. Min version must equal or be higher than {MIN_VERSION}."));
             }
@@ -29,12 +30,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 string key = "adv_" + objectName;
                 LevelLoaderPlugin.Instance.itemObjects.Add(key, ObjectStorage.ItemObjects[objectName]);
             }
-
-            /*foreach (string vendingMachineName in ObjectsStorage.SodaMachines.Keys)
-            {
-                string key = "adv_" + vendingMachineName;
-                LevelLoaderPlugin.Instance.basicObjects.Add(key, ObjectsStorage.SodaMachines[vendingMachineName].gameObject);
-            }*/
 
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_good_machine", ObjectStorage.Objects["GoodMachine"]);
 
@@ -64,7 +59,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
             LevelLoaderPlugin.Instance.randomEventAliases.Add("adv_disappearing_characters", ObjectStorage.Events["DisappearingCharacters"]);
             LevelLoaderPlugin.Instance.randomEventAliases.Add("adv_cold_school", ObjectStorage.Events["ColdSchool"]);
             LevelLoaderPlugin.Instance.randomEventAliases.Add("adv_portal_chaos", ObjectStorage.Events["PortalChaos"]);
-            LevelLoaderPlugin.Instance.randomEventAliases.Add("adv_voting", ObjectStorage.Events["Voting"]);
         }
 
         private static void InitializeNpcs()
@@ -88,18 +82,14 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 
         private static void InitializeLights()
         {
-            LevelLoaderPlugin.Instance.lightTransforms.Add("adv_advanced_education_lamp",
-                AssetHelper.LoadAsset<Transform>("AdvancedClassLampLight"));
         }
 
         private static void InitializeObjects()
         {
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_symbol_machine", ObjectStorage.Objects["symbol_machine"]);
-            LevelLoaderPlugin.Instance.basicObjects.Add("adv_voting_ballot", ObjectStorage.Objects["voting_ballot"]);
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_farm_finish_flag", ObjectStorage.Objects["farm_flag"]);
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_farm_finish_points_flag", ObjectStorage.Objects["farm_points_flag"]);
             LevelLoaderPlugin.Instance.basicObjects.Add("adv_farm_sign1", ObjectStorage.Objects["farm_sign1"]);
-            LevelLoaderPlugin.Instance.basicObjects.Add("adv_voting_ceiling_screen", ObjectStorage.Objects["voting_screen"]);
         }
 
         private static void InitializeStructures()
@@ -180,10 +170,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 
         private static void InitializeActivities()
         {
-            LevelLoaderPlugin.Instance.activityAliases.Add("adv_advanced_math_machine",
-                ObjectStorage.Objects["advanced_math_machine"].GetComponent<AdvancedMathMachine>());
-            LevelLoaderPlugin.Instance.activityAliases.Add("adv_advanced_math_machine_corner",
-                ObjectStorage.Objects["advanced_math_machine_corner"].GetComponent<AdvancedMathMachine>());
             LevelLoaderPlugin.Instance.activityAliases.Add("adv_pairs_comparator", 
                 ObjectStorage.Objects["pairs_comparator"].GetComponent<PairsComparator>());
         }
@@ -210,26 +196,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
                 )
             );
 
-            LevelLoaderPlugin.Instance.roomSettings.Add("adv_school_council_class", new RoomSettings(
-                EnumExtensions.GetFromExtendedName<RoomCategory>("SchoolCouncil"),
-                RoomType.Room,
-                ObjectStorage.RoomColors["SchoolCouncil"],
-                Array.Find(UnityEngine.Object.FindObjectsOfType<StandardDoorMats>(),
-                    x => x.name == "SchoolCouncilDoorSet"),
-                mapMaterial: RoomHelper.CreateMapMaterial("SchoolCouncilMapBG", AssetStorage.textures["adv_school_council_bg"])
-                )
-            );
-
-            LevelLoaderPlugin.Instance.roomSettings.Add("adv_advanced_class", new RoomSettings(
-                RoomCategory.Class,
-                RoomType.Room,
-                ObjectStorage.RoomColors["AdvancedClass"],
-                Array.Find(UnityEngine.Object.FindObjectsOfType<StandardDoorMats>(),
-                    x => x.name == "AdvancedClassDoorSet"),
-                mapMaterial: RoomHelper.CreateMapMaterial("AdvancedClassMapBG", AssetStorage.textures["adv_advanced_class_bg"])
-                )
-            );
-
             LevelLoaderPlugin.Instance.roomSettings.Add("adv_corn_field", new RoomSettings(
                 RoomCategory.Special,
                 RoomType.Room,
@@ -249,23 +215,18 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 
             LevelLoaderPlugin.Instance.roomSettings["adv_class_compass_comparator"].container =
                 AssetHelper.LoadAsset<RoomFunctionContainer>("ClassRoomFunction_CompassComparator");
-            LevelLoaderPlugin.Instance.roomSettings["adv_advanced_class"].container =
-                AssetHelper.LoadAsset<RoomFunctionContainer>("ClassRoomFunction");
 
-            LevelLoaderPlugin.Instance.roomSettings["adv_school_council_class"].container =
-                ObjectStorage.RoomFunctionsContainers["CorruptedLightsFunction"];
             LevelLoaderPlugin.Instance.roomSettings["adv_english_class_timer"].container =
                 ObjectStorage.RoomFunctionsContainers["EnglishClassTimerFunction"];
 
-            LevelLoaderPlugin.Instance.roomSettings["adv_school_council_class"].container =
-                ObjectStorage.RoomFunctionsContainers["SchoolCouncilFunction"];
             LevelLoaderPlugin.Instance.roomSettings["adv_corn_field"].container =
                 UnityEngine.Object.Instantiate(LevelLoaderPlugin.Instance.roomSettings["outside"].container);
 
-            //Corn Field room function container
+            // Corn Field room function container
             RoomFunctionContainer cornContainer = LevelLoaderPlugin.Instance.roomSettings["adv_corn_field"].container;
             cornContainer.name = "CornFieldFunctionContainer";
             cornContainer.gameObject.ConvertToPrefab(true);
+            RoomHelper.SetupRoomFunction<ProperOpenAreaCellGroupFunction>(cornContainer);
 
             SkyboxRoomFunction skyboxFunc = cornContainer.GetComponent<SkyboxRoomFunction>();
 

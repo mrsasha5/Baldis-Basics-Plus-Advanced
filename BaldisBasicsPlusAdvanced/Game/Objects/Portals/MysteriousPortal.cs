@@ -70,7 +70,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
             spriteRenderer.transform.parent.parent = gameObject.transform;
             spriteRenderer.transform.localPosition = Vector3.zero;
 
-            audMan = gameObject.AddComponent<PropagatedAudioManager>();
+            audMan = ObjectCreator.InitPropagatedAudioManager(gameObject);
         }
 
         private void InitializeParticleSystem()
@@ -257,7 +257,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Portals
 
             if (appearing) audMan.PlaySingle(AssetStorage.sounds["adv_magical_appearing"]);
 
-            if (OptionsDataManager.ExtraSettings.GetValue<bool>("particles"))
+            if (ExtraSettingsManager.ExtraSettings.GetValue<bool>("particles"))
             {
                 if (appearing)
                 {

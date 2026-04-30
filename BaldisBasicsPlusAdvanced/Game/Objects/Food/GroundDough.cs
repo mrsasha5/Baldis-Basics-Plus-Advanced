@@ -61,27 +61,22 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
 
             entity.gameObject.SetRigidbody();
             this.entity = entity;
-
             entity.SetGrounded(false);
-
-            audMan = gameObject.AddComponent<PropagatedAudioManager>();
-
-            moveMod = new MovementModifier(Vector3.zero, 0.95f)
+            moveMod = new MovementModifier(Vector3.zero, 0.7f)
             {
                 ignoreAirborne = true
             };
 
+            audMan = ObjectCreator.InitPropagatedAudioManager(gameObject);
             lifetime = 25f;
-
             height = 5f;
-            minHeight = 0.8f;
+            minHeight = 0.4f;
             gravity = 15f;
         }
 
         public void Initialize(EnvironmentController ec, Vector3 pos, Vector3? forceDirection = null, float force = 25f)
         {
             this.ec = ec;
-
             entity.Initialize(ec, pos);
             if (forceDirection != null) entity.AddForce(new Force((Vector3)forceDirection, force, -force));
         }
@@ -96,7 +91,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
                     return;
                 }
 
-                //Mystman pls fix your buggy guilt's system
+                // Mystman pls fix your buggy guilt's system
                 if (npcTarget != null)
                 {
                     if (entity.CurrentRoom == null || (entity.CurrentRoom.category != RoomCategory.Office
@@ -146,7 +141,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
             if (ready && active && target != null)
             {
                 transform.position = target.transform.position;
-                //entity.SetHeight(... + minHeight);
             }
         }
 
@@ -160,9 +154,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Food
 
                 target.AddForce(new Force(target.transform.forward, 50f, -50f));
                 target.ExternalActivity.moveMods.Add(moveMod);
-
-                //entity.SetInteractionState(false);
-                //entity.SetFrozen(true);
 
                 npcTarget = other.GetComponent<NPC>();
                 pmTarget = other.GetComponent<PlayerManager>();

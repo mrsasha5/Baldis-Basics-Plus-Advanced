@@ -1,7 +1,9 @@
 ﻿using BaldisBasicsPlusAdvanced.Game.Events;
+using System;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
+    [Obsolete("Voting event is removed.")]
     public abstract class BaseTopic
     {
         protected EnvironmentController ec;

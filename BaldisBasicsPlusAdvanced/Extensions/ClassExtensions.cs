@@ -11,11 +11,15 @@ using MTM101BaldAPI.UI;
 using System.Linq;
 using BaldisBasicsPlusAdvanced.Cache;
 using MTM101BaldAPI.Reflection;
+using System.Reflection;
+using HarmonyLib;
 
 namespace BaldisBasicsPlusAdvanced.Extensions
 {
     public static class ClassExtensions
     {
+        private static FieldInfo _envAudMan = AccessTools.Field(typeof(EnvironmentController), "audMan");
+
         private static int[] angles = new int[] {
             0,
             90,
@@ -298,12 +302,12 @@ namespace BaldisBasicsPlusAdvanced.Extensions
 
         public static void SoundTeleport(this Entity entity, Vector3 pos)
         {
-            AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
+            AudioManager audMan = ObjectCreator.CreatePropagatedAudioManager(entity.transform.position, destroyWhenAudioEnds: true);
             audMan.PlaySingle(AssetStorage.sounds["teleport"]);
 
             entity.Teleport(pos);
 
-            AudioManager _audMan = ObjectCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
+            AudioManager _audMan = ObjectCreator.CreatePropagatedAudioManager(entity.transform.position, destroyWhenAudioEnds: true);
             _audMan.PlaySingle(AssetStorage.sounds["teleport"]);
         }
 
@@ -315,7 +319,7 @@ namespace BaldisBasicsPlusAdvanced.Extensions
 
         public static AudioManager GetAudMan(this EnvironmentController ec)
         {
-            return ReflectionHelper.GetValue<AudioManager>(ec, "audMan");
+            return (AudioManager)_envAudMan.GetValue(ec);
         }
 
         public static PlayerControllerSystem GetControllerSystem(this PlayerManager pm)

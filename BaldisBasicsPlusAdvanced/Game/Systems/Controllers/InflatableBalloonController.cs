@@ -129,7 +129,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
             renderer.transform.localScale = Vector3.one * size;
             if (owner == ControllerOwner.Player) renderer.gameObject.layer = LayerHelper.takenBalloonLayer;
 
-            audMan = ObjectCreator.CreatePropagatedAudMan(entity.transform.position);
+            audMan = ObjectCreator.CreatePropagatedAudioManager(entity.transform.position);
             audMan.transform.SetParent(entity.transform);
             audMan.PlaySingle(AssetStorage.sounds["adv_balloon_inflation"]);
             

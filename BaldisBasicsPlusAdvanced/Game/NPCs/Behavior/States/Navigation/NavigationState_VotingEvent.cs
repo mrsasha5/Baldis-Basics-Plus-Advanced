@@ -1,7 +1,9 @@
 ﻿using BaldisBasicsPlusAdvanced.Game.Objects.Voting;
+using System;
 
 namespace BaldisBasicsPlusAdvanced.Game.NPCs.Behavior.States.Navigation
 {
+    [Obsolete("Voting event is removed.")]
     public class NavigationState_VotingEvent : NavigationState
     {
         private RoomController votingRoom;

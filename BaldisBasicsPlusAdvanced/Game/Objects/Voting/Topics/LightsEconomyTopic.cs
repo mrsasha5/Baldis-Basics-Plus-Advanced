@@ -1,10 +1,12 @@
 ﻿using BaldisBasicsPlusAdvanced.Extensions;
 using MTM101BaldAPI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
+    [Obsolete("Voting event is removed.")]
     public class LightsEconomyTopic : BaseTopic
     {
         private static RoomCategory[] categories = new RoomCategory[]

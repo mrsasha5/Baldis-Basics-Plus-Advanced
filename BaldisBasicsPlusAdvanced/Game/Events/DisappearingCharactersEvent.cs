@@ -43,7 +43,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         {
             float cooldown = 3f;
             float effectTime = 7f;
-
             List<NPC> npcs = GetAvailableNPCs();
 
             if (npcs.Count == 0) yield break;
@@ -70,8 +69,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                         SpriteRenderer chalkRenderer = ReflectionHelper.GetValue<SpriteRenderer>(chalkFace, "chalkRenderer");
                         chalkRenderer.gameObject.SetActive(false);
                     }
-
-
                 }
                 yield return null;
             }
@@ -88,8 +85,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         private void Disappear(NPC npc, bool hide)
         {
             npc.GetComponent<Entity>().SetVisible(!hide);
-
-            AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(Vector3.zero, destroyWhenAudioEnds: true);
+            AudioManager audMan = ObjectCreator.CreatePropagatedAudioManager(Vector3.zero, destroyWhenAudioEnds: true);
             audMan.transform.SetParent(npc.transform, false);
             
             if (hide)
@@ -104,8 +100,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
         public override void End()
         {
             base.End();
-            if (activeEvents == 1) //For compatibility with chaos mode
-                                   //(funny to understand that game events themselves barely compatible in BBCR)
+            if (activeEvents == 1)
             {
                 StopAllCoroutines();
                 foreach (NPC npc in ec.Npcs)
@@ -126,8 +121,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
                 }
             }
             activeEvents--;
-            
         }
-
     }
 }

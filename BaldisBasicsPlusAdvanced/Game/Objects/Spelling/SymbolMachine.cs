@@ -14,7 +14,6 @@ using UnityEngine.AI;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
 {
-
     public class SymbolMachine : MonoBehaviour, IClickable<int>, IPrefab
     {
         [SerializeField]
@@ -125,7 +124,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             audBeep = AssetStorage.sounds["adv_beep"];
             audReinit = AssetStorage.sounds["adv_symbol_machine_reinit"];
 
-            audMan = ObjectCreator.CreateAudMan(Vector3.zero);
+            audMan = ObjectCreator.CreatePropagatedAudioManager(Vector3.zero);
             audMan.transform.SetParent(transform, false);
 
             texts = new List<TextMeshPro>();

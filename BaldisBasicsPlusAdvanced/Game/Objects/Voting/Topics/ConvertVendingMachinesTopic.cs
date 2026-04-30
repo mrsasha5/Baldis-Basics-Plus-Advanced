@@ -1,11 +1,13 @@
 ﻿using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using MTM101BaldAPI.Registers;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
+    [Obsolete("Voting event is removed.")]
     public class ConvertVendingMachinesTopic : BaseTopic
     {
 

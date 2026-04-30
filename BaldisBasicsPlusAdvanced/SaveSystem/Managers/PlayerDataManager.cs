@@ -5,7 +5,6 @@ using UnityCipher;
 
 namespace BaldisBasicsPlusAdvanced.SaveSystem
 {
-    
     public class PlayerDataManager
     {
         //1f
@@ -50,6 +49,5 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem
                     SaveSystemCore.FileName));
             }
         }
-
     }
 }

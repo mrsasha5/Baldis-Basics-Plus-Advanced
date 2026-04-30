@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Locations;
 using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Tools;
@@ -11,6 +12,7 @@ using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
+using HarmonyLib;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Reflection;
 using PlusLevelStudio;
@@ -29,58 +31,39 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
         private static List<StructureBuilderPrefabReference> visualPrefabs;
 
-        public static List<GameObject> GetVisualPrefabsFrom(string type)
+        public static void OnPreLoadEditorLevel(EditorMode mode, EditorLevelData data)
         {
-            List<GameObject> prefabs = new List<GameObject>();
-            for (int i = 0; i < visualPrefabs.Count; i++)
+            data.items.RemoveAll(x => x.item == "adv_MysteriousBusPass");
+            data.randomEvents.RemoveAll(x => x == "adv_voting");
+            data.potentialStoreItems.RemoveAll(x => x.id == "adv_MysteriousBusPass");
+            data.objects.RemoveAll(x => x.prefab == "adv_voting_ballot");
+            data.objects.RemoveAll(x => x.prefab == "adv_voting_ceiling_screen");
+            data.posters.RemoveAll(x => x.type == "adv_paris");
+            data.lights.Where(x => x.type == "adv_advanced_education_lamp").Do(x => x.type = "standardhanging");
+            foreach (EditorRoom room in data.rooms)
             {
-                if (visualPrefabs[i].builder == type)
+                switch (room.roomType)
                 {
-                    prefabs.Add(visualPrefabs[i].visualPrefab);
+                    case "adv_advanced_class":
+                        room.roomType = "class";
+                        break;
+                    case "adv_school_council_class":
+                        room.roomType = "class";
+                        break;
+                } 
+                if (room.activity?.type != null)
+                {
+                    switch (room.activity?.type)
+                    {
+                        case "adv_advanced_math_machine":
+                            room.activity.type = "mathmachine";
+                            break;
+                        case "adv_advanced_math_machine_corner":
+                            room.activity.type = "mathmachine_corner";
+                            break;
+                    }
                 }
             }
-            return prefabs;
-        }
-
-        public static GameObject GetVisualPrefab(string type, string prefab)
-        {
-            for (int i = 0; i < visualPrefabs.Count; i++)
-            {
-                if (visualPrefabs[i].builder == type && visualPrefabs[i].prefab == prefab)
-                {
-                    return visualPrefabs[i].visualPrefab;
-                }
-            }
-
-            throw new Exception("Visual prefab reference is not in the list.");
-        }
-
-        public static bool ContainsStructureVisualPrefab(string type, string prefab)
-        {
-            for (int i = 0; i < visualPrefabs.Count; i++)
-            {
-                if (visualPrefabs[i].builder == type && visualPrefabs[i].prefab == prefab)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static GameObject AddStructureVisualPrefab(string type, string prefab, GameObject obj)
-        {
-            GameObject instance = EditorInterface.AddStructureGenericVisual("_99_seconds", obj);
-            LevelStudioPlugin.Instance.genericStructureDisplays.Remove("_99_seconds");
-
-            visualPrefabs.Add(new StructureBuilderPrefabReference()
-            {
-                builder = type,
-                prefab = prefab,
-                visualPrefab = instance
-            });
-
-            return instance;
         }
 
         public LevelStudioIntegration() : base()
@@ -102,7 +85,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
         protected override void Initialize()
         {
             base.Initialize();
-
             AssetLoader.LoadLocalizationFolder(AssetHelper.modPath + 
                 "Compats/LevelStudio/Language/English/", Language.English);
 
@@ -111,6 +93,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             InitializeItemsInStoreSettings();
             InitializeTextureContainers();
             EditorInterfaceModes.AddModeCallback(InitializeTools);
+            LevelStudioPlugin.Instance.editorLevelPreLoadCallbacks.Add(OnPreLoadEditorLevel);
         }
 
         private static void InitializeStructures()
@@ -315,10 +298,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             EditorInterface.AddObjectVisual("adv_symbol_machine", ObjectStorage.Objects["symbol_machine"], true);
 
-            EditorInterface.AddObjectVisual("adv_voting_ballot", ObjectStorage.Objects["voting_ballot"], true);
-            EditorInterface.AddObjectVisual("adv_voting_ceiling_screen", ObjectStorage.Objects["voting_screen"], true);
-            GameObject.Destroy(ObjectStorage.Objects["voting_screen"].GetComponent<Collider>());
-
             //Pairs comparator
             PairsComparator pairsCompPre = ObjectStorage.Objects["pairs_comparator"].GetComponent<PairsComparator>();
             Sprite pairBalloonSpr = AssetHelper.LoadAsset<Sprite>("ExclamationPointBalloon");
@@ -353,38 +332,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 currentAngle -= angle;
                 counter--;
             }
-
-            // Advanced MMs
-            GameObject advancedMMVisual = EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectStorage.Objects["advanced_math_machine"]);
-            BoxCollider mmCollider = advancedMMVisual.transform.Find("Model").GetComponent<BoxCollider>();
-            GameObject advancedCornerMMVisual = EditorInterface.CloneToPrefabStripMonoBehaviors(ObjectStorage.Objects["advanced_math_machine_corner"]);
-            BoxCollider cornerMmCollider = advancedCornerMMVisual.transform.Find("Model").GetComponent<BoxCollider>();
-
-            advancedMMVisual.gameObject.layer = LevelStudioPlugin.editorInteractableLayer;
-            advancedCornerMMVisual.gameObject.layer = LevelStudioPlugin.editorInteractableLayer;
-            mmCollider.gameObject.layer = LevelStudioPlugin.editorInteractableLayer;
-            cornerMmCollider.gameObject.layer = LevelStudioPlugin.editorInteractableLayer;
-            UnityEngine.Object.DestroyImmediate(advancedMMVisual.transform.Find("Buffer").gameObject);
-            UnityEngine.Object.DestroyImmediate(advancedCornerMMVisual.transform.Find("Buffer").gameObject);
-
-            MovableObjectInteraction movableObjectInteraction1 = mmCollider.gameObject.AddComponent<MovableObjectInteraction>();
-            movableObjectInteraction1.allowedRotations = RotateAxis.Yaw;
-            movableObjectInteraction1.allowedAxis = MoveAxis.All;
-            mmCollider.gameObject.AddComponent<EditorRendererContainer>()
-                .AddRendererRange(advancedMMVisual.GetComponentsInChildren<Renderer>(), "none");
-            mmCollider.gameObject.AddComponent<EditorDeletableObject>().renderContainer =
-                mmCollider.gameObject.GetComponent<EditorRendererContainer>();
-
-            MovableObjectInteraction movableObjectInteraction2 = cornerMmCollider.gameObject.AddComponent<MovableObjectInteraction>();
-            movableObjectInteraction2.allowedRotations = RotateAxis.Yaw;
-            movableObjectInteraction2.allowedAxis = MoveAxis.All;
-            cornerMmCollider.gameObject.AddComponent<EditorRendererContainer>()
-                .AddRendererRange(advancedCornerMMVisual.GetComponentsInChildren<Renderer>(), "none");
-            cornerMmCollider.gameObject.AddComponent<EditorDeletableObject>().renderContainer =
-                cornerMmCollider.gameObject.GetComponent<EditorRendererContainer>();
-
-            LevelStudioPlugin.Instance.activityDisplays.Add("adv_advanced_math_machine", advancedMMVisual);
-            LevelStudioPlugin.Instance.activityDisplays.Add("adv_advanced_math_machine_corner", advancedCornerMMVisual);
 
             EditorInterface.AddObjectVisual("adv_farm_finish_flag", ObjectStorage.Objects["farm_flag"], true)
                 .GetComponentInChildren<SpriteRenderer>().RemoveBillboard();
@@ -437,7 +384,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             mode.availableRandomEvents.Add("adv_disappearing_characters");
             mode.availableRandomEvents.Add("adv_cold_school");
             mode.availableRandomEvents.Add("adv_portal_chaos");
-            mode.availableRandomEvents.Add("adv_voting");
 
             EditorInterfaceModes.AddToolToCategory(mode, "npcs",
                 new NPCTool("adv_criss_the_crystal", AssetStorage.sprites["adv_editor_criss_the_crystal"]));
@@ -453,12 +399,12 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new ObjectTool("adv_good_machine", 
                     AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Objects/adv_editor_GoodMachine.png")));
 
-            //Stuff for rooms
+            // Stuff for rooms
             if (mode.id == "rooms")
             {
                 EditorInterfaceModes.AddToolToCategory(mode, "rooms",
                     new RoomTool("adv_class_compass_comparator", LevelStudioPlugin.Instance.uiAssetMan.Get<Sprite>("Tools/room_class")));
-
+                // Plates as objects only for premades
                 foreach (string name in ObjectStorage.Objects.Keys)
                 {
                     if (ObjectStorage.Objects[name].TryGetComponent(out BasePlate plate))
@@ -481,23 +427,9 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new WindowTool("adv_big_hole", 
                     AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Doors/adv_editor_big_hole.png")));
 
-            EditorInterfaceModes.AddToolToCategory(mode, "lights", 
-                new LightTool("adv_advanced_education_lamp", 
-                    AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Lights/adv_editor_advanced_class_lamp.png")));
-
-            EditorInterfaceModes.AddToolToCategory(mode, "activities",
-                new ActivityTool("adv_advanced_math_machine", AssetStorage.sprites["adv_editor_advanced_math_machine"], 0f));
-            EditorInterfaceModes.AddToolToCategory(mode, "activities",
-                new ActivityTool("adv_advanced_math_machine_corner", AssetStorage.sprites["adv_editor_advanced_math_machine_corner"], 0f));
             EditorInterfaceModes.AddToolToCategory(mode, "activities",
                 new ActivityTool("adv_pairs_comparator", 
                 AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Activities/adv_editor_compass_comparator.png"), 5f));
-
-            EditorInterfaceModes.AddToolToCategory(mode, "objects",
-                new ObjectTool("adv_voting_ceiling_screen",
-                    AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Objects/adv_editor_voting_screen.png")));
-            EditorInterfaceModes.AddToolToCategory(mode, "objects",
-                new ObjectTool("adv_voting_ballot", AssetStorage.sprites["adv_editor_voting_ballot"]));
 
             EditorInterfaceModes.AddToolToCategory(mode, "objects", 
                 new ObjectToolNoRotation("adv_farm_finish_flag", AssetStorage.sprites["adv_editor_finish_flag"], 5f));
@@ -545,10 +477,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 new RoomTool("adv_english_class", AssetStorage.sprites["adv_editor_english_floor"]));
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
                 new RoomTool("adv_english_class_timer", AssetStorage.sprites["adv_editor_english_floor_timer"]));
-            EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
-                new RoomTool("adv_school_council_class", AssetStorage.sprites["adv_editor_school_council_floor"]));
-            EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
-                new RoomTool("adv_advanced_class", AssetStorage.sprites["adv_editor_advanced_class_floor"]));
             EditorInterfaceModes.AddToolToCategory(mode, "rooms", 
                 new RoomTool("adv_corn_field", AssetStorage.sprites["adv_editor_corn_field"]));
 
@@ -626,6 +554,60 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 texBase + "Rooms/adv_room_advanced.png");
             AssetStorage.LoadModSprite("adv_editor_corn_field",
                 texBase + "Rooms/adv_room_corn_field.png");
+        }
+
+        public static List<GameObject> GetVisualPrefabsFrom(string type)
+        {
+            List<GameObject> prefabs = new List<GameObject>();
+            for (int i = 0; i < visualPrefabs.Count; i++)
+            {
+                if (visualPrefabs[i].builder == type)
+                {
+                    prefabs.Add(visualPrefabs[i].visualPrefab);
+                }
+            }
+            return prefabs;
+        }
+
+        public static GameObject GetVisualPrefab(string type, string prefab)
+        {
+            for (int i = 0; i < visualPrefabs.Count; i++)
+            {
+                if (visualPrefabs[i].builder == type && visualPrefabs[i].prefab == prefab)
+                {
+                    return visualPrefabs[i].visualPrefab;
+                }
+            }
+
+            throw new Exception("Visual prefab reference is not in the list.");
+        }
+
+        public static bool ContainsStructureVisualPrefab(string type, string prefab)
+        {
+            for (int i = 0; i < visualPrefabs.Count; i++)
+            {
+                if (visualPrefabs[i].builder == type && visualPrefabs[i].prefab == prefab)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static GameObject AddStructureVisualPrefab(string type, string prefab, GameObject obj)
+        {
+            GameObject instance = EditorInterface.AddStructureGenericVisual("_99_seconds", obj);
+            LevelStudioPlugin.Instance.genericStructureDisplays.Remove("_99_seconds");
+
+            visualPrefabs.Add(new StructureBuilderPrefabReference()
+            {
+                builder = type,
+                prefab = prefab,
+                visualPrefab = instance
+            });
+
+            return instance;
         }
     }
 }

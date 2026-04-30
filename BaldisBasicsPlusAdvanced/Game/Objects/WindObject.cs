@@ -130,9 +130,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             {
                 audMan.QueueAudio(AssetStorage.sounds["blowing"]);
                 audMan.SetLoop(val: true);
-            } else if (audMan.audioDevice != null) //or else it will invoke null ref exception
-            {
-                audMan.FlushQueue(true);
             }
 
             VirtualUpdate();

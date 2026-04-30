@@ -6,32 +6,31 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem
 {
     public class SaveSystemCore
     {
+        public static string Path
+        {
+            get
+            {
+                string _path = ModdedSaveSystem.GetSaveFolder(AdvancedCore.Instance, FileName) + "/";
+                Directory.CreateDirectory(_path);
+                return _path;
+            }
+        }
 
-        private static string path;
-
-        public static string Path => path;
-
-        public static string FileName => Singleton<PlayerFileManager>.Instance.fileName;
+        public static string FileName => PlayerFileManager.Instance.fileName;
 
         public static void Load()
         {
-            PrepareFolder();
-
-            OptionsDataManager.Load();
-            PlayerDataManager.Load();
+            // Options
+            ExtraSettingsManager.Load();
             KeyBindingsManager.Load();
+            // Player data
+            PlayerDataManager.Load();
         }
 
         public static void Save()
         {
+            // Only player since options themselves manage saving
             PlayerDataManager.Save();
         }
-
-        private static void PrepareFolder()
-        {
-            path = ModdedSaveSystem.GetSaveFolder(AdvancedCore.Instance, FileName) + "/";
-            Directory.CreateDirectory(path);
-        }
-
     }
 }

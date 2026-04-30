@@ -24,7 +24,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Systems.Controllers
                 entity.ExternalActivity.moveMods.Add(moveMod);
             }
 
-            AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(entity.transform.position, destroyWhenAudioEnds: true);
+            AudioManager audMan = ObjectCreator.CreatePropagatedAudioManager(entity.transform.position, destroyWhenAudioEnds: true);
             audMan.transform.parent = entity.transform;
             audMan.PlaySingle(AssetStorage.sounds["adv_frozen"]);
 

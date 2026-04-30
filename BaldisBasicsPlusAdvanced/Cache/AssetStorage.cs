@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 
@@ -19,104 +20,42 @@ namespace BaldisBasicsPlusAdvanced.Cache
 {
     internal class AssetStorage
     {
-        public class AssetDictionary<T>
-        {
-            private Dictionary<string, T> instances = new Dictionary<string, T>();
-
-            private List<string> ignoreInstances = new List<string>();
-
-            public void Add(string key, T instance, bool doNotUnload = false)
-            {
-                instances.Add(key, instance);
-                if (doNotUnload) ignoreInstances.Add(key);
-            }
-
-            public bool Contains(string key)
-            {
-                return instances.ContainsKey(key);
-            }
-
-            public void Clear()
-            {
-                for (int i = 0; i < instances.Count; i++)
-                {
-                    if (!ignoreInstances.Contains(instances.Keys.ElementAt(i)))
-                    {
-                        instances.Remove(instances.Keys.ElementAt(i));
-                    }
-                }
-            }
-
-            public T this[string i]
-            {
-                get
-                {
-                    return instances[i];
-                }
-                set
-                {
-                    instances[i] = value;
-                }
-            }
-
-        }
-
         private static bool overridden = false;
 
         public static bool Overridden => overridden;
 
-        public static AssetDictionary<SoundObject> sounds = new AssetDictionary<SoundObject>();
-
-        public static AssetDictionary<Sprite> sprites = new AssetDictionary<Sprite>();
-
-        public static AssetDictionary<Sprite[]> spriteSheets = new AssetDictionary<Sprite[]>();
-
-        public static AssetDictionary<Texture2D> textures = new AssetDictionary<Texture2D>();
-
-        public static AssetDictionary<ItemObject> itemObjects = new AssetDictionary<ItemObject>();
-
-        public static AssetDictionary<GameObject> gameObjects = new AssetDictionary<GameObject>();
-
-        public static AssetDictionary<Material> materials = new AssetDictionary<Material>();
-
-        public static AssetDictionary<TMP_Text> texts = new AssetDictionary<TMP_Text>();
-
-        public static AssetDictionary<Mesh> meshes = new AssetDictionary<Mesh>();
+        public static Dictionary<string, SoundObject> sounds = new Dictionary<string, SoundObject>();
+        public static Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
+        public static Dictionary<string, Sprite[]> spriteSheets = new Dictionary<string, Sprite[]>();
+        public static Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
+        public static Dictionary<string, ItemObject> itemObjects = new Dictionary<string, ItemObject>();
+        public static Dictionary<string, GameObject> gameObjects = new Dictionary<string, GameObject>();
+        public static Dictionary<string, Material> materials = new Dictionary<string, Material>();
+        public static Dictionary<string, TMP_Text> texts = new Dictionary<string, TMP_Text>();
+        public static Dictionary<string, Mesh> meshes = new Dictionary<string, Mesh>();
 
         //game assets
 
         public static Shader graphsStandardShader;
-
         public static Baldi genericBaldi;
-
         public static Structure_EnvironmentObjectPlacer weightedPlacer;
-
         public static Structure_EnvironmentObjectPlacer individualPlacer;
-
         public static BeltManager windManager;
-
         public static Pickup pickup;
-
         public static Transform windGraphicsParent;
-
         public static AudioClip weirdErrorSound;
-
         public static TextAsset campingMidi;
-
         public static GameButton gameButton;
-
         public static CoverCloud coverCloud;
-
         public static SoundObject[] bullyTakeouts;
-
         public static StandardDoor classDoor;
-
         public static CursorController cursor;
 
         #region Critical Assets for Systems (Notifications System, Invoking Crash Screen with Sound...)
 
         public static void InitializeCriticalResources()
         {
+            //textures.Add("chair_screen", AssetHelper.LoadEmbeddedTexture("Assets/UI/Error_Screen.png"));
             weirdErrorSound = AssetHelper.LoadAsset<AudioClip>("WeirdError");
             LoadSound("buzz_elv", "Elv_Buzz");
             LoadSprite("tooltip_bg", "TooltipBG");
@@ -449,7 +388,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
             LoadModSound("adv_boing", "Sounds/Adv_Boing.ogg", SoundType.Effect, "Adv_Sub_Boing", 1f);
             LoadModSound("adv_appearing", "Sounds/Adv_Appearing.ogg", SoundType.Effect, "Adv_Sub_Appearing", 2f);
             LoadModSound("adv_disappearing", "Sounds/Adv_Disappearing.ogg", SoundType.Effect, "Adv_Sub_Disappearing", 3f);
-            LoadModSound("adv_emergency", "Sounds/Adv_Emergency.wav", SoundType.Effect, "Adv_Sub_Emergency", 1f);
             LoadModSound("adv_frozen", "Sounds/Adv_Frozen.ogg", SoundType.Effect, "Adv_Sub_Frozen", Color.blue, 3f);
             LoadModSound("adv_elephant_hit", "Sounds/Adv_Elephant_Hit.ogg", SoundType.Effect, "Adv_Sub_ElephantHit", 1f);
             LoadModSound("adv_metal_blow", "Sounds/Adv_Metal_Blow.ogg", SoundType.Effect, "Adv_Sub_MetalBlow", 1f);
@@ -470,7 +408,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
             LoadModSound("adv_burning_start", "Sounds/Adv_Burning_Start.wav", SoundType.Effect, "Adv_Sub_Burning_Loop", 3.2f);
             LoadModSound("adv_burning_loop", "Sounds/Adv_Burning_Loop.wav", SoundType.Effect, "Adv_Sub_Burning_Loop", 2f);
             LoadModSound("adv_burning_end", "Sounds/Adv_Burning_End.wav", SoundType.Effect, "Adv_Sub_Burning_End", 1f);
-            LoadModSound("adv_throwing_vote", "Sounds/Adv_Throwing_Vote.wav", SoundType.Effect, "Adv_Sub_ThrowingVote", 1f);
             LoadModSound("adv_time_stops", "Sounds/Adv_Time_Stops.wav", SoundType.Effect, "Adv_Sub_TimeStops", 14f);
             LoadModSound("adv_time_starts", "Sounds/Adv_Time_Starts.wav", SoundType.Effect, "Adv_Sub_TimeStarts", 9f);
             LoadModSound("adv_bell", "Sounds/Adv_Bell.wav", SoundType.Effect, "Adv_Sub_Bell", 3f);
@@ -622,8 +559,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
             CreateMaterialByShader("adv_white", "Shader Graphs/Standard", textures["white"]);
             CreateMaterialByShader("qmark_sheet", "Shader Graphs/Standard", textures["qmark_sheet"]);
 
-            sounds["adv_emergency"].color = Color.red;
-
             SpriteRenderer advancedClassLamp = UnityEngine.Object.Instantiate(AssetHelper.LoadAsset<Transform>("HangingLight"))
                 .GetComponentInChildren<SpriteRenderer>();
             advancedClassLamp.transform.parent.gameObject.AddComponent<RendererContainer>().renderers = new Renderer[]
@@ -746,7 +681,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
                         direction = Direction.East
                     });
 
-                    if (!AssetHelper.ModInstalled(IntegrationManager.recommendedCharactersId))
+                    if (!AssetHelper.ModInstalled(IntegrationManager.REC_CHARS_ID))
                     {
                         pitStop.posters.Add(new PosterData()
                         {
@@ -756,9 +691,9 @@ namespace BaldisBasicsPlusAdvanced.Cache
                         });
                     }
 
-                    if (!(AssetHelper.ModInstalled(IntegrationManager.carnivalPackId) ||
-                        AssetHelper.ModInstalled(IntegrationManager.criminalPackId) ||
-                        AssetHelper.ModInstalled(IntegrationManager.piratePackId)))
+                    if (!(AssetHelper.ModInstalled(IntegrationManager.CARNIVAL_PACK_ID) ||
+                        AssetHelper.ModInstalled(IntegrationManager.CRIMINAL_PACK_ID) ||
+                        AssetHelper.ModInstalled(IntegrationManager.PIRATE_PACK_ID)))
                     {
                         pitStop.posters.Add(new PosterData()
                         {
@@ -878,7 +813,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
             sprites.Add(key, sprite);
         }
 
-        public static Texture2D LoadModTexture(string key, string path, bool doNotUnload = false, bool overrideBasePath = false)
+        public static Texture2D LoadModTexture(string key, string path, bool overrideBasePath = false)
         {
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading: " + path);
@@ -888,7 +823,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
             return texture;
         }
 
-        public static void LoadGameObject(string key, string name, bool doNotUnload = false)
+        public static void LoadGameObject(string key, string name)
         {
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
@@ -897,31 +832,31 @@ namespace BaldisBasicsPlusAdvanced.Cache
             gameObjects.Add(key, _object);
         }
 
-        public static void LoadSprite(string key, string name, bool doNotUnload = false)
+        public static void LoadSprite(string key, string name)
         {
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
 #endif
             Sprite sprite = AssetHelper.LoadAsset<Sprite>(name);
-            sprites.Add(key, sprite, doNotUnload);
+            sprites.Add(key, sprite);
         }
 
-        public static void LoadTexture(string key, string name, bool doNotUnload = false)
+        public static void LoadTexture(string key, string name)
         {
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
 #endif
             Texture2D sprite = AssetHelper.LoadAsset<Texture2D>(name);
-            textures.Add(key, sprite, doNotUnload);
+            textures.Add(key, sprite);
         }
 
-        public static void LoadMaterial(string key, string name, bool doNotUnload = false)
+        public static void LoadMaterial(string key, string name)
         {
 #if DEBUG
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
 #endif
             Material material = AssetHelper.LoadAsset<Material>(name);
-            materials.Add(key, material, doNotUnload);
+            materials.Add(key, material);
         }
 
         public static void LoadMesh(string key, string name, bool doNotUnload = false)
@@ -930,7 +865,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
 #endif
             Mesh material = AssetHelper.LoadAsset<Mesh>(name);
-            meshes.Add(key, material, doNotUnload);
+            meshes.Add(key, material);
         }
 
         public static void LoadSound(string key, string name, bool doNotUnload = false)
@@ -939,7 +874,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
             AdvancedCore.Logging.LogInfo("\nAssetsStorage\nLoading from assets: " + name);
 #endif
             SoundObject sound = AssetHelper.LoadAsset<SoundObject>(name);
-            sounds.Add(key, sound, doNotUnload);
+            sounds.Add(key, sound);
         }
     }
 }

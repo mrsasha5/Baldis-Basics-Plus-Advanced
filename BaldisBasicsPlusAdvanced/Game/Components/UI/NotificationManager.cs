@@ -29,11 +29,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
         {
             canvas = ObjectCreator.CreateCanvas(setGlobalCam: false);
             canvas.transform.SetParent(transform);
-
-            audMan = canvas.gameObject.AddComponent<AudioManager>();
+            audMan = ObjectCreator.InitAudioManager(canvas.gameObject, distanceIndependent: true);
             audMan.useUnscaledPitch = true;
-            AudioSource source = canvas.gameObject.AddComponent<AudioSource>();
-            audMan.audioDevice = source;
+            canvas.gameObject.SetActive(true);
         }
 
         private void Update()

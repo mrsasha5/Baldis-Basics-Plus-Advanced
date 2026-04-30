@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
+    [Obsolete("Voting event is removed.")]
     public class NoPlatesCooldownTopic : BaseTopic
     {
         public override string Desc => "Adv_SC_Topic_PlatesCooldown".Localize();

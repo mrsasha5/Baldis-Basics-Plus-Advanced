@@ -16,7 +16,8 @@ namespace BaldisBasicsPlusAdvanced.Generation
 
         private static void LoadData<T>(string folder) where T : BaseSpawnData
         {
-            foreach (string path in Directory.GetFiles(AssetHelper.modPath + "Data/Generation/" + folder))
+            foreach (string path in Directory.GetFiles(AssetHelper.modPath + "Data/Generation/" + folder, 
+                "*.json", SearchOption.AllDirectories))
             {
                 data.Add(JsonConvert.DeserializeObject<T>(File.ReadAllText(path)));
             }
@@ -65,33 +66,24 @@ namespace BaldisBasicsPlusAdvanced.Generation
         private static ItemSpawnData RegisterItem(string @enum)
         {
             ItemMetaData meta = ItemSpawnData.FindInstance(@enum);
-
             ItemSpawnData data = new ItemSpawnData(meta.value);
-
             GenerationManager.data.Add(data);
-
             return data;
         }
 
         private static RandomEventSpawnData RegisterRandomEvent(string @enum)
         {
             RandomEventMetadata meta = RandomEventSpawnData.FindInstance(@enum);
-
             RandomEventSpawnData data = new RandomEventSpawnData(meta.value);
-
             GenerationManager.data.Add(data);
-
             return data;
         }
 
         private static NpcSpawnData RegisterNpcSpawnData(string @enum)
         {
             NPCMetadata meta = NpcSpawnData.FindInstance(@enum);
-
             NpcSpawnData data = new NpcSpawnData(meta.value);
-
             GenerationManager.data.Add(data);
-
             return data;
         }
 

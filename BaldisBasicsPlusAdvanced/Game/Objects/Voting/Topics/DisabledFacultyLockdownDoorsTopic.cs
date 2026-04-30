@@ -1,8 +1,10 @@
 ﻿using BaldisBasicsPlusAdvanced.Extensions;
+using System;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
+    [Obsolete("Voting event is removed.")]
     public class DisabledFacultyLockdownDoorsTopic : BaseTopic
     {
 

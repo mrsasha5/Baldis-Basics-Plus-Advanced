@@ -7,7 +7,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.CustomMusics
 {
     internal class CustomMusicsIntegration : CompatibilityModule
     {
-
         public CustomMusicsIntegration() : base()
         {
             guid = "pixelguy.pixelmodding.baldiplus.custommusics";

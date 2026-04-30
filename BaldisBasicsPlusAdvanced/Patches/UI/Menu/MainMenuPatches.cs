@@ -17,7 +17,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.UI.Menu
         [HarmonyPostfix]
         private static void OnStart(MainMenu __instance)
         {
-            if (OptionsDataManager.ExtraSettings.showNotif && !__instance.TryGetComponent(out NotifiedMainMenu _))
+            if (ExtraSettingsManager.ExtraSettings.showNotif && !__instance.TryGetComponent(out NotifiedMainMenu _))
             {
                 Image image = UIHelpers.CreateImage(AssetStorage.sprites["about_notif"], __instance.transform, 
                     Vector3.zero, correctPosition: false);

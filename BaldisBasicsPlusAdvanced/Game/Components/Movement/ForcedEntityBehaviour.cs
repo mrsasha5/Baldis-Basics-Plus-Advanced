@@ -38,7 +38,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.Movement
             direction = raycastDirection;
             this.makesNoises = makesNoises;
 
-            audMan = ObjectCreator.CreatePropagatedAudMan(entity.transform.position);
+            audMan = ObjectCreator.CreatePropagatedAudioManager(entity.transform.position);
             
             if (entity is PlayerEntity)
             {
@@ -93,7 +93,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.Movement
 
         private void PlayBang()
         {
-            ObjectCreator.CreatePropagatedAudMan(transform.position, destroyWhenAudioEnds: true).PlaySingle(AssetStorage.sounds["bang"]);
+            ObjectCreator.CreatePropagatedAudioManager(transform.position, destroyWhenAudioEnds: true).PlaySingle(AssetStorage.sounds["bang"]);
             if (makesNoises) ec.MakeNoise(transform.position, 64); //like First Prize
         }
 

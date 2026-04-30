@@ -1,8 +1,9 @@
 ﻿using BaldisBasicsPlusAdvanced.Extensions;
+using System;
 
 namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics
 {
-
+    [Obsolete("Voting event is removed.")]
     public class PrincipalIgnoresSomeRulesTopic : BaseTopic
     {
 

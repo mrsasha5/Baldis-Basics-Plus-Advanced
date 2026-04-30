@@ -4,7 +4,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
 {
     internal class AssetManagerCore
     {
-
         public static void PreInitialize()
         {
             AssetStorage.InitializeCriticalResources();

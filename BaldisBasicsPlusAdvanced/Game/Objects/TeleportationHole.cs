@@ -66,7 +66,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
         public void InitializePrefab(int variant)
         {
-            audMan = gameObject.AddComponent<PropagatedAudioManager>();
+            audMan = ObjectCreator.InitPropagatedAudioManager(gameObject);
             pitchMultiplier = 0.15f;
             maxForce = 60f;
             particleDestroyDistance = 0.5f;
@@ -76,7 +76,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             gameObject.layer = LayerHelper.ignoreRaycastB;
 
-            audManForBoom = childObj.AddComponent<PropagatedAudioManager>();
+            audManForBoom = ObjectCreator.InitPropagatedAudioManager(childObj);
             ReflectionHelper.SetValue<bool>(audManForBoom, "disableSubtitles", true);
 
             sphereCollider = gameObject.AddComponent<SphereCollider>();
@@ -155,7 +155,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             this.ec = ec;
             time = endsIn;
             audManForBoom.PlaySingle(AssetStorage.sounds["adv_explosion"]);
-            if (OptionsDataManager.ExtraSettings.GetValue<bool>("particles"))
+            if (ExtraSettingsManager.ExtraSettings.GetValue<bool>("particles"))
             {
                 particleSystems[0].Play();
                 particleSystems[1].Play();
@@ -182,7 +182,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             particleSystems[1].SetParticles(_particles, aliveParticles);
 
             if (time > 0f) time -= Time.deltaTime * ec.EnvironmentTimeScale;
-            if (audMan.audioDevice.loop)
+            if (audMan.audioSourceManager.GetAudioSource(SoundType.Effect).loop)
                 audMan.pitchModifier += Time.deltaTime * ec.EnvironmentTimeScale * pitchMultiplier;
             else audMan.pitchModifier = 1f;
 

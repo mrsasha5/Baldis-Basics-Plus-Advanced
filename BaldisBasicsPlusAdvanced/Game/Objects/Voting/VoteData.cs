@@ -1,5 +1,8 @@
-﻿namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
+﻿using System;
+
+namespace BaldisBasicsPlusAdvanced.Game.Objects.Voting
 {
+    [Obsolete("Voting event is removed.")]
     public class VoteData
     {
         public NPC npc;

@@ -10,7 +10,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 {
     public class StealingPlate : BasePlate
     {
-
         [SerializeField]
         private float timePerItem;
 
@@ -37,9 +36,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         protected override void VirtualOnPress()
         {
             base.VirtualOnPress();
-
             ItemManager itm = entities[0]?.GetComponent<ItemManager>();
-
             int itemsCount = itm.CountItems();
 
             if (itemsCount > 0)
@@ -60,9 +57,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
         {
             Canvas canvasOverlay = Instantiate(ObjectStorage.Overlays["ElephantOverlay"]);
             canvasOverlay.worldCamera = Singleton<CoreGameManager>.Instance.GetCamera(0).canvasCam;
-            AudioManager audMan = ObjectCreator.CreateAudMan(Vector3.zero);
-            audMan.positional = false;
-
+            AudioManager audMan = ObjectCreator.CreateAudioManager(Vector3.zero, distanceIndependent: true, transform);
             audMan.PlaySingle(AssetStorage.sounds["adv_elephant_hit"]);
 
             while (audMan.AnyAudioIsPlaying)
@@ -80,8 +75,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
 
             Destroy(canvasOverlay.gameObject);
             Destroy(audMan.gameObject);
-
-            yield break;
         }
     }
 }

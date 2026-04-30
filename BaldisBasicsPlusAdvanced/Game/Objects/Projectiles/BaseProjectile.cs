@@ -102,13 +102,9 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
         {
             SetEntityValues();
             BuildEntity();
-
-            audMan = gameObject.AddComponent<PropagatedAudioManager>();
-
+            audMan = ObjectCreator.InitPropagatedAudioManager(gameObject);
             capsuleCollider = GetComponent<CapsuleCollider>();
-
             capsuleCollider.height = 4f;
-
             speed = 80f;
         }
 

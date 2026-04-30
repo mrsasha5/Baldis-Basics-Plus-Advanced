@@ -11,7 +11,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
     //I should do something with this thing in the future
     internal class ObjectStorage
     {
-
         private static Dictionary<string, Color> roomColors = new Dictionary<string, Color>()
         {
             { "English", Color.magenta },

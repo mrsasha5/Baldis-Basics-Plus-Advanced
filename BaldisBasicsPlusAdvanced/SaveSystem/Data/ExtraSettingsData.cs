@@ -21,14 +21,15 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Data
 
         public void SetValue(string key, object value)
         {
-            if (value.GetType() != parameters[key].GetType()) throw new Exception("Different types detected! Cannot set the value " + value.ToString() + " for " + key);
+            if (value.GetType() != parameters[key].GetType()) 
+                throw new Exception("Different types detected! Cannot set the value " + value.ToString() + " for " + key);
             parameters[key] = value;
         }
 
         internal void CheckValues()
         {
             CheckValue("tips", true);
-            CheckValue("tips_during_game", false);
+            CheckValue("legacy_elevator", true);
             CheckValue("particles", true);
             CheckValue("first_prize_extensions", false);
             CheckValue("elevator_animations", true);

@@ -14,7 +14,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu
 
         private void OnEnable()
         {
-            if (notifImage != null && !OptionsDataManager.ExtraSettings.showNotif) {
+            if (notifImage != null && !ExtraSettingsManager.ExtraSettings.showNotif) {
                 Destroy(notifImage.gameObject);
                 Destroy(this);
             }

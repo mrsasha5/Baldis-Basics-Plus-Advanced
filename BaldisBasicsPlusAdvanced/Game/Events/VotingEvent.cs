@@ -22,9 +22,10 @@ using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.Events
 {
+    [Obsolete("Voting event is removed.")]
     public class VotingEvent : RandomEvent, IPrefab
     {
-
+        [Obsolete("Voting event is removed.")]
         public enum VotingState
         {
             NotStarted,
@@ -33,6 +34,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
             Finished
         }
 
+        [Obsolete("Voting event is removed.")]
         public class PrincipalController
         {
             public RoomController room;
@@ -132,6 +134,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Events
 
         public EnvironmentController Ec => ec;
 
+        [Obsolete("Voting event is removed.")]
         public static bool IsTopicActive<T>() where T : BaseTopic
         {
             return VotingBallot.IsTopicActive<T>();

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BepInEx;
@@ -71,10 +72,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI.Elevator
 
             this.originalText = originalText;
 
-            audMan = ObjectCreator.CreateAudMan(gameObject);
+            audMan = ObjectCreator.InitAudioManager(gameObject, distanceIndependent: true);
             audMan.ignoreListenerPause = true;
             audMan.useUnscaledPitch = true;
-            ReflectionHelper.SetValue<bool>(audMan, "disableSubtitles", true);
+            audMan.ReflectionSetValue("disableSubtitles", true);
 
             Image image =
                 UIHelpers.CreateImage(AssetStorage.spriteSheets["adv_tips_screen"][0], transform, Vector3.zero, false);

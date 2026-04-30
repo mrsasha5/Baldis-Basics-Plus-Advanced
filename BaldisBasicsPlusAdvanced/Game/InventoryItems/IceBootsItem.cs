@@ -1,6 +1,7 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Systems.Controllers;
+using BaldisBasicsPlusAdvanced.Helpers;
 using System;
 using UnityEngine;
 
@@ -15,9 +16,7 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
 
         public void InitializePrefab(int variant)
         {
-            audioManager = gameObject.AddComponent<AudioManager>();
-            audioManager.positional = false;
-            audioManager.audioDevice = gameObject.AddComponent<AudioSource>();
+            audioManager = ObjectCreator.InitAudioManager(gameObject, distanceIndependent: true);
         }
 
         public override bool Use(PlayerManager pm)
@@ -34,7 +33,6 @@ namespace BaldisBasicsPlusAdvanced.Game.InventoryItems
             }
 
             snowBootsController.RegisterOnDestroy(OnDestroyEvent, false);
-
             audioManager.QueueAudio(AssetStorage.sounds["whoosh"]);
 
             return true;

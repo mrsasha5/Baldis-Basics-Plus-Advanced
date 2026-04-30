@@ -33,7 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
         {
             SetFlying(false);
             Destroy(gameObject);
-            AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(transform.position, destroyWhenAudioEnds: true);
+            AudioManager audMan = ObjectCreator.CreatePropagatedAudioManager(transform.position, destroyWhenAudioEnds: true);
             audMan.PlaySingle(AssetStorage.sounds["teleport"]);
         }
 
@@ -47,7 +47,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Projectiles
             CorruptionNpcEffect corruptionEffect = npc.gameObject.AddComponent<CorruptionNpcEffect>();
             corruptionEffect.Initialize(npc.spriteRenderer[0]);
             corruptionEffect.Hit();
-            AudioManager audMan = ObjectCreator.CreatePropagatedAudMan(npc.transform.position, destroyWhenAudioEnds: true);
+            AudioManager audMan = ObjectCreator.CreatePropagatedAudioManager(npc.transform.position, destroyWhenAudioEnds: true);
             audMan.transform.SetParent(npc.transform, true);
             audMan.PlaySingle(AssetStorage.sounds["buzz_lose"]);
             corruptionEffect.onEffectPreEnd = delegate {

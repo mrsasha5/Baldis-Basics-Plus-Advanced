@@ -25,7 +25,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
             storeFunc = __instance;
             priceTagPre = ___mapTag;
 
-            int hammerPrice = (int)(___storeData.mapPrice * 1.2f);
+            int hammerPrice = ___storeData.mapPrice;
 
             PriceTag hammerPriceTag = null;
 
@@ -35,13 +35,12 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
                 hammerPriceTag.transform.localPosition = new Vector3(25f, 2.65f, 4f);
             }
 
-            if (Singleton<BaseGameManager>.Instance is PitstopGameManager && !PitOverrides.ExpelHammerPickupDisabled)
+            if (BaseGameManager.Instance is PitstopGameManager && !PitOverrides.ExpelHammerPickupDisabled)
             {
                 CreatePickup<ExpelHammerPickup>(hammerPriceTag, hammerPrice, new Vector3(25f, 5f, 2f));
             }
             else
             {
-                //TAG_Sale
                 hammerPriceTag?.SetText(Singleton<LocalizationManager>.Instance.GetLocalizedText("Adv_Tag_Out"));
             }
         }
@@ -49,12 +48,10 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
         private static T CreatePickup<T>(PriceTag tag, int price, Vector3 pos) where T : BasePickup
         {
             Pickup pickupComp = GameObject.Instantiate(AssetStorage.pickup, storeFunc.Room.objectObject.transform);
-
             T pickup = pickupComp.gameObject.AddComponent<T>();
             pickup.name = "Pickup";
             pickup.Initialize(pickup.GetComponentInChildren<SpriteRenderer>(), tag, price);
             pickup.transform.position = pos;
-
             pickup.onPickupPurchasing += delegate ()
              {
                  if (BuyingItem(pickup.Price, tag, out int ytpCollected))
@@ -67,9 +64,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
                          ReflectionHelper.UseMethod(storeFunc, "SetOffAlarm");
                  }
              };
-
             GameObject.Destroy(pickupComp);
-
             return pickup;
         }
 
@@ -85,7 +80,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
         {
             if (func == null) func = storeFunc;
             if (func == null) return;
-
             PropagatedAudioManagerAnimator audMan = 
                 ReflectionHelper.GetValue<PropagatedAudioManagerAnimator>(func, "johnnyAudioManager");
             if (!audMan.QueuedUp)
@@ -98,14 +92,12 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
         {
             if (func == null) func = storeFunc;
             if (func == null) return;
-
             PropagatedAudioManagerAnimator audMan = 
                 ReflectionHelper.GetValue<PropagatedAudioManagerAnimator>(func, "johnnyAudioManager");
             if (!audMan.QueuedUp)
             {
                 audMan.QueueRandomAudio(ReflectionHelper.GetValue<SoundObject[]>(func, "audBuy"));
             }
-
             ReflectionHelper.SetValue<bool>(storeFunc, "itemPurchased", true);
             ReflectionHelper.SetValue<bool>(storeFunc, "playerLeft", false);
         }

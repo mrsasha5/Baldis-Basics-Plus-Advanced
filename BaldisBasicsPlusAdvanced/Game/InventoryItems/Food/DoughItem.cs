@@ -1,6 +1,5 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Game.Objects.Food;
-using System;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Game.InventoryItems.Food

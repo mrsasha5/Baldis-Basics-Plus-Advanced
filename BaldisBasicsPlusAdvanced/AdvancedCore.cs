@@ -10,8 +10,10 @@ using BaldisBasicsPlusAdvanced.Generation;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.Managers;
 using BaldisBasicsPlusAdvanced.Menu;
+using BaldisBasicsPlusAdvanced.Patches.UI.Elevator;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using BepInEx;
+using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using HarmonyLib;
 using MTM101BaldAPI;
@@ -24,13 +26,14 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.IO;
+using UnityEngine;
 using static BepInEx.BepInDependency;
 
 namespace BaldisBasicsPlusAdvanced
 {
     [BepInPlugin(modId, modName, version)]
     [BepInDependency("mtm101.rulerp.bbplus.baldidevapi", DependencyFlags.HardDependency)]
-    [BepInDependency(IntegrationManager.levelLoaderId, DependencyFlags.HardDependency)]
+    [BepInDependency(IntegrationManager.LEVEL_LOADER_ID, DependencyFlags.HardDependency)]
     [BepInDependency(LevelStudioIntegration.GUID, DependencyFlags.SoftDependency)]
     public class AdvancedCore : BaseUnityPlugin
     {
@@ -38,7 +41,11 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "BB+ Advanced Edition";
 
-        public const string version = "0.3.4.1";
+        public const string version = "0.3.4.16";
+
+#if BETA
+        public const string BETA_NUM = "";
+#endif
 
         private static AdvancedCore instance;
 
@@ -50,7 +57,7 @@ namespace BaldisBasicsPlusAdvanced
 
         internal static bool LoadingFinished { get; private set; }
 
-        private static Harmony harmony;
+        internal static Harmony harmony;
 
         private void Awake()
         {
@@ -64,10 +71,9 @@ namespace BaldisBasicsPlusAdvanced
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModLoader(), LoadingEventOrder.Pre);
             LoadingEvents.RegisterOnAssetsLoaded(Info, GenericModLoader(OnAssetsPostLoad()), LoadingEventOrder.Post);
             LoadingEvents.RegisterOnAssetsLoaded(Info, GenericModLoader(OnAssetsFinalLoad()), LoadingEventOrder.Final);
-
 #if BETA
             MTM101BaldiDevAPI.AddWarningScreen(
-                "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
+                $"<color=#FF0000>Advanced Edition BETA v{version}_{BETA_NUM}\n</color>" +
                 "Remember about main conditions for the beta testers. " +
                 "You must observe them until they are declared obsolete by me.\n" +
                 "<color=#FFFF00>The main points you should remember are:\n" +
@@ -78,24 +84,22 @@ namespace BaldisBasicsPlusAdvanced
                 false);
 
             MTM101BaldiDevAPI.AddWarningScreen(
-                "<color=#FF0000>Advanced Edition BETA BUILD\n</color>" +
+                $"<color=#FF0000>Advanced Edition BETA v{version}_{BETA_NUM}\n</color>" +
                 "If you didn't get this build officially... " +
                 "Please note that as a NON-BETA TESTER YOU WILL NOT RECEIVE FEEDBACK IN CASE OF A BROKEN GAME. " +
                 "You can close game until it will be launched fully.",
                 false);
 #endif
-
+            if (Application.version == "0.14.1" || Application.version == "0.14")
+                MTM101BaldiDevAPI.AddWarningScreen("This version is unsupported. Use 0.14.2 or higher if compatible.", fatal: true);
             GameRegisterManager.InitializeDoNotDestroyOnLoadObjects();
-
             AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English", Language.English);
-            AssetLoader.LoadLocalizationFolder(AssetLoader.GetModPath(this) + "/Language/English/Compats", Language.English);
             Rewired.ReInput.ControllerConnectedEvent += OnControllerConnected;
         }
 
         private static IEnumerator OnAssetsFinalLoad()
         {
             yield return 1;
-
             yield return "Patching some rooms...";
             foreach (RoomAsset room in AssetHelper.LoadAssets<RoomAsset>())
             {
@@ -109,20 +113,17 @@ namespace BaldisBasicsPlusAdvanced
         private static IEnumerator OnAssetsPostLoad()
         {
             yield return 3;
-
             yield return "Initializing new MIDIs...";
             GameRegisterManager.PostInitializeMidis();
             yield return "Initializing posters...";
             GameRegisterManager.PostInitializePosters();
             yield return "Invoking OnAssetsPostLoad for modules...";
             IntegrationManager.InvokeOnAssetsPostLoad();
-
             if (ApiManager.onAssetsPostLoading != null)
             {
                 ApiManager.onAssetsPostLoading.Invoke();
                 ApiManager.onAssetsPostLoading = null;
             }
-
             GC.Collect();
             LoadingFinished = true;
         }
@@ -136,11 +137,8 @@ namespace BaldisBasicsPlusAdvanced
             }
 
             NotificationManager.Notification notif = CheckAssetsMarker();
-
             int count = 25;
-
             if (notif != null) count++;
-
             yield return count;
 
             if (notif != null)
@@ -213,14 +211,14 @@ namespace BaldisBasicsPlusAdvanced
             CustomOptionsCore.OnMenuInitialize += delegate (OptionsMenu menu, CustomOptionsHandler handler)
             {
                 handler.AddCategory<ExtraOptionsMenu>("Adv_Options_ExtraSettings");
-                handler.AddCategory<KeyBindingsOptionsMenu>("Adv_Options_KeyBindings");
+                if (!IntegrationManager.IsActive<RewiredPlusIntegration>())
+                    handler.AddCategory<KeyBindingsOptionsMenu>("Adv_Options_KeyBindings");
             };
         }
 
         private static NotificationManager.Notification CheckAssetsMarker()
         {
             NotificationManager.Notification notif = null;
-
             string[] versionMarkers =
                 Directory.GetFiles(AssetHelper.modPath, "*.ver", SearchOption.TopDirectoryOnly);
 

@@ -8,7 +8,6 @@ namespace BaldisBasicsPlusAdvanced.Patches.FieldTrips
     [HarmonyPatch(typeof(MinigameBase))]
     internal class MinigameBasePatch
     {
-
         [HarmonyPatch("Win")]
         [HarmonyPrefix]
         private static void OnWin(MinigameBase __instance)

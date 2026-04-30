@@ -23,6 +23,12 @@
     <NoWarn>1701;1702;1591;0649</NoWarn>
     <DebugType>portable</DebugType>
   </PropertyGroup>
+	
+  <ItemGroup>
+    <EmbeddedResource Include="../Resources/Embedded/**/*">
+      <LogicalName>$([System.String]::new('%(RelativeDir)').Replace('\','/').Replace('../Resources/Embedded/', ''))%(FileName)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -99,6 +105,9 @@
     </Reference>
     <Reference Include="PlusStudioLevelLoader">
       <HintPath>..\Dependencies\PlusStudioLevelLoader.dll</HintPath>
+    </Reference>
+    <Reference Include="QualityOfPlus">
+      <HintPath>..\Dependencies\QualityOfPlus.dll</HintPath>
     </Reference>
     <Reference Include="Rewired_Core">
       <HintPath>..\Dependencies\Rewired_Core.dll</HintPath>

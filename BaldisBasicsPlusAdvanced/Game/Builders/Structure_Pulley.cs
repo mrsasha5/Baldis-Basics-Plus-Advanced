@@ -118,7 +118,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             pulley.Initialize(ec, cell.CenterWorldPosition - Directions.ToVector3(dir) * 5f, Directions.ToVector3(dir) * offsetFromCenter,
                 new MeshRenderer[] { backgroundRenderer, meshRenderer } );
 
-            AdvancedCore.Logging.LogDebug($"{name} is placing {pulleyPre.name} at {cell.position.ToString()} with {dir.ToString()} direction in the room {cell.room.name}.");
+            AdvancedCore.Logging.LogInfo($"{name} is placing {pulleyPre.name} at {cell.position.ToString()} with {dir.ToString()} direction in the room {cell.room.name}.");
 
             return pulley;
         }

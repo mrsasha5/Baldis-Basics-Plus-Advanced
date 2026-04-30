@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using BaldisBasicsPlusAdvanced.Cache;
-using BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm;
 using BaldisBasicsPlusAdvanced.Helpers;
 using UnityEngine;
 
-namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects
+namespace BaldisBasicsPlusAdvanced.Game.Objects
 {
     public class FinishFlag : MonoBehaviour, IPrefab
     {
@@ -21,13 +20,6 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects
         private float disappearingSpeed;
 
         private bool touched;
-
-        private FarmFieldTripManager fieldTripManager;
-
-        public void Initialize(FarmFieldTripManager manager)
-        {
-            fieldTripManager = manager;
-        }
 
         public void Destroy()
         {
@@ -59,11 +51,6 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects
             {
                 touched = true;
 
-                if (fieldTripManager != null)
-                {
-                    fieldTripManager.OnWin();
-                }
-
                 if (ytpsReward > 0)
                 {
                     CoreGameManager.Instance.AddPoints(ytpsReward, 0, playAnimation: true);
@@ -76,9 +63,7 @@ namespace BaldisBasicsPlusAdvanced.Game.FieldTrips.SpecialTrips.Farm.Objects
         private IEnumerator Disappear()
         {
             MaterialPropertyBlock _propertyBlock = new MaterialPropertyBlock();
-
             float percent = 1f;
-
             Color color = renderer.color;
 
             while (percent > 0f)

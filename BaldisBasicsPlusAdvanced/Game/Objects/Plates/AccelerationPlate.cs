@@ -91,7 +91,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
                     potentialAngles.Add(i * 90f);
                 }
             }
-
         }
 
         public void DefineRotateDirection(float angle)
