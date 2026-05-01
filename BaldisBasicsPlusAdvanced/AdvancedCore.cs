@@ -41,7 +41,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "BB+ Advanced Edition";
 
-        public const string version = "0.3.4.16";
+        public const string version = "0.3.4.17";
 
 #if BETA
         public const string BETA_NUM = "";
