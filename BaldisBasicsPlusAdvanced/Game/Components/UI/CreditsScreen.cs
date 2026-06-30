@@ -118,10 +118,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
         public void InitializePrefab(int variant)
         {
-            transparentPlaySprite = AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_play_transparent.png");
-            playSprite = AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_play.png");
-            transparentPauseSprite = AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_pause_transparent.png");
-            pauseSprite = AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_pause.png");
+            transparentPlaySprite = AssetHelper.SpriteFromFile("Textures/UI/Buttons/Button_Play_Transparent.png");
+            playSprite = AssetHelper.SpriteFromFile("Textures/UI/Buttons/Button_Play.png");
+            transparentPauseSprite = AssetHelper.SpriteFromFile("Textures/UI/Buttons/Button_Pause_Transparent.png");
+            pauseSprite = AssetHelper.SpriteFromFile("Textures/UI/Buttons/Button_Pause.png");
 
             skipBackButtonHeight = 500f;
             skipForwardButtonHeight = 1000f;
@@ -183,10 +183,10 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             tmpText.alignment = TextAlignmentOptions.Center;
 
             exitButton = ObjectCreator.CreateSpriteButton(
-                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_door_exit_transparent.png"), 
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/Button_DoorExit_Transparent.png"), 
                 new Vector3(208, 148), canvas.transform, 
-                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_door_exit.png"),
-                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_door_exit_pressed.png")
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/Button_DoorExit.png"),
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/Button_DoorExit_Pressed.png")
             );
 
             pauseButton = ObjectCreator.CreateSpriteButton(
@@ -196,17 +196,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
                 pauseSprite
             );
 
-            skipForwardButton = ObjectCreator.CreateSpriteButton(
-                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_acceleration_transparent.png"),
-                new Vector3(208, -148), canvas.transform,
-                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_acceleration.png")
-            );
+            Sprite[] sprs = new Sprite[]
+            {
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/Button_Acceleration_transparent.png"),
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/Button_Acceleration.png")
+            };
 
-            skipBackButton = ObjectCreator.CreateSpriteButton(
-                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_acceleration_transparent.png"),
-                new Vector3(145, -148), canvas.transform,
-                AssetHelper.SpriteFromFile("Textures/UI/Buttons/adv_button_acceleration.png")
-            );
+            skipForwardButton = ObjectCreator.CreateSpriteButton(sprs[0], new Vector3(208, -148), canvas.transform, sprs[1]);
+            skipBackButton = ObjectCreator.CreateSpriteButton(sprs[0], new Vector3(145, -148), canvas.transform, sprs[1]);
             skipBackButton.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
 
             canvas.SetCursorInitiator();

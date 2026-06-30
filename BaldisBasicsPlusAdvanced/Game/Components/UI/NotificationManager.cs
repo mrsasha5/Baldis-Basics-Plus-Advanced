@@ -40,7 +40,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             {
                 currentNotif = notifsQueue.Dequeue();
                 currentNotif.active = true;
-                currentNotif.gameObject = CreateNotification(currentNotif.key);
+                currentNotif.image = CreateNotification(currentNotif.key);
                 currentNotif.tmpText = gameObject.GetComponentInChildren<TextMeshProUGUI>();
                 StartCoroutine(NotificationAnimator(true));
             }
@@ -84,16 +84,15 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             return notif;
         }
 
-        private GameObject CreateNotification(string key)
+        private Image CreateNotification(string key)
         {
             Image imageBg = UIHelpers.CreateImage(
                 AssetStorage.sprites["tooltip_bg"], canvas.transform, Vector3.zero, correctPosition: false);
             imageBg.type = Image.Type.Sliced;
-            imageBg.rectTransform.anchoredPosition = Vector3.zero;
-            imageBg.rectTransform.anchorMin = new Vector2(1f, 1f);
-            imageBg.rectTransform.anchorMax = new Vector2(1f, 1f);
+            imageBg.rectTransform.anchorMin = new Vector2(1f, 0f);
+            imageBg.rectTransform.anchorMax = new Vector2(1f, 0f);
             imageBg.rectTransform.sizeDelta = new Vector2(150f, 100f);
-            imageBg.rectTransform.transform.localPosition = Vector3.right * 245f + Vector3.up * -230f;
+            imageBg.rectTransform.anchoredPosition = new Vector3(-75f, -50f, 0f);
 
             TextMeshProUGUI tmpText = UIHelpers.CreateText<TextMeshProUGUI>(BaldiFonts.ComicSans12, "", imageBg.transform, Vector3.zero);
             tmpText.text = Singleton<LocalizationManager>.Instance.GetLocalizedText(key);
@@ -101,15 +100,14 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             tmpText.color = Color.black;
             tmpText.rectTransform.sizeDelta = new Vector2(140f, 90f);
 
-            return imageBg.gameObject;
+            return imageBg;
         }
 
         private IEnumerator NotificationAnimator(bool appearing)
         {
-            float maxHeight = -130f;
-            float minHeight = -230f;
-
-            Vector3 pos = currentNotif.gameObject.transform.localPosition;
+            float maxHeight = 50f;
+            float minHeight = -50f;
+            Vector3 pos = currentNotif.image.rectTransform.anchoredPosition;
 
             if (appearing)
             {
@@ -122,11 +120,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
                     if (pos.y > maxHeight) pos.y = maxHeight;
 
-                    currentNotif.gameObject.transform.localPosition = pos;
+                    currentNotif.image.rectTransform.anchoredPosition = pos;
                     yield return null;
                 }
                 currentNotif.state = AnimationState.None;
-            } else
+            }
+            else
             {
                 currentNotif.state = AnimationState.Disappearing;
                 while (pos.y > minHeight)
@@ -134,13 +133,13 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
                     if (currentNotif == null) yield break;
 
                     pos.y -= Time.unscaledDeltaTime * currentNotif.speed;
-                    currentNotif.gameObject.transform.localPosition = pos;
+                    currentNotif.image.rectTransform.anchoredPosition = pos;
                     yield return null;
                 }
 
                 currentNotif.state = AnimationState.None;
                 currentNotif.active = false;
-                Destroy(currentNotif.gameObject);
+                Destroy(currentNotif.image.gameObject);
                 currentNotif = null;
 
                 if (notifsQueue.Count == 0) gameObject.SetActive(false);
@@ -156,7 +155,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
             public AnimationState state;
 
-            public GameObject gameObject;
+            public Image image;
 
             public TextMeshProUGUI tmpText;
 
@@ -167,7 +166,6 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             public float speed = 200f;
 
             public SoundObject sound;
-
         }
 
         public enum AnimationState
@@ -176,6 +174,5 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
             Appearing,
             Disappearing
         }
-
     }
 }

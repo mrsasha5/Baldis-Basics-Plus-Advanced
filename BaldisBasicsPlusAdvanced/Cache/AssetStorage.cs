@@ -228,13 +228,9 @@ namespace BaldisBasicsPlusAdvanced.Cache
             LoadModTexture("adv_english_class_door_closed", "Rooms/EnglishClass/Adv_English_Door_Closed.png");
             LoadModTexture("adv_english_class_door_open", "Rooms/EnglishClass/Adv_English_Door_Open.png");
 
-            LoadModTexture("adv_advanced_class_ceiling", "Rooms/AdvancedClass/Adv_Advanced_Class_Ceiling.png");
-            LoadModTexture("adv_advanced_class_floor", "Rooms/AdvancedClass/Adv_Advanced_Class_Floor.png");
-            LoadModTexture("adv_advanced_class_wall", "Rooms/AdvancedClass/Adv_Advanced_Class_Wall.png");
-            LoadModTexture("adv_advanced_class_door_closed", "Rooms/AdvancedClass/Adv_Advanced_Class_Door_Closed.png");
-            LoadModTexture("adv_advanced_class_door_open", "Rooms/AdvancedClass/Adv_Advanced_Class_Door_Open.png");
-            LoadModTexture("adv_advanced_class_bg", "Rooms/AdvancedClass/Adv_Advanced_Class_Bg.png");
-            LoadModTexture("adv_advanced_class_lamp", "Rooms/AdvancedClass/Adv_Advanced_Class_Lamp.png");
+            LoadModTexture("adv_advanced_class_ceiling", "Rooms/AdvancedClass/Advanced_Class_Ceiling.png");
+            LoadModTexture("adv_advanced_class_floor", "Rooms/AdvancedClass/Advanced_Class_Floor.png");
+            LoadModTexture("adv_advanced_class_wall", "Rooms/AdvancedClass/Advanced_Class_Wall.png");
 
             LoadModTexture("adv_school_council_door_open", "Rooms/SchoolCouncil/Adv_School_Council_Door_Open.png");
             LoadModTexture("adv_school_council_door_closed", "Rooms/SchoolCouncil/Adv_School_Council_Door_Closed.png");
@@ -242,76 +238,56 @@ namespace BaldisBasicsPlusAdvanced.Cache
             LoadModTexture("adv_school_council_bg", "Rooms/SchoolCouncil/Adv_School_Council_Bg.png");
             //Rooms & posters END
 
-            LoadModTexture("adv_ballot_front", "Objects/VotingBallot/adv_ballot_front.png");
-            LoadModTexture("adv_ballot_front_voting", "Objects/VotingBallot/adv_ballot_front_voting.png");
-            LoadModTexture("adv_ballot_empty_top", "Objects/VotingBallot/adv_ballot_empty_top.png");
-            LoadModTexture("adv_ballot_top", "Objects/VotingBallot/adv_ballot_top.png");
+            LoadModTexture("adv_rusty_rotohall", "RustyRotohall.png");
+            LoadModTexture("adv_rusty_rotohall_blank", "RustyRotohall_Blank.png");
+            LoadModTexture("adv_rusty_rotohall_floor", "RustyRotohall_Floor.png");
+            LoadModTexture("adv_rusty_rotohall_sign_left", "RustyRotohall_Sign_Left.png");
+            LoadModTexture("adv_rusty_rotohall_sign_right", "RustyRotohall_Sign_Right.png");
+            LoadModTexture("adv_rusty_rotohall_sign_straight", "RustyRotohall_Sign_Straight.png");
 
-            LoadModTexture("adv_rusty_rotohall", "Objects/RustyRotoHall/adv_rusty_rotohall.png");
-            LoadModTexture("adv_rusty_rotohall_blank", "Objects/RustyRotoHall/adv_rusty_rotohall_blank.png");
-            LoadModTexture("adv_rusty_rotohall_floor", "Objects/RustyRotoHall/adv_rusty_rotohall_floor.png");
-            LoadModTexture("adv_rusty_rotohall_sign_left", "Objects/RustyRotoHall/adv_rusty_rotohall_sign_left.png");
-            LoadModTexture("adv_rusty_rotohall_sign_right", "Objects/RustyRotoHall/adv_rusty_rotohall_sign_right.png");
-            LoadModTexture("adv_rusty_rotohall_sign_straight", "Objects/RustyRotoHall/adv_rusty_rotohall_sign_straight.png");
+            LoadModTexture("adv_symbol_machine_face", "SymbolMachine_Front.png");
+            LoadModTexture("adv_symbol_machine_face_right", "SymbolMachine_Front_Right.png");
+            LoadModTexture("adv_symbol_machine_face_wrong", "SymbolMachine_Front_Wrong.png");
+            LoadModTexture("adv_symbol_machine_side", "SymbolMachine_Side.png");
 
-            LoadModTexture("adv_symbol_machine_face", "Objects/SymbolMachine/adv_symbol_machine_front.png");
-            LoadModTexture("adv_symbol_machine_face_right", "Objects/SymbolMachine/adv_symbol_machine_front_right.png");
-            LoadModTexture("adv_symbol_machine_face_wrong", "Objects/SymbolMachine/adv_symbol_machine_front_wrong.png");
-            LoadModTexture("adv_symbol_machine_side", "Objects/SymbolMachine/adv_symbol_machine_side.png");
+            LoadModTexture("adv_pressure_plate_activated", "Plates/PowerPlate_Activated.png");
+            LoadModTexture("adv_pressure_plate_deactivated", "Plates/PowerPlate.png");
+            LoadModTexture("adv_invisibility_plate_activated", "Plates/InvisibilityPlate_Activated.png");
+            LoadModTexture("adv_invisibility_plate_deactivated", "Plates/InvisibilityPlate.png");
+            LoadModTexture("adv_acceleration_plate_activated", "Plates/AccelerationPlate_Activated.png");
+            LoadModTexture("adv_acceleration_plate_deactivated", "Plates/AccelerationPlate.png");
+            LoadModTexture("adv_acceleration_plate_activated_arrow", "Plates/AccelerationPlate_Activated_Arrow.png");
+            LoadModTexture("adv_acceleration_plate_deactivated_arrow", "Plates/AccelerationPlate_Arrow.png");
+            LoadModTexture("adv_noisy_plate_activated", "Plates/NoisyPlate_Activated.png");
+            LoadModTexture("adv_noisy_plate_deactivated", "Plates/NoisyPlate.png");
+            LoadModTexture("adv_stealing_plate_activated", "Plates/StealingPlate_Activated.png");
+            LoadModTexture("adv_stealing_plate_deactivated", "Plates/StealingPlate.png");
+            LoadModTexture("adv_bully_plate_activated", "Plates/BullyPlate_Activated.png");
+            LoadModTexture("adv_bully_plate_deactivated", "Plates/BullyPlate.png");
+            LoadModTexture("adv_present_plate_activated", "Plates/PresentPlate_Activated.png");
+            LoadModTexture("adv_present_plate_deactivated", "Plates/PresentPlate.png");
+            LoadModTexture("adv_sugar_addiction_plate_activated", "Plates/SugarAddictionPlate_Activated.png");
+            LoadModTexture("adv_sugar_addiction_plate_deactivated", "Plates/SugarAddictionPlate.png");
+            LoadModTexture("adv_slowdown_plate_activated", "Plates/SlowdownPlate_Activated.png");
+            LoadModTexture("adv_slowdown_plate_deactivated", "Plates/SlowdownPlate.png");
+            LoadModTexture("adv_protection_plate_activated", "Plates/ProtectionPlate_Activated.png");
+            LoadModTexture("adv_protection_plate_deactivated", "Plates/ProtectionPlate.png");
+            LoadModTexture("adv_teleportation_plate_activated", "Plates/TeleportationPlate_Activated.png");
+            LoadModTexture("adv_teleportation_plate_deactivated", "Plates/TeleportationPlate.png");
+            LoadModTexture("adv_fake_plate_deactivated", "Plates/FakePlate.png");
+            LoadModTexture("adv_fake_plate_activated", "Plates/FakePlate_Activated.png");
+            LoadModTexture("adv_fake_plate_surprize", "Plates/FakePlate_Surprize.png");
 
-            LoadModTexture("adv_pressure_plate_activated", "Objects/Plates/adv_pressure_plate_activated.png");
-            LoadModTexture("adv_pressure_plate_deactivated", "Objects/Plates/adv_pressure_plate_deactivated.png");
+            LoadModTexture("adv_kitchen_stove", "KitchenStove.png");
 
-            LoadModTexture("adv_invisibility_plate_activated", "Objects/Plates/adv_invisibility_plate_activated.png");
-            LoadModTexture("adv_invisibility_plate_deactivated", "Objects/Plates/adv_invisibility_plate_deactivated.png");
+            LoadModTexture("adv_gum_dispenser", "GumDispenser.png");
 
-            LoadModTexture("adv_acceleration_plate_activated", "Objects/Plates/adv_acceleration_plate_activated.png");
-            LoadModTexture("adv_acceleration_plate_deactivated", "Objects/Plates/adv_acceleration_plate_deactivated.png");
-            LoadModTexture("adv_acceleration_plate_activated_arrow", "Objects/Plates/adv_acceleration_plate_activated_arrow.png");
-            LoadModTexture("adv_acceleration_plate_deactivated_arrow", "Objects/Plates/adv_acceleration_plate_deactivated_arrow.png");
-
-            LoadModTexture("adv_noisy_plate_activated", "Objects/Plates/adv_noisy_plate_activated.png");
-            LoadModTexture("adv_noisy_plate_deactivated", "Objects/Plates/adv_noisy_plate_deactivated.png");
-
-            LoadModTexture("adv_stealing_plate_activated", "Objects/Plates/adv_stealing_plate_activated.png");
-            LoadModTexture("adv_stealing_plate_deactivated", "Objects/Plates/adv_stealing_plate_deactivated.png");
-
-            LoadModTexture("adv_bully_plate_activated", "Objects/Plates/adv_bully_plate_activated.png");
-            LoadModTexture("adv_bully_plate_deactivated", "Objects/Plates/adv_bully_plate_deactivated.png");
-
-            LoadModTexture("adv_present_plate_activated", "Objects/Plates/adv_present_plate_activated.png");
-            LoadModTexture("adv_present_plate_deactivated", "Objects/Plates/adv_present_plate_deactivated.png");
-
-            LoadModTexture("adv_sugar_addiction_plate_activated", "Objects/Plates/adv_sugar_addiction_plate_activated.png");
-            LoadModTexture("adv_sugar_addiction_plate_deactivated", "Objects/Plates/adv_sugar_addiction_plate_deactivated.png");
-
-            LoadModTexture("adv_slowdown_plate_activated", "Objects/Plates/adv_slowdown_plate_activated.png");
-            LoadModTexture("adv_slowdown_plate_deactivated", "Objects/Plates/adv_slowdown_plate_deactivated.png");
-
-            LoadModTexture("adv_protection_plate_activated", "Objects/Plates/adv_protection_plate_activated.png");
-            LoadModTexture("adv_protection_plate_deactivated", "Objects/Plates/adv_protection_plate_deactivated.png");
-
-            LoadModTexture("adv_teleportation_plate_activated", "Objects/Plates/adv_teleportation_plate_activated.png");
-            LoadModTexture("adv_teleportation_plate_deactivated", "Objects/Plates/adv_teleportation_plate_deactivated.png");
-
-            LoadModTexture("adv_fake_plate_deactivated", "Objects/Plates/FakePlate/adv_fake_plate_deactivated.png");
-            LoadModTexture("adv_fake_plate_activated", "Objects/Plates/FakePlate/adv_fake_plate_activated.png");
-            LoadModTexture("adv_fake_plate_surprize", "Objects/Plates/FakePlate/adv_fake_plate_surprize.png");
-
-            LoadModTexture("adv_kitchen_stove", "Objects/KitchenStove/adv_kitchen_stove.png");
-
-            LoadModTexture("adv_gum_dispenser", "Objects/GumDispenser/adv_gum_dispenser.png");
-
-            LoadModTexture("AMM_Front", "Activities/AMM_Front.png");
-            LoadModTexture("AMM_Front_Correct", "Activities/AMM_Front_Correct.png");
-            LoadModTexture("AMM_Front_Wrong", "Activities/AMM_Front_Wrong.png");
-            LoadModTexture("AMM_Side", "Activities/AMM_Side.png");
             LoadModTexture("PairsComparator_Base", "Activities/PairsComparator_Base.png");
             LoadModTexture("PairsComparator_Arrow", "Activities/PairsComparator_Arrow.png");
 
             for (int i = 0; i < 5; i++)
             {
-                LoadModTexture("adv_pulley_base" + (i + 1), $"Objects/Pulley/adv_pulley_base{i + 1}.png");
+                LoadModTexture("adv_pulley_base" + (i + 1), $"PulleyBase_{i + 1}.png");
             }
 
             foreach (string path in Directory.GetFiles(AssetHelper.modPath + "Textures/Items"))
@@ -322,8 +298,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
             LoadModSprite("PairsComparator_WallSign_Right", "Textures/Activities/PairsComparator_WallSign_Right.png", 35f, new Vector2(0.999f, 0.5f));
             LoadModSprite("PairsComparator_WallSign_Left", "Textures/Activities/PairsComparator_WallSign_Left.png", 35f, new Vector2(0.001f, 0.5f));
-            LoadModSprite("AMM_WallSign_Right", "Textures/Activities/AMM_WallSign_Right.png", 35f, new Vector2(0.999f, 0.5f));
-            LoadModSprite("AMM_WallSign_Left", "Textures/Activities/AMM_WallSign_Left.png", 35f, new Vector2(0.001f, 0.5f));
 
             LoadModSprite("Gauge_CrystalBlindness", "Textures/Gauges/Gauge_CrystalBlindness.png");
             LoadModSprite("Gauge_SugarAddiction", "Textures/Gauges/Gauge_SugarAddiction.png");
@@ -331,56 +305,53 @@ namespace BaldisBasicsPlusAdvanced.Cache
             LoadModSprite("Gauge_Reaper", "Textures/Gauges/Gauge_Reaper.png");
             LoadModSprite("Gauge_Protection", "Textures/Gauges/Gauge_Protection.png");
 
-            LoadModSprite("adv_tip_screen_forward", "Textures/UI/SwingingTipsScreen/adv_tip_screen_forward.png");
+            LoadModSprite("adv_tip_screen_forward", "Textures/UI/Elevator/SwingingTipScreen.png");
 
             spriteSheets.Add("adv_tip_screen_forward_static_sheet",
                 AssetLoader.SpritesFromSpritesheet(2, 1, 1f, Vector2.one * 0.5f,
-                AssetHelper.TextureFromFile("Textures/UI/SwingingTipsScreen/adv_tip_screen_forward_static_sheet.png")));
+                AssetHelper.TextureFromFile("Textures/UI/Elevator/SwingingTipScreen_Static_Sheet.png")));
 
             spriteSheets.Add("adv_tips_screen", AssetLoader.SpritesFromSpritesheet(3, 2, 1f, Vector2.one * 0.5f,
-                AssetHelper.TextureFromFile("Textures/UI/SwingingTipsScreen/adv_swinging_tip_screen_sheet.png")));
+                AssetHelper.TextureFromFile("Textures/UI/Elevator/SwingingTipScreen_Base_Sheet.png")));
             spriteSheets["adv_tips_screen"] =
                 spriteSheets["adv_tips_screen"].Take(spriteSheets["adv_tips_screen"].Length - 1).ToArray();
             spriteSheets.Add("adv_tips_screen_reversed", spriteSheets["adv_tips_screen"].Reverse().ToArray());
 
-            LoadModSprite("adv_pulley", "Textures/Objects/Pulley/adv_pulley_handle.png", 25f);
+            LoadModSprite("adv_pulley", "Textures/PulleyHandle.png", 25f);
 
             for (int i = 1; i <= 3; i++)
             {
-                LoadModSprite($"adv_elv_tubes_glow_{i}", $"Textures/UI/Elevator/Tubes/Elv_TubesGlow_{i}.png");
-                LoadModSprite($"adv_elv_tube_mask_{i}", $"Textures/UI/Elevator/Tubes/Elv_Tube_Mask_{i}.png");
+                LoadModSprite($"adv_elv_tubes_glow_{i}", $"Textures/UI/Elevator/Elv_TubesGlow_{i}.png");
+                LoadModSprite($"adv_elv_tube_mask_{i}", $"Textures/UI/Elevator/Elv_Tube_Mask_{i}.png");
             }
 
-            LoadModSprite("adv_obstacle_trick", "Textures/Objects/Plates/FakePlate/adv_obstacle_trick.png", 20f);
-            LoadModSprite("adv_boxing_glove_trick", "Textures/Objects/Plates/FakePlate/adv_boxing_glove_trick.png", 20f);
-            LoadModSprite("adv_exit", "Textures/UI/Buttons/adv_button_exit.png");
-            LoadModSprite("adv_exit_transparent", "Textures/UI/Buttons/adv_button_exit_transparent.png");
+            LoadModSprite("adv_obstacle_trick", "Textures/Signs/Sign_No.png", 20f);
+            LoadModSprite("adv_boxing_glove_trick", "Textures/SpringBoxingGlove.png", 20f);
+            LoadModSprite("adv_exit", "Textures/UI/Buttons/Button_Exit.png");
+            LoadModSprite("adv_exit_transparent", "Textures/UI/Buttons/Button_Exit_Transparent.png");
 
             //Projectiles!!1!
-            LoadModSprite("adv_anvil_projectile", "Textures/Objects/Projectiles/adv_anvil_projectile.png", 25f);
+            LoadModSprite("adv_anvil_projectile", "Textures/Anvil.png", 25f);
 
-            LoadModSprite("adv_frozen_overlay", "Textures/UI/adv_frozen_overlay.png");
-            LoadModSprite("adv_protected_overlay", "Textures/UI/adv_protected_overlay.png");
+            LoadModSprite("adv_frozen_overlay", "Textures/UI/Overlay_Frozen.png");
+            LoadModSprite("adv_protected_overlay", "Textures/UI/Overlay_Protected.png");
 
             LoadModSprite("Frozen_Enemy", "Textures/Npcs/Frozen_Enemy.png", 20f);
-            LoadModSprite("adv_portal", "Textures/Objects/MysteriousPortal/adv_portal.png", 15f);
-            LoadModSprite("adv_portal_opened", "Textures/Objects/MysteriousPortal/adv_portal_opened.png", 15f);
-            LoadModSprite("adv_elephant_overlay", "Textures/UI/adv_elephant_overlay.png");
-            LoadModSprite("adv_arrows", "Textures/UI/adv_arrows.png", 70f);
+            LoadModSprite("adv_portal", "Textures/MysteriousPortal.png", 15f);
+            LoadModSprite("adv_portal_opened", "Textures/MysteriousPortal_Opened.png", 15f);
+            LoadModSprite("adv_elephant_overlay", "Textures/UI/Overlay_Elephant.png");
+            LoadModSprite("adv_arrows", "Textures/UI/SpinningArrows.png", 70f);
 
-            //Lamps!!!
-            LoadModSprite("adv_advanced_class_lamp", "Textures/Rooms/AdvancedClass/Adv_Advanced_Class_Lamp.png", 50f);
-
-            string alphabet = "abcdefghijklmnopqrstuvwxyz";
+            string alphabet = "abcdefghijklmnopqrstuvwxyz".ToUpper();
             for (int i = 0; i < alphabet.Length; i++)
             {
                 string symbol = alphabet.ElementAt(i).ToString();
-                LoadModSprite("adv_balloon_" + symbol, "Textures/Objects/Spelloons/adv_balloon_" + symbol + ".png", 30f);
+                LoadModSprite("adv_balloon_" + symbol, "Textures/Balloons/Balloon_" + symbol + ".png", 30f);
             }
 
             LoadModSprite("Reaper", "Textures/Npcs/Reaper.png", 1.5f);
-            LoadModSprite("adv_farm_flag", "Textures/Objects/Flags/adv_farm_flag.png", 5f, new Vector2(0.08f, 0.88f));
-            LoadModSprite("adv_corn_sign1", "Textures/Objects/Signs/adv_corn_sign1.png", 25f);
+            LoadModSprite("adv_farm_flag", "Textures/Flags/Farm_Flag.png", 5f, new Vector2(0.08f, 0.88f));
+            LoadModSprite("adv_corn_sign1", "Textures/Signs/CornSign_Weird.png", 25f);
 
             LoadModSound("adv_mysterious_machine", "Sounds/Adv_Mysterious_Machine.wav", SoundType.Effect, "Adv_Sub_Machine", 5f);
             LoadModSound("adv_pah", "Sounds/Adv_PAH.ogg", SoundType.Effect, "Adv_Sub_Pah", 1f);
@@ -550,25 +521,14 @@ namespace BaldisBasicsPlusAdvanced.Cache
                 SoundType.Voice, "");
 
             CreateMaterial("adv_good_machine", "zesty_machine",
-                AssetHelper.TextureFromFile("Textures/VendingMachines/adv_good_stuffs_machine.png"));
+                AssetHelper.TextureFromFile("Textures/VendingMachines/Machine_GoodStuff.png"));
             CreateMaterial("adv_good_machine_out", "zesty_machine",
-                AssetHelper.TextureFromFile("Textures/VendingMachines/adv_good_stuffs_machine_out.png"));
+                AssetHelper.TextureFromFile("Textures/VendingMachines/Machine_GoodStuff_Out.png"));
 
             //Shader Graphs/Standard
             //Sprites/Default
             CreateMaterialByShader("adv_white", "Shader Graphs/Standard", textures["white"]);
             CreateMaterialByShader("qmark_sheet", "Shader Graphs/Standard", textures["qmark_sheet"]);
-
-            SpriteRenderer advancedClassLamp = UnityEngine.Object.Instantiate(AssetHelper.LoadAsset<Transform>("HangingLight"))
-                .GetComponentInChildren<SpriteRenderer>();
-            advancedClassLamp.transform.parent.gameObject.AddComponent<RendererContainer>().renderers = new Renderer[]
-            {
-                advancedClassLamp
-            };
-            advancedClassLamp.transform.parent.name = "AdvancedClassLampLight";
-            advancedClassLamp.sprite = sprites["adv_advanced_class_lamp"];
-            advancedClassLamp.transform.localPosition = Vector3.up * 8.95f;
-            advancedClassLamp.transform.parent.gameObject.ConvertToPrefab(true);
 
 #if DEBUG
             sw.Stop();

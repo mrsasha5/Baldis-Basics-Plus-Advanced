@@ -152,7 +152,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
             endlessCollider.gameObject.layer = LayerHelper.ignoreRaycast;
             trigger = endlessCollider.gameObject.AddComponent<ColliderGroup>();
 
-            Sprite sprite = AssetHelper.SpriteFromFile("Textures/Objects/BluePulley.png", 22f);
+            Sprite sprite = AssetHelper.SpriteFromFile("Textures/Pulley_Blue.png", 22f);
 
             audMan = ObjectCreator.InitPropagatedAudioManager(gameObject);
             motorMan = ObjectCreator.InitPropagatedAudioManager(new GameObject("MotorMan"));
@@ -585,8 +585,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Activities
         public override void InitializePrefab(int variant)
         {
             base.InitializePrefab(variant);
-            correctSprite = AssetHelper.SpriteFromFile("Textures/Objects/Balloon_Correct.png", 30f);
-            incorrectSprite = AssetHelper.SpriteFromFile("Textures/Objects/Balloon_Incorrect.png", 30f);
+            correctSprite = AssetHelper.SpriteFromFile("Textures/Balloon_Correct.png", 30f);
+            incorrectSprite = AssetHelper.SpriteFromFile("Textures/Balloon_Incorrect.png", 30f);
 
             offsetAnimationEnabled = false;
             destroyOnPop = false;

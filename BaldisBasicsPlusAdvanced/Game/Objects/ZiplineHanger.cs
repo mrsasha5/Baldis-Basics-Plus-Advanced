@@ -111,8 +111,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             hasInfinityUses = true;
             canAcceptNPCs = true;
 
-            genericSprite = AssetHelper.SpriteFromFile("Textures/Objects/Hangers/adv_hanger.png", pixelsPerUnit);
-            brokenSprite = AssetHelper.SpriteFromFile("Textures/Objects/Hangers/adv_broken_hanger.png", pixelsPerUnit);
+            genericSprite = AssetHelper.SpriteFromFile("Textures/Hanger_White.png", pixelsPerUnit);
+            brokenSprite = AssetHelper.SpriteFromFile("Textures/Hanger_White_Broken.png", pixelsPerUnit);
 
             renderer = ObjectCreator.CreateSpriteRendererBase(genericSprite);
             renderer.transform.parent.SetParent(transform, false);
@@ -129,8 +129,8 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
 
             if (variant == 2)
             {
-                genericSprite = AssetHelper.SpriteFromFile("Textures/Objects/Hangers/adv_black_hanger.png", pixelsPerUnit);
-                brokenSprite = AssetHelper.SpriteFromFile("Textures/Objects/Hangers/adv_broken_black_hanger.png", pixelsPerUnit);
+                genericSprite = AssetHelper.SpriteFromFile("Textures/Hanger_Black.png", pixelsPerUnit);
+                brokenSprite = AssetHelper.SpriteFromFile("Textures/Hanger_Black_Broken.png", pixelsPerUnit);
                 renderer.sprite = genericSprite;
                 hasInfinityUses = false;
                 minMaxUses.x = 2;

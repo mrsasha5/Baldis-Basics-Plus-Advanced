@@ -33,6 +33,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
         public static void OnPreLoadEditorLevel(EditorMode mode, EditorLevelData data)
         {
+            // Remove legacy stuff
             data.items.RemoveAll(x => x.item == "adv_MysteriousBusPass");
             data.randomEvents.RemoveAll(x => x == "adv_voting");
             data.potentialStoreItems.RemoveAll(x => x.id == "adv_MysteriousBusPass");
@@ -71,7 +72,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             guid = GUID;
             priority = 127;
             versionInfo = new VersionInfo(this)
-                .SetMinVersion("1.8.0.0", exceptCurrent: false);
+                .SetMinVersion("1.8.3.1", exceptCurrent: false);
 
             CreateConfigValue("Level Studio",
                 "Adds support for Level Studio like new objects, structures and other content which can be used on your levels!");

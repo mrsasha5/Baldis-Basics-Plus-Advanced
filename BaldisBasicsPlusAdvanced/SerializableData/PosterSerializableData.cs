@@ -13,7 +13,6 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
     [JsonObject(MemberSerialization.Fields)]
     public class PosterSerializableData
     {
-
         internal static PosterTextData[] emptyTextArray = new PosterTextData[0];
 
         public static PosterObject GetPosterAndDataFromFile(string pngPath, bool overrideBasePath, out PosterSerializableData posterData)
@@ -52,7 +51,6 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
 
         private class PosterText
         {
-
 #pragma warning disable CS0649
 
             public string textKey;
@@ -99,7 +97,6 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
 
                 return data;
             }
-
         }
 
         public int weight;
@@ -122,6 +119,5 @@ namespace BaldisBasicsPlusAdvanced.SerializableData
             }
             texts = null;
         }
-
     }
 }

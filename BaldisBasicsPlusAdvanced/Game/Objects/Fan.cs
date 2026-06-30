@@ -61,25 +61,25 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects
             sprites = new Sprite[2][];
             sprites[0] = new Sprite[]
             {
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_2.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_3.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_1.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_1.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_1.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_1.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_backside.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_2.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Side_2.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Face_Side_3.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Face_1.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Face_Side_1.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Side_1.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Rear_Side_1.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Backside.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Rear_Side_2.png", pixelsPerUnit),
             };
             sprites[1] = new Sprite[]
             {
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_2.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_4.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_2.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_face_side_2.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_side_1.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_1.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_backside.png", pixelsPerUnit),
-                AssetHelper.SpriteFromFile("Textures/Objects/Fan/adv_fan_rear_side_2.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Side_2.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Face_Side_4.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Face_2.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Face_Side_2.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Side_1.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Rear_Side_1.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Backside.png", pixelsPerUnit),
+                AssetHelper.SpriteFromFile("Textures/Fan_Rear_Side_2.png", pixelsPerUnit),
             };
 
             animator.rotator = rotator;

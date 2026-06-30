@@ -600,7 +600,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabCreator.CreateStructureBuilder<Structure_Zipline>("Structure_Zipline");
             PrefabCreator.CreateStructureBuilder<Structure_NoisyPlate>("Structure_NoisyPlate");
             PrefabCreator.CreateStructureBuilder<Structure_GumDispenser>("Structure_GumDispenser");
-            PrefabCreator.CreateStructureBuilder<Structure_PlainPlate>("Structure_PlainPlate");
+            PrefabCreator.CreateStructureBuilder<Structure_PowerPlate>("Structure_PlainPlate");
         }
 
         #endregion
@@ -771,7 +771,7 @@ namespace BaldisBasicsPlusAdvanced.Managers
             PrefabCreator.CreateObjectPrefab<CrazyMysteriousPortal>("Crazy Mysterious Portal", "crazy_mysterious_portal");
 
             // Plates
-            PrefabCreator.CreatePlate<PressurePlate>("plate");
+            PrefabCreator.CreatePlate<PowerPlate>("plate");
             PrefabCreator.CreatePlate<InvisibilityPlate>("invisibility_plate");
             PrefabCreator.CreatePlate<AccelerationPlate>("acceleration_plate");
             PrefabCreator.CreatePlate<NoisyPlate>("noisy_plate");
@@ -793,10 +793,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
             // Spelling
             PrefabCreator.CreateObjectPrefab<SymbolMachine>("SymbolMachine", "symbol_machine");
             string alphabet = "abcdefghijklmnopqrstuvwxyz";
+            string upperAlphabet = alphabet.ToUpper();
             for (int i = 0; i < alphabet.Length; i++)
             {
                 ApiManager.CreateNewSpelloon(alphabet[i].ToString(),
-                    AssetStorage.sprites["adv_balloon_" + alphabet[i]]);
+                    AssetStorage.sprites["adv_balloon_" + upperAlphabet[i]]);
             }
 
             PrefabCreator.CreateObjectPrefab<TeleportationHole>("Teleportation Hole", "teleportation_hole");
@@ -895,14 +896,11 @@ namespace BaldisBasicsPlusAdvanced.Managers
         {
             AssetStorage.CreateDoorMats("adv_english_class", "adv_english_class_door");
             AssetStorage.CreateDoorMats("adv_school_council", "adv_school_council_door");
-            AssetStorage.CreateDoorMats("adv_advanced_class", "adv_advanced_class_door");
 
             PrefabCreator.CreateDoorMatSet("EnglishDoorSet", AssetStorage.materials["adv_english_class_open"],
                 AssetStorage.materials["adv_english_class_closed"]);
             PrefabCreator.CreateDoorMatSet("SchoolCouncilDoorSet", AssetStorage.materials["adv_school_council_open"],
                 AssetStorage.materials["adv_school_council_closed"]);
-            PrefabCreator.CreateDoorMatSet("AdvancedClassDoorSet", AssetStorage.materials["adv_advanced_class_open"],
-                AssetStorage.materials["adv_advanced_class_closed"]);
         }
 
         #endregion

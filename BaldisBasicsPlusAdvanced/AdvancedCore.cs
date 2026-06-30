@@ -41,10 +41,10 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "BB+ Advanced Edition";
 
-        public const string version = "0.3.4.17";
+        public const string version = "0.3.5";
 
 #if BETA
-        public const string BETA_NUM = "";
+        public const string BETA_NUM = "1";
 #endif
 
         private static AdvancedCore instance;
@@ -85,9 +85,8 @@ namespace BaldisBasicsPlusAdvanced
 
             MTM101BaldiDevAPI.AddWarningScreen(
                 $"<color=#FF0000>Advanced Edition BETA v{version}_{BETA_NUM}\n</color>" +
-                "If you didn't get this build officially... " +
-                "Please note that as a NON-BETA TESTER YOU WILL NOT RECEIVE FEEDBACK IN CASE OF A BROKEN GAME. " +
-                "You can close game until it will be launched fully.",
+                "If you did not get this build from official sources... " +
+                "Please note that YOU WILL NOT RECEIVE FEEDBACK IN CASE OF A BROKEN GAME.",
                 false);
 #endif
             if (Application.version == "0.14.1" || Application.version == "0.14")
@@ -137,8 +136,12 @@ namespace BaldisBasicsPlusAdvanced
             }
 
             NotificationManager.Notification notif = CheckAssetsMarker();
+            IEnumerator eventListenersInitializer = ReflectionEventsManager.Init();
             int count = 25;
+            eventListenersInitializer.MoveNext();
+            count += (int)eventListenersInitializer.Current;
             if (notif != null) count++;
+
             yield return count;
 
             if (notif != null)
@@ -153,6 +156,11 @@ namespace BaldisBasicsPlusAdvanced
             IntegrationManager.OnModLoadingStarted();
             yield return "Patching game...";
             harmony.PatchAllConditionals();
+
+            while (eventListenersInitializer.MoveNext())
+            {
+                yield return eventListenersInitializer.Current;
+            }
 
             yield return "Caching game assets...";
             AssetManagerCore.Initialize();
@@ -203,6 +211,7 @@ namespace BaldisBasicsPlusAdvanced
             GenerationManager.LoadHardcodedGenerationData();
             yield return "Initializing integration modules...";
             IntegrationManager.Initialize();
+            ReflectionEventsManager.InvokePreloadingEvents();
             GC.Collect();
         }
 
