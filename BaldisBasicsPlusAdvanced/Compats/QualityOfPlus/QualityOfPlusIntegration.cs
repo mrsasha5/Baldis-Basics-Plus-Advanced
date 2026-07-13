@@ -1,4 +1,6 @@
-﻿using QualityOfPlus.BetterElevator;
+﻿using QualityOfPlus;
+using QualityOfPlus.BetterElevator;
+using QualityOfPlus.BetterElevator.BackButtons;
 
 namespace BaldisBasicsPlusAdvanced.Compats.QualityOfPlus
 {
@@ -8,7 +10,7 @@ namespace BaldisBasicsPlusAdvanced.Compats.QualityOfPlus
         {
             guid = IntegrationManager.QOP_ID;
             versionInfo = new VersionInfo(this)
-                .SetMinVersion("1.8.1", exceptCurrent: true);
+                .SetMinVersion("2.0", exceptCurrent: false);
             requiresCorrectVersion = true;
 
             CreateConfigValue("Quality of Plus",
@@ -18,8 +20,8 @@ namespace BaldisBasicsPlusAdvanced.Compats.QualityOfPlus
         public static void LockStart(bool value)
         {
             if (value)
-                BackButtonsInElevator.LockStart();
-            else BackButtonsInElevator.UnlockStart();
+                QOPManager.Instance.GetFeature<BackElevatorButtonsFeature>().AddForce(true);
+            else QOPManager.Instance.GetFeature<BackElevatorButtonsFeature>().RemoveForce(true);
         }
     }
 }

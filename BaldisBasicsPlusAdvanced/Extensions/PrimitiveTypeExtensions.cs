@@ -41,6 +41,5 @@ namespace BaldisBasicsPlusAdvanced.Extensions
             }
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
-
     }
 }

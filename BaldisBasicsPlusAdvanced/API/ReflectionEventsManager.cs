@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using BepInEx.Bootstrap;
-using HarmonyLib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,7 +35,7 @@ namespace BaldisBasicsPlusAdvanced.API
                 yield return $"Looking for event listeners ({counter}/{Chainloader.PluginInfos.Values.Count})...";
                 try
                 {
-                    MethodInfo _getListenerMethod = typeof(BaseUnityPlugin).GetMethod("AdvancedEdition_GetEventListener",
+                    MethodInfo _getListenerMethod = info.GetType().GetMethod("AdvancedEdition_GetEventListener",
                         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[0], null);
                     if (_getListenerMethod == null) continue;
 
@@ -66,7 +65,7 @@ namespace BaldisBasicsPlusAdvanced.API
             {
                 try
                 {
-                    MethodInfo _method = typeof(object).GetMethod("GetForbiddenButtonReceivers", defFlags, null, new Type[0], null);
+                    MethodInfo _method = listeners[i].GetType().GetMethod("GetForbiddenButtonReceivers", defFlags, null, new Type[0], null);
                     if (_method == null) continue;
 
                     object returnedInstance = _method.Invoke(listeners[i], null);

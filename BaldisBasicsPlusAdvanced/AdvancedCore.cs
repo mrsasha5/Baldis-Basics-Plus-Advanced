@@ -44,7 +44,7 @@ namespace BaldisBasicsPlusAdvanced
         public const string version = "0.3.5";
 
 #if BETA
-        public const string BETA_NUM = "1";
+        public const string BETA_NUM = "";
 #endif
 
         private static AdvancedCore instance;
@@ -136,10 +136,10 @@ namespace BaldisBasicsPlusAdvanced
             }
 
             NotificationManager.Notification notif = CheckAssetsMarker();
-            IEnumerator eventListenersInitializer = ReflectionEventsManager.Init();
+            //IEnumerator eventListenersInitializer = ReflectionEventsManager.Init();
             int count = 25;
-            eventListenersInitializer.MoveNext();
-            count += (int)eventListenersInitializer.Current;
+            //eventListenersInitializer.MoveNext();
+            //count += (int)eventListenersInitializer.Current;
             if (notif != null) count++;
 
             yield return count;
@@ -157,10 +157,10 @@ namespace BaldisBasicsPlusAdvanced
             yield return "Patching game...";
             harmony.PatchAllConditionals();
 
-            while (eventListenersInitializer.MoveNext())
+            /*while (eventListenersInitializer.MoveNext())
             {
                 yield return eventListenersInitializer.Current;
-            }
+            }*/
 
             yield return "Caching game assets...";
             AssetManagerCore.Initialize();
@@ -211,7 +211,7 @@ namespace BaldisBasicsPlusAdvanced
             GenerationManager.LoadHardcodedGenerationData();
             yield return "Initializing integration modules...";
             IntegrationManager.Initialize();
-            ReflectionEventsManager.InvokePreloadingEvents();
+            //ReflectionEventsManager.InvokePreloadingEvents();
             GC.Collect();
         }
 

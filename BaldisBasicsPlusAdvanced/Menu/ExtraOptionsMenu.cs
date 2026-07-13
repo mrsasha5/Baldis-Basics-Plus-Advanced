@@ -1,4 +1,6 @@
 ﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Compats;
+using BaldisBasicsPlusAdvanced.Compats.QualityOfPlus;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using BaldisBasicsPlusAdvanced.Game.Components.UI.MainMenu;
@@ -37,8 +39,8 @@ namespace BaldisBasicsPlusAdvanced.Menu
             legacyElevator = CreateSynchronizatedToggleButton(
                 synchronizableName: "legacy_elevator",
                 nameKey: "Adv_Option_LegacyElevator",
-                descKey: "Adv_Option_LegacyElevator_Desc",
-                pos: new Vector3(70f, -5f, 0f),
+                descKey: IntegrationManager.IsActive<QualityOfPlusIntegration>() ? "Adv_Option_LegacyElevator_Desc_Overridden" : "Adv_Option_LegacyElevator_Desc",
+                pos : new Vector3(70f, -5f, 0f),
                 width: 250f
             );
 
