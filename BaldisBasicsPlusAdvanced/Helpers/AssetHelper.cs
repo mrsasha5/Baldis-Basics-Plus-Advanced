@@ -5,31 +5,38 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
 
 namespace BaldisBasicsPlusAdvanced.Helpers
 {
     public class AssetHelper
     {
-        public static Texture2D LoadEmbeddedTexture(string name, TextureFormat format = TextureFormat.RGBA32)
+        private static void CasePathCheck(string path)
         {
-            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
-            Texture2D tex = null;
-            using (BinaryReader reader = new BinaryReader(stream))
+            string fileName = Path.GetFileName(path);
+
+            if (!File.Exists(path)) throw new FileNotFoundException(path);
+
+            try
             {
-                tex = new Texture2D(2, 2, format, mipChain: false);
-                tex.name = Path.GetFileNameWithoutExtension(name);
-                tex.LoadImage(reader.ReadBytes((int)stream.Length));
-                tex.filterMode = FilterMode.Point;
+                string realPath = Directory.GetFiles(Path.GetDirectoryName(path), fileName)[0];
+                string _path = path;
+                realPath = realPath.Replace("/", "").Replace("\\", "");
+                path = path.Replace("/", "").Replace("\\", "");
+
+                if (realPath != path) throw new Exception($"Incorrect characters case: {_path}");
             }
-            stream.Dispose();
-            return tex;
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public static Sprite SpriteFromFile(string path, float pixelsPerUnit = 1f, Vector2? center = null, bool overrideBasePath = false)
         {
-            Texture2D texture = AssetLoader.TextureFromFile(overrideBasePath ? path : modPath + path);
+            string _path = overrideBasePath ? path : modPath + path;
+            CasePathCheck(_path);
+            Texture2D texture = AssetLoader.TextureFromFile(_path);
             Sprite sprite = null;
             if (center == null)
                 sprite = AssetLoader.SpriteFromTexture2D(texture, Vector2.one/2f, pixelsPerUnit);
@@ -39,7 +46,9 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static Texture2D TextureFromFile(string path, bool overrideBasePath = false)
         {
-            Texture2D texture = AssetLoader.TextureFromFile(overrideBasePath ? path : modPath + path);
+            string _path = overrideBasePath ? path : modPath + path;
+            CasePathCheck(_path);
+            Texture2D texture = AssetLoader.TextureFromFile(_path);
             return texture;
         }
 
@@ -102,6 +111,7 @@ namespace BaldisBasicsPlusAdvanced.Helpers
 
         public static AudioClip AudioFromFile(string path)
         {
+            CasePathCheck(modPath + path);
             AudioClip clip = AssetLoader.AudioClipFromFile(modPath + path);
             return clip;
         }

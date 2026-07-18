@@ -89,7 +89,7 @@ namespace BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal
                 "Big Hole",
                 AssetHelper.TextureFromFile("Textures/Windows/Window_BigHole.png"),
                 AssetHelper.TextureFromFile("Textures/Windows/Window_BigHole.png"),
-                AssetHelper.TextureFromFile("Textures/Windows/Window_BigHole_mask.png")
+                AssetHelper.TextureFromFile("Textures/Windows/Window_BigHole_Mask.png")
             );
             windowObjectPre.windowPre = Instantiate(windowObjectPre.windowPre);
             windowObjectPre.windowPre.gameObject.ConvertToPrefab(true);

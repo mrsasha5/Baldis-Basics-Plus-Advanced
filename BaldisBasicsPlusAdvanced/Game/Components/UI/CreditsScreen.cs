@@ -198,7 +198,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Components.UI
 
             Sprite[] sprs = new Sprite[]
             {
-                AssetHelper.SpriteFromFile("Textures/UI/Buttons/Button_Acceleration_transparent.png"),
+                AssetHelper.SpriteFromFile("Textures/UI/Buttons/Button_Acceleration_Transparent.png"),
                 AssetHelper.SpriteFromFile("Textures/UI/Buttons/Button_Acceleration.png")
             };
 

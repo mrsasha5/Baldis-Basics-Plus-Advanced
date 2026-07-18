@@ -14,10 +14,11 @@ There is no exact theme of content, content may be different and of any type.
 - "[Baldi's Basics Plus Custom Musics](https://gamebanana.com/mods/527812)" made by [PixelGuy](https://gamebanana.com/members/1713226)
 - "3D Elevator" made by [PixelGuy](https://gamebanana.com/members/1713226)
 - "[Quality of Plus](https://gamebanana.com/mods/614400)" made by [RostMoment](https://gamebanana.com/members/3042714)
-- [Rewired Custom Input Manager](https://github.com/AlexBW145/BBPRewiredCustomMan) made by [AlexBW145](https://gamebanana.com/members/1789398)
-# Outdated Dependencies (may be required depending on mod version)
-- [Legacy Level Loading System](https://gamebanana.com/mods/508477) made by [MissingTextureMan101](https://gamebanana.com/members/1665049)
-- [Baldi's Basics Extra](https://github.com/Rostmoment/BaldiBasicsExtra) made by [RostMoment](https://gamebanana.com/members/3042714)
+- "[Rewired Custom Input Manager](https://github.com/AlexBW145/BBPRewiredCustomMan)" made by [AlexBW145](https://gamebanana.com/members/1789398)
+# Outdated Dependencies
+**They may be required depending on mod version*
+- "[Legacy Level Loading System](https://gamebanana.com/mods/508477)" made by [MissingTextureMan101](https://gamebanana.com/members/1665049)
+- "[Baldi's Basics Extra](https://github.com/Rostmoment/BaldiBasicsExtra)" made by [RostMoment](https://gamebanana.com/members/3042714)
 # Notes
 - *For legal reasons, not all of dependecies are included in the public repository.*
 - *All of mentioned dependencies are required for compiling project to DLL file. If you want to build project without additional dependencies, you are supposed to remove all code that uses them.*

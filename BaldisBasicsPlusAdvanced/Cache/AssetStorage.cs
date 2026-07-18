@@ -751,7 +751,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         public static SoundObject LoadModSound(string key, string path, SoundType soundType, string subKey, Color color, float subDuration = 2f)
         {
-            //if (Debugging) AdvancedCore.Logging.LogInfo("Loading: " + path); //because used in other method
             SoundObject sound = LoadModSound(key, path, soundType, subKey, subDuration);
             sound.color = color;
             return sound;
