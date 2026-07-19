@@ -11,7 +11,7 @@ namespace BaldisBasicsPlusAdvanced.API
     {
         private static object[] listeners;
 
-        public static Type[] forbiddenButtonReceivers;
+        public static Type[] forbiddenButtonReceivers = new Type[] { typeof(PowerLeverController) };
 
         public static IEnumerator Init()
         {
@@ -58,7 +58,7 @@ namespace BaldisBasicsPlusAdvanced.API
 
         private static void InitForbiddenButtonAcceptors()
         {
-            List<Type> receivers = new List<Type>() { typeof(PowerLeverController) };
+            List<Type> receivers = new List<Type>(forbiddenButtonReceivers);
             BindingFlags defFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
             
             for (int i = 0; i < listeners.Length; i++)
