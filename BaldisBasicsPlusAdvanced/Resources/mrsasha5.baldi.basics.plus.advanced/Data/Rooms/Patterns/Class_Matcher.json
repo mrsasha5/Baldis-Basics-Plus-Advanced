@@ -1,0 +1,13 @@
+{
+    "weights":
+    {
+        3: 75
+    },
+    "minItemValue": 0,
+    "maxItemValue": 30,
+    "categoryName": "Class",
+    "functionContainerName": "ClassRoomFunction_MatchActivity",
+    "keepTextures": false,
+    "bannedFloors": [1, 2],
+    "endlessMode": true
+}

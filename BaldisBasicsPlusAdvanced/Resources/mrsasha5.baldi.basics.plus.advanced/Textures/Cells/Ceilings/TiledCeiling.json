@@ -1,0 +1,13 @@
+{
+    "weights":
+    {
+        1: 25,
+        2: 50,
+        3: 75,
+        4: 50,
+        5: 75
+    },
+    "types": ["Ceiling"],
+    "levelTypes": ["Schoolhouse"],
+    "bannedFloors": [1, 2]
+}

@@ -1,0 +1,12 @@
+{
+    "weights":
+    {
+        2: 50
+    },
+    "minItemValue": 0,
+    "maxItemValue": 0,
+    "categoryName": "Hall",
+    "endlessMode": true,
+    "isAHallway": true,
+    "isPotentialPostPlotSpecialHall": true
+}

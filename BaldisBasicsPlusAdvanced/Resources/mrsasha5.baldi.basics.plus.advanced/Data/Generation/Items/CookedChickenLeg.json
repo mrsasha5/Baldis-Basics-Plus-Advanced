@@ -1,0 +1,17 @@
+{
+    "reference": "CookedChickenLeg",
+    "uses": 2,
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse"],
+        "bannedFloors": [1],
+        "weights":
+        [
+            {"floor": 2, "weight": 15}
+        ]
+    },
+    "shopWeights":
+    [
+        {"floor": 2, "weight": 15}
+    ]
+}

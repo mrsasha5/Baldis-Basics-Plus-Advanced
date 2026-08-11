@@ -1,0 +1,21 @@
+{"items":[
+
+{"key":"Adv_Notif_UnknownAssetsVersion","value":"Assets Version Marker is missing! Please install them in correct way. Press any key to continue."},
+{"key":"Adv_Notif_AssetsWarning","value":"Detected assets folder merging with previous folder! Please install them in correct way. Press any key to continue."},
+{"key":"Adv_Notif_IncorrectAssetsWarning","value":"Incorrect assets version is installed! Press any key to continue."},
+{"key":"Adv_Notif_UpdateIsFound","value":"Found compatible version of the BB+ Advanced Edition ({0} to update)!\nAbility ends in: {1}s"},
+{"key":"Adv_Notif_UpdateWithFittingForcedDeps","value":"Found a new version of the BB+ Advanced Edition! Some dependencies may need updating. Continue? ({0})\nAbility ends in: {1}s"},
+{"key":"Adv_Notif_UpdateWithNewDeps","value":"Found a new version of the BB+ Advanced Edition! But you should install new dependencies yourself. Continue? ({0})\nAbility ends in: {1}s"},
+{"key":"Adv_Notif_DownloadingProgress","value":"Downloading {0}%"},
+{"key":"Adv_Notif_RetryQuestion","value":"Something went wrong! Retry? ({0})\nAbility ends in: {1}s"},
+{"key":"Adv_Notif_WritingFilesError","value":"Something went wrong during creating temp files!"},
+{"key":"Adv_Notif_ExtractingUpdateError","value":"Something went wrong during extracting! Continue installing by yourself."},
+{"key":"Adv_Notif_ExtensionError","value":"Extension {0} is unsupported!"},
+{"key":"Adv_Notif_AutoInstallerOsSupportError","value":"Auto-installation is not supported for your OS! Install it yourself (all mod files stored in Adv_TEMP)."},
+{"key":"Adv_Notif_MovingFilesError","value":"Something went wrong during moving files!"},
+{"key":"Adv_Notif_InstallerIsReady","value":"Close game to get auto-installation! If something go wrong, you can do it yourself (all mod files stored in Adv_TEMP)."},
+{"key":"Adv_Notif_RecipesError","value":"Cannot load {0} recipe(s) from assets! Failed by: {1}"},
+{"key":"Adv_Notif_LayersError","value":"Some layers are defined incorrectly!"},
+{"key":"Adv_Notif_ControllerWarning","value":"Controller is detected, but Rewired Custom Manager is missing! Modded bindings are not available."}
+
+]}

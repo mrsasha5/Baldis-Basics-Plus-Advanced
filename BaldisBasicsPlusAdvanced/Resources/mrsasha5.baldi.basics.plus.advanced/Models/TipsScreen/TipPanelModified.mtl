@@ -1,0 +1,45 @@
+# Created with Anim8or 1.00
+# Object "object01":
+
+newmtl YellowTex
+Ka 1 1 0.122
+Kd 1 1 0.122
+Ks 1 1 1
+Ns 752.6
+map_Kd YellowTex.png
+
+newmtl WhiteTex
+Ka 0.878 0.878 0.878
+Kd 0.878 0.878 0.878
+Ks 1 1 1
+Ns 752.6
+map_Kd WhiteTex.png
+
+newmtl RedTex
+Ka 0.773 0.00784 0.00784
+Kd 0.773 0.00784 0.00784
+Ks 1 1 1
+Ns 752.6
+map_Kd RedTex.png
+
+newmtl BlackTex
+Ka 0 0 0
+Kd 0 0 0
+Ks 1 1 1
+Ns 752.6
+map_Kd BlackTex.png
+
+newmtl GreenTex
+Ka 0.22 0.941 0.18
+Kd 0.22 0.941 0.18
+Ks 1 1 1
+Ns 752.6
+map_Kd GreenTex.png
+
+newmtl BlueTex
+Ka 0 0 0.98
+Kd 0 0 0.98
+Ks 1 1 1
+Ns 752.6
+map_Kd BlueTex.png
+

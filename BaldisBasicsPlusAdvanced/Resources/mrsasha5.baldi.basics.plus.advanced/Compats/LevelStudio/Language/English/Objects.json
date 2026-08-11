@@ -1,0 +1,48 @@
+{"items":[
+
+{"key":"Ed_Tool_object_adv_good_machine_Title","value":"Good Stuffs Vending Machine"},
+{"key":"Ed_Tool_object_adv_good_machine_Desc","value":"Vending machine that gives random item which should be very useful in many situations."},
+
+{"key":"Ed_Tool_object_adv_symbol_machine_Title","value":"Symbol Machine"},
+{"key":"Ed_Tool_object_adv_symbol_machine_Desc","value":"Suggests you to make required word from Spelloons for a some reward."},
+
+{"key":"Ed_Tool_object_adv_voting_ballot_Title","value":"Voting Ballot"},
+{"key":"Ed_Tool_object_adv_voting_ballot_Desc","value":"Used by Voting event to provide ability for everyone to make vote."},
+{"key":"Ed_Tool_object_adv_voting_ceiling_screen_Title","value":"Voting Screen"},
+{"key":"Ed_Tool_object_adv_voting_ceiling_screen_Desc","value":"Used by Voting event to show the timer and final result."},
+
+{"key":"Ed_Tool_object_adv_farm_finish_flag_Title","value":"Farm Finish Flag"},
+{"key":"Ed_Tool_object_adv_farm_finish_flag_Desc","value":"Just a good decoration for mazes to let player know where reward is placed."},
+{"key":"Ed_Tool_object_adv_farm_finish_points_flag_Title","value":"Farm Finish Flag (points)"},
+{"key":"Ed_Tool_object_adv_farm_finish_points_flag_Desc","value":"Used by special rooms premades. Gives points when player touch it."},
+
+{"key":"Ed_Tool_object_adv_farm_sign1_Title","value":"Legacy Farm Sign"},
+{"key":"Ed_Tool_object_adv_farm_sign1_Desc","value":"\"More weird corn maze signs to come!\" - Baldi."},
+
+{"key":"Ed_Tool_object_adv_invisibility_plate_Title","value":"Invisibility Plate"},
+{"key":"Ed_Tool_object_adv_invisibility_plate_Desc","value":"Makes any npc or player invisible for a few seconds!"},
+{"key":"Ed_Tool_object_adv_acceleration_plate_Title","value":"Acceleration Plate"},
+{"key":"Ed_Tool_object_adv_acceleration_plate_Desc","value":"Stay on it a few seconds for the FUN!"},
+{"key":"Ed_Tool_object_adv_noisy_plate_Title","value":"Noisy Plate"},
+{"key":"Ed_Tool_object_adv_noisy_plate_Desc","value":"Makes a very loud sound which should attract attention of npcs who relies on sound!"},
+{"key":"Ed_Tool_object_adv_noisy_faculty_plate_Title","value":"Noisy Faculty Plate"},
+{"key":"Ed_Tool_object_adv_stealing_plate_Title","value":"Stealing Plate"},
+{"key":"Ed_Tool_object_adv_stealing_plate_Desc","value":"Joke plate which was made for editor. Cooldown depends on how many items you have!"},
+{"key":"Ed_Tool_object_adv_bully_plate_Title","value":"Bully Plate"},
+{"key":"Ed_Tool_object_adv_bully_plate_Desc","value":"Steals single item from player's inventory."},
+{"key":"Ed_Tool_object_adv_present_plate_Title","value":"Present Plate"},
+{"key":"Ed_Tool_object_adv_present_plate_Desc","value":"Spawns random item."},
+{"key":"Ed_Tool_object_adv_slowdown_plate_Title","value":"Slowdown Plate"},
+{"key":"Ed_Tool_object_adv_slowdown_plate_Desc","value":"Slowdowns any entity that steps on it!"},
+{"key":"Ed_Tool_object_adv_sugar_addiction_plate_Title","value":"Sugar Addiction Plate"},
+{"key":"Ed_Tool_object_adv_sugar_addiction_plate_Desc","value":"Speed ups entity that steps on it!"},
+{"key":"Ed_Tool_object_adv_protection_plate_Title","value":"Protection Plate"},
+{"key":"Ed_Tool_object_adv_protection_plate_Desc","value":"Gives to player protection effect for a few seconds which means Baldi can't kill you until effect ends."},
+{"key":"Ed_Tool_object_adv_teleportation_plate_Title","value":"Teleportation Plate"},
+{"key":"Ed_Tool_object_adv_teleportation_plate_Desc","value":"Teleports entity which steps on it! Acts like Dangerous Teleporter! Be careful!"},
+{"key":"Ed_Tool_object_adv_fake_plate_Title","value":"Fake Plate"},
+{"key":"Ed_Tool_object_adv_fake_plate_Desc","value":"Disguises itself as other plates, trying to catch you out. However, no one has ever seen the real face of this plate..."},
+{"key":"Ed_Tool_object_adv_safety_trapdoor_Title","value":"Safety Trapdoor"},
+{"key":"Ed_Tool_object_adv_safety_trapdoor_Desc","value":"Works like Blue Locker, but more safety and not infinity."}
+
+]}

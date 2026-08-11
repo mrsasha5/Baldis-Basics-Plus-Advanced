@@ -1,0 +1,21 @@
+{
+    "weight": 75,
+    "texts": [
+        {
+            "textKey": "Adv_PST_BreadIsHead_1",
+            "font": "BoldComicSans24",
+            "alignment": "Center",
+            "position": {"x": 60, "z": 130},
+            "size": {"x": 140, "z": 192},
+            "color": {"r": 1.0, "g": 0.64, "b": 0.0, "a": 1.0}
+        },
+        {
+            "textKey": "Adv_PST_BreadIsHead_2",
+            "font": "ComicSans18",
+            "alignment": "Center",
+            "position": {"x": 60, "z": 90},
+            "size": {"x": 140, "z": 192},
+            "color": {"r": 1.0, "g": 1.0, "b": 0.0, "a": 1.0}
+        }
+    ]
+}

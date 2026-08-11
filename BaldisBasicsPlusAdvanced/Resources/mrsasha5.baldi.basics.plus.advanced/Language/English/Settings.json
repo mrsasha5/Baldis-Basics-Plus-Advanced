@@ -1,0 +1,29 @@
+{"items":[
+
+{"key":"Adv_RewiredCategory","value":"Advanced Edition"},
+{"key":"Adv_Reset","value":"Reset"},
+{"key":"Adv_Options_ExtraSettings","value":"Extra\nSettings"},
+{"key":"Adv_Options_KeyBindings","value":"Key\nBindings"},
+{"key":"Adv_Options_KeyBindings_Warning","value":"Have a controller? You must include Rewired Custom Manager API for getting support. More information is available at the mod page."},
+{"key":"Adv_Options_KeyBindings_Overridden","value":"Key bindings are overridden by Rewired Custom Manager.\nGo to Control Mapper menu!"},
+{"key":"Adv_KeyBind_WindBlowerSwitch","value":"Wind Blower Switch"},
+{"key":"Adv_KeyBind_WindBlowerSwitch_Desc","value":"Allows you to turn off/turn on the Wind Blower\nwithout wasting any remaining wind!"},
+{"key":"Adv_KeyBind_BalloonPopAction","value":"Pop the Inflatable Balloon"},
+{"key":"Adv_KeyBind_BalloonPopAction_Desc","value":"It allows you to pop the balloon\non which you are flying!"},
+{"key":"Adv_Option_Tips","value":"Elevator Tips"},
+{"key":"Adv_Option_Tips_Desc","value":"Tips will appear in the elevator! Tips contains\ninteresting game facts and recommendations!"},
+{"key":"Adv_Option_Tips_During_Game","value":"Tips"},
+{"key":"Adv_Option_Tips_During_Game_Desc","value":"These tips appear during the game!\nThey can describe you how to use somethings..."},
+{"key":"Adv_Option_FirstPrizeFeature","value":"First Prize Pushes NPCs"},
+{"key":"Adv_Option_FirstPrizeFeature_Desc","value":"Allows First Prize to push NPCs!"},
+{"key":"Adv_Option_Particles","value":"Particles"},
+{"key":"Adv_Option_Particles_Desc","value":"Particles improve visuals!\nOnly some of them can be turned off."},
+{"key":"Adv_Option_Elv_Animations","value":"Elevator Animations"},
+{"key":"Adv_Option_Elv_Animations_Desc","value":"Makes the elevator screen potentially better\nby adding a new animations in it."},
+{"key":"Adv_Option_LegacyElevator","value":"Legacy Elevator"},
+{"key":"Adv_Option_LegacyElevator_Desc","value":"Reverts elevator changes that came from the 0.14 update.\nWarning: some mods may do same thing with the elevator,\nso this option can become useless in some cases."},
+{"key":"Adv_Option_LegacyElevator_Desc_Overridden","value":"<color=#FF2800>This option is overridden by another mod.</color>"},
+{"key":"Adv_Option_Tips","value":"Elevator Tips"},
+{"key":"Adv_Option_Credits_Desc","value":"Credits!"}
+
+]}

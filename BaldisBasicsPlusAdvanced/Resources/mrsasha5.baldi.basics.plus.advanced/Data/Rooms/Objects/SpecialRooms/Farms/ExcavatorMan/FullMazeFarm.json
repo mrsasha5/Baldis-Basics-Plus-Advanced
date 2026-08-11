@@ -1,0 +1,7 @@
+{
+    "weights":
+    {
+        2: 30
+    },
+    "inheritPaths": ["Farm_Base.json"]
+}

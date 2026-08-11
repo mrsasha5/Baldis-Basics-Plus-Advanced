@@ -1,0 +1,16 @@
+{"items":[
+
+{"key":"Ed_Tool_room_adv_english_class_Title","value":"English Class"},
+{"key":"Ed_Tool_room_adv_english_class_Desc","value":"No special properties. It is supposed to be used for the Symbol Machine."},
+{"key":"Ed_Tool_room_adv_english_class_timer_Title","value":"English Class: Timer Mode"},
+{"key":"Ed_Tool_room_adv_english_class_timer_Desc","value":"Overrides behaviour of the Symbol Machine like it happens on the PIT Stop floor!"},
+{"key":"Ed_Tool_room_adv_school_council_class_Title","value":"School Council"},
+{"key":"Ed_Tool_room_adv_school_council_class_Desc","value":"Special room for the voting event. Place ballot here!"},
+{"key":"Ed_Tool_room_adv_advanced_class_Title","value":"Advanced Education Class"},
+{"key":"Ed_Tool_room_adv_advanced_class_Desc","value":"No special properties. It is supposed to be used for the Advanced Math Machine."},
+{"key":"Ed_Tool_room_adv_corn_field_Title","value":"Corn Field"},
+{"key":"Ed_Tool_room_adv_corn_field_Desc","value":"Works like outside room, but has very high skybox and no stamina regeneration."},
+{"key":"Ed_Tool_room_adv_class_compass_comparator_Title","value":"<size=75%>Classroom (Compass Comparator)"},
+{"key":"Ed_Tool_room_adv_class_compass_comparator_Desc","value":"Shows the compass comparator instruction chalkboard."}
+
+]}

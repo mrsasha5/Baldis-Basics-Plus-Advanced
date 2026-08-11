@@ -1,0 +1,7 @@
+{
+    "weights":
+    {
+        3: 75
+    },
+    "inheritPaths": ["Class_CompassComparator.json"]
+}

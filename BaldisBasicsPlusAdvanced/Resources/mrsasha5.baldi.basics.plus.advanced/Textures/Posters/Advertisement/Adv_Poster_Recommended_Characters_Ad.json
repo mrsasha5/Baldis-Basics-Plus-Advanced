@@ -1,0 +1,28 @@
+{
+    "texts": [
+        {
+            "textKey": "Adv_PST_RecommendedCharacters_1",
+            "font": "ComicSans18",
+            "alignment": "Center",
+            "position": {"x": 64, "z": 203},
+            "size": {"x": 128, "z": 21},
+            "color": {"r": 1.0, "g": 1.0, "b": 1.0, "a": 1.0}
+        },
+	{
+            "textKey": "Adv_PST_RecommendedCharacters_2",
+            "font": "ComicSans18",
+            "alignment": "Center",
+            "position": {"x": 66, "z": 188},
+            "size": {"x": 128, "z": 10},
+            "color": {"r": 1.0, "g": 1.0, "b": 1.0, "a": 1.0}
+        },
+        {
+            "textKey": "Adv_PST_RecommendedCharacters_Desc",
+            "font": "ComicSans12",
+            "alignment": "Right",
+            "position": {"x": 115, "z": 20},
+            "size": {"x": 70, "z": 192},
+            "color": {"r": 1.0, "g": 1.0, "b": 1.0, "a": 1.0}
+        }
+    ]
+}

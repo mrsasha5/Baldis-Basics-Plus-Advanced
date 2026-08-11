@@ -1,0 +1,11 @@
+{
+    "weights":
+    {
+        1: 10,
+        2: 25,
+        3: 40,
+        4: 25,
+        5: 40
+    },
+    "inheritPaths": ["Faculty.json"]
+}

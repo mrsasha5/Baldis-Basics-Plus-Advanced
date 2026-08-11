@@ -1,0 +1,11 @@
+{
+    "weights":
+    {
+        2: 10,
+        3: 20,
+        4: 10,
+        5: 20
+    },
+    "bannedFloors": [1],
+    "inheritPaths": ["Faculty.json"]
+}

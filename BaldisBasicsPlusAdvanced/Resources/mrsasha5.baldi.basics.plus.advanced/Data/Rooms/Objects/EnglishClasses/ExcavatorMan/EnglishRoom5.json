@@ -1,0 +1,10 @@
+{
+    "weights":
+    {
+        2: 25,
+        3: 50,
+        4: 25,
+        5: 50
+    },
+    "inheritPaths": ["EnglishClass.json"]
+}

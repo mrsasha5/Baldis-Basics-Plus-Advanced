@@ -1,0 +1,16 @@
+{
+   "rawFood": [
+   {
+      "name": "Hammer"
+   },
+   {
+      "name": "ZestyBar"
+   }],
+   "cookedFood": [
+   {
+      "name": "Hammer"
+   },
+   {
+      "name": "Dough"
+   }]
+}

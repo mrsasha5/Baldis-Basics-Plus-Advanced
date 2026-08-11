@@ -1,0 +1,13 @@
+{
+   "rawFood": [
+   {
+      "name": "DietBsoda"
+   },
+   {
+      "name": "Boots"
+   }],
+   "cookedFood": [
+   {
+      "name": "IceBoots"
+   }]
+}

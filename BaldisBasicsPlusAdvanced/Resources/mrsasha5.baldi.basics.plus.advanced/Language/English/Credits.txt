@@ -1,0 +1,195 @@
+Offset: -3315.0
+Max Height: 3350.0
+
+Baldi's Basics Plus: Advanced Edition
+Welcome to the credits!
+
+
+Mr. Sasha
+*Programming, Initial Main Author, Artist, Sound Maker and other things which are not mentioned here...
+
+
+Excavator Man
+*Artist (2D & 3D), Music Maker, Room Premades Maker, Recipes Maker, Ideas Maker
+Made design of:
+- Advanced Math Machine
+- Gum Dispenser
+- Hangers (Ziplines), texture for their pillars
+- Kitchen Stove
+- Acceleration Plate
+- Bully Plate
+- Invisibility Plate (old texture which was a base for the new one)
+- Noisy Plate
+- Present Plate
+- Pressure Green Plate 
+- Protection Plate
+- Slowdown Plate
+- Stealing Plate (AKA Placeface Plate, Editor only feature)
+- Sugar Addiction Plate
+- Teleportation Plate
+- Fake Plate texture for Editor only
+- Fake Plate Boxing Glove trick
+- Anvil Projectile
+- Pulley wall texture
+- Rusty RotoHall
+- Safety Trapdoor
+- Spelloons
+- Symbol Machine
+- Voting Ballot
+- Compass Comparator
+- Blue Pulley
+- Check Mark Balloon
+- Cross Mark Balloon
+Made themed MIDI tracks:
+- Grades are Important (Factory)
+- Advanced Subjects (Laboratory)
+- Janitors Only (Maintenance)
+- History Repeats (Castle)
+- Glass Camelott (Window World)
+Made design for rooms:
+- Advanced Class
+- English Class
+- School Council
+- Corn Field
+Made design for posters:
+- All generic posters (except Criss The Crystal's BSODA Advertisement, Bread is head of everything, Old RotoHalls)
+- Painting City, Paiting Landscape, Painting Sun, Paiting Flowers, Painting Beach (Faculty only)
+- Invisibility Plate (generic poster) original design
+- Symbol Machine poster
+- Extra Points Symbol Machine minigame description poster
+- Recipe poster
+- Content packs advertisement poster
+- Mystman12's Chalkboard (taken from BBCR and modified a bit to remove light reflection)
+Made design for buttons:
+- Play
+- Pause
+- Rewinding
+- Exit (Blue door)
+Made design for overlays:
+- Protection effect
+Made design for item icons:
+- Wind Blower
+- Boxing Glove
+- Bread (And Piece of Bread)
+- Hammer
+- Teleportation Bomb
+- Inflatable Balloon
+- Raw Chicken Leg
+- Cooked Chicken Leg
+- Magic Clock
+- Dough
+- Placeable Fan
+Made design for gauges:
+- Protection gauge
+- Sugar Addiction Plate Effect gauge
+Made many Level Stusio's icons
+Made cell textures:
+- Tiled Ceiling
+- Green Bricks
+- New White Bricks Wall
+- Parquet Floor
+- White Carpet
+Made recipes:
+- Diet BSODA + Diet BSODA = BSODA
+- BSODA = Diet BSODA + Diet BSODA
+- Bus Pass = Mysterious Bus Pass
+- Mysterious Bus Pass = Bus Pass
+- Diet BSODA + Boots = Ice Boots
+- Quarter = Principal Keys
+- Principal Keys = Quarter
+- Wind Blower + Hammer = Placeable Fan + Hammer
+- Zesty Bar + Hammer = Dough + Hammer
+- Circle Key = Principal Keys
+- Hexagon Key = Principal Keys
+- Pentagon Key = Principal Keys
+- Square Key = Principal Keys
+- Triangle Key = Principal Keys
+- Weird Key = Principal Keys
+Improved Bendabest19's Tip Screen model (wires, "TIP" text)
+Made Static animation for Tip Screen in 2D Elevator
+Corrected renderer of the Placeable Fun (original author couldn't fix issue)
+Made Error Screen texture
+Ideas:
+- Compass Comparator
+- Pressure Green Plate (by the way, it's inspired me to invent other plate variants)
+- Gum Dispenser
+
+Michael the Stickman
+*Artist (3D)
+Made models and rendered them for:
+- Placeable Fun (Entity)
+- Ice Boots (Item icon)
+
+Blin222
+*2D Artist, NPC Creator, Beta Tester
+Made Criss the Crystal (all assets by him)
+Made Criss the Crystal's Level Studio icon
+Made posters "BSODA Advertisement", "Bread Is Head of Everything" and Criss's one
+Made recipe Alarm Clock + Alarm Clock = Magic Clock
+Made Big Hole texture
+Found a few bugs
+
+Pixelguy
+*Baldi Voice Maker, Beta Tester
+Made Baldi's announcing events voicelines:
+- Cold Machine
+- Disappearing Characters
+- Mysterious Portals
+
+B-Side Skid
+*Room Premades Maker, Music Maker
+Made MIDIs:
+- Puzzling Prison (Prison)
+- Who Vented (Vent World)
+Made a couple of room premades
+
+GrandGames
+*Artist (2D), Idea Inventor, Beta Tester
+Textures:
+- Pulley Handle
+Ideas:
+- Pulley (Came from BBNG and was adjusted by me)
+
+Bendabest2010
+*Artist (2D, 3D)
+Textures:
+- New farm signs
+- Improved Mysterious Teleporter sprite (before it was recolor of the Dangerous Teleporter)
+- Exterior activity signs for Advanced Math Machine, Compass Comparator
+Models:
+- Tip Screen
+
+Kostya Karuselkin
+*Artist (2D)
+Adapted textures to the Invisibility Elixir:
+- Invisibility Plate textures (pressed, non-pressed states)
+- Invisibility Plate poster
+
+Wazkitta
+*Artist (2D), Room Premades Maker, Beta Tester
+Made Mysterious Bus Pass item icon
+Found a few bugs
+
+Antoniofigo
+*Beta Tester, Ideas Inventor
+Found a lot of bugs
+
+RostMoment
+*Beta Tester
+Found a few bugs
+
+TABS Dash
+*Beta Tester
+Found a few bugs
+
+DarkSky
+*Beta Tester
+Found a few bugs
+
+EnderChap
+*Beta Tester
+Pointed about missing Criss's poster in Level Studio during beta tests
+
+Special thanks to:
+MissingTextureMan101
+They develop Baldi's Basics Plus Development API, Level Studio Loading System and Level Studio that help to develop and support this mod

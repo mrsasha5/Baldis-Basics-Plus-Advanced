@@ -1,0 +1,16 @@
+{
+    "reference": "BoxingGlove",
+    "uses": 2,
+    "standardData":
+    {
+    	"levelTypes": ["Schoolhouse", "Laboratory", "Maintenance", "Factory"],
+        "weights":
+        [
+            {"floor": 2, "weight": 35}
+        ]
+    },
+    "shopWeights":
+    [
+        {"floor": 2, "weight": 35}
+    ]
+}

@@ -1,0 +1,14 @@
+{
+   "rawFood": [
+   {
+      "name": "PortalPoster"
+   },
+   {
+      "name": "PortalPoster"
+   }],
+   "cookedFood": [
+   {
+      "name": "PlaceablePortal",
+      "uses": 2
+   }]
+}

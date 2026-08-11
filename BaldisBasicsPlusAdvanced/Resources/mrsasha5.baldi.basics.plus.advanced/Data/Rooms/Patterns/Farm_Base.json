@@ -1,0 +1,14 @@
+{
+    "weights":
+    {
+        1: 30
+    },
+    "minItemValue": 0,
+    "maxItemValue": 30,
+    "categoryName": "Special",
+    "functionContainerName": "CornFieldFunctionContainer",
+    "levelTypes": ["Schoolhouse"],
+    "keepTextures": true,
+    "bannedFloors": [1],
+    "endlessMode": true
+}

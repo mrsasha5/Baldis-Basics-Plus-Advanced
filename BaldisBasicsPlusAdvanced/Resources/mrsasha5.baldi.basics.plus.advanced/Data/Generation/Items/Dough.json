@@ -1,0 +1,15 @@
+{
+    "reference": "Dough",
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse"],
+        "weights":
+        [
+            {"floor": 2, "weight": 50}
+        ]
+    },
+    "shopWeights":
+    [
+        {"floor": 2, "weight": 50}
+    ]
+}

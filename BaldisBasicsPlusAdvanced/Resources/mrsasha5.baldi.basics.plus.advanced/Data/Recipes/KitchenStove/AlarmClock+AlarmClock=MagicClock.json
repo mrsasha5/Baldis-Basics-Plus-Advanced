@@ -1,0 +1,13 @@
+{
+  "rawFood": [
+    {
+      "name": "AlarmClock"
+    },
+    {
+      "name": "AlarmClock"
+    }],
+  "cookedFood": [
+    {
+      "name": "MagicClock"
+    }]
+}

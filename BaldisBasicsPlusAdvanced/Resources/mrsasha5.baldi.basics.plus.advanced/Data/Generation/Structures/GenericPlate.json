@@ -1,0 +1,19 @@
+{
+    "reference": "Structure_GenericPlate",
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse", "Factory", "Laboratory", "Maintenance"],
+        "bannedFloors": [1],
+        "weights":
+        [
+            {"floor": 2, "weight": 75}
+        ]
+    },
+    "parameters":
+    [
+        {
+            "floor": 2,
+            "minMax": [{"x": 2, "z": 5}, {"x": 0, "z": 2}]
+        }
+    ]
+}

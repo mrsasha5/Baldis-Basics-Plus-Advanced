@@ -1,0 +1,16 @@
+{"items":[
+
+{"key":"Adv_Voting_Result","value":"Voting result:\n"},
+{"key":"Adv_Expel_Hammer_Pages","value":"page: {0}/{1}"},
+{"key":"Adv_ExpelHammer_Character_Info","value":"Select a character that will be removed from {0} floors:"},
+{"key":"Adv_Item_ExpelHammer_ReturnPurchase", "value": "Johnny is ready to take the Hammer of Force back! You will get {0} points for this action."},
+{"key":"Adv_Text_IAgree","value":"I agree"},
+{"key":"Adv_Text_Loading","value":"Loading"},
+{"key":"Adv_Voting_Plus","value":"Support"},
+{"key":"Adv_Voting_Minus","value":"Reject"},
+{"key":"Adv_Voting_Player_Voted","value":"You have voted already"},
+{"key":"Adv_Voting_Approved","value":"The voting is ended with {0}% positive votes."},
+{"key":"Adv_Voting_Rejected","value":"The voting is ended with {0}% negative votes."},
+{"key":"Adv_Voting_EqualVotes","value":"The voting is ended with equal votes."}
+
+]}

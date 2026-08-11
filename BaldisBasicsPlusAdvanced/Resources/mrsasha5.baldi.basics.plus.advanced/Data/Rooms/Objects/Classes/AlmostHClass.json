@@ -1,0 +1,7 @@
+{
+    "weights":
+    {
+        2: 75
+    },
+    "inheritPaths": ["Class_MM.json"]
+}

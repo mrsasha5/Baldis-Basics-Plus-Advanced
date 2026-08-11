@@ -1,0 +1,19 @@
+{"items":[
+
+{"key":"Ed_Tool_item_adv_Hammer_Desc","value":"Item that works well in right hands."},
+{"key":"Ed_Tool_item_adv_WindBlower_Desc","value":"Allows player to blow wind like Cloudy Copter for a few seconds! However, it is worth remembering that you can turn off it to keep the wind."},
+{"key":"Ed_Tool_item_adv_MysteriousTeleporter_Desc","value":"Teleports any npc like Dangerous Teleporter does that, works as projectile."},
+{"key":"Ed_Tool_item_adv_IceBoots_Desc","value":"Gives you immunity only from Baldi while you are sliding!"},
+{"key":"Ed_Tool_item_adv_PlaceableFan_Desc","value":"Blows strong wind when it is active!"},
+{"key":"Ed_Tool_item_adv_TeleportationBomb_Desc","value":"Creates teleportation hole which teleports everyone while it is not closed!"},
+{"key":"Ed_Tool_item_adv_MagicClock_Desc","value":"Stops time for a few seconds, while time is stopped entities can't interact with you."},
+{"key":"Ed_Tool_item_adv_InflatableBalloon_Desc","value":"While player is flying by using this balloon, they can't interact with entities."},
+{"key":"Ed_Tool_item_adv_Dough_Desc","value":"Gives guilt for npc or player who is stepped on this."},
+{"key":"Ed_Tool_item_adv_MysteriousBusPass_Desc","value":"Analog of Bus Pass."},
+{"key":"Ed_Tool_item_adv_Bread_Desc","value":"A delicious bread which with some chance can give speed effect for player!"},
+{"key":"Ed_Tool_item_adv_RawChickenLeg_Desc","value":"I wouldn't recommend eat this until it will be cooked on Kitchen Stove."},
+{"key":"Ed_Tool_item_adv_CookedChickenLeg_Desc","value":"Excellent fried chicken that will feed any NPC or player."},
+{"key":"Ed_Tool_item_adv_BoxingGlove_Desc","value":"Helps you to throw NPCs back. You can also break windows by using the glove or pushing NPCs into them."},
+{"key":"Ed_Tool_item_adv_PlaceablePortal_Desc","value":"Creates portal which can be connected with other one."}
+
+]}

@@ -1,0 +1,12 @@
+{
+    "reference": "DisappearingCharacters",
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse", "Laboratory"],
+        "bannedFloors": [1],
+        "weights":
+        [
+            {"floor": 2, "weight": 100}
+        ]
+    }
+}

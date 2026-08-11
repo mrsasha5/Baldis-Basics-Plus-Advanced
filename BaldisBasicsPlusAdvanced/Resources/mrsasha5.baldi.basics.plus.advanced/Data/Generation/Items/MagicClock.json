@@ -1,0 +1,20 @@
+{
+    "reference": "MagicClock",
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse", "Laboratory"],
+        "bannedFloors": [1],
+        "weights":
+        [
+            {"floor": 2, "weight": 50}
+        ]
+    },
+    "shopWeights":
+    [
+        {"floor": 2, "weight": 50}
+    ],
+    "mysteryRoomWeights":
+    [
+        {"floor": 2, "weight": 50}
+    ]
+}

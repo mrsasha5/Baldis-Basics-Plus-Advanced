@@ -1,0 +1,15 @@
+{
+    "reference": "WindBlower",
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse", "Laboratory"],
+        "weights":
+        [
+            {"floor": 2, "weight": 75}
+        ]
+    },
+    "shopWeights":
+    [
+        {"floor": 2, "weight": 75}
+    ]
+}

@@ -1,0 +1,7 @@
+{
+    "reference": "EnglishClass",
+    "standardData":
+    {
+        "bannedFloors": [1]
+    }
+}

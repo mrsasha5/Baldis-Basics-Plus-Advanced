@@ -1,0 +1,13 @@
+{
+    "weights":
+    {
+        2: 30
+    },
+    "minItemValue": 0,
+    "maxItemValue": 30,
+    "categoryName": "Special",
+    "functionContainerName": "CafeteriaRoomFunction",
+    "levelTypes": ["Schoolhouse"],
+    "keepTextures": false,
+    "endlessMode": true
+}

@@ -1,0 +1,16 @@
+{
+    "reference": "IceBoots",
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse", "Laboratory"],
+        "bannedFloors": [1],
+        "weights":
+        [
+            {"floor": 2, "weight": 75}
+        ]
+    },
+    "shopWeights":
+    [
+        {"floor": 2, "weight": 75}
+    ]
+}

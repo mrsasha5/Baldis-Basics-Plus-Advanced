@@ -1,0 +1,20 @@
+{"items":[
+
+{"key":"Adv_FieldTrip_Farm_Win_Title","value":"WOWIE!"},
+{"key":"Adv_FieldTrip_Farm_Win_Desc","value":"You have beaten a crazy corn maze! Great job! Go back to the school!"},
+{"key":"Adv_Voting_Not_Started","value":"Voting starts soon"},
+{"key":"Adv_Voting_Active","value":"Voting ends in: {0}m {1}s"},
+{"key":"Adv_Voting_Waits","value":"Counting votes..."},
+{"key":"Adv_Voting_Ended","value":"Voting is ended. Result: {0}"},
+{"key":"Adv_Phrase_SM_Progress","value":"Write word: {0}\nProgress: {1}%"},
+{"key":"Adv_Phrase_SM_Timed","value":"Write word: {0}\nTime: {1}s"},
+{"key":"Adv_Phrase_SM_ReInit","value":"Generating problem: {0}%"},
+{"key":"Adv_Phrase_SM_No_Words","value":"OH NO! Words were removed!"},
+{"key":"Adv_Phrase_Good_1","value":"Good one!"},
+{"key":"Adv_Phrase_Good_2","value":"Great job! That's right!"},
+{"key":"Adv_Phrase_Good_3","value":"You're doing fantastic!"},
+{"key":"Adv_Phrase_Bad_1","value":"Be more careful next time!"},
+{"key":"Adv_Phrase_Bad_2","value":"Learn more!"},
+{"key":"Adv_Phrase_Bad_3","value":"You can be better!"}
+
+]}

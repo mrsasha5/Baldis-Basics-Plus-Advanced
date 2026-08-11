@@ -1,0 +1,7 @@
+{
+    "weights":
+    {
+        1: 50
+    },
+    "inheritPaths": ["Class_Notebook.json"]
+}

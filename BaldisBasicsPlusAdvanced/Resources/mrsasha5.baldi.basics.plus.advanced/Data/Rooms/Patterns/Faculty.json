@@ -1,0 +1,11 @@
+{
+    "weights":
+    {
+        2: 50
+    },
+    "minItemValue": 30,
+    "maxItemValue": 75,
+    "categoryName": "Faculty",
+    "keepTextures": false,
+    "endlessMode": true
+}

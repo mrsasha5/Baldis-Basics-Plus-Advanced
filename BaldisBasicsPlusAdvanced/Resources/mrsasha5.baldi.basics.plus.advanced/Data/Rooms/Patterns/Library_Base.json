@@ -1,0 +1,14 @@
+{
+    "weights":
+    {
+        2: 30
+    },
+    "minItemValue": 0,
+    "maxItemValue": 30,
+    "categoryName": "Special",
+    "functionContainerName": "LibraryRoomFunction",
+    "levelTypes": ["Schoolhouse"],
+    "keepTextures": false,
+    "bannedFloors": [1],
+    "endlessMode": true
+}

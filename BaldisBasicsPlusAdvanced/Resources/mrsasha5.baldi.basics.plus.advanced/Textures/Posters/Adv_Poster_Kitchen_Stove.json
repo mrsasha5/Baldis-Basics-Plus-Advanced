@@ -1,0 +1,19 @@
+{
+    "texts": [
+        {
+            "textKey": "Adv_PST_KitchenStove",
+            "font": "BoldComicSans24",
+            "alignment": "Center",
+            "position": {"x": 0, "z": 90},
+            "size": {"x": 256, "z": 192},
+            "color": {"r":0.0,"g":0.0,"b":0.0,"a":1.0}
+        },
+        {
+            "textKey": "Adv_PST_KitchenStove_Desc",
+            "font": "ComicSans12",
+            "alignment": "Center",
+            "position": {"x": 32, "z": 28},
+            "color": {"r":0.0,"g":0.0,"b":0.0,"a":1.0}
+        }
+    ]
+}

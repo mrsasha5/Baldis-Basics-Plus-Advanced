@@ -1,0 +1,17 @@
+{
+    "reference": "RawChickenLeg",
+    "uses": 2,
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse"],
+        "bannedFloors": [1],
+        "weights":
+        [
+            {"floor": 2, "weight": 40}
+        ]
+    },
+    "shopWeights":
+    [
+        {"floor": 2, "weight": 40}
+    ]
+}

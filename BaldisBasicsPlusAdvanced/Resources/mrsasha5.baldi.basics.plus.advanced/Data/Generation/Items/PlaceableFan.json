@@ -1,0 +1,16 @@
+{
+    "reference": "PlaceableFan",
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse", "Factory", "Maintenance"],
+        "bannedFloors": [1],
+        "weights":
+        [
+            {"floor": 2, "weight": 35}
+        ]
+    },
+    "shopWeights":
+    [
+        {"floor": 2, "weight": 35}
+    ]
+}

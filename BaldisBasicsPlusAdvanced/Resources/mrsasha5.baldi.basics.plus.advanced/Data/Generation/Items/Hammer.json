@@ -1,0 +1,18 @@
+{
+    "reference": "Hammer",
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse", "Factory"],
+        "bannedFloors": [1],
+        "weights":
+        [
+            {"floor": 2, "weight": 50}
+        ]
+    },    
+    "rooms": true,
+    "johnnyStore": true,
+    "shopWeights":
+    [
+        {"floor": 2, "weight": 50}
+    ]
+}

@@ -1,0 +1,26 @@
+{"items":[
+
+{"key":"Adv_SC_Topic_Base","value":"The School Council's topic:"},
+{"key":"Adv_SC_Topic_Electricity","value":"To save more electricity, it is proposed to partially turn off the school's lights."},
+{"key":"Adv_SC_Topic_PlatesCooldown","value":"Disable a cooldown for all pressure plates."},
+{"key":"Adv_SC_Topic_Rules","value":"Allow to our students to run, drink or stay after-hours in the halls in order to give the Principal's attention to more important matters."},
+{"key":"Adv_SC_Topic_NoisyPlates","value":"Disable faculty's noisy plates to they stopped distracting students from their lessons."},
+{"key":"Adv_SC_Topic_GottaSweep","value":"Looks like our school needs a deep cleaning! Should we give overtime to Gotta Sweep?"},
+{"key":"Adv_SC_Topic_VendingMachines","value":"Randomize absolutely all vending machines items."},
+{"key":"Adv_SC_Topic_Belts","value":"Turn off all conveyor belts due to the absence of manufactured goods."},
+{"key":"Adv_SC_Topic_Ziplines","value":"It seems like our school equipment is subject to frequent wear and tear! We need to restore broken Ziplines?"},
+{"key":"Adv_SC_Topic_Ventilation","value":"It seems our ventilation system can't cope with the stuffiness! Should we activate them for a while?"},
+{"key":"Adv_SC_Topic_FacultySuperDoors","value":"Should we allow students to walk through Faculty Super doors?"},
+
+{"key":"Adv_SC_Topic_Electricity_BasicInfo","value":"We turned off lights in some rooms!"},
+{"key":"Adv_SC_Topic_PlatesCooldown_BasicInfo","value":"We turned off a cooldown for all plates!"},
+{"key":"Adv_SC_Topic_Rules_BasicInfo","value":"Everyone is free to: run, drink or stay after-hours!"},
+{"key":"Adv_SC_Topic_NoisyPlates_BasicInfo","value":"Faculty's noisy plates are disabled now!"},
+{"key":"Adv_SC_Topic_GottaSweep_BasicInfo","value":"Gotta sweep, sweep, sweep!"},
+{"key":"Adv_SC_Topic_VendingMachines_BasicInfo","value":"Vending machines items were randomized!"},
+{"key":"Adv_SC_Topic_Belts_BasicInfo","value":"We turned off all conveyor belts!"},
+{"key":"Adv_SC_Topic_Ziplines_BasicInfo","value":"Ziplines were restored!"},
+{"key":"Adv_SC_Topic_Ventilation_BasicInfo","value":"Ventilation is open!"},
+{"key":"Adv_SC_Topic_FacultySuperDoors_BasicInfo","value":"Everyone is free to: walk through Faculty Super doors!"}
+
+]}

@@ -1,0 +1,17 @@
+{
+    "reference": "PlaceablePortal",
+    "uses": 2,
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse", "Laboratory"],
+        "bannedFloors": [1],
+        "weights":
+        [
+            {"floor": 2, "weight": 30}
+        ]
+    },
+    "shopWeights":
+    [
+        {"floor": 2, "weight": 30}
+    ]
+}

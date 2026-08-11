@@ -1,0 +1,20 @@
+{
+    "structure": "cached_weighted",
+    "isStructureInForcedList": true,
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse", "Maintenance", "Factory"]
+    },
+    "parameters":
+    [
+        {
+            "prefab": [{"selection": "GoodMachine", "weight": 50}],
+            "floor": 2
+        },
+        {
+            "prefab": [{"selection": "GoodMachine", "weight": 75}],
+            "floor": 3
+        }
+    ]
+
+}

@@ -1,0 +1,11 @@
+{
+   "rawFood": [
+   {
+      "name": "Dough"
+   }],
+   "cookedFood": [
+   {
+      "name": "Bread",
+      "uses": 2
+   }]
+}

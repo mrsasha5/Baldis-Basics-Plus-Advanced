@@ -1,0 +1,12 @@
+{
+    "weights":
+    {
+        2: 50
+    },
+    "minItemValue": 0,
+    "maxItemValue": 30,
+    "categoryName": "Class",
+    "bannedFloors": [2, 3, 4, 5],
+    "levelTypes": ["Schoolhouse"],
+    "endlessMode": true
+}

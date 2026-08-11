@@ -1,0 +1,19 @@
+{
+    "reference": "Structure_NoisyPlate",
+    "standardData":
+    {
+        "levelTypes": ["Schoolhouse", "Laboratory"],
+        "bannedFloors": [1],
+        "weights":
+        [
+            {"floor": 2, "weight": 50}
+        ]
+    },
+    "parameters":
+    [
+        {
+            "floor": 2,
+            "minMax": [{"x": 2, "z": 5}]
+        }
+    ]
+}

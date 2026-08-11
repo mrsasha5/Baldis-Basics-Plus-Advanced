@@ -1,0 +1,21 @@
+{
+    "weight": 75,
+    "texts": [
+        {
+            "textKey": "Adv_PST_Stars_1",
+            "font": "ComicSans18",
+            "alignment": "Center",
+            "position": {"x": 10, "z": 90},
+            "size": {"x": 140, "z": 192},
+            "color": {"r": 0.0, "g": 0.0, "b": 0.0, "a": 1.0}
+        },
+        {
+            "textKey": "Adv_PST_Stars_2",
+            "font": "ComicSans12",
+            "alignment": "Center",
+            "position": {"x": 20, "z": 70},
+            "size": {"x": 120, "z": 192},
+            "color": {"r": 0.0, "g": 0.0, "b": 0.0, "a": 1.0}
+        }
+    ]
+}
