@@ -1,0 +1,168 @@
+﻿using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace BaldisBasicsPlusAdvanced.Game.Objects.Plates
+{
+    public class NoisyPlate : BasePlate
+    {
+        [SerializeField]
+        private SoundObject audAlarm;
+
+        [SerializeField]
+        private int generosity;
+
+        [SerializeField]
+        private float cooldown;
+
+        [SerializeField]
+        private int points;
+
+        [SerializeField]
+        private bool callsPrincipal;
+
+        private RoomController room;
+
+        private List<NoisyPlate> connectedPlates = new List<NoisyPlate>();
+
+        public bool CallsPrincipal => callsPrincipal;
+
+        public float Cooldown => cooldown;
+
+        public int Generosity => generosity;
+
+        public int PointsReward => points;
+
+        public override void InitializePrefab(int variant)
+        {
+            base.InitializePrefab(variant);
+            audAlarm = AssetStorage.sounds["buzz_elv"];
+            cooldown = 60f;
+            generosity = 1;
+            points = 30;
+        }
+
+        protected override void SetValues(PlateData data)
+        {
+            base.SetValues(data);
+            //plateData.hasLight = true;
+            //plateData.lightColor = Color.red;
+            data.MarkAsCooldownPlate();
+            data.timeToUnpress = 0.2f;
+        }
+
+        protected override void VirtualStart()
+        {
+            base.VirtualStart();
+            room = ec.CellFromPosition(transform.position).room;
+        }
+
+        public void OverrideCooldown(float cooldown) { 
+            this.cooldown = cooldown;
+        }
+
+        public void SetCallsPrincipal(bool state)
+        {
+            callsPrincipal = state;
+        }
+
+        public void ConnectRange(List<NoisyPlate> range)
+        {
+            List<NoisyPlate> plates = new List<NoisyPlate>(range);
+            for (int i = 0; i < plates.Count; i++)
+            {
+                if (plates[i] == this || connectedPlates.Contains(plates[i]))
+                {
+                    plates.RemoveAt(i);
+                    i--;
+                }
+            }
+            connectedPlates.AddRange(plates);
+        }
+
+        public void ConnectTo(NoisyPlate plate)
+        {
+            if (plate == this || connectedPlates.Contains(plate)) return;
+            connectedPlates.Add(plate);
+        }
+
+        public void SetPointsReward(int count)
+        {
+            points = count;
+        }
+
+        public void SetGenerosity(int count)
+        {
+            generosity = count;
+        }
+
+        protected override void SetTextures()
+        {
+            SetTexturesByBaseName("adv_noisy_plate");
+        }
+
+        protected override void VirtualOnPress()
+        {
+            base.VirtualOnPress();
+            audMan.PlaySingle(audAlarm, 2f);
+            ec.MakeNoise(transform.position, 127);
+
+            //Removed this feature since lightning in BB+ still sucks
+            /*if (room.Powered)
+            {
+                for (int i = 0; i < room.lights.Count; i++)
+                {
+                    room.lights[i].lightColor = Color.red;
+                    room.lights[i].SetLight(true);
+                }
+                StartCoroutine(ResetRoomColor(resetFacultyColorTime));
+            }*/
+
+            if (callsPrincipal)
+            {
+                for (int i = 0; i < ec.Npcs.Count; i++)
+                {
+                    if (ec.Npcs[i] is Principal)
+                    {
+                        ((Principal)ec.Npcs[i]).WhistleReact(transform.position);
+                    }
+                }
+            }
+
+            if (generosity > 0)
+            {
+                CoreGameManager.Instance.AddPoints(points, 0, true);
+                generosity--;
+            }
+
+            SetCooldown(cooldown);
+            for (int i = 0; i < connectedPlates.Count; i++) {
+                connectedPlates[i].SetCooldown(cooldown);
+                connectedPlates[i].SetUses(uses);
+                if (generosity > 0) connectedPlates[i].generosity--;
+            }
+        }
+
+        private IEnumerator ResetRoomColor(float timer)
+        {
+            while (timer > 0f)
+            {
+                timer -= Time.deltaTime * ec.EnvironmentTimeScale;
+                yield return null;
+            }
+            for (int i = 0; i < room.lights.Count; i++)
+            {
+                room.lights[i].lightColor = Color.white;
+                if (room.Powered) room.lights[i].SetLight(true);
+            }
+        }
+
+        protected override bool IsPressable(Entity target)
+        {
+            return base.IsPressable(target) && target.TryGetComponent(out PlayerManager pm) && !pm.Tagged;
+        }
+
+    }
+}

@@ -4,46 +4,46 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # Forbidden & allowed dependencies
-/Dependencies/*
-!/Dependencies/OHarmony.dll
-!/Dependencies/OHarmony.xml
-!/Dependencies/BepInEx.Harmony.dll
-!/Dependencies/BepInEx.Harmony.xml
-!/Dependencies/BepInEx.Preloader.dll
-!/Dependencies/BepInEx.Preloader.xml
-!/Dependencies/BepInEx.dll
-!/Dependencies/BepInEx.xml
-!/Dependencies/HarmonyXInterop.dll
-!/Dependencies/Mono.Cecil.Mdb.dll
-!/Dependencies/Mono.Cecil.Pdb.dll
-!/Dependencies/Mono.Cecil.Rocks.dll
-!/Dependencies/Mono.Cecil.dll
-!/Dependencies/MonoMod.RuntimeDetour.dll
-!/Dependencies/MonoMod.RuntimeDetour.xml
-!/Dependencies/MonoMod.Utils.dll
-!/Dependencies/MonoMod.Utils.xml
-!/Dependencies/BEPINEX-LICENSE.txt
+/BaldisBasicsPlusAdvanced/Dependencies/*
+!BaldisBasicsPlusAdvanced/Dependencies/OHarmony.dll
+!BaldisBasicsPlusAdvanced/Dependencies/OHarmony.xml
+!BaldisBasicsPlusAdvanced/Dependencies/BepInEx.Harmony.dll
+!BaldisBasicsPlusAdvanced/Dependencies/BepInEx.Harmony.xml
+!BaldisBasicsPlusAdvanced/Dependencies/BepInEx.Preloader.dll
+!BaldisBasicsPlusAdvanced/Dependencies/BepInEx.Preloader.xml
+!BaldisBasicsPlusAdvanced/Dependencies/BepInEx.dll
+!BaldisBasicsPlusAdvanced/Dependencies/BepInEx.xml
+!BaldisBasicsPlusAdvanced/Dependencies/HarmonyXInterop.dll
+!BaldisBasicsPlusAdvanced/Dependencies/Mono.Cecil.Mdb.dll
+!BaldisBasicsPlusAdvanced/Dependencies/Mono.Cecil.Pdb.dll
+!BaldisBasicsPlusAdvanced/Dependencies/Mono.Cecil.Rocks.dll
+!BaldisBasicsPlusAdvanced/Dependencies/Mono.Cecil.dll
+!BaldisBasicsPlusAdvanced/Dependencies/MonoMod.RuntimeDetour.dll
+!BaldisBasicsPlusAdvanced/Dependencies/MonoMod.RuntimeDetour.xml
+!BaldisBasicsPlusAdvanced/Dependencies/MonoMod.Utils.dll
+!BaldisBasicsPlusAdvanced/Dependencies/MonoMod.Utils.xml
+!BaldisBasicsPlusAdvanced/Dependencies/BEPINEX-LICENSE.txt
 
 # APIs
-!/Dependencies/MTM101BaldAPI.dll
-!/Dependencies/MTM101BaldAPI.xml
-!/Dependencies/Newtonsoft.Json.dll
-!/Dependencies/BBPRewiredCompat.dll
-!/Dependencies/BBPRewiredCompat.xml
+!BaldisBasicsPlusAdvanced/Dependencies/MTM101BaldAPI.dll
+!BaldisBasicsPlusAdvanced/Dependencies/MTM101BaldAPI.xml
+!BaldisBasicsPlusAdvanced/Dependencies/Newtonsoft.Json.dll
+!BaldisBasicsPlusAdvanced/Dependencies/BBPRewiredCompat.dll
+!BaldisBasicsPlusAdvanced/Dependencies/BBPRewiredCompat.xml
 
 # Level Studio dependencies
-!/Dependencies/PlusStudioLevelLoader.dll
-!/Dependencies/PlusStudioLevelFormat.dll
-!/Dependencies/PlusStudioLevelLoader.xml
-!/Dependencies/PlusLevelStudio.dll
-!/Dependencies/PlusLevelStudio.xml
+!BaldisBasicsPlusAdvanced/Dependencies/PlusStudioLevelLoader.dll
+!BaldisBasicsPlusAdvanced/Dependencies/PlusStudioLevelFormat.dll
+!BaldisBasicsPlusAdvanced/Dependencies/PlusStudioLevelLoader.xml
+!BaldisBasicsPlusAdvanced/Dependencies/PlusLevelStudio.dll
+!BaldisBasicsPlusAdvanced/Dependencies/PlusLevelStudio.xml
 
 # Pixelguy's mods
-!/Dependencies/The3DElevator.dll
-!/Dependencies/BBPlusCustomMusics.dll
+!BaldisBasicsPlusAdvanced/Dependencies/The3DElevator.dll
+!BaldisBasicsPlusAdvanced/Dependencies/BBPlusCustomMusics.dll
 
 # Rost's mod
-!/Dependencies/QualityOfPlus.dll
+!BaldisBasicsPlusAdvanced/Dependencies/QualityOfPlus.dll
 
 # User-specific files
 *.rsuser

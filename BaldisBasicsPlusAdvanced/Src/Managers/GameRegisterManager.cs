@@ -1,0 +1,975 @@
+﻿#region Used Namespaces
+using BaldisBasicsPlusAdvanced.Cache;
+using BaldisBasicsPlusAdvanced.Game.Events;
+using BaldisBasicsPlusAdvanced.Game.InventoryItems;
+using BaldisBasicsPlusAdvanced.Helpers;
+using MTM101BaldAPI.Registers;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEngine;
+using MTM101BaldAPI;
+using BaldisBasicsPlusAdvanced.Game.Objects;
+using BaldisBasicsPlusAdvanced.API;
+using BaldisBasicsPlusAdvanced.Game.Builders;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
+using HarmonyLib;
+using BaldisBasicsPlusAdvanced.SerializableData;
+using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
+using BaldisBasicsPlusAdvanced.Game.Rooms.Functions;
+using MTM101BaldAPI.UI;
+using TMPro;
+using BaldisBasicsPlusAdvanced.Game.Components.UI;
+using MTM101BaldAPI.ObjectCreation;
+using BaldisBasicsPlusAdvanced.Game.Objects.Projectiles;
+using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate;
+using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
+using BaldisBasicsPlusAdvanced.Game.Objects.Food;
+using BaldisBasicsPlusAdvanced.Game.InventoryItems.Food;
+using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
+using BaldisBasicsPlusAdvanced.Compats;
+using MTM101BaldAPI.AssetTools;
+using BaldisBasicsPlusAdvanced.Patches.GameManager;
+using BaldisBasicsPlusAdvanced.Game.Objects.Portals;
+using BaldisBasicsPlusAdvanced.Game.Components.UI.Menu;
+using BaldisBasicsPlusAdvanced.Compats.CustomMusics;
+using BaldisBasicsPlusAdvanced.Game.Activities;
+using BaldisBasicsPlusAdvanced.Extensions;
+#endregion
+
+namespace BaldisBasicsPlusAdvanced.Managers
+{
+    internal class GameRegisterManager
+    {
+
+        #region Main MIDIs Initialization
+
+        public static void InitializeMidis()
+        {
+            if (IntegrationManager.IsActive<CustomMusicsIntegration>()) return;
+
+            void LoadFrom(string path, LevelType type)
+            {
+                string[] paths = Directory.GetFiles(path);
+                foreach (string _path in paths)
+                {
+                    MusicPatch.Insert(AssetLoader.MidiFromFile(_path, Path.GetFileName(_path)), type);
+                }
+            }
+
+            foreach (string folderPath in 
+                Directory.GetDirectories(AssetHelper.modPath + "Audio/Music/Floors"))
+            {
+                string name = Path.GetFileName(folderPath);
+
+                if (name == "Compats") continue;
+
+                LoadFrom(folderPath, (LevelType)Enum.Parse(typeof(LevelType), name));
+            }
+        }
+
+        #endregion
+
+        #region MIDIs Post Initialization (For mods)
+
+        public static void PostInitializeMidis()
+        {
+            void LoadFrom(string path, string typeName)
+            {
+                LevelType type;
+                try
+                {
+                    type = EnumExtensions.GetFromExtendedName<LevelType>(typeName);
+                }
+                catch
+                {
+                    return;
+                }
+
+                string[] paths = Directory.GetFiles(path);
+                foreach (string _path in paths)
+                {
+                    if (!MusicPatch.musicNames.ContainsKey(type)) MusicPatch.musicNames.Add(type, new List<string>());
+                    MusicPatch.musicNames[type].Add(AssetLoader.MidiFromFile(_path, Path.GetFileName(_path)));
+                }
+            }
+
+            foreach (string folderPath in Directory.GetDirectories(AssetHelper.modPath + "Audio/Music/Floors/Compats"))
+            {
+                LoadFrom(folderPath, Path.GetFileName(folderPath));
+            }
+
+        }
+
+        #endregion
+
+        #region Don't Destroy On Scene Load Objects Initialization
+
+        public static void InitializeDoNotDestroyOnLoadObjects()
+        {
+            NotificationManager notifMan = new GameObject("NotificationManager").AddComponent<NotificationManager>();
+            notifMan.Initialize();
+            notifMan.gameObject.SetActive(false);
+            GameObject.DontDestroyOnLoad(notifMan);
+        }
+
+        #endregion
+
+        #region Cells Textures
+
+        public static void InitializeCellTextures()
+        {
+            foreach (string path in 
+                Directory.GetFiles(AssetHelper.modPath + "Textures/Cells", "*.png", SearchOption.AllDirectories))
+            {
+                CellTextureSerializableData data = CellTextureSerializableData.LoadFrom(path);
+
+                if (data != null)
+                {
+                    ObjectStorage.CellTextureData.Add(data);
+                }
+
+            }
+        }
+
+        #endregion
+
+        #region NPCs Initialization
+
+        public static void InitializeNPCs()
+        {
+            PrefabCreator.CreateNpc(
+                new NPCBuilder<CrissTheCrystal>(AdvancedCore.Instance.Info)
+                .SetName("Criss the Crystal")
+                .SetMetaName("Adv_NPC_CrissTheCrystal")
+                .SetEnum("CrissTheCrystal")
+                .SetPoster(AssetStorage.textures["Poster_CrissTheCrystal"],
+                    "Adv_NPC_CrissTheCrystal", "Adv_NPC_CrissTheCrystal_Desc")
+                .AddLooker()
+                .AddMetaFlag(NPCFlags.StandardNoCollide)
+                .SetMetaTags(new string[] { TagStorage.STUDENT })
+            );
+
+            ObjectStorage.Posters.Add(ObjectStorage.Npcs["CrissTheCrystal"].Poster);
+            ObjectStorage.Npcs["CrissTheCrystal"].Poster.name = "Adv_Poster_Criss_The_Crystal";
+        }
+
+        #endregion
+
+        #region Items Initialization
+
+        public static void InitializeGameItems()
+        {
+            PrefabCreator.CreateItem<HammerItem>(
+                nameKey: "Adv_Item_Hammer",
+                descKey: "Adv_Item_Hammer_Desc",
+                enumName: "Hammer",
+                smallSpriteKey: "Hammer_Small",
+                largeSpriteKey: "Hammer_Large",
+                generatorCost: 75,
+                price: 500,
+                flags: ItemFlags.None,
+                tags: new string[]
+                {
+                    TagStorage.REPAIR_TOOL,
+                    TagStorage.COMPAT_CRIMINAL_CONTRABAND
+                }
+            ).overrideDisabled = true;
+
+            PrefabCreator.CreateItem<WindBlowerItem>(
+                nameKey: "Adv_Item_WindBlower",
+                descKey: "Adv_Item_WindBlower_Desc",
+                enumName: "WindBlower",
+                smallSpriteKey: "WindBlower_Small",
+                largeSpriteKey: "WindBlower_Large",
+                generatorCost: 25,
+                price: 300,
+                flags: ItemFlags.None
+            );
+
+            PrefabCreator.CreateItem<MysteriousTeleporterItem>(
+                nameKey: "Adv_Item_MysteriousTeleporter",
+                descKey: "Adv_Item_MysteriousTeleporter_Desc",
+                enumName: "MysteriousTeleporter",
+                smallSpriteKey: "MysteriousTeleporter_Small",
+                largeSpriteKey: "MysteriousTeleporter_Large",
+                generatorCost: 40,
+                price: 500,
+                tags: new string[]
+                {
+                    TagStorage.COMPAT_CRIMINAL_CONTRABAND
+                },
+                flags: ItemFlags.CreatesEntity
+            );
+
+            PrefabCreator.CreateItem<IceBootsItem>(
+                nameKey: "Adv_Item_IceBoots",
+                descKey: "Adv_Item_IceBoots_Desc",
+                enumName: "IceBoots",
+                smallSpriteKey: "IceBoots_Small",
+                largeSpriteKey: "IceBoots_Large",
+                generatorCost: 50,
+                price: 300,
+                flags: ItemFlags.Persists
+             );
+
+            PrefabCreator.CreateItem<PlaceableFanItem>(
+                nameKey: "Adv_Item_PlaceableFan",
+                descKey: "Adv_Item_PlaceableFan_Desc",
+                enumName: "PlaceableFan",
+                flags: ItemFlags.CreatesEntity,
+                smallSpriteKey: "PlaceableFan_Small",
+                largeSpriteKey: "PlaceableFan_Large",
+                generatorCost: 75,
+                price: 750
+            );
+
+            PrefabCreator.CreateItem<TeleportationBombItem>(
+                nameKey: "Adv_Item_TeleportationBomb",
+                descKey: "Adv_Item_TeleportationBomb_Desc",
+                enumName: "TeleportationBomb",
+                flags: ItemFlags.CreatesEntity | ItemFlags.Persists,
+                smallSpriteKey: "TeleportationBomb_Small",
+                largeSpriteKey: "TeleportationBomb_Large",
+                generatorCost: 75,
+                price: 500,
+                tags: new string[]
+                {
+                    TagStorage.COMPAT_CRIMINAL_CONTRABAND
+                }
+            );
+
+            PrefabCreator.CreateItem<MagicClockItem>(
+                nameKey: "Adv_Item_MagicClock",
+                descKey: "Adv_Item_MagicClock_Desc",
+                enumName: "MagicClock",
+                flags: ItemFlags.Persists,
+                smallSpriteKey: "MagicClock_Small",
+                largeSpriteKey: "MagicClock_Large",
+                generatorCost: 75,
+                price: 750,
+                tags: new string[]
+                {
+                    TagStorage.COMPAT_CRIMINAL_CONTRABAND
+                }
+            );
+
+            PrefabCreator.CreateItem<InflatableBalloonItem>(
+                nameKey: "Adv_Item_InflatableBalloon",
+                descKey: "Adv_Item_InflatableBalloon_Desc",
+                enumName: "InflatableBalloon",
+                flags: ItemFlags.None,
+                smallSpriteKey: "InflatableBalloon_Small",
+                largeSpriteKey: "InflatableBalloon_Large",
+                generatorCost: 50,
+                price: 300
+            );
+
+            PrefabCreator.CreateItem<DoughItem>(
+                nameKey: "Adv_Item_Dough",
+                descKey: "Adv_Item_Dough_Desc",
+                enumName: "Dough",
+                flags: ItemFlags.CreatesEntity,
+                smallSpriteKey: "Dough_Small",
+                largeSpriteKey: "Dough_Large",
+                generatorCost: 25,
+                price: 300
+            );
+
+            /*PrefabCreator.CreateItem<MysteriousBusPassItem>(
+                nameKey: "Adv_Item_MysteriousBusPass",
+                descKey: "Adv_Item_MysteriousBusPass_Desc",
+                enumName: "MysteriousBusPass",
+                flags: ItemFlags.NoUses,
+                smallSpriteKey: "MysteriousBusPass_Small",
+                largeSpriteKey: "MysteriousBusPass_Large",
+                generatorCost: 75,
+                price: 400,
+                tags: new string[] { 
+                    TagStorage.FORBIDDEN_PRESENT 
+                }
+            );*/
+        }
+
+        public static void InitializeMultipleUsableItems()
+        {
+            ItemObject bread2 = PrefabCreator.CreateItem<BreadItem>(
+                nameKey: "Adv_Item_Bread",
+                descKey: "Adv_Item_Bread_Desc",
+                enumName: "Bread",
+                flags: ItemFlags.MultipleUse,
+                tags: new string[] { TagStorage.FOOD },
+                smallSpriteKey: "Bread_Small",
+                largeSpriteKey: "Bread_Large",
+                generatorCost: 35,
+                price: 550
+                );
+
+            ItemObject bread1 = PrefabCreator.CreateItem<BreadItem>(
+                nameKey: "Adv_Item_BreadPiece",
+                descKey: "Adv_Item_BreadPiece_Desc",
+                enumName: "Bread",
+                flags: ItemFlags.MultipleUse,
+                tags: new string[] { TagStorage.FOOD },
+                smallSpriteKey: "PieceOfBread_Small",
+                largeSpriteKey: "PieceOfBread_Large",
+                generatorCost: 35,
+                price: 550,
+                itemMeta: bread2.GetMeta()
+                );
+
+            ItemObject rawChicken2 = PrefabCreator.CreateItem<ChickenItem>(
+                nameKey: "Adv_Item_RawChickenLeg",
+                descKey: "Adv_Item_RawChickenLeg_Desc",
+                enumName: "RawChickenLeg",
+                flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
+                tags: new string[] { TagStorage.FOOD },
+                smallSpriteKey: "RawChickenLeg_Small",
+                largeSpriteKey: "RawChickenLeg_Large",
+                generatorCost: 30,
+                price: 500
+                );
+
+            ItemObject rawChicken1 = PrefabCreator.CreateItem<ChickenItem>(
+                nameKey: "Adv_Item_RawChickenLeg1",
+                descKey: "Adv_Item_RawChickenLeg_Desc",
+                enumName: "RawChickenLeg",
+                flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
+                tags: new string[] { TagStorage.FOOD },
+                smallSpriteKey: "RawChickenLeg_Small",
+                largeSpriteKey: "RawChickenLeg_Large",
+                generatorCost: 30,
+                price: 500,
+                itemMeta: rawChicken2.GetMeta()
+                );
+
+            ItemObject cookedChicken2 = PrefabCreator.CreateItem<ChickenItem>(
+                nameKey: "Adv_Item_CookedChickenLeg",
+                descKey: "Adv_Item_CookedChickenLeg_Desc",
+                enumName: "CookedChickenLeg",
+                flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
+                tags: new string[] { TagStorage.FOOD },
+                smallSpriteKey: "CookedChickenLeg_Small",
+                largeSpriteKey: "CookedChickenLeg_Large",
+                generatorCost: 75,
+                price: 800,
+                variant: 2
+                );
+
+            ItemObject cookedChicken1 = PrefabCreator.CreateItem<ChickenItem>(
+                nameKey: "Adv_Item_CookedChickenLeg1",
+                descKey: "Adv_Item_CookedChickenLeg_Desc",
+                enumName: "CookedChickenLeg",
+                flags: ItemFlags.CreatesEntity | ItemFlags.MultipleUse,
+                tags: new string[] { TagStorage.FOOD },
+                smallSpriteKey: "CookedChickenLeg_Small",
+                largeSpriteKey: "CookedChickenLeg_Large",
+                generatorCost: 75,
+                price: 800,
+                itemMeta: cookedChicken2.GetMeta(),
+                variant: 2
+                );
+
+            ItemObject boxingGlove2 = PrefabCreator.CreateItem<BoxingGloveItem>(
+                nameKey: "Adv_Item_BoxingGlove",
+                descKey: "Adv_Item_BoxingGlove_Desc",
+                enumName: "BoxingGlove",
+                smallSpriteKey: "BoxingGlove_Small",
+                largeSpriteKey: "BoxingGlove_Large",
+                generatorCost: 50,
+                price: 500,
+                flags: ItemFlags.MultipleUse
+                );
+
+            ItemObject boxingGlove1 = PrefabCreator.CreateItem<BoxingGloveItem>(
+                nameKey: "Adv_Item_BoxingGlove1",
+                descKey: "Adv_Item_BoxingGlove_Desc",
+                enumName: "BoxingGlove",
+                smallSpriteKey: "BoxingGlove_Small",
+                largeSpriteKey: "BoxingGlove_Large",
+                generatorCost: 50,
+                price: 500,
+                flags: ItemFlags.MultipleUse,
+                itemMeta: boxingGlove2.GetMeta()
+                );
+
+            ItemObject portal2 = PrefabCreator.CreateItem<PlaceablePortalItem>(
+                nameKey: "Adv_Item_PlaceablePortal",
+                descKey: "Adv_Item_PlaceablePortal_Desc",
+                enumName: "PlaceablePortal",
+                smallSpriteKey: "PlaceablePortal_Small",
+                largeSpriteKey: "PlaceablePortal_Large",
+                generatorCost: 30,
+                price: 750,
+                flags: ItemFlags.MultipleUse
+                );
+
+            ItemObject portal1 = PrefabCreator.CreateItem<PlaceablePortalItem>(
+                nameKey: "Adv_Item_PlaceablePortal1",
+                descKey: "Adv_Item_PlaceablePortal_Desc",
+                enumName: "PlaceablePortal",
+                smallSpriteKey: "PlaceablePortal_Small",
+                largeSpriteKey: "PlaceablePortal_Large",
+                generatorCost: 30,
+                price: 750,
+                flags: ItemFlags.MultipleUse,
+                itemMeta: portal2.GetMeta()
+                );
+
+            ((BaseMultipleUsableItem)boxingGlove2.item).Initialize(boxingGlove1);
+            boxingGlove2.GetMeta().itemObjects = ((BaseMultipleUsableItem)boxingGlove2.item).AllVersions.AddItem(boxingGlove2).ToArray();
+
+            ((BaseMultipleUsableItem)portal2.item).Initialize(portal1);
+            portal2.GetMeta().itemObjects = ((BaseMultipleUsableItem)portal2.item).AllVersions.AddItem(portal2).ToArray();
+
+            ((BaseMultipleUsableItem)rawChicken2.item).Initialize(rawChicken1);
+            rawChicken2.GetMeta().itemObjects = ((BaseMultipleUsableItem)rawChicken2.item).AllVersions.AddItem(rawChicken2).ToArray();
+
+            ((BaseMultipleUsableItem)cookedChicken2.item).Initialize(cookedChicken1);
+            cookedChicken2.GetMeta().itemObjects = ((BaseMultipleUsableItem)cookedChicken2.item).AllVersions.AddItem(cookedChicken2).ToArray();
+
+            ((BaseMultipleUsableItem)bread2.item).Initialize(bread1);
+            bread2.GetMeta().itemObjects = ((BaseMultipleUsableItem)bread2.item).AllVersions.AddItem(bread2).ToArray();
+        }
+
+        #endregion
+
+        #region Random Events Initialization
+
+        public static void InitializeRandomEvents()
+        {
+            PrefabCreator.CreateEvent<DisappearingCharactersEvent>(
+                name: "Event_DisappearingCharacters",
+                soundKey: "adv_bal_event_disappearing_characters",
+                enumName: "DisappearingCharacters",
+                minTime: 60f,
+                maxTime: 80f,
+                flags: RandomEventFlags.None
+            );
+
+            PrefabCreator.CreateEvent<ColdSchoolEvent>(
+                name: "Event_ColdSchool",
+                soundKey: "adv_bal_event_cold_machine",
+                enumName: "ColdSchool",
+                minTime: 60f,
+                maxTime: 90f,
+                flags: RandomEventFlags.None
+            );
+
+            PrefabCreator.CreateEvent<PortalChaosEvent>(
+                name: "Event_PortalChaos",
+                enumName: "PortalChaos",
+                soundKey: "adv_bal_event_portals",
+                minTime: 75f,
+                maxTime: 120f,
+                flags: RandomEventFlags.None
+            );
+        }
+
+        #endregion
+
+        #region Vending Machines Initialization
+
+        public static void InitializeVendingMachines()
+        {
+            PrefabCreator.CreateMultipleRequiredVendingMachine("GoodMachine",
+                ItemMetaStorage.Instance.FindByEnum(Items.Quarter).itemObjects[0], 2,
+                AssetStorage.materials["adv_good_machine"], AssetStorage.materials["adv_good_machine_out"], null,
+                new WeightedItemObject[] {
+                new WeightedItemObject()
+                {
+                    weight = 25,
+                    selection = ItemMetaStorage.Instance.FindByEnum(Items.Teleporter).itemObjects[0]
+                },
+                new WeightedItemObject()
+                {
+                    weight = 50,
+                    selection = ItemMetaStorage.Instance.FindByEnum(Items.Apple).itemObjects[0]
+                },
+                new WeightedItemObject()
+                {
+                    weight = 25,
+                    selection = ItemMetaStorage.Instance.FindByEnum(Items.GrapplingHook).itemObjects.Last()
+                },
+            });
+        }
+
+        #endregion
+
+        #region Structure Builders Initialization
+
+        public static void InitializeObjectBuilders()
+        {
+            //Rusty RotoHall Builder
+            Structure_Rotohalls rotoHallBuilder = 
+                GameObject.Instantiate(AssetHelper.LoadAsset<Structure_Rotohalls>("Rotohall_Structure"));
+            rotoHallBuilder.name = "Structure_RustyRotohall";
+            rotoHallBuilder.gameObject.ConvertToPrefab(true);
+
+            MeshRenderer rustyCornerCylinder = 
+                GameObject.Instantiate(AssetHelper.LoadAsset<MeshRenderer>("CornerCylinder_Model"));
+            MeshRenderer rustyStraightCylinder =
+                GameObject.Instantiate(AssetHelper.LoadAsset<MeshRenderer>("StraightCylinder_Model"));
+            rustyCornerCylinder.name = "RustyCornerCylinder_Model";
+            rustyStraightCylinder.name = "RustyStraightCylinder_Model";
+            rustyCornerCylinder.gameObject.ConvertToPrefab(true);
+            rustyStraightCylinder.gameObject.ConvertToPrefab(true);
+
+            Material[] materials = rustyCornerCylinder.materials;
+
+            materials[0].SetMainTexture(AssetStorage.textures["adv_rusty_rotohall"]);
+            materials[1].SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_sign_left"]);
+            materials[2].SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_sign_right"]);
+            rustyCornerCylinder.materials = materials;
+
+            materials = rustyStraightCylinder.materials;
+
+            materials[0].SetMainTexture(AssetStorage.textures["adv_rusty_rotohall"]);
+            materials[1].SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_sign_straight"]);
+            rustyStraightCylinder.materials = materials;
+
+            Array.Find(rustyCornerCylinder.GetComponentsInChildren<MeshRenderer>(), x => x.name == "CylinderFloor_Model")
+                .material.SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_floor"]);
+            Array.Find(rustyStraightCylinder.GetComponentsInChildren<MeshRenderer>(), x => x.name == "CylinderFloor_Model")
+                .material.SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_floor"]);
+
+            ReflectionHelper.SetValue<RotoHall>(rotoHallBuilder, "rotoHallPre",
+                ObjectStorage.Objects["rusty_rotohall"].GetComponent<RotoHall>());
+            ReflectionHelper.SetValue<MeshRenderer>(rotoHallBuilder, "cornerCylinderPre", rustyCornerCylinder);
+            ReflectionHelper.SetValue<MeshRenderer>(rotoHallBuilder, "straightCylinderPre", rustyStraightCylinder);
+
+            ObjectStorage.StructureBuilders.Add("Structure_RustyRotohall", rotoHallBuilder);
+            //Builder ends
+
+            PrefabCreator.CreateStructureBuilder<Structure_Pulley>("Structure_Pulley");
+            PrefabCreator.CreateStructureBuilder<Structure_AccelerationPlate>("Structure_AccelerationPlate");
+            PrefabCreator.CreateStructureBuilder<Structure_KitchenStove>("Structure_KitchenStove");
+            PrefabCreator.CreateStructureBuilder<Structure_GenericPlate>("Structure_GenericPlate");
+            PrefabCreator.CreateStructureBuilder<Structure_Zipline>("Structure_Zipline");
+            PrefabCreator.CreateStructureBuilder<Structure_NoisyPlate>("Structure_NoisyPlate");
+            PrefabCreator.CreateStructureBuilder<Structure_GumDispenser>("Structure_GumDispenser");
+            PrefabCreator.CreateStructureBuilder<Structure_PowerPlate>("Structure_PlainPlate");
+        }
+
+        #endregion
+
+        #region UI Initialization
+
+        public static void InitializeUi()
+        {
+            PrefabCreator.CreateOverlay("FrozenOverlay", AssetStorage.sprites["adv_frozen_overlay"], false);
+            PrefabCreator.CreateOverlay("ElephantOverlay", AssetStorage.sprites["adv_elephant_overlay"], true);
+            PrefabCreator.CreateOverlay("ShieldOverlay", AssetStorage.sprites["adv_protected_overlay"], true);
+
+            Canvas errorScreen = ObjectCreator.CreateCanvas(false);
+
+
+            //Initializing Chalkboard Menu
+            Canvas canvas = ObjectCreator.CreateCanvas(setGlobalCam: true);
+            canvas.name = "Chalkboard Menu";
+
+            ChalkboardMenu chalkboardMenu = canvas.gameObject.AddComponent<ChalkboardMenu>();
+
+            chalkboardMenu.canvas = canvas;
+
+            chalkboardMenu.chalkboard = UIHelpers.CreateImage(AssetStorage.sprites["chalkboard_standard"], canvas.transform,
+                Vector3.zero, correctPosition: false);
+            chalkboardMenu.chalkboard.ToCenter();
+
+            TextMeshProUGUI title = UIHelpers.CreateText<TextMeshProUGUI>(BaldiFonts.ComicSans24,
+                "Title",
+                chalkboardMenu.chalkboard.transform, new Vector3(0, 105, 0), false);
+            title.name = "title";
+
+            TextMeshProUGUI info = UIHelpers.CreateText<TextMeshProUGUI>(BaldiFonts.ComicSans24,
+                "",
+                chalkboardMenu.chalkboard.transform, Vector3.up * 50f, false);
+            info.name = "info";
+
+            chalkboardMenu.texts.Add(title);
+            title.GetComponent<RectTransform>().sizeDelta = new Vector2(350, 50);
+            title.color = Color.white;
+            title.alignment = TextAlignmentOptions.Top;
+
+            chalkboardMenu.texts.Add(info);
+            info.GetComponent<RectTransform>().sizeDelta = new Vector2(350, 50);
+            info.color = Color.white;
+            info.alignment = TextAlignmentOptions.Top;
+
+            StandardMenuButton exit = ObjectCreator.CreateSpriteButton(AssetStorage.sprites["adv_exit_transparent"], 
+                new Vector3(185, 140), chalkboardMenu.chalkboard.transform, AssetStorage.sprites["adv_exit"]);
+            exit.name = "exit";
+
+            chalkboardMenu.buttons.Add(exit);
+            exit.InitializeAllEvents();
+
+            canvas.gameObject.ConvertToPrefab(true);
+
+            canvas.SetCursorInitiator(setAutoInitiator: true);
+
+            ObjectStorage.Objects.Add("chalkboard_menu", canvas.gameObject);
+            //Chalkboard Menu ends
+
+            PrefabCreator.CreateObjectPrefab<CreditsScreen>("Credits Screen", "credits_screen");
+        }
+
+        #endregion
+
+        #region API Content Initialization 
+
+        public static void InitializeApiThings()
+        {
+            LocalizationManager localization = Singleton<LocalizationManager>.Instance;
+
+            string[] tipsBaseNames = new string[1];
+
+            tipsBaseNames[0] = "Adv_Elv_Tip";
+
+            foreach (string tipBaseName in tipsBaseNames)
+            {
+                if (tipBaseName == null) continue;
+                int num = 1;
+                string tipKey = tipBaseName + num;
+
+                Dictionary<string, string> locText = ReflectionHelper.GetValue<Dictionary<string, string>>(localization, "localizedText");
+                List<string> tipKeys = locText.Keys.ToList();
+
+                for (int i = 0; i < tipKeys.Count; i++)
+                {
+                    if (!tipKeys[i].StartsWith(tipBaseName))
+                    {
+                        tipKeys.RemoveAt(i);
+                        i--;
+                    }
+                }
+
+                tipKeys.Remove("Adv_Elv_Tip_Base");
+
+                ApiManager.AddNewTips(AdvancedCore.Instance.Info, tipKeys.ToArray());
+            }
+
+            ApiManager.AddNewSymbolMachineWords(AdvancedCore.Instance.Info,
+                "BSODA", "Beans", "Baldi", "Bully", "Criss", "boots", "field", "learn", "expel",
+                "spell", "blind", "laser", "brain", "ruler", "floor", "class", "flood", "party",
+                "apple", "chalk", "erase", "cloud", "plate", "store", "clock", "farm", "math"
+            );
+        }
+
+        #endregion
+
+        #region Objects Initialization
+
+        public static void InitializeObjects()
+        {
+            // Cloning the Rotohall and making it as rusty
+            RotoHall rotoHall = GameObject.Instantiate(AssetHelper.LoadAsset<RotoHall>("RotoHall_Base"));
+            rotoHall.gameObject.ConvertToPrefab(true);
+            rotoHall.name = "RustyRotoHall_Base";
+            RustyRotohall rustyRotoHall = rotoHall.gameObject.SwapComponent<RotoHall, RustyRotohall>(rotoHall);
+            rustyRotoHall.GetComponent<EntitySpinner>().ReflectionSetValue("environmentObject", rustyRotoHall);
+            rustyRotoHall.ReflectionSetValue("speed", 25f);
+            rustyRotoHall.ReflectionSetValue("audTurn", AssetStorage.sounds["adv_turning_start"]);
+            rustyRotoHall.GetComponent<MeshRenderer>().material.SetMainTexture(AssetStorage.textures["adv_rusty_rotohall_blank"]);
+            ObjectStorage.Objects.Add("rusty_rotohall", rustyRotoHall.gameObject);
+
+            // Compass Comparator
+            PrefabCreator.CreateObjectPrefab<PairsComparator>("PairsComparator", "pairs_comparator");
+
+            // Zipline Hangers
+            PrefabCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Hanger", "zipline_hanger");
+            PrefabCreator.CreateObjectPrefab<ZiplineHanger>("Zipline Black Hanger", "zipline_black_hanger", variant: 2);
+
+            // Pulley
+            PrefabCreator.CreateObjectPrefab<Pulley>("Pulley", "pulley");
+
+            // Gum Dispenser
+            PrefabCreator.CreateObjectPrefab<GumDispenser>("Gum Dispenser", "gum_dispenser");
+
+            // Mysterious portals
+            PrefabCreator.CreateObjectPrefab<MysteriousPortal>("Mysterious Portal", "mysterious_portal");
+            PrefabCreator.CreateObjectPrefab<CrazyMysteriousPortal>("Crazy Mysterious Portal", "crazy_mysterious_portal");
+
+            // Plates
+            PrefabCreator.CreatePlate<PowerPlate>("plate");
+            PrefabCreator.CreatePlate<InvisibilityPlate>("invisibility_plate");
+            PrefabCreator.CreatePlate<AccelerationPlate>("acceleration_plate");
+            PrefabCreator.CreatePlate<NoisyPlate>("noisy_plate");
+            PrefabCreator.CreatePlate<StealingPlate>("stealing_plate");
+            PrefabCreator.CreatePlate<BullyPlate>("bully_plate");
+            PrefabCreator.CreatePlate<PresentPlate>("present_plate");
+            PrefabCreator.CreatePlate<SlowdownPlate>("slowdown_plate");
+            PrefabCreator.CreatePlate<SugarPlate>("sugar_addiction_plate");
+            PrefabCreator.CreatePlate<ProtectionPlate>("protection_plate");
+            PrefabCreator.CreatePlate<TeleportationPlate>("teleportation_plate");
+            PrefabCreator.CreatePlate<MysteriousPlate>("fake_plate");
+            PrefabCreator.CreatePlate<KitchenStove>("kitchen_stove");
+            PrefabCreator.CreatePlate<JohnnyKitchenStove>("johnny_kitchen_stove");
+
+            // Triggers
+            PrefabCreator.CreateTrigger<NoPlatesCooldownTrigger>("no_plates_cooldown");
+            PrefabCreator.CreateTrigger<PitStopOverridesTrigger>("pit_stop_overrides");
+
+            // Spelling
+            PrefabCreator.CreateObjectPrefab<SymbolMachine>("SymbolMachine", "symbol_machine");
+            string alphabet = "abcdefghijklmnopqrstuvwxyz";
+            string upperAlphabet = alphabet.ToUpper();
+            for (int i = 0; i < alphabet.Length; i++)
+            {
+                ApiManager.CreateNewSpelloon(alphabet[i].ToString(),
+                    AssetStorage.sprites["adv_balloon_" + upperAlphabet[i]]);
+            }
+
+            PrefabCreator.CreateObjectPrefab<TeleportationHole>("Teleportation Hole", "teleportation_hole");
+            PrefabCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_flag");
+            PrefabCreator.CreateObjectPrefab<FinishFlag>("Farm Finish Flag", "farm_points_flag", variant: 2);
+
+            GameObject cornSign = new GameObject("Corn Sign");
+            ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["adv_corn_sign1"])
+                .transform.SetParent(cornSign.transform, false);
+            cornSign.ConvertToPrefab(true);
+            ObjectStorage.Objects.Add("farm_sign1", cornSign);
+        }
+
+        #endregion
+
+        #region Entities Initialization
+
+        public static void InitializeEntities()
+        {
+            // Mysterious Teleporter
+            PrefabCreator.CreateObjectPrefab<MysteriousTeleporterProjectile>("MysteriousTeleporter", "mysterious_teleporter");
+            // Anvil Projectile
+            PrefabCreator.CreateObjectPrefab<AnvilProjectile>("AnvilProjectile", "anvil_projectile");
+
+            // Custom gum since original one requires Beans
+            Gum gumComp = GameObject.Instantiate(AssetHelper.LoadAsset<Gum>("Gum"));
+            GumProjectile gumProj = gumComp.gameObject.AddComponent<GumProjectile>();
+            gumProj.gameObject.ConvertToPrefab(true);
+            gumProj.Speed = ReflectionHelper.GetValue<float>(gumComp, "speed");
+            gumProj.canvas = ReflectionHelper.GetValue<Canvas>(gumComp, "canvas");
+            gumProj.moveMod = ReflectionHelper.GetValue<MovementModifier>(gumComp, "moveMod");
+            gumProj.playerMod = ReflectionHelper.GetValue<MovementModifier>(gumComp, "playerMod");
+            gumProj.groundedSprite = ReflectionHelper.GetValue<GameObject>(gumComp, "groundedSprite");
+            gumProj.flyingSprite = ReflectionHelper.GetValue<GameObject>(gumComp, "flyingSprite");
+            gumProj.InitializePrefab(1);
+            GameObject.Destroy(gumComp);
+            ObjectStorage.Objects.Add("gum", gumProj.gameObject);
+
+            PrefabCreator.CreateEntity<Fan>(new EntityBuilder()
+                .SetName("Fan")
+                .AddTrigger(1f)
+                .SetLayerCollisionMask(LayerHelper.entityCollisionMask)
+                .AddRenderbaseFunction(delegate (Entity entity)
+                {
+                    Transform fanBaseRenderer = ObjectCreator.CreateSpriteRendererBase(null)
+                    .transform.parent;
+                    fanBaseRenderer.SetParent(entity.transform);
+                    return fanBaseRenderer;
+                })).gameObject.layer = LayerHelper.clickableEntities;
+
+            PrefabCreator.CreateEntity<PlateFoodTrap>(new EntityBuilder()
+                .SetName("RawChichenGroundTrap")
+                .AddTrigger(1f)
+                .SetLayerCollisionMask(LayerHelper.entityCollisionMask)
+                .AddRenderbaseFunction(delegate (Entity entity)
+                {
+                    Transform fanBaseRenderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["food_plate"])
+                    .transform.parent;
+                    fanBaseRenderer.SetParent(entity.transform);
+                    return fanBaseRenderer;
+                })).gameObject.layer = LayerHelper.clickableEntities;
+
+            PrefabCreator.CreateEntity<PlateFoodTrap>(new EntityBuilder()
+                .SetName("CookedChichenGroundTrap")
+                .AddTrigger(1f)
+                .SetLayerCollisionMask(LayerHelper.entityCollisionMask)
+                .AddRenderbaseFunction(delegate (Entity entity)
+                {
+                    Transform fanBaseRenderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["food_plate"])
+                    .transform.parent;
+                    fanBaseRenderer.SetParent(entity.transform);
+                    return fanBaseRenderer;
+                }),
+                variant: 2).gameObject.layer = LayerHelper.clickableEntities;
+
+            PrefabCreator.CreateEntity<GroundDough>(new EntityBuilder()
+                .SetName("Dough")
+                .AddTrigger(1f)
+                .SetLayerCollisionMask(LayerHelper.entityCollisionMask)
+                .AddRenderbaseFunction(delegate (Entity entity)
+                {
+                    Transform fanBaseRenderer = ObjectCreator.CreateSpriteRendererBase(AssetStorage.sprites["Dough_Large"])
+                    .transform.parent;
+                    fanBaseRenderer.SetParent(entity.transform);
+                    return fanBaseRenderer;
+                }));
+        }
+
+        #endregion
+
+        #region Door Materials Initialization
+
+        public static void CreateDoorMats()
+        {
+            AssetStorage.CreateDoorMats("adv_english_class", "adv_english_class_door");
+            AssetStorage.CreateDoorMats("adv_school_council", "adv_school_council_door");
+
+            PrefabCreator.CreateDoorMatSet("EnglishDoorSet", AssetStorage.materials["adv_english_class_open"],
+                AssetStorage.materials["adv_english_class_closed"]);
+        }
+
+        #endregion
+
+        #region Rooms Initialization
+
+        public static void InitializeRoomAssetsInPrefabs()
+        {
+            
+        }
+
+        public static void InitializeRoomBasics()
+        {
+            InitializeRoomGroups();
+            InitializeRoomFunctions();
+        }
+
+        private static void InitializeRoomFunctions()
+        {
+            PrefabCreator.CreateFunctionContainerWithRoomFunction<EnglishClassTimerFunction>("EnglishClassTimerFunction");
+            PrefabCreator.CreateFunctionContainerWithRoomFunction<CorruptedLightsFunction>("CorruptedLightsFunction");
+
+            PrefabCreator.CreateClassFunctionContainer(
+                "ClassRoomFunction_CompassComparator", "Adv_Poster_Compass_Comparator", "Adv_PST_CompassComparator_Title", 
+                    "Adv_PST_CompassComparator_Desc", 174, 78);
+        }
+
+        private static void InitializeRoomGroups()
+        {
+            PrefabCreator.CreateRoomGroup("EnglishClass", minRooms: -6, maxRooms: 1)
+                .SetCeilingTex(AssetStorage.textures["adv_english_ceiling"], 100)
+                .SetWallTex(AssetStorage.textures["adv_english_wall"], 100)
+                .SetFloorTex(AssetStorage.textures["adv_english_floor"], 100);
+            EnumExtensions.ExtendEnum<RoomCategory>("SchoolCouncil");
+        }
+
+        public static void InitializeRoomAssets()
+        {
+            foreach (string path in 
+                Directory.GetFiles(AssetHelper.modPath + "Data/Rooms/Objects", "*.rbpl", SearchOption.AllDirectories))
+            {
+                CustomRoomData roomData = CustomRoomData.RoomFromFile(path);
+                if (roomData == null) continue;
+                ObjectStorage.CustomRoomData.Add(roomData);
+            }
+        }
+
+        #endregion
+
+        #region Posters Initialization
+
+        private static List<WeightedPosterObject> _facultyPosters = new List<WeightedPosterObject>();
+
+        public static void InitializePosters()
+        {
+            PosterSerializableData.GetPosterFromFile("Textures/Posters/Advertisement/Adv_Poster_Recommended_Characters_Ad.png");
+            PosterSerializableData.GetPosterFromFile("Textures/Posters/Advertisement/Adv_Poster_Content_Packs_Ad.png");
+            PosterSerializableData.GetPosterFromFile("Textures/Posters/Adv_Poster_Kitchen_Stove.png");
+            PosterSerializableData.GetPosterFromFile("Textures/Posters/Adv_Poster_Symbol_Machine.png");
+            PosterSerializableData.GetPosterFromFile("Textures/Posters/Adv_Poster_Extra_Points.png");
+
+            foreach (string path in Directory.GetFiles(
+                AssetHelper.modPath + "Textures/Posters/GenericPosters", "*.png", SearchOption.AllDirectories))
+            {
+                string jsonPath = path.Replace(".png", ".json");
+
+                if (!File.Exists(jsonPath)) throw new Exception("Json for generic poster is missing!");
+
+                PosterObject poster =
+                    PosterSerializableData.GetPosterAndDataFromFile(path, overrideBasePath: true, out PosterSerializableData data);
+
+                ObjectStorage.WeightedPosterObjects.Add(new WeightedPosterObject()
+                {
+                    selection = poster,
+                    weight = data.weight
+                });
+            }
+
+            foreach (string path in Directory.GetFiles(
+                AssetHelper.modPath + "Textures/Posters/Faculties/", "*.png", SearchOption.AllDirectories))
+            {
+                PosterObject poster =
+                    PosterSerializableData.GetPosterAndDataFromFile(path, overrideBasePath: true, out PosterSerializableData data);
+                _facultyPosters.Add(new WeightedPosterObject()
+                {
+                    selection = poster,
+                    weight = data.weight
+                });
+            }
+        }
+
+        public static void PostInitializePosters()
+        {
+            RoomAsset[] rooms = Array.FindAll(AssetHelper.LoadAssets<RoomAsset>(), x => x.category == RoomCategory.Faculty);
+
+            for (int i = 0; i < rooms.Length; i++)
+            {
+                rooms[i].posters.AddRange(_facultyPosters);
+            }
+
+            _facultyPosters = null;
+        }
+
+        #endregion
+
+        #region Tags Management
+
+        public static void SetTags()
+        {
+            SetTagsTo(new string[] { TagStorage.FIRST_PRIZE_IMMUNITY },
+                Character.Bully, Character.Sweep, Character.Prize);
+
+            SetTagsTo(new string[] { TagStorage.COLD_SCHOOL_IMMUNIY },
+                Character.Pomp, Character.Sweep, Character.Prize, Character.Chalkles);
+
+            SetTagsTo(new string[] { TagStorage.NARROWLY_FUNCTIONAL },
+                Items.BusPass, Items.lostItem0, Items.lostItem1, Items.lostItem2, Items.lostItem3,
+                Items.lostItem4, Items.lostItem5, Items.lostItem6, Items.lostItem7, Items.lostItem8, Items.lostItem9,
+                Items.CircleKey, Items.TriangleKey, Items.SquareKey, Items.PentagonKey, Items.HexagonKey, Items.WeirdKey);
+            SetTagsTo(new string[] { TagStorage.PERFECT_RATE, TagStorage.SYMBOL_MACHINE_POTENTIAL_REWARD },
+                Items.GrapplingHook, Items.Apple, Items.Bsoda, Items.Teleporter);
+            SetTagsTo(new string[] { TagStorage.GOOD_RATE, TagStorage.SYMBOL_MACHINE_POTENTIAL_REWARD },
+                Items.PortalPoster, Items.NanaPeel, Items.Quarter, Items.ZestyBar, Items.DietBsoda);
+            SetTagsTo(new string[] { TagStorage.NORMAL_RATE, TagStorage.SYMBOL_MACHINE_POTENTIAL_REWARD },
+                Items.Nametag, Items.ChalkEraser, Items.DetentionKey);
+            SetTagsTo(new string[] { TagStorage.COMMON_RATE, TagStorage.SYMBOL_MACHINE_POTENTIAL_REWARD },
+                Items.Scissors, Items.Tape, Items.PrincipalWhistle, Items.Wd40);
+        }
+
+        private static void SetTagsTo(string[] tags, params Character[] characters)
+        {
+            foreach (NPCMetadata metadata in Array.FindAll(NPCMetaStorage.Instance.All(), x => characters.Contains(x.character)))
+            {
+                foreach (string tag in tags)
+                {
+                    if (!metadata.tags.Contains(tag)) metadata.tags.Add(tag);
+                }
+            }
+        }
+
+        private static void SetTagsTo(string[] tags, params Items[] items)
+        {
+            foreach (ItemMetaData metadata in Array.FindAll(ItemMetaStorage.Instance.All(), x => items.Contains(x.id)))
+            {
+                foreach (string tag in tags)
+                {
+                    if (!metadata.tags.Contains(tag)) metadata.tags.Add(tag);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+}

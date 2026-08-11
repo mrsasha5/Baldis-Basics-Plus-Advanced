@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.6.11822.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaldisBasicsPlusAdvanced", "BaldisBasicsPlusAdvanced\BaldisBasicsPlusAdvanced.csproj", "{4381A5C5-CA67-42DA-9419-C30D9EC7F5A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaldisBasicsPlusAdvanced", "BaldisBasicsPlusAdvanced\Src\BaldisBasicsPlusAdvanced.csproj", "{4381A5C5-CA67-42DA-9419-C30D9EC7F5A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestModForAdvanced", "AdvancedApiTestMod\TestModForAdvanced.csproj", "{028738D3-38E6-4643-8606-6789BEBFE0E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestModForAdvanced", "AdvancedApiTestMod\Src\TestModForAdvanced.csproj", "{028738D3-38E6-4643-8606-6789BEBFE0E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
