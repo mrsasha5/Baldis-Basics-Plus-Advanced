@@ -5,8 +5,8 @@
 
 # Forbidden & allowed dependencies
 /BaldisBasicsPlusAdvanced/Dependencies/*
-!BaldisBasicsPlusAdvanced/Dependencies/OHarmony.dll
-!BaldisBasicsPlusAdvanced/Dependencies/OHarmony.xml
+!BaldisBasicsPlusAdvanced/Dependencies/0Harmony.dll
+!BaldisBasicsPlusAdvanced/Dependencies/0Harmony.xml
 !BaldisBasicsPlusAdvanced/Dependencies/BepInEx.Harmony.dll
 !BaldisBasicsPlusAdvanced/Dependencies/BepInEx.Harmony.xml
 !BaldisBasicsPlusAdvanced/Dependencies/BepInEx.Preloader.dll
