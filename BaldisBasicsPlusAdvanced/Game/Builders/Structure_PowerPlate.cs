@@ -2,15 +2,17 @@
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates;
+using BaldisBasicsPlusAdvanced.Patches.Objects;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace BaldisBasicsPlusAdvanced.Game.Builders
 {
     public class Structure_PowerPlate : BaseStructure_Plate
     {
-
         public override void InitializePrefab(int variant)
         {
             base.InitializePrefab(1);
@@ -51,9 +53,12 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         {
             List<IButtonReceiver> potentialButtonReceivers = new List<IButtonReceiver>();
             UnityEngine.Object[] _potentialButtonReceivers = Array.FindAll(FindObjectsOfType<UnityEngine.Object>(), 
-                x => x is IButtonReceiver && !ReflectionEventsManager.forbiddenButtonReceivers.Contains(x.GetType()));
+                x => x is IButtonReceiver && !ReflectionEventManager.forbiddenButtonReceivers.Contains(x.GetType()));
+
             for (int i = 0; i < _potentialButtonReceivers.Length; i++)
             {
+                if (_potentialButtonReceivers[i] is BeltManager belt && !BeltManagerPatch.connectedBelts.Contains(belt)) 
+                    continue; // Prevent from entity softlock on the factory
                 potentialButtonReceivers.Add((IButtonReceiver)_potentialButtonReceivers[i]);
             }
 
@@ -72,6 +77,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
             {
                 potentialButtonReceivers.Add(newReceiversList[i]);
             }
+
             return potentialButtonReceivers;
         }
     }

@@ -168,4 +168,9 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Game\NPCs\Behavior\States\Navigation\" />
+    <Folder Include="Game\WeightedSelections\" />
+  </ItemGroup>
+
 </Project>

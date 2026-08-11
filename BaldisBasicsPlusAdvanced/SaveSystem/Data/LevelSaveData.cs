@@ -1,6 +1,4 @@
-﻿using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
-using Newtonsoft.Json;
-using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace BaldisBasicsPlusAdvanced.SaveSystem.Data
@@ -61,7 +59,6 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Data
                     remainingFloorsToUnban.RemoveAt(index + addendIndex);
                     addendIndex--;
                 }
-
             }
         }
 
@@ -97,6 +94,5 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Data
             bannedCharacters = new List<Character>(levelSaveData.bannedCharacters);
             remainingFloorsToUnban = new List<int?>(levelSaveData.remainingFloorsToUnban);
         }
-
     }
 }

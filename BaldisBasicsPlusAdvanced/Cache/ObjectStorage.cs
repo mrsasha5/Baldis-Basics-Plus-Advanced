@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
 using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
-using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
 using BaldisBasicsPlusAdvanced.SerializableData;
 using BepInEx;
 using UnityEngine;
@@ -27,11 +26,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         private static List<CustomRoomData> customRoomData = new List<CustomRoomData>();
 
-        //API data starts here
-
-        private static Dictionary<PluginInfo, List<WeightedCouncilTopic>> topics = new Dictionary<PluginInfo, List<WeightedCouncilTopic>>();
-
-        public static Dictionary<PluginInfo, List<WeightedCouncilTopic>> Topics => topics;
+        // API data
 
         private static Dictionary<PluginInfo, List<string>> tips = new Dictionary<PluginInfo, List<string>>();
 
@@ -41,7 +36,7 @@ namespace BaldisBasicsPlusAdvanced.Cache
 
         public static Dictionary<PluginInfo, List<string>> SymbolMachineWords => words;
 
-        //Ends here
+        // Ends here
 
         private static Dictionary<string, SceneObject> sceneObjects = new Dictionary<string, SceneObject>();
 

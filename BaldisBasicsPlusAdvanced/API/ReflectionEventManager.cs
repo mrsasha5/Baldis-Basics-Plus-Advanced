@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace BaldisBasicsPlusAdvanced.API
 {
-    internal class ReflectionEventsManager
+    internal class ReflectionEventManager
     {
         private static object[] listeners;
 

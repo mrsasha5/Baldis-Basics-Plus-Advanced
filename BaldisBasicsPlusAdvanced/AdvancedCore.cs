@@ -41,7 +41,7 @@ namespace BaldisBasicsPlusAdvanced
 
         public const string modName = "BB+ Advanced Edition";
 
-        public const string version = "0.3.5.2";
+        public const string version = "0.3.5.4";
 
 #if BETA
         public const string BETA_NUM = "";
@@ -137,7 +137,7 @@ namespace BaldisBasicsPlusAdvanced
 
             NotificationManager.Notification notif = CheckAssetsMarker();
             //IEnumerator eventListenersInitializer = ReflectionEventsManager.Init();
-            int count = 25;
+            int count = 23;
             //eventListenersInitializer.MoveNext();
             //count += (int)eventListenersInitializer.Current;
             if (notif != null) count++;
@@ -200,10 +200,6 @@ namespace BaldisBasicsPlusAdvanced
             GameRegisterManager.InitializeRoomAssets();
             yield return "Overriding game prefabs...";
             AssetStorage.OverrideAssetsProperties();
-            yield return "Initializing scene objects...";
-            GameRegisterManager.InitializeSceneObjects();
-            yield return "Initializing trips...";
-            GameRegisterManager.InitializeTrips();
             yield return "Loading new MIDIs...";
             GameRegisterManager.InitializeMidis();
             yield return "Defining generation...";

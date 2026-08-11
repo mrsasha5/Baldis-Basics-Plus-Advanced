@@ -24,8 +24,6 @@ using BaldisBasicsPlusAdvanced.Game.Components.UI;
 using MTM101BaldAPI.ObjectCreation;
 using BaldisBasicsPlusAdvanced.Game.Objects.Projectiles;
 using BaldisBasicsPlusAdvanced.Game.Objects.Triggers;
-using BaldisBasicsPlusAdvanced.Game.Objects.Voting;
-using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Game.Objects.Food;
@@ -115,45 +113,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             notifMan.Initialize();
             notifMan.gameObject.SetActive(false);
             GameObject.DontDestroyOnLoad(notifMan);
-        }
-
-        #endregion
-
-        #region Scene Objects Initialization
-
-        public static void InitializeSceneObjects()
-        {
-            /*const string fieldTripsModeName = "Mode_SpecialFieldTrips";
-
-            BinaryReader binaryReader = new BinaryReader(File.OpenRead(AssetHelper.modPath + "Data/Levels/Farm.bpl"));
-            BaldiLevel level = BaldiLevel.Read(binaryReader);
-
-            SceneObject farmScene = LevelImporter.CreateSceneObject(level);
-            farmScene.name = "Farm";
-            farmScene.levelTitle = "FRM";
-            farmScene.usesMap = false;
-            farmScene.levelAsset.rooms[1].wallTex = AssetHelper.LoadAsset<Texture2D>("Corn");
-
-            ObjectStorage.SceneObjects.Add("Farm", farmScene);
-
-            FarmFieldTripManager farmMan = new GameObject("FarmManager").AddComponent<FarmFieldTripManager>();
-            farmMan.InitializePrefab(1);
-
-            ReflectionHelper.SetValue<bool>(farmMan, "destroyOnLoad", true);
-            ReflectionHelper.Static_SetValue<Singleton<BaseGameManager>>("m_Instance", null);
-
-            ObjectStorage.SceneObjects["Farm"].manager = farmMan;
-
-            farmMan.beginPlayImmediately = true;
-            farmMan.managerNameKey = fieldTripsModeName;
-
-            ReflectionHelper.SetValue(farmMan, "elevatorScreenPre", Resources.FindObjectsOfTypeAll<ElevatorScreen>()[0]);
-
-            farmMan.gameObject.ConvertToPrefab(true);
-
-            farmScene.AddMeta(AdvancedCore.Instance, new string[] { "adv_special_field_trip" });
-
-            binaryReader.Close();*/
         }
 
         #endregion
@@ -507,15 +466,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 maxTime: 120f,
                 flags: RandomEventFlags.None
             );
-
-            PrefabCreator.CreateEvent<VotingEvent>(
-                name: "Event_Voting",
-                enumName: "Voting",
-                soundKey: "adv_bal_event_voting",
-                minTime: 100f,
-                maxTime: 100f,
-                flags: RandomEventFlags.RoomSpecific | RandomEventFlags.AffectsGenerator
-            );
         }
 
         #endregion
@@ -663,7 +613,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
             //Chalkboard Menu ends
 
             PrefabCreator.CreateObjectPrefab<CreditsScreen>("Credits Screen", "credits_screen");
-            //PrefabsCreator.CreateObjectPrefab<UpdatesCenterMenu>("Updates Center", "updates_center");
         }
 
         #endregion
@@ -672,7 +621,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeApiThings()
         {
-            
             LocalizationManager localization = Singleton<LocalizationManager>.Instance;
 
             string[] tipsBaseNames = new string[1];
@@ -707,33 +655,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 "spell", "blind", "laser", "brain", "ruler", "floor", "class", "flood", "party",
                 "apple", "chalk", "erase", "cloud", "plate", "store", "clock", "farm", "math"
             );
-
-            ApiManager.CreateSchoolCouncilTopic<NoPlatesCooldownTopic>(AdvancedCore.Instance.Info, 100);
-            ApiManager.CreateSchoolCouncilTopic<PrincipalIgnoresSomeRulesTopic>(AdvancedCore.Instance.Info, 75);
-            ApiManager.CreateSchoolCouncilTopic<LightsEconomyTopic>(AdvancedCore.Instance.Info, 50);
-            ApiManager.CreateSchoolCouncilTopic<TurnOffFacultyNoisyPlatesTopic>(AdvancedCore.Instance.Info, 100);
-            ApiManager.CreateSchoolCouncilTopic<GottaSweepTimeTopic>(AdvancedCore.Instance.Info, 50);
-            ApiManager.CreateSchoolCouncilTopic<ConvertVendingMachinesTopic>(AdvancedCore.Instance.Info, 50);
-            ApiManager.CreateSchoolCouncilTopic<OpenVentsTopic>(AdvancedCore.Instance.Info, 125);
-            ApiManager.CreateSchoolCouncilTopic<BrokenZiplinesTopic>(AdvancedCore.Instance.Info, 125);
-            ApiManager.CreateSchoolCouncilTopic<DisabledConveyorsTopic>(AdvancedCore.Instance.Info, 125);
-            ApiManager.CreateSchoolCouncilTopic<DisabledFacultyLockdownDoorsTopic>(AdvancedCore.Instance.Info, 125);
-            //ApiManager.CreateSchoolCouncilTopic<OpenVentsTopic>(AdvancedCore.Instance.Info, 100);
-        }
-
-        #endregion
-
-        #region Special Field Trips Initialization
-
-        public static void InitializeTrips()
-        {
-            /*new FieldTripData()
-            {
-                sceneName = "Farm",
-                sceneObject = ObjectStorage.SceneObjects["Farm"]
-            }
-            .SetDefaultSkybox()
-            .Register();*/
         }
 
         #endregion
@@ -809,8 +730,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
                 .transform.SetParent(cornSign.transform, false);
             cornSign.ConvertToPrefab(true);
             ObjectStorage.Objects.Add("farm_sign1", cornSign);
-
-            PrefabCreator.CreateObjectPrefab<VotingCeilingScreen>("VotingScreen", "voting_screen");
         }
 
         #endregion
@@ -899,8 +818,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
             PrefabCreator.CreateDoorMatSet("EnglishDoorSet", AssetStorage.materials["adv_english_class_open"],
                 AssetStorage.materials["adv_english_class_closed"]);
-            PrefabCreator.CreateDoorMatSet("SchoolCouncilDoorSet", AssetStorage.materials["adv_school_council_open"],
-                AssetStorage.materials["adv_school_council_closed"]);
         }
 
         #endregion
@@ -922,9 +839,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
         {
             PrefabCreator.CreateFunctionContainerWithRoomFunction<EnglishClassTimerFunction>("EnglishClassTimerFunction");
             PrefabCreator.CreateFunctionContainerWithRoomFunction<CorruptedLightsFunction>("CorruptedLightsFunction");
-            PrefabCreator.CreateFunctionContainerWithRoomFunction<SchoolCouncilFunction>("SchoolCouncilFunction");
-            RoomHelper.SetupRoomFunction<DisabledPowerOnGenerationFinishFunction>(
-                ObjectStorage.RoomFunctionsContainers["SchoolCouncilFunction"]);
 
             PrefabCreator.CreateClassFunctionContainer(
                 "ClassRoomFunction_CompassComparator", "Adv_Poster_Compass_Comparator", "Adv_PST_CompassComparator_Title", 

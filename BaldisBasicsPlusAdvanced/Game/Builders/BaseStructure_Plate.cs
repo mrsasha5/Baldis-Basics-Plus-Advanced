@@ -167,7 +167,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Builders
         {
             BasePlate plate = Instantiate(platePre, cell.room.objectObject.transform);
             plate.transform.position = cell.FloorWorldPosition;
-            plate.transform.rotation = dir.ToRotation();
+            if (dir != Direction.Null) plate.transform.rotation = dir.ToRotation();
 
             cell.HardCover(plateCoverage);
             generatedPlates.Add(plate);

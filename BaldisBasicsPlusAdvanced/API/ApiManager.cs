@@ -2,8 +2,6 @@
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Game.Objects.Spelling;
-using BaldisBasicsPlusAdvanced.Game.Objects.Voting.Topics;
-using BaldisBasicsPlusAdvanced.Game.WeightedSelections;
 using BaldisBasicsPlusAdvanced.Helpers;
 using BaldisBasicsPlusAdvanced.SaveSystem;
 using BaldisBasicsPlusAdvanced.SaveSystem.Data;
@@ -366,123 +364,6 @@ namespace BaldisBasicsPlusAdvanced.API
             spelloon.GetComponentInChildren<SpriteRenderer>().sprite = sprite;
 
             return true;
-        }
-
-        #endregion
-
-        #region School Council
-
-        [Obsolete("Voting event is removed.")]
-        public static List<WeightedCouncilTopic> GetAllWeightedSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
-        {
-            if (!ObjectStorage.Topics.ContainsKey(pluginInfo))
-                return null;
-
-            return new List<WeightedCouncilTopic>(ObjectStorage.Topics[pluginInfo]);
-        }
-
-        [Obsolete("Voting event is removed.")]
-        public static List<WeightedCouncilTopic> GetAllWeigthedSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
-        {
-            return GetAllWeightedSchoolCouncilTopicsFrom(pluginInfo);
-        }
-
-        [Obsolete("Voting event is removed.")]
-        public static List<BaseTopic> GetAllSchoolCouncilTopicsFrom(PluginInfo pluginInfo)
-        {
-            if (!ObjectStorage.Topics.ContainsKey(pluginInfo))
-                return null;
-
-            List<BaseTopic> topics = new List<BaseTopic>();
-            List<WeightedCouncilTopic> _topics = ObjectStorage.Topics[pluginInfo];
-
-            for (int i = 0; i < _topics.Count; i++)
-            {
-                topics.Add(_topics[i].selection);
-            }
-
-            return topics;
-        }
-
-        [Obsolete("Voting event is removed.")]
-        public static List<BaseTopic> GetAllSchoolCouncilTopics()
-        {
-            List<BaseTopic> topics = new List<BaseTopic>();
-
-            foreach (List<WeightedCouncilTopic> _topics in ObjectStorage.Topics.Values)
-            {
-                for (int i = 0; i < _topics.Count; i++)
-                {
-                    topics.Add(_topics[i].selection);
-                }
-            }
-
-            return topics;
-        }
-
-        [Obsolete("Voting event is removed.")]
-        public static void CreateSchoolCouncilTopic<T>(PluginInfo pluginInfo, int weight = 100) where T : BaseTopic, new()
-        {
-            if (!ObjectStorage.Topics.ContainsKey(pluginInfo)) 
-                ObjectStorage.Topics.Add(pluginInfo, new List<WeightedCouncilTopic>());
-
-            ObjectStorage.Topics[pluginInfo].Add(new WeightedCouncilTopic()
-            {
-                selection = new T(),
-                weight = weight
-            });
-        }
-
-        [Obsolete("Voting event is removed.")]
-        public static List<PluginInfo> UnloadAllSchoolCouncilTopicsExcept(params PluginInfo[] pluginInfos)
-        {
-            List<PluginInfo> unloadedPlugins = new List<PluginInfo>();
-            foreach (PluginInfo pluginInfo in ObjectStorage.Topics.Keys.ToArray())
-            {
-                if (!pluginInfos.Contains(pluginInfo))
-                {
-                    ObjectStorage.Topics.Remove(pluginInfo);
-                    unloadedPlugins.Add(pluginInfo);
-                }
-            }
-            return unloadedPlugins;
-        }
-
-        [Obsolete("Voting event is removed.")]
-        public static List<PluginInfo> UnloadAllSchoolCouncilTopicsFrom(params PluginInfo[] pluginInfos)
-        {
-            List<PluginInfo> unloadedPlugins = new List<PluginInfo>();
-            foreach (PluginInfo pluginInfo in pluginInfos)
-            {
-                if (ObjectStorage.Topics.ContainsKey(pluginInfo))
-                {
-                    ObjectStorage.Topics.Remove(pluginInfo);
-                    unloadedPlugins.Add(pluginInfo);
-                }
-            }
-            return unloadedPlugins;
-        }
-
-        [Obsolete("Voting event is removed.")]
-        public static void UnloadAllSchoolCouncilTopics()
-        {
-            ObjectStorage.Topics.Clear();
-        }
-
-        [Obsolete("Voting event is removed.")]
-        public static void UnloadSchoolCouncilTopics(params BaseTopic[] topics)
-        {
-            foreach (List<WeightedCouncilTopic> _topics in ObjectStorage.Topics.Values)
-            {
-                for (int i = 0; i < _topics.Count; i++)
-                {
-                    if (topics.Contains(_topics[i].selection))
-                    {
-                        _topics.RemoveAt(i);
-                        i--;
-                    }
-                }
-            }
         }
 
         #endregion
