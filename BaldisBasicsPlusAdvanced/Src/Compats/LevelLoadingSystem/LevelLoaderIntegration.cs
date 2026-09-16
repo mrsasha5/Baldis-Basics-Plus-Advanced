@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using BaldisBasicsPlusAdvanced.Cache;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Activities;
-using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Game.Rooms.Functions;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -63,7 +62,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 
         private static void InitializeNpcs()
         {
-            LevelLoaderPlugin.Instance.npcAliases.Add("adv_criss_the_crystal", ObjectStorage.Npcs["CrissTheCrystal"]);
         }
 
         private static void InitializePosters()
@@ -76,8 +74,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelLoadingSystem
 
         private static void InitializeDoors()
         {
-            LevelLoaderPlugin.Instance.windowObjects.Add("adv_big_hole",
-                ObjectStorage.Npcs["CrissTheCrystal"].GetComponent<CrissTheCrystal>().windowObjectPre);
         }
 
         private static void InitializeLights()

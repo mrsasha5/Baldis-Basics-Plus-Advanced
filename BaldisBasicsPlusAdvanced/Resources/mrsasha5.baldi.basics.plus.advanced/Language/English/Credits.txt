@@ -121,12 +121,9 @@ Made models and rendered them for:
 - Ice Boots (Item icon)
 
 Blin222
-*2D Artist, NPC Creator, Beta Tester
-Made Criss the Crystal (all assets by him)
-Made Criss the Crystal's Level Studio icon
-Made posters "BSODA Advertisement", "Bread Is Head of Everything" and Criss's one
+*2D Artist
+Made poster "Bread Is Head of Everything"
 Made recipe Alarm Clock + Alarm Clock = Magic Clock
-Made Big Hole texture
 Found a few bugs
 
 Pixelguy

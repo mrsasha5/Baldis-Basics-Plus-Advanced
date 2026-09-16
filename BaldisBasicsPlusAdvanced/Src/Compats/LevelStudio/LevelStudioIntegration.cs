@@ -8,7 +8,6 @@ using BaldisBasicsPlusAdvanced.Compats.LevelStudio.Editor.Visuals;
 using BaldisBasicsPlusAdvanced.Extensions;
 using BaldisBasicsPlusAdvanced.Game.Activities;
 using BaldisBasicsPlusAdvanced.Game.Builders;
-using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Game.Objects;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.Base;
 using BaldisBasicsPlusAdvanced.Helpers;
@@ -40,6 +39,10 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             data.objects.RemoveAll(x => x.prefab == "adv_voting_ballot");
             data.objects.RemoveAll(x => x.prefab == "adv_voting_ceiling_screen");
             data.posters.RemoveAll(x => x.type == "adv_paris");
+            data.posters.RemoveAll(x => x.type == "adv_criss_the_crystal");
+            data.windows.RemoveAll(x => x.type == "adv_big_hole");
+            data.posters.RemoveAll(x => x.type == "adv_bsoda_ad");
+            data.npcs.RemoveAll(x => x.npc == "adv_criss_the_crystal");
             data.lights.Where(x => x.type == "adv_advanced_education_lamp").Do(x => x.type = "standardhanging");
             foreach (EditorRoom room in data.rooms)
             {
@@ -295,8 +298,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 }
             }
 
-            EditorInterface.AddNPCVisual("adv_criss_the_crystal", ObjectStorage.Npcs["CrissTheCrystal"]);
-
             EditorInterface.AddObjectVisual("adv_symbol_machine", ObjectStorage.Objects["symbol_machine"], true);
 
             //Pairs comparator
@@ -344,13 +345,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
 
             #endregion
 
-            #region Door & Window Visuals
-
-            EditorInterface.AddWindow("adv_big_hole", 
-                ObjectStorage.Npcs["CrissTheCrystal"].GetComponent<CrissTheCrystal>().windowObjectPre);
-
-            #endregion
-
             LevelStudioPlugin.Instance.eventSprites.Add("adv_disappearing_characters", 
                 AssetHelper.SpriteFromFile("Compats/LevelStudio/Textures/Events/Adv_Editor_Invisibility_Event.png"));
             LevelStudioPlugin.Instance.eventSprites.Add("adv_cold_school",
@@ -385,9 +379,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
             mode.availableRandomEvents.Add("adv_disappearing_characters");
             mode.availableRandomEvents.Add("adv_cold_school");
             mode.availableRandomEvents.Add("adv_portal_chaos");
-
-            EditorInterfaceModes.AddToolToCategory(mode, "npcs",
-                new NPCTool("adv_criss_the_crystal", AssetStorage.sprites["adv_editor_criss_the_crystal"]));
 
             foreach (string objectName in ObjectStorage.ItemObjects.Keys)
             {
@@ -521,9 +512,6 @@ namespace BaldisBasicsPlusAdvanced.Compats.LevelStudio
                 texBase + "Structures/adv_editor_zipline_black.png");
             AssetStorage.LoadModSprite("adv_editor_gum_dispenser",
                 texBase + "Structures/adv_editor_gum_dispenser.png");
-
-            AssetStorage.LoadModSprite("adv_editor_criss_the_crystal",
-                texBase + "NPCs/adv_editor_criss_the_crystal.png");
 
             AssetStorage.LoadModSprite("adv_editor_corn_sign1",
                 texBase + "Objects/adv_editor_corn_sign1.png");

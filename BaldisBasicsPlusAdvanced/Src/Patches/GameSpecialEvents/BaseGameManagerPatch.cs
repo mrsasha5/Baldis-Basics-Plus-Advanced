@@ -31,7 +31,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.GameSpecialEvents
         [HarmonyPostfix]
         private static void OnLoadNextLevel(BaseGameManager __instance)
         {
-            LevelDataManager.LevelData.OnLoadNextLevel(__instance is PitstopGameManager);
+            LevelDataManager.LevelData.OnLoadNextLevel(__instance.InPitstop());
         }
 
         [HarmonyPatch(typeof(MainGameManager), "RestartLevel")]

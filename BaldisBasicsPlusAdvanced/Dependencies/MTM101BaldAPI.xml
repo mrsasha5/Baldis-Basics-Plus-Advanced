@@ -1408,6 +1408,11 @@
             This event isn't called through regular means, and shouldn't be added to the random event pool.
             </summary>
         </member>
+        <member name="F:MTM101BaldAPI.Registers.RandomEventFlags.UsesCurtains">
+            <summary>
+            This event uses the event curtains.
+            </summary>
+        </member>
         <member name="M:MTM101BaldAPI.Registers.SceneObjectMetadata.GetSupportedLevelTypes">
             <summary>
             Get the level types supported by this SceneObject.

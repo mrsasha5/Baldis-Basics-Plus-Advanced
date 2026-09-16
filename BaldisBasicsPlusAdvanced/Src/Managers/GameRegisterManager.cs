@@ -28,7 +28,6 @@ using BaldisBasicsPlusAdvanced.Game.Objects.Plates.FakePlate;
 using BaldisBasicsPlusAdvanced.Game.Objects.Plates.KitchenStove;
 using BaldisBasicsPlusAdvanced.Game.Objects.Food;
 using BaldisBasicsPlusAdvanced.Game.InventoryItems.Food;
-using BaldisBasicsPlusAdvanced.Game.NPCs.CrissTheCrystal;
 using BaldisBasicsPlusAdvanced.Compats;
 using MTM101BaldAPI.AssetTools;
 using BaldisBasicsPlusAdvanced.Patches.GameManager;
@@ -140,20 +139,6 @@ namespace BaldisBasicsPlusAdvanced.Managers
 
         public static void InitializeNPCs()
         {
-            PrefabCreator.CreateNpc(
-                new NPCBuilder<CrissTheCrystal>(AdvancedCore.Instance.Info)
-                .SetName("Criss the Crystal")
-                .SetMetaName("Adv_NPC_CrissTheCrystal")
-                .SetEnum("CrissTheCrystal")
-                .SetPoster(AssetStorage.textures["Poster_CrissTheCrystal"],
-                    "Adv_NPC_CrissTheCrystal", "Adv_NPC_CrissTheCrystal_Desc")
-                .AddLooker()
-                .AddMetaFlag(NPCFlags.StandardNoCollide)
-                .SetMetaTags(new string[] { TagStorage.STUDENT })
-            );
-
-            ObjectStorage.Posters.Add(ObjectStorage.Npcs["CrissTheCrystal"].Poster);
-            ObjectStorage.Npcs["CrissTheCrystal"].Poster.name = "Adv_Poster_Criss_The_Crystal";
         }
 
         #endregion
@@ -651,8 +636,8 @@ namespace BaldisBasicsPlusAdvanced.Managers
             }
 
             ApiManager.AddNewSymbolMachineWords(AdvancedCore.Instance.Info,
-                "BSODA", "Beans", "Baldi", "Bully", "Criss", "boots", "field", "learn", "expel",
-                "spell", "blind", "laser", "brain", "ruler", "floor", "class", "flood", "party",
+                "BSODA", "Beans", "Baldi", "Bully", "boots", "field", "learn", "expel",
+                "spell", "blind", "brain", "ruler", "floor", "class", "flood", "party",
                 "apple", "chalk", "erase", "cloud", "plate", "store", "clock", "farm", "math"
             );
         }

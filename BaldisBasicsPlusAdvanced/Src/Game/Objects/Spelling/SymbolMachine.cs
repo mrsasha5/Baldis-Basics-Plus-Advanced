@@ -208,7 +208,7 @@ namespace BaldisBasicsPlusAdvanced.Game.Objects.Spelling
             room = transform.parent.parent.GetComponent<RoomController>();
             _roomPowered = room.Powered;
             room.ec.OnEnvironmentBeginPlay += Initialize;
-            isPitFloor = Singleton<BaseGameManager>.Instance is PitstopGameManager;
+            isPitFloor = BaseGameManager.Instance.InPitstop();
         }
 
         private void Update()

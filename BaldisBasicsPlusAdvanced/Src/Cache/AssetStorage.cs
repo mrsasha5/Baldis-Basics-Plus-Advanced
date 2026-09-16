@@ -213,10 +213,6 @@ namespace BaldisBasicsPlusAdvanced.Cache
             LoadGameObject("math_num_0", "MathNum_0");
 
             if (IntegrationManager.IsActive<LevelStudioIntegration>()) LevelStudioIntegration.LoadEditorAssets();
-                
-            LoadModTexture("CrissTheCrystal_Sheet", "Npcs/CrissTheCrystal_Sheet.png");
-            LoadModTexture("CrissTheCrystal_Crazy_Sheet", "Npcs/CrissTheCrystal_Crazy_Sheet.png");
-            LoadModTexture("Poster_CrissTheCrystal", "Npcs/Poster_CrissTheCrystal.png");
 
             //ROOMS AND POSTERS
             LoadModTexture("adv_poster_recipe_example", "Posters/Adv_Poster_Recipe_Example.png");

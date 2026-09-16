@@ -30,7 +30,7 @@ namespace BaldisBasicsPlusAdvanced.SaveSystem.Data
 
         public void OnLoadSceneObject(SceneObject sceneObject, bool restarting)
         {
-            if (sceneObject.manager is PitstopGameManager && !restarting)
+            if (sceneObject.manager.InPitstop() && !restarting)
             {
                 if (hammerLives > 0)
                 {

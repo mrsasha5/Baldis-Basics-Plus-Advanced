@@ -35,7 +35,7 @@ namespace BaldisBasicsPlusAdvanced.Patches.Shop
                 hammerPriceTag.transform.localPosition = new Vector3(25f, 2.65f, 4f);
             }
 
-            if (BaseGameManager.Instance is PitstopGameManager && !PitOverrides.ExpelHammerPickupDisabled)
+            if (BaseGameManager.Instance.InPitstop() && !PitOverrides.ExpelHammerPickupDisabled)
             {
                 CreatePickup<ExpelHammerPickup>(hammerPriceTag, hammerPrice, new Vector3(25f, 5f, 2f));
             }
