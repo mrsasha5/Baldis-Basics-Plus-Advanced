@@ -1,5 +1,5 @@
-Offset: -3315.0
-Max Height: 3350.0
+Offset: -3190.0
+Max Height: 3225.0
 
 Baldi's Basics Plus: Advanced Edition
 Welcome to the credits!
@@ -175,18 +175,14 @@ RostMoment
 *Beta Tester
 Found a few bugs
 
-TABS Dash
-*Beta Tester
-Found a few bugs
-
 DarkSky
 *Beta Tester
 Found a few bugs
 
 EnderChap
 *Beta Tester
-Pointed about missing Criss's poster in Level Studio during beta tests
+Found a bug
 
 Special thanks to:
 MissingTextureMan101
-They develop Baldi's Basics Plus Development API, Level Studio Loading System and Level Studio that help to develop and support this mod
+They develop Baldi's Basics Plus Development API, Level Studio Loading System and Level Studio that help to support this mod very much
